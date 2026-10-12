@@ -13,7 +13,7 @@ import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
 import { canFinish, createTrial, emptyInput, stepTrial, type TrialAction } from './core/trial';
 import { surfacing } from './sim/latte/field';
-import { pitcherFlow } from './sim/latte/pitcher';
+import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
 import { createHud } from './ui/hud';
 import { buildCafe } from './world/cafe';
 import { createCameraRig } from './world/camera';
@@ -113,6 +113,10 @@ async function boot(): Promise<void> {
       return !sfx.muted;
     },
     pause: setPaused,
+    restart: () => {
+      setPaused(false);
+      act('restart');
+    },
     height: (d) => (touchHeight = d),
     skip: () => (input.skip = true),
   });
@@ -145,8 +149,12 @@ async function boot(): Promise<void> {
     'wheel',
     (e) => {
       e.preventDefault();
+      // A trackpad pinch arrives as ctrl+wheel: block the page zoom, but don't move the jug.
+      if (e.ctrlKey) return;
       const unit = e.deltaMode === 1 ? 33 : 1;
-      input.heightDelta -= e.deltaY * unit * 0.012;
+      // Clamp single events so a mouse-wheel notch or trackpad momentum can't teleport the jug.
+      const dy = Math.max(-150, Math.min(150, e.deltaY * unit));
+      input.heightDelta -= dy * 0.012;
     },
     { passive: false },
   );
@@ -172,6 +180,8 @@ async function boot(): Promise<void> {
       else if (ph === 'feedback') act(canFinish(trial) && trial.attempt >= 2 ? 'finish' : 'next');
       else if (ph === 'verdict') act('restart');
       else input.skip = true;
+    } else if (k === '1' || k === '2' || k === '3') {
+      input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
     } else if (k === 'w' || k === 'arrowup') keyHeight = 1;
     else if (k === 's' || k === 'arrowdown') keyHeight = -1;
     else if (k === 'm') sfx.setMuted(!sfx.muted);
@@ -220,6 +230,7 @@ async function boot(): Promise<void> {
     input.skip = false;
     input.action = null;
     input.heightDelta = 0;
+    input.heightPreset = null;
   };
 
   // ---------------------------------------------------------------- resize

@@ -47,7 +47,9 @@ export function instruction(t: Trial, touch: boolean): Instruction | null {
       };
     case 'pour': {
       const p = t.pour;
-      const height = touch ? 'the ▲▼ buttons' : 'scroll or <kbd>W</kbd>/<kbd>S</kbd>';
+      const height = touch
+        ? 'the ▲▼ buttons'
+        : '<kbd>1</kbd> high · <kbd>2</kbd> lift · <kbd>3</kbd> low (or scroll, <kbd>W</kbd>/<kbd>S</kbd>)';
       if (p.poured === 0)
         return {
           title: 'Pour the heart',
@@ -66,7 +68,7 @@ export function instruction(t: Trial, touch: boolean): Instruction | null {
       if (p.fill < 0.97)
         return {
           title: 'Bloom, then pull through',
-          html: 'Let the white bloom… then lift a touch, let go of the button and push <b>forward</b> through it.',
+          html: `Let the white bloom… then lift a touch${touch ? '' : ' (<kbd>2</kbd>)'}, let go and push <b>forward</b> through it.`,
         };
       return { title: 'Stop!', html: 'Cup is full. Let go.' };
     }

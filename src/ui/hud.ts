@@ -15,6 +15,7 @@ export interface HudCallbacks {
   toggleVoice(): boolean;
   toggleSound(): boolean;
   pause(p: boolean): void;
+  restart(): void;
   height(dir: -1 | 0 | 1): void;
   skip(): void;
 }
@@ -50,7 +51,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     <div id="subs" class="gone" role="status" aria-live="polite"><div class="who">GAZ<small>Owner</small></div><div class="text"></div></div>
     <div id="card" class="hide"></div>
     <div id="verdict" class="hide"></div>
-    <div id="pause" class="hide"><div class="box"><h3>Paused</h3><button class="btn" id="resumeBtn">Back to it</button></div></div>`;
+    <div id="pause" class="hide"><div class="box"><h3>Paused</h3><div class="titleBtns"><button class="btn" id="resumeBtn">Back to it</button><button class="btn ghost" id="restartBtn">Restart trial</button></div></div></div>`;
   const $ = <T extends HTMLElement>(s: string): T => root.querySelector(s) as T;
   const title = $('#title');
   const topbar = $('#topbar');
@@ -84,6 +85,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   };
   $('#pauseBtn').onclick = () => cb.pause(true);
   $('#resumeBtn').onclick = () => cb.pause(false);
+  $('#restartBtn').onclick = () => cb.restart();
   subs.onclick = () => cb.skip();
   touchHeight.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
     const dir = Number(b.dataset.h) as -1 | 1;
@@ -124,7 +126,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     else if (mode === 'pour')
       html = `<div class="gauge"><div class="k"><span>Jug height</span><span data-g="hv"></span></div>
         <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:0;height:${pct(SURF_LOW, 0, HEIGHT_MAX)}%"></div><div class="zone mid" style="bottom:${pct(SURF_LOW, 0, HEIGHT_MAX)}%;height:${pct(SURF_HIGH, 0, HEIGHT_MAX) - pct(SURF_LOW, 0, HEIGHT_MAX)}%"></div><div class="needle" data-g="hn"></div></div>
-        <div class="vlabels"><span>High · sinks</span><span>Mix</span><span>Low · draws</span></div></div>
+        <div class="vlabels"><span>${touch ? '' : '[1] '}High · sinks</span><span>${touch ? '' : '[2] '}Lift</span><span>${touch ? '' : '[3] '}Low · draws</span></div></div>
         <div class="tag" data-g="ht"></div>
         <div class="k" style="margin-top:10px"><span>Flow</span></div><div class="bar"><div class="fill" data-g="fl"></div></div>
         <div class="k" style="margin-top:10px"><span>Cup</span><span data-g="cv"></span></div><div class="bar"><div class="zone" style="left:88%;width:12%"></div><div class="fill" data-g="cf"></div></div>

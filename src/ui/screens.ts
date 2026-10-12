@@ -17,8 +17,9 @@ export function titleHtml(touch: boolean): string {
        <b>Press &amp; hold</b><span>grind, steam, pour</span>
        <b>▲ ▼</b><span>jug height while pouring</span>`
     : `<b>Mouse</b><span>move the jug · set steam depth</span>
-       <b>Hold click / Space</b><span>grind · steam · pour</span>
-       <b>Scroll · W / S</b><span>jug height while pouring</span>
+       <b>Hold click / Space</b><span>grind · steam · pour (trackpad: use Space)</span>
+       <b>1 · 2 · 3</b><span>jug high · lift · low (trackpad-friendly)</span>
+       <b>Scroll · W / S</b><span>fine jug height while pouring</span>
        <b>Enter</b><span>confirm · next</span>
        <b>Esc</b><span>pause</span>`;
   return `<div class="titleCard">

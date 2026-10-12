@@ -7,6 +7,7 @@ import { controlsAt, OWNER_DEMO, runTrack, type TrackKey } from '../../src/sim/l
 import { heartTemplate, inHeart } from '../../src/sim/latte/heart';
 import {
   createPitcher,
+  HEIGHT_PRESETS,
   pitcherFlow,
   stepPitcher,
   stepPourFrame,
@@ -164,6 +165,31 @@ describe('pour physics', () => {
     const s = scorePattern(runTrack(blob, SILKY_MILK).pour.foam);
     expect(s.heartness).toBeLessThan(0.4);
     expect(s.art).toBeLessThan(0.5);
+  });
+});
+
+describe('trackpad-style pour (Space to tip, height only from the 1/2/3 presets)', () => {
+  // Height jumps between presets (the jug then moves there at its own speed); position moves in a
+  // straight line, as a one-finger trackpad drag would. No simultaneous click-and-scroll needed.
+  const [HIGH, LIFT, LOW] = HEIGHT_PRESETS;
+  const track: TrackKey[] = [
+    { t: 0.0, x: 0, y: -0.3, h: HIGH, hold: false },
+    { t: 0.5, x: 0, y: -0.3, h: HIGH, hold: true },
+    { t: 3.6, x: 0, y: -0.35, h: HIGH, hold: true },
+    { t: 3.6001, x: 0, y: -0.35, h: LOW, hold: true },
+    { t: 6.4, x: 0, y: -0.35, h: LOW, hold: true },
+    { t: 6.4001, x: 0, y: -0.38, h: LIFT, hold: true },
+    { t: 6.6, x: 0, y: 0.1, h: LIFT, hold: false },
+    { t: 6.95, x: 0, y: 0.85, h: LIFT, hold: false },
+    { t: 7.4, x: 0, y: 0.6, h: HIGH, hold: false },
+  ];
+
+  it('still pours a recognisable heart', () => {
+    const { pour } = runTrack(track, SILKY_MILK);
+    const s = scorePattern(pour.foam);
+    expect(s.heartness).toBeGreaterThan(0.7);
+    expect(s.art).toBeGreaterThan(0.75);
+    expect(pour.spill).toBe(0);
   });
 });
 

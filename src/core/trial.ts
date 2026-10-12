@@ -72,6 +72,8 @@ export interface TrialInput {
   jugDepth: number;
   /** Pouring: height change requested since the last step (scroll/keys), cm. */
   heightDelta: number;
+  /** Pouring: jump the target height to this preset (cm), or null. */
+  heightPreset: number | null;
   /** Advance the current subtitle. */
   skip: boolean;
   action: TrialAction | null;
@@ -86,6 +88,7 @@ export function emptyInput(): TrialInput {
     hasCup: false,
     jugDepth: 1.5,
     heightDelta: 0,
+    heightPreset: null,
     skip: false,
     action: null,
   };
@@ -147,6 +150,8 @@ export interface Trial {
   patterns: Float32Array[];
   outcome: TrialOutcome | null;
   watch: PourWatch;
+  /** Consecutive attempts that improved by 8+ / that failed (invalid or under 60). */
+  streak: { improved: number; failed: number };
   flags: Record<string, boolean>;
   /** Phase-local timestamp (e.g. when a step finished), or -1. */
   mark: number;
@@ -181,6 +186,7 @@ export function createTrial(seed: number): Trial {
     patterns: [],
     outcome: null,
     watch: freshWatch(),
+    streak: { improved: 0, failed: 0 },
     flags: {},
     mark: -1,
     events: [],
@@ -361,8 +367,7 @@ function judge(t: Trial): void {
   const espScore = t.espressoScore ?? scoreEspresso(t.espresso);
   const pattern = scorePattern(t.pour.foam);
   const result = scoreAttempt(pattern, t.pour, milkScore, espScore);
-  const prevBest = bestValidIndex(t.results);
-  const prev = prevBest >= 0 ? (t.results[prevBest] as AttemptResult) : null;
+  const last = t.results[t.results.length - 1] ?? null;
   t.results.push(result);
   t.patterns.push(t.pour.foam.slice());
   t.events.push({ type: 'attempt', index: t.attempt, result });
@@ -372,20 +377,43 @@ function judge(t: Trial): void {
   else if (result.band === 'almost') addFrustration(t.owner, -0.2);
   else addFrustration(t.owner, 1.3);
 
+  // Streaks: Gaz remembers the last cup.
+  const failed = !result.valid || result.total < 60;
+  const improved = last !== null && result.total - last.total >= 8;
+  const worse = last !== null && last.total - result.total >= 8;
+  t.streak.improved = improved ? t.streak.improved + 1 : 0;
+  t.streak.failed = failed ? t.streak.failed + 1 : 0;
+  const artFault = result.faults.find((f) => `art.${f}` in OWNER_LINES);
+  const lastArtFault = last?.faults.find((f) => `art.${f}` in OWNER_LINES);
+  const sameMistake =
+    result.valid &&
+    last !== null &&
+    last.valid &&
+    artFault !== undefined &&
+    artFault === lastArtFault;
+
   sayNow(t, 'inspect.look');
   if (!result.valid && result.invalid) {
     sayQueue(t, `invalid.${result.invalid}`);
-  } else {
-    const artFault = result.faults.find((f) => `art.${f}` in OWNER_LINES);
-    if (result.total >= 85) sayQueue(t, 'art.great');
-    else if (artFault) sayQueue(t, `art.${artFault}`);
-    else sayQueue(t, 'art.decent');
-    if (result.faults.includes('overflow')) sayQueue(t, 'extra.overflow');
-    else if (result.faults.includes('spill')) sayQueue(t, 'extra.spill');
-    else if (prev && result.total - prev.total >= 8) sayQueue(t, 'extra.improved');
-    else if (prev && prev.total - result.total >= 8) sayQueue(t, 'extra.worse');
-    else if (result.faults.includes('underfilled')) sayQueue(t, 'extra.underfilled');
+    if (t.streak.failed >= 2) sayQueue(t, 'extra.failedAgain');
+    return finishJudging(t, result);
   }
+  if (result.total >= 85) sayQueue(t, 'art.great');
+  else if (artFault) sayQueue(t, `art.${artFault}`);
+  else sayQueue(t, 'art.decent');
+  // One follow-up line at most, most important first.
+  if (result.faults.includes('overflow')) sayQueue(t, 'extra.overflow');
+  else if (result.faults.includes('spill')) sayQueue(t, 'extra.spill');
+  else if (sameMistake) sayQueue(t, 'extra.sameMistake');
+  else if (t.streak.improved >= 2) sayQueue(t, 'extra.improvedAgain');
+  else if (improved) sayQueue(t, 'extra.improved');
+  else if (t.streak.failed >= 2) sayQueue(t, 'extra.failedAgain');
+  else if (worse) sayQueue(t, 'extra.worse');
+  else if (result.faults.includes('underfilled')) sayQueue(t, 'extra.underfilled');
+  finishJudging(t, result);
+}
+
+function finishJudging(t: Trial, result: AttemptResult): void {
   t.events.push({ type: 'sfx', id: result.valid && result.total >= 60 ? 'good' : 'bad' });
 }
 
@@ -409,6 +437,12 @@ export function stepTrial(t: Trial, input: TrialInput, dt: number): void {
   const passive =
     t.phase === 'intro' || t.phase === 'inspect' || t.phase === 'verdict' || t.phase === 'lock';
   updateSpeech(t, input.skip || (passive && input.pressed));
+
+  // Restart is available from anywhere once the trial has begun (pause menu, verdict).
+  if (input.action === 'restart' && t.phase !== 'title') {
+    restartTrial(t);
+    return;
+  }
 
   switch (t.phase) {
     case 'title':
@@ -456,7 +490,6 @@ export function stepTrial(t: Trial, input: TrialInput, dt: number): void {
       }
       break;
     case 'verdict':
-      if (input.action === 'restart') restartTrial(t);
       break;
   }
 }
@@ -603,6 +636,7 @@ function stepPourPhase(t: Trial, input: TrialInput, dt: number): void {
     c.targetX = input.cupX;
     c.targetY = input.cupY;
   }
+  if (input.heightPreset !== null) c.targetHeight = input.heightPreset;
   c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
   c.holding = input.holding;
   const milk = t.milk ?? SILKY_MILK;

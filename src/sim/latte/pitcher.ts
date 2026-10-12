@@ -12,6 +12,9 @@ export const PITCHER_MILK = 1.0;
 export const HEIGHT_MIN = 0.4;
 export const HEIGHT_MAX = 10;
 export const HEIGHT_START = 7;
+/** One-key heights (keys 1/2/3): high to fill, a lift for the pull-through, low to draw. Lets a
+ *  trackpad player pour with Space and steer with one finger, no click-and-scroll needed. */
+export const HEIGHT_PRESETS = [7, 3, 0.8] as const;
 /** Tilt per second while held / released. */
 export const TILT_UP = 1.0;
 export const TILT_DOWN = 2.4;

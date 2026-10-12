@@ -556,6 +556,36 @@ export const OWNER_LINES: LineBook = {
     ],
     mood: 'pleased',
   },
+  'extra.sameMistake': {
+    tiers: [
+      [
+        { text: 'Same stuff-up as last time. Were you even listening?' },
+        { text: 'Same problem as your last cup. Read the card, mate.' },
+      ],
+      [{ text: "Same mistake. Again. I'm starting to think it's on purpose." }],
+    ],
+    mood: 'annoyed',
+    gesture: 'facepalm',
+  },
+  'extra.improvedAgain': {
+    tiers: [
+      [
+        { text: "Better again. Two in a row. Don't let it go to your head." },
+        { text: "Getting better every cup. Keep that up and I'll have to pay you." },
+      ],
+    ],
+    mood: 'pleased',
+    gesture: 'nod',
+  },
+  'extra.failedAgain': {
+    tiers: [
+      [{ text: "That's two in a row, champ. Shake it off." }],
+      [{ text: "Two duds in a row. Milk's not free, mate." }],
+      [{ text: "Another dud. I'm running out of cups and patience." }],
+    ],
+    mood: 'annoyed',
+    gesture: 'shakeHead',
+  },
   'extra.worse': {
     tiers: [
       [{ text: 'Went backwards there, champ.' }, { text: 'Worse. How is that even possible?' }],

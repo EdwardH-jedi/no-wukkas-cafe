@@ -10,9 +10,15 @@ import {
   type TrialInput,
 } from '../../src/core/trial';
 import { OWNER_LINES } from '../../src/data/ownerLines';
-import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
+import { controlsAt, OWNER_DEMO, type TrackKey } from '../../src/sim/latte/demo';
+import { HEIGHT_PRESETS } from '../../src/sim/latte/pitcher';
 
-type Style = 'good' | 'lazy' | 'messy';
+type Style = 'good' | 'lazy' | 'messy' | 'blob';
+
+/** The demo pour without the pull-through: stays low and stops. Makes a blob. */
+const BLOB_TRACK: TrackKey[] = OWNER_DEMO.map((k) =>
+  k.t >= 6.4 ? { ...k, x: 0, y: -0.35, h: k.hold ? 0.7 : 8 } : { ...k },
+);
 
 /** A headless player. Drives the trial through the same inputs the mouse produces. */
 function botInput(t: Trial, style: Style, step: number): TrialInput {
@@ -48,7 +54,7 @@ function botInput(t: Trial, style: Style, step: number): TrialInput {
         if (t.phaseTime > 8) i.action = 'next';
         break;
       }
-      const c = controlsAt(OWNER_DEMO, t.phaseTime);
+      const c = controlsAt(style === 'blob' ? BLOB_TRACK : OWNER_DEMO, t.phaseTime);
       i.hasCup = true;
       i.cupX = style === 'messy' ? c.targetX + 1.3 : c.targetX;
       i.cupY = c.targetY;
@@ -65,12 +71,15 @@ function botInput(t: Trial, style: Style, step: number): TrialInput {
   return i;
 }
 
-function play(style: Style, seed = 7, maxSeconds = 600) {
+/** Play with one style, or a style per attempt. */
+function play(style: Style | Style[], seed = 7, maxSeconds = 600) {
   const t = createTrial(seed);
   const phases: Phase[] = [];
   const said: string[] = [];
+  const styleFor = (a: number): Style =>
+    Array.isArray(style) ? (style[Math.min(a, style.length - 1)] as Style) : style;
   for (let n = 0; n < maxSeconds / STEP; n++) {
-    stepTrial(t, botInput(t, style, n), STEP);
+    stepTrial(t, botInput(t, styleFor(t.attempt), n), STEP);
     for (const e of t.events) {
       if (e.type === 'phase') phases.push(e.phase);
       if (e.type === 'say') said.push(e.line.key);
@@ -178,6 +187,54 @@ describe('trial shift, played headless', () => {
       (k) => k.startsWith('pour.intro') || k === 'pour.again' || k === 'pour.last',
     );
     expect(pours).toEqual(['pour.intro', 'pour.again', 'pour.last']);
+  });
+
+  it('calls out the same mistake twice in a row', () => {
+    const { t, said } = play(['blob', 'blob', 'good']);
+    expect(t.results[0]?.faults).toContain('blob');
+    expect(t.results[1]?.faults).toContain('blob');
+    expect(said).toContain('extra.sameMistake');
+  });
+
+  it('notices improving cup after cup', () => {
+    const { t, said } = play(['lazy', 'blob', 'good']);
+    const totals = t.results.map((r) => r.total);
+    expect(totals[1]! - totals[0]!).toBeGreaterThanOrEqual(8);
+    expect(totals[2]! - totals[1]!).toBeGreaterThanOrEqual(8);
+    expect(said).toContain('extra.improved');
+    expect(said).toContain('extra.improvedAgain');
+    expect(t.outcome?.band).toBe('hired');
+  });
+
+  it('notices failing twice in a row', () => {
+    const { said } = play(['lazy', 'lazy', 'lazy']);
+    expect(said.filter((k) => k === 'extra.failedAgain').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('height presets jump the jug target (trackpad-friendly height control)', () => {
+    const t = createTrial(1);
+    for (let n = 0; n < 600 / STEP && t.phase !== 'pour'; n++)
+      stepTrial(t, botInput(t, 'good', n), STEP);
+    expect(t.phase).toBe('pour');
+    const input = emptyInput();
+    input.heightPreset = HEIGHT_PRESETS[2];
+    stepTrial(t, input, STEP);
+    expect(t.controls.targetHeight).toBe(HEIGHT_PRESETS[2]);
+    for (let n = 0; n < 30; n++) stepTrial(t, emptyInput(), STEP);
+    expect(t.pitcher.height).toBeCloseTo(HEIGHT_PRESETS[2], 5);
+  });
+
+  it('restart works mid-trial too (pause menu)', () => {
+    const t = createTrial(2);
+    for (let n = 0; n < 600 / STEP && t.phase !== 'steam'; n++)
+      stepTrial(t, botInput(t, 'good', n), STEP);
+    expect(t.phase).toBe('steam');
+    const input = emptyInput();
+    input.action = 'restart';
+    stepTrial(t, input, STEP);
+    expect(t.phase).toBe('intro');
+    expect(t.espresso.dose).toBe(0);
+    expect(t.espressoScore).toBeNull();
   });
 
   it('restart goes back to the greeting with a clean slate', () => {

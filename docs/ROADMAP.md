@@ -16,7 +16,8 @@ Day 1 is now a job trial: the player applies at No Wukkas and makes one flat whi
 - [x] **D1.4 Gaz:** event-keyed dialogue with frustration tiers, cooldowns and no-repeat pools; canvas-face expressions, gestures, head tracking
 - [x] **D1.5 View:** café scene, machine/grinder/jug/cup, coffee-surface shader, camera shots, synthesised SFX, TTS behind `voice.ts`, HUD + result card + verdict
 - [x] **D1.6 Checks:** sim/core unit tests, Playwright e2e playing the whole trial with real mouse input
-- [ ] **D1.7 Playtest** on a MacBook trackpad and iPhone Safari; tune pour feel and steam timing from what people actually do
+- [x] **D1.7 Trackpad + replay:** Space to tip and 1/2/3 height presets (no click-and-scroll needed), pinch can't zoom the page, restart from the pause menu; Gaz remembers streaks (same mistake twice, improving twice, failing twice)
+- [ ] **D1.8 Playtest** on a real MacBook trackpad and iPhone Safari; tune pour feel and steam timing from what people actually do
 
 ## Phase 0: Port and measure
 
