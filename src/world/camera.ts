@@ -2,7 +2,6 @@
 // subtle head-look that follows the pointer with dead zones when the pointer isn't a control.
 
 import * as THREE from 'three';
-import type { Phase } from '../core/trial';
 import { clamp } from '../sim/math';
 import { CT, LAYOUT } from './layout';
 import { INSPECT_CUP } from './station';
@@ -19,7 +18,7 @@ export interface CameraRig {
   camera: THREE.PerspectiveCamera;
   /** Pointer in -1..1 (x right, y down); `look` false while the pointer drives a control. */
   update(
-    phase: Phase,
+    phase: string,
     phaseTime: number,
     dt: number,
     now: number,
@@ -32,6 +31,7 @@ export interface CameraRig {
 }
 
 type Shot =
+  | 'service'
   | 'title'
   | 'intro'
   | 'grind'
@@ -44,11 +44,27 @@ type Shot =
   | 'feedback'
   | 'verdict';
 
-const shotFor = (p: Phase, phaseTime: number): Shot => {
+const SHOTS = new Set<string>([
+  'title',
+  'intro',
+  'grind',
+  'lock',
+  'shot',
+  'steam',
+  'pour',
+  'inspect',
+  'feedback',
+  'verdict',
+]);
+
+const shotFor = (p: string, phaseTime: number): Shot => {
   if (p === 'demo') return 'pour';
   // Inspection: a close look at the cup in Gaz's hands, then pull back for his reaction.
   if (p === 'inspect') return phaseTime < 2.3 ? 'closeUp' : 'inspect';
-  return p;
+  // Day 2: the hot water is poured at the machine; the shift summary faces Gaz.
+  if (p === 'water') return 'shot';
+  if (p === 'summary' || p === 'wrapup') return 'verdict';
+  return SHOTS.has(p) ? (p as Shot) : 'service';
 };
 
 export function createCameraRig(): CameraRig {
@@ -73,6 +89,12 @@ export function createCameraRig(): CameraRig {
 
   const frame = (s: Shot, f: CameraFocus, now: number): void => {
     switch (s) {
+      case 'service':
+        // Behind the counter, looking out at the register, the queue and the door.
+        wantPos.set(-0.62, 1.62, 0.5);
+        wantTarget.set(0.3, 1.18, -2.6);
+        wantFov = 56;
+        break;
       case 'title':
         wantPos.set(-0.9 + Math.sin(now * 0.1) * 0.25, 1.66, 0.95);
         wantTarget.set(-0.9 + Math.sin(now * 0.13) * 1.2, 1.3, -4.5);

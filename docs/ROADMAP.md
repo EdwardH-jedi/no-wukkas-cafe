@@ -19,6 +19,18 @@ Day 1 is now a job trial: the player applies at No Wukkas and makes one flat whi
 - [x] **D1.7 Trackpad + replay:** Space to tip and 1/2/3 height presets (no click-and-scroll needed), pinch can't zoom the page, restart from the pause menu; Gaz remembers streaks (same mistake twice, improving twice, failing twice)
 - [ ] **D1.8 Playtest** on a real MacBook trackpad and iPhone Safari; tune pour feel and steam timing from what people actually do
 
+## Day 2: The morning rush (first paid shift)
+
+Five scripted customers, one espresso station, Gaz watching. Reuses the Day 1 mechanics unchanged.
+
+- [x] **D2.1 Orders + matching:** take orders (also mid-drink), tickets with patience, make a flat white or a long black, serve it to the customer you pick; wrong drinks are handed back and stay on the pass
+- [x] **D2.2 Drinks:** long black = hot water then the shot (crema kept); modifiers only where the mechanics can show them: extra hot (68–74 °C steam) and a requested heart (scored art); drinks cool on the pass
+- [x] **D2.3 Customers:** Dazza, Priya, Nan Beryl, Jiwoo, Karen from the prototype cast, scripted movement, faces that follow patience, own lines for ordering/impatience/serving/complaints/walking out
+- [x] **D2.4 Gaz + speech:** reacts to slow service, wrong drinks, misses, walk-outs and good runs; one subtitle channel with priorities so nobody talks over anyone
+- [x] **D2.5 Shift report:** orders completed, correct orders, average serve time, satisfaction, tips (cents), waste, grade + Gaz's verdict; replay and back to title
+- [x] **D2.6 Checks:** sim/core unit tests incl. bot difficulty profiles, Playwright e2e of a whole shift, evidence in `docs/verification/2026-10-12-day2/`
+- [ ] **D2.7 Playtest** a full shift with real players; tune patience, arrival times and tips from what they do
+
 ## Phase 0: Port and measure
 
 Goal: the prototype running from a clean, tested TypeScript codebase, with telemetry to tell what's fun.

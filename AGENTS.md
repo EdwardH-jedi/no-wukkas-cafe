@@ -11,7 +11,7 @@ Keep it true. If you change a command, folder or rule, update this file in the s
 
 - **Platform:** web first (desktop + mobile browsers, iOS Safari included). Static build, no backend.
 - **Stack (target):** Vite · TypeScript (strict) · Three.js (npm, latest) · Vitest · Playwright.
-- **Current state:** `src/` holds the Vite + TypeScript game. Its first playable day is the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner; see `docs/ROADMAP.md` → "Day 1"). The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
+- **Current state:** `src/` holds the Vite + TypeScript game. Playable days: the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner) and **Day 2, the morning rush** (five scripted customers, orders, serving, shift report); see `docs/ROADMAP.md` → "Day 1" / "Day 2". The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
 - **Owner:** Edward. Solo project with AI pair-programming.
 
 ## 2. Roles and working agreement
@@ -40,21 +40,21 @@ npm run preview        # serve dist/ locally
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
-npm run test:e2e       # playwright: plays the whole Day 1 trial with real mouse input
+npm run test:e2e       # playwright: plays the Day 1 trial and a Day 2 shift with real input (~6 min)
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
 ```
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
-Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `project(x, y)`), plus a `timeScale` test hook. The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to mute TTS.
+Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to mute TTS.
 
 ## 4. Architecture and hard boundaries
 
 ```
 src/
   main.ts            boot, wires everything, owns the RAF loop
-  core/              state machine (today: the Day 1 trial in core/trial.ts), fixed-step game
-                     clock with pause, seeded RNG; later: event bus, versioned save/load
+  core/              state machines (Day 1 trial.ts, Day 2 rush.ts + barista.ts + speech.ts),
+                     fixed-step game clock with pause, seeded RNG; later: event bus, save/load
   sim/               PURE game logic: orders, recipe evaluation, pricing, customers, patience,
                      events, economy, stress, rating. No DOM. No three. No Date.now/Math.random.
   data/              content as data: drinks, milks, slang dictionary, cast, events, shop items, news

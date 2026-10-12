@@ -178,7 +178,7 @@ kbd {
 }
 
 /* ---------- top bar ---------- */
-#topbar {
+:is(#topbar, #rtopbar) {
   position: absolute;
   left: 16px;
   right: 16px;
@@ -247,7 +247,7 @@ kbd {
   background: var(--flag);
   border-color: var(--flag);
 }
-#topbar .spacer {
+:is(#topbar, #rtopbar) .spacer {
   flex: 1;
 }
 .iconbtn {
@@ -265,7 +265,7 @@ kbd {
 }
 
 /* ---------- subtitles ---------- */
-#subs {
+:is(#subs, #rsubs) {
   position: absolute;
   left: 50%;
   bottom: calc(26px + env(safe-area-inset-bottom, 0px));
@@ -282,18 +282,18 @@ kbd {
   pointer-events: auto;
   cursor: pointer;
 }
-#subs.gone {
+:is(#subs, #rsubs).gone {
   opacity: 0;
   transform: translateX(-50%) translateY(8px);
   pointer-events: none;
 }
-#subs .who {
+:is(#subs, #rsubs) .who {
   font-family: var(--display);
   font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--crema);
 }
-#subs .who small {
+:is(#subs, #rsubs) .who small {
   font-family: var(--body);
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -302,7 +302,7 @@ kbd {
   font-size: 10px;
   margin-left: 6px;
 }
-#subs .text {
+:is(#subs, #rsubs) .text {
   font-size: clamp(16px, 2.1vw, 20px);
   line-height: 1.4;
   margin-top: 4px;
@@ -310,7 +310,7 @@ kbd {
 }
 
 /* ---------- instruction + gauges ---------- */
-#instr {
+:is(#instr, #rinstr) {
   position: absolute;
   left: 16px;
   bottom: calc(150px + env(safe-area-inset-bottom, 0px));
@@ -323,14 +323,14 @@ kbd {
   font-size: 14px;
   line-height: 1.45;
 }
-#instr .h {
+:is(#instr, #rinstr) .h {
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 3px;
 }
-#gauges {
+:is(#gauges, #rgauges) {
   position: absolute;
   right: 16px;
   top: 64px;
@@ -455,7 +455,7 @@ kbd {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-#actionBar {
+:is(#actionBar, #ractions) {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -463,7 +463,7 @@ kbd {
   display: flex;
   gap: 10px;
 }
-#touchHeight {
+:is(#touchHeight, #rtouchHeight) {
   position: absolute;
   right: 16px;
   bottom: calc(150px + env(safe-area-inset-bottom, 0px));
@@ -471,7 +471,7 @@ kbd {
   flex-direction: column;
   gap: 8px;
 }
-#touchHeight button {
+:is(#touchHeight, #rtouchHeight) button {
   width: 54px;
   height: 54px;
   border-radius: 14px;
@@ -627,7 +627,8 @@ kbd {
 }
 
 /* ---------- verdict ---------- */
-#verdict {
+#verdict,
+#rsummary {
   position: absolute;
   inset: 0;
   display: grid;
@@ -691,7 +692,7 @@ kbd {
 }
 
 /* ---------- pause ---------- */
-#pause {
+:is(#pause, #rpause) {
   position: absolute;
   inset: 0;
   display: grid;
@@ -699,10 +700,10 @@ kbd {
   background: rgba(22, 16, 12, 0.7);
   pointer-events: auto;
 }
-#pause .box {
+:is(#pause, #rpause) .box {
   text-align: center;
 }
-#pause h3 {
+:is(#pause, #rpause) h3 {
   font-family: var(--display);
   font-weight: 400;
   font-size: 40px;
@@ -718,13 +719,13 @@ kbd {
 }
 
 @media (max-width: 720px) {
-  #gauges {
+  :is(#gauges, #rgauges) {
     top: auto;
     bottom: calc(150px + env(safe-area-inset-bottom, 0px));
     right: 16px;
     width: 160px;
   }
-  #instr {
+  :is(#instr, #rinstr) {
     bottom: auto;
     top: 60px;
   }
@@ -732,5 +733,128 @@ kbd {
     top: auto;
     bottom: 16px;
     transform: none;
+  }
+}
+
+/* ---------- Day 2: the morning rush ---------- */
+#rail {
+  position: absolute;
+  left: 16px;
+  top: 62px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 260px);
+  pointer-events: none;
+}
+.ticket {
+  width: 156px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 8px 10px 10px;
+  border-radius: 3px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  transform: rotate(-0.8deg);
+}
+.ticket:nth-child(even) {
+  transform: rotate(0.7deg);
+}
+.ticket .tn {
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.ticket .tt {
+  color: var(--paper-dim);
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.ticket .to {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.ticket .tp {
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd3c1;
+  overflow: hidden;
+  margin-bottom: 7px;
+}
+.ticket .tp i {
+  display: block;
+  height: 100%;
+  background: var(--gum);
+  transition: width 0.25s linear;
+}
+.ticket .tp i.warn {
+  background: var(--gold);
+}
+.ticket .tp i.bad {
+  background: var(--flag);
+}
+.ticket .serve {
+  width: 100%;
+  padding: 6px 8px;
+  box-shadow: 0 3px 0 #b8892a;
+}
+.ticket .serve:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+  cursor: default;
+}
+#pass {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(205px + env(safe-area-inset-bottom, 0px));
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 7px 14px;
+  font-size: 14px;
+}
+#pass .k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+#pass.cold {
+  border-color: var(--flag);
+  color: #ffd0c8;
+}
+#ractions {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+#rsubs.customer .who {
+  color: var(--harbour);
+}
+#rsummary .kv {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  font-size: 13px;
+}
+#rsummary .stamp {
+  font-size: clamp(26px, 5vw, 40px);
+}
+.hide-root.hide {
+  display: none !important;
+}
+@media (max-width: 720px) {
+  #rail {
+    max-width: calc(100vw - 32px);
+  }
+  .ticket {
+    width: 132px;
   }
 }

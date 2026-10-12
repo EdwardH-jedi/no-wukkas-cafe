@@ -2,12 +2,11 @@
 // Reads trial state every frame and poses everything; never writes to it (AGENTS.md §4 rule 5).
 
 import * as THREE from 'three';
-import type { Trial } from '../core/trial';
-import { extractionLevel } from '../sim/espresso';
-import { ESPRESSO_FILL, surfaceRadius } from '../sim/latte/field';
-import { pitcherFlow, PITCHER_MILK } from '../sim/latte/pitcher';
+import { extractionLevel, type EspressoState } from '../sim/espresso';
+import { ESPRESSO_FILL, surfaceRadius, type PourState } from '../sim/latte/field';
+import { pitcherFlow, PITCHER_MILK, type PitcherState } from '../sim/latte/pitcher';
 import { clamp, lerp, smoothstep } from '../sim/math';
-import { milkVolume, tipDepth } from '../sim/steam';
+import { milkVolume, tipDepth, type SteamState } from '../sim/steam';
 import { createCoffeeSurface } from './coffeeSurface';
 import { CT, CUP, LAYOUT, liquidDrop } from './layout';
 import { canvasTexture, disposeTree, StaticBuilder, std } from './util';
@@ -24,10 +23,32 @@ const JUG_TIP = new THREE.Vector3(0.052, 0.118, 0); // spout tip relative to the
 const JUG_SCALE = 0.8; // a small latte-art jug
 const WAND_TIP = new THREE.Vector3(LAYOUT.wand.x, CT + 0.17, LAYOUT.wand.z);
 const JUG_REST = new THREE.Vector3(-0.38, CT, -1.0);
+/** Day 2 long black: the cup sits under the hot-water tap first. */
+const WATER_CUP = new THREE.Vector3(-1.45, CT + 0.035, -0.7);
+const WATER_TAP = new THREE.Vector3(-1.45, CT + 0.24, -0.7);
 const PUFFS = 26;
 /** Gaz holds the cup up here to inspect it, tilted toward the player (who looks from -x, +z). */
 export const INSPECT_CUP = new THREE.Vector3(0.27, 1.3, 0.08);
 const INSPECT_TOWARD = new THREE.Vector3(-1, 0, 1).normalize();
+
+/** What the station needs to know each frame. Day 1's Trial satisfies it as is; Day 2 builds one
+ *  from its barista state (phases 'idle', 'water' and 'ready' are Day 2 only). */
+export interface StationView {
+  phase: string;
+  phaseTime: number;
+  attempt: number;
+  espresso: EspressoState;
+  steam: SteamState;
+  pour: PourState;
+  pitcher: PitcherState;
+  demoActive: boolean;
+  demoEndedAt: number;
+  /** Day 2: the drink being made. Day 1 is always a flat white. */
+  drink?: 'flatWhite' | 'longBlack' | null;
+  /** Day 2 long black: hot water in the cup (cup volumes) and whether the tap is running. */
+  water?: number;
+  dispensing?: boolean;
+}
 
 export interface Station {
   root: THREE.Group;
@@ -35,7 +56,7 @@ export interface Station {
   readonly cupRim: THREE.Vector3;
   /** World height of the coffee surface (pointer plane while pouring). */
   readonly surfaceY: number;
-  update(t: Trial, dt: number, now: number): void;
+  update(t: StationView, dt: number, now: number): void;
   dispose(): void;
 }
 
@@ -327,6 +348,17 @@ export function buildStation(scene: THREE.Scene): Station {
     root.add(m);
     return m;
   });
+  const waterStream = new THREE.Mesh(
+    streamGeo,
+    new THREE.MeshStandardMaterial({
+      color: '#e8f4f7',
+      roughness: 0.1,
+      transparent: true,
+      opacity: 0.8,
+    }),
+  );
+  waterStream.visible = false;
+  root.add(waterStream);
   const espColA = new THREE.Color('#2e1407');
   const espColB = new THREE.Color('#8a4f24');
   const espColC = new THREE.Color('#d1a45f');
@@ -436,7 +468,7 @@ export function buildStation(scene: THREE.Scene): Station {
     jug.position.copy(base).add(v2);
   };
 
-  function update(t: Trial, dt: number, now: number): void {
+  function update(t: StationView, dt: number, now: number): void {
     const phase = t.phase;
     if (phase !== lastPhase || t.attempt !== lastAttempt) {
       if (phase === 'steam' && t.attempt === 0) cupSlide = 0;
@@ -483,8 +515,11 @@ export function buildStation(scene: THREE.Scene): Station {
     // --- cup position
     if (phase === 'steam' || phase === 'demo' || phase === 'pour')
       cupSlide = Math.min(1, cupSlide + dt / 0.7);
+    const longBlack = t.drink === 'longBlack';
     const atMachine = early || phase === 'lock' || phase === 'shot';
     const held = phase === 'inspect' || phase === 'feedback';
+    // Day 2: no cup out while idle; long blacks start under the hot-water tap.
+    cup.visible = phase !== 'idle';
     if (held) {
       const k = phase === 'inspect' ? smoothstep(0.1, 0.9, t.phaseTime) : 1;
       v1.set(LAYOUT.cup.x, LAYOUT.cup.y, LAYOUT.cup.z);
@@ -493,8 +528,13 @@ export function buildStation(scene: THREE.Scene): Station {
       qYaw.setFromAxisAngle(yAxis, inspectYaw * k);
       qTilt.setFromAxisAngle(tiltAxis, 0.95 * k);
       cup.quaternion.multiplyQuaternions(qTilt, qYaw);
+    } else if (phase === 'water') {
+      cupPos.copy(WATER_CUP);
+      cup.rotation.set(0, 0, 0);
     } else if (atMachine) {
-      cupPos.copy(LAYOUT.group);
+      if (longBlack && phase === 'shot')
+        cupPos.lerpVectors(WATER_CUP, LAYOUT.group, smoothstep(0, 0.4, t.phaseTime));
+      else cupPos.copy(LAYOUT.group);
       cup.rotation.set(0, 0, 0);
     } else {
       const k = phase === 'steam' && t.attempt === 0 ? smoothstep(0, 1, cupSlide) : 1;
@@ -507,11 +547,23 @@ export function buildStation(scene: THREE.Scene): Station {
     // --- coffee level + art
     const pourView =
       phase === 'pour' ||
+      (phase === 'ready' && !longBlack) ||
       (phase === 'demo' && (t.demoActive || t.demoEndedAt >= 0)) ||
       held ||
       phase === 'verdict';
     let fill: number;
-    if (early || phase === 'lock') {
+    const water = t.water ?? 0;
+    if (longBlack && (phase === 'water' || phase === 'shot' || phase === 'ready')) {
+      // Water first, then the shot lands on top: all crema, no milk.
+      const shot =
+        phase === 'water'
+          ? 0
+          : phase === 'ready'
+            ? ESPRESSO_FILL
+            : clamp(e.yield / 38) * ESPRESSO_FILL;
+      fill = Math.min(1, water + shot);
+      coffee.clear();
+    } else if (early || phase === 'lock') {
       fill = 0;
       coffee.clear();
     } else if (phase === 'shot') {
@@ -528,7 +580,7 @@ export function buildStation(scene: THREE.Scene): Station {
     const rs = surfaceRadius(fill) * RIM * 0.985;
     coffee.mesh.scale.set(rs, rs, 1);
     coffee.mesh.position.y = RIM_Y - liquidDrop(fill);
-    coffee.setTone(clamp((fill - ESPRESSO_FILL) / (1 - ESPRESSO_FILL)) * 0.72);
+    coffee.setTone(longBlack ? 0 : clamp((fill - ESPRESSO_FILL) / (1 - ESPRESSO_FILL)) * 0.72);
     cupRim.set(cupPos.x, cupPos.y + RIM_Y, cupPos.z);
     const surfaceY = cupPos.y + coffee.mesh.position.y;
     surfaceYNow = surfaceY;
@@ -541,6 +593,15 @@ export function buildStation(scene: THREE.Scene): Station {
       s.position.set(IN_GROUP.x + (s.userData.side as number) * 0.012, top, IN_GROUP.z);
       const r = 0.0011 + 0.0004 * Math.sin(now * 40 + (s.userData.side as number));
       s.scale.set(r, len, r);
+    }
+
+    // --- hot water (Day 2 long black)
+    waterStream.visible = phase === 'water' && t.dispensing === true;
+    if (waterStream.visible) {
+      const len = Math.max(0.005, WATER_TAP.y - surfaceY);
+      const r = 0.0042 + 0.0004 * Math.sin(now * 33);
+      waterStream.position.copy(WATER_TAP);
+      waterStream.scale.set(r, len, r);
     }
 
     // --- milk jug
@@ -649,7 +710,7 @@ export function buildStation(scene: THREE.Scene): Station {
         );
       }
     }
-    if ((pourView || phase === 'steam') && !held && fill > 0.5) {
+    if ((pourView || phase === 'steam' || phase === 'ready') && !held && fill > 0.5) {
       cupSteamAcc += dt * 2.2;
       while (cupSteamAcc >= 1) {
         cupSteamAcc -= 1;

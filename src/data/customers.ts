@@ -40,7 +40,7 @@ export interface CustomerDef {
   /** What Gaz calls them. */
   callName: string;
   tag: string;
-  voice: { pitch: number; rate: number };
+  voice: { pitch: number; rate: number; female?: boolean };
   look: CustomerLook;
   order: Order;
   /** Seconds after the doors open that they walk in. */
@@ -96,7 +96,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Priya',
     name: 'Priya',
     tag: 'Nurse · post night-shift',
-    voice: { pitch: 1.0, rate: 0.95 },
+    voice: { pitch: 1.0, rate: 0.95, female: true },
     look: {
       skin: '#b98262',
       hair: 'pony',
@@ -131,7 +131,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Beryl',
     name: 'Nan Beryl',
     tag: 'Regular since 1987',
-    voice: { pitch: 1.25, rate: 0.82 },
+    voice: { pitch: 1.25, rate: 0.82, female: true },
     look: {
       skin: '#f1cdb4',
       hair: 'curly',
@@ -167,7 +167,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Jiwoo',
     name: 'Jiwoo 지우',
     tag: 'Working holiday',
-    voice: { pitch: 1.2, rate: 1.1 },
+    voice: { pitch: 1.2, rate: 1.1, female: true },
     look: {
       skin: '#f3d4bc',
       hair: 'long',
@@ -203,7 +203,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Karen',
     name: 'Karen',
     tag: 'Wants the manager',
-    voice: { pitch: 1.1, rate: 1.05 },
+    voice: { pitch: 1.1, rate: 1.05, female: true },
     look: {
       skin: '#f3cfb6',
       hair: 'bob',

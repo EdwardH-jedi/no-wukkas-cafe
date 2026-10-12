@@ -29,7 +29,8 @@ export function titleHtml(touch: boolean): string {
     <p>You want the barista job. Gaz, the owner, wants a flat white with a heart on top, and he's watching every move. Three goes. Don't stuff it up.</p>
     <div class="controls">${controls}</div>
     <div class="titleBtns">
-      <button class="btn" data-act="start">Start the trial</button>
+      <button class="btn" data-act="start">Day 1: Start the trial</button>
+      <button class="btn ghost" data-act="day2">Day 2: The morning rush</button>
       <button class="btn ghost" data-act="voice" aria-pressed="true">Voice: on</button>
     </div>
   </div>`;
@@ -97,6 +98,7 @@ export function renderVerdict(
   t: Trial,
   quote: string,
   onAction: (a: TrialAction) => void,
+  onDay2: () => void,
 ): void {
   const o = t.outcome;
   if (!o) return;
@@ -116,12 +118,16 @@ export function renderVerdict(
     <div style="text-align:center">${o.bestIndex >= 0 ? `Best attempt: <b>${o.score}/100</b>` : 'No attempt counted.'} · ${esc(band.sub)}</div>
     <div class="attempts">${thumbs}</div>
     <div class="quote">“${esc(quote)}”<br><small>— Gaz, owner</small></div>
-    <div class="cardBtns"><button class="btn" data-act="restart">Do the trial again</button></div>
+    <div class="cardBtns">
+      <button class="btn" data-act="${o.band === 'hired' || o.band === 'almost' ? 'day2' : 'restart'}">${o.band === 'hired' || o.band === 'almost' ? 'Start Day 2: the morning rush' : 'Do the trial again'}</button>
+      <button class="btn ghost" data-act="${o.band === 'hired' || o.band === 'almost' ? 'restart' : 'day2'}">${o.band === 'hired' || o.band === 'almost' ? 'Do the trial again' : 'Try the morning rush anyway'}</button>
+    </div>
   </div></div>`;
   el.querySelectorAll('canvas').forEach((c, i) => {
     drawPattern(c, t.patterns[i] as Float32Array, t.results[i]?.pattern ?? null, false);
   });
-  const btn = el.querySelector('button[data-act]') as HTMLButtonElement;
-  btn.onclick = () => onAction('restart');
-  btn.focus({ preventScroll: true });
+  el.querySelectorAll<HTMLButtonElement>('button[data-act]').forEach((b) => {
+    b.onclick = () => (b.dataset.act === 'day2' ? onDay2() : onAction('restart'));
+  });
+  (el.querySelector('button[data-act]') as HTMLButtonElement).focus({ preventScroll: true });
 }

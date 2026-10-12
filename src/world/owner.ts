@@ -3,8 +3,7 @@
 // play on top when he says something.
 
 import * as THREE from 'three';
-import type { Trial } from '../core/trial';
-import type { Gesture, Mood, SpokenLine } from '../sim/owner';
+import type { Gesture, Mood } from '../sim/owner';
 import { clamp } from '../sim/math';
 import { LAYOUT } from './layout';
 import { canvasTexture, disposeTree, std } from './util';
@@ -144,12 +143,26 @@ const GESTURE_POSE: Partial<Record<Gesture, string>> = {
   leanIn: 'leanIn',
 };
 
+/** What Gaz's body needs each frame. Day 1's Trial satisfies it; Day 2 passes its own. */
+export interface OwnerScene {
+  phase: string;
+  speech: { current: unknown };
+  owner: { frustration: number };
+}
+
+/** A line he says (mood + gesture drive his face and arms). */
+export interface OwnerLine {
+  mood: Mood;
+  gesture: Gesture;
+  duration: number;
+}
+
 export interface OwnerView {
   root: THREE.Group;
   /** World position of his face (camera target). */
   readonly head: THREE.Vector3;
-  onSay(line: SpokenLine, now: number): void;
-  update(t: Trial, dt: number, now: number, look: THREE.Vector3): void;
+  onSay(line: OwnerLine, now: number): void;
+  update(t: OwnerScene, dt: number, now: number, look: THREE.Vector3): void;
   dispose(): void;
 }
 
@@ -511,7 +524,13 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
     update(t, dt, now, look) {
       // Base pose for the phase, gesture on top for ~1.9 s.
       let base = 'crossed';
-      if (t.phase === 'title' || t.phase === 'intro' || t.phase === 'verdict') base = 'hips';
+      if (
+        t.phase === 'title' ||
+        t.phase === 'intro' ||
+        t.phase === 'verdict' ||
+        t.phase === 'summary'
+      )
+        base = 'hips';
       else if (t.phase === 'inspect' || t.phase === 'feedback') base = 'holdCup';
       else if (t.phase === 'pour') base = 'leanIn';
       const gAge = now - gestureStart;

@@ -1,14 +1,25 @@
 // What to do right now, in plain words. Derived from trial state each frame.
 
-import type { Trial } from '../core/trial';
-import { SURF_LOW } from '../sim/latte/field';
+import type { EspressoState } from '../sim/espresso';
+import { SURF_LOW, type PourState } from '../sim/latte/field';
+import type { PitcherState } from '../sim/latte/pitcher';
+import type { SteamState } from '../sim/steam';
 
 export interface Instruction {
   title: string;
   html: string;
 }
 
-export function instruction(t: Trial, touch: boolean): Instruction | null {
+/** What the instruction panel needs (Day 1's Trial and Day 2's station both provide it). */
+export interface InstructionView {
+  phase: string;
+  espresso: EspressoState;
+  steam: SteamState;
+  pour: PourState;
+  pitcher: PitcherState;
+}
+
+export function instruction(t: InstructionView, touch: boolean): Instruction | null {
   const hold = touch ? 'Press and hold' : 'Hold the mouse button (or <kbd>Space</kbd>)';
   const e = t.espresso;
   switch (t.phase) {
@@ -40,6 +51,11 @@ export function instruction(t: Trial, touch: boolean): Instruction | null {
         html: `${hold} to open the steam. ${move} <b>down</b> to bring the tip to the surface (<i>tss-tss</i> = air going in), <b>up</b> to sink it and spin. Let go at <b>55–65 °C</b>.`,
       };
     }
+    case 'water':
+      return {
+        title: 'Hot water first',
+        html: `${hold} to run hot water into the cup. Let go when it's in the green band (about two-thirds); the shot goes on top to keep the crema.`,
+      };
     case 'demo':
       return {
         title: 'Watch Gaz',
