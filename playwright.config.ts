@@ -11,14 +11,19 @@ export default defineConfig({
   reporter: [['list']],
   use: {
     baseURL: `http://localhost:${PORT}`,
-    viewport: { width: 1280, height: 800 },
     trace: 'retain-on-failure',
     launchOptions: {
       // Software WebGL so the 3D scene renders in headless Chromium.
       args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
     },
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  // Software WebGL is slow; a smaller viewport keeps the frame rate (and input sampling) usable.
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1024, height: 640 } },
+    },
+  ],
   webServer: {
     command: `npx vite --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}`,

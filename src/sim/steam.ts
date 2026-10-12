@@ -12,7 +12,7 @@ export const TARGET_TEMP: readonly [number, number] = [55, 65];
 export const SCALD_TEMP = 78;
 export const AERATION_TARGET: readonly [number, number] = [0.3, 0.6];
 /** Tip depth (cm below the surface) bands. */
-export const CHIRP_DEPTH: readonly [number, number] = [0, 0.7];
+export const CHIRP_DEPTH: readonly [number, number] = [0, 1.0];
 /** How much the surface rises as foam builds, cm per unit of aeration. */
 const FOAM_RISE_CM = 1.6;
 const AERATE_RATE = 0.13; // aeration per second in the chirp zone (cold milk)

@@ -10,10 +10,13 @@ function run(seconds: number, depth: number, s = createSteam()) {
 describe('steaming', () => {
   it('stretches air in only with the tip near the surface', () => {
     expect(run(0.3, 0.3).zone).toBe('chirp');
-    const chirp = run(2, 0.3);
-    expect(chirp.aeration).toBeGreaterThan(0.2);
-    // The foam has lifted the surface past the tip by now, so it spins instead.
-    expect(chirp.zone).toBe('whirl');
+    expect(run(2, 0.3).aeration).toBeGreaterThan(0.2);
+    // Held still, the rising foam lifts the surface past the tip and it starts to spin,
+    // which caps the stretch inside the silky range.
+    const held = run(4, 0.3);
+    expect(held.zone).toBe('whirl');
+    expect(held.aeration).toBeGreaterThan(0.3);
+    expect(held.aeration).toBeLessThan(0.6);
     const deep = run(2, 3);
     expect(deep.zone).toBe('whirl');
     expect(deep.aeration).toBe(0);

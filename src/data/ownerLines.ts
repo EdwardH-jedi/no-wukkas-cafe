@@ -1,7 +1,9 @@
 // Everything Gaz says. Keyed by gameplay event; `tiers` = [calm-sarcastic, annoyed, fed up].
 // Rules (AGENTS.md §6): the jokes are about the coffee, never about who the player is.
 // Australian English and spelling. Slang used: mate, champ, bloody, reckon, righto, rack off,
-// servo, arvo, flattie, stuff it up, slower than a wet week, flat as a tack, no wukkas.
+// servo, flattie, stuff it up, slower than a wet week, have a crack, pokie machine, no wukkas.
+// TODO(slang-check): "flat as a tack" means low on energy; it's used as a pun on flat (unstretched)
+// milk in 'steam.flat'. Edward to confirm it reads naturally.
 
 import type { LineBook, LineDef } from '../sim/owner';
 
@@ -555,13 +557,6 @@ export const OWNER_LINES: LineBook = {
       [{ text: 'Went backwards there, champ.' }, { text: 'Worse. How is that even possible?' }],
     ],
     mood: 'annoyed',
-  },
-  'feedback.lastChance': {
-    tiers: [
-      [{ text: 'Last chance coming up. No pressure.' }],
-      [{ text: 'Last go. Everything rides on this one.' }],
-    ],
-    mood: 'smug',
   },
   'verdict.disaster': {
     tiers: [

@@ -14,9 +14,10 @@ Work out what they actually said, make it right, and do it before their patience
 
 | | |
 |---|---|
-| **Stage** | Playable prototype → porting to a proper codebase (Roadmap Phase 0) |
-| **Prototype** | [`prototype/game.html`](prototype/game.html): single file, Three.js r128 via CDN |
-| **Next** | Vite + TypeScript port, then "hands-on" brewing (shot timing, steam temperature, two group heads) |
+| **Stage** | Day 1 barista trial playable in `src/` (Vite + TypeScript + Three.js) |
+| **Day 1** | Job trial at No Wukkas: grind, pull a shot, steam milk, pour a latte-art heart while Gaz the owner judges you. Three goes |
+| **Prototype** | [`prototype/game.html`](prototype/game.html): single file, Three.js r128 via CDN; reference for the customer + economy loop |
+| **Next** | Playtest the trial, then port the customer day from the prototype (Roadmap Phase 0) |
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full plan.
 
@@ -50,7 +51,7 @@ npx serve prototype
 # open http://localhost:3000/game.html (needs internet for the Three.js CDN)
 ```
 
-### Run the real project (after Phase 0 scaffolding)
+### Run the real project
 
 ```bash
 npm install

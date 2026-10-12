@@ -1,0 +1,76 @@
+// What to do right now, in plain words. Derived from trial state each frame.
+
+import type { Trial } from '../core/trial';
+import { SURF_LOW } from '../sim/latte/field';
+
+export interface Instruction {
+  title: string;
+  html: string;
+}
+
+export function instruction(t: Trial, touch: boolean): Instruction | null {
+  const hold = touch ? 'Press and hold' : 'Hold the mouse button (or <kbd>Space</kbd>)';
+  const e = t.espresso;
+  switch (t.phase) {
+    case 'grind':
+      if (e.dose < 0.5) return { title: 'Grind', html: `${hold} to grind into the basket.` };
+      if (e.grinding) return { title: 'Grind', html: 'Let go at <b>18–20 g</b>.' };
+      return {
+        title: 'Grind',
+        html: `More? Hold again. Happy with it? <b>Tamp &amp; lock in</b>${touch ? '' : ' (<kbd>Enter</kbd>)'}.`,
+      };
+    case 'lock':
+      return { title: 'Tamp', html: 'Tamping and locking the portafilter in…' };
+    case 'shot':
+      if (e.done) return null;
+      if (!e.extracting)
+        return {
+          title: 'Pull the shot',
+          html: `${touch ? 'Tap' : 'Click (or <kbd>Space</kbd>)'} to start the pump.`,
+        };
+      return {
+        title: 'Pull the shot',
+        html: `${touch ? 'Tap' : 'Click'} again to stop between <b>25 and 31 s</b>.`,
+      };
+    case 'steam': {
+      if (t.steam.done) return null;
+      const move = touch ? 'Drag' : 'Move the mouse';
+      return {
+        title: 'Steam the milk',
+        html: `${hold} to open the steam. ${move} <b>down</b> to bring the tip to the surface (<i>tss-tss</i> = air going in), <b>up</b> to sink it and spin. Let go at <b>55–65 °C</b>.`,
+      };
+    }
+    case 'demo':
+      return {
+        title: 'Watch Gaz',
+        html: 'High to fill → drop <b>low</b> to bloom → lift, ease off and <b>pull through</b> away from you.',
+      };
+    case 'pour': {
+      const p = t.pour;
+      const height = touch ? 'the ▲▼ buttons' : 'scroll or <kbd>W</kbd>/<kbd>S</kbd>';
+      if (p.poured === 0)
+        return {
+          title: 'Pour the heart',
+          html: `${touch ? 'Drag' : 'Mouse'} = jug position. ${hold} to tip and pour; the longer you hold, the more it flows. ${height} = height.`,
+        };
+      if (p.fill < 0.55)
+        return {
+          title: 'Fill',
+          html: 'Pour from up high so the milk sinks under the crema and fills the cup.',
+        };
+      if (t.pitcher.height > SURF_LOW + 0.9 && !p.drawing)
+        return {
+          title: 'Drop in',
+          html: `Now bring the jug right down to the surface (${height}).`,
+        };
+      if (p.fill < 0.97)
+        return {
+          title: 'Bloom, then pull through',
+          html: 'Let the white bloom… then lift a touch, let go of the button and push <b>forward</b> through it.',
+        };
+      return { title: 'Stop!', html: 'Cup is full. Let go.' };
+    }
+    default:
+      return null;
+  }
+}

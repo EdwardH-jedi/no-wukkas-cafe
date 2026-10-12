@@ -6,11 +6,23 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done (only when checks a
 
 ---
 
+## Day 1: Barista trial shift (new first playable day)
+
+Day 1 is now a job trial: the player applies at No Wukkas and makes one flat white while Gaz, the owner, watches. No customers, no economy yet. Built directly in `src/` on the Phase 0 scaffold.
+
+- [x] **D1.1 Trial flow:** greeting → grind → tamp/lock → shot → steam → owner demo → up to 3 attempts (pour → inspect → feedback) → verdict → restart (`src/core/trial.ts`)
+- [x] **D1.2 Latte-art sim:** 128² foam field on the cup surface driven by pitcher position, height and flow (source push, wake drag, forward jet, MacCormack advection); same physics for the owner's demo and the player (`src/sim/latte/`)
+- [x] **D1.3 Deterministic judging:** heart-template IoU (±20°), cleft + tip, mirror symmetry, centring, crispness, spill/fill; validity rules; bands 0–24 / 25–59 / 60–84 / 85–100; best valid attempt wins
+- [x] **D1.4 Gaz:** event-keyed dialogue with frustration tiers, cooldowns and no-repeat pools; canvas-face expressions, gestures, head tracking
+- [x] **D1.5 View:** café scene, machine/grinder/jug/cup, coffee-surface shader, camera shots, synthesised SFX, TTS behind `voice.ts`, HUD + result card + verdict
+- [x] **D1.6 Checks:** sim/core unit tests, Playwright e2e playing the whole trial with real mouse input
+- [ ] **D1.7 Playtest** on a MacBook trackpad and iPhone Safari; tune pour feel and steam timing from what people actually do
+
 ## Phase 0: Port and measure
 
 Goal: the prototype running from a clean, tested TypeScript codebase, with telemetry to tell what's fun.
 
-- [ ] **0.1 Scaffold:** Vite + TS strict, ESLint/Prettier, Vitest, Playwright, all scripts from AGENTS.md §3 (stubs are fine for `balance`/`test:e2e`), `.gitignore`, CI-free for now
+- [x] **0.1 Scaffold:** Vite + TS strict, ESLint/Prettier, Vitest, Playwright, all scripts from AGENTS.md §3 (stubs are fine for `balance`/`test:e2e`), `.gitignore`, CI-free for now
 - [ ] **0.2 Core:** seeded RNG (`core/rng.ts`), game clock with pause, state machine, event bus, versioned save (`version: 1`)
 - [ ] **0.3 Data:** move `DRINKS, MILKS, TEX, SLANG, CAST, STYLE, CHAT, ACCENT, NEWS, UPGRADES, CARS, HOMES, TREATS` into `src/data/` with types
 - [ ] **0.4 Sim:** port `recipe`, `describe`, `phraseDrink`, `accentify`, `randomRecipe`, `evaluate`, `priceOf`, customer patience, specials schedule and `endDay` economy into `src/sim/`. Money in cents. Unit tests for each
