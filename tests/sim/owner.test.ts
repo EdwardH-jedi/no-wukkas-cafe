@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../src/core/rng';
-import { GREETING, GREETING_OPENERS, OWNER_LINES } from '../../src/data/ownerLines';
+import { CUSTOMERS } from '../../src/data/customers';
+import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../../src/data/ownerLines';
 import { FAULT_TEXT } from '../../src/data/tips';
 import {
   addFrustration,
@@ -78,8 +79,13 @@ describe('dialogue content', () => {
   const all = [
     ...GREETING,
     ...GREETING_OPENERS,
+    ...RUSH_INTRO,
     ...Object.values(OWNER_LINES).flatMap((p) => p.tiers.flat()),
   ].map((l) => l.text);
+  const customerLines = CUSTOMERS.flatMap((c) => {
+    const { complaint, ...rest } = c.lines;
+    return [...Object.values(rest), ...Object.values(complaint)];
+  });
   const tips = Object.values(FAULT_TEXT).flatMap((t) => [t.label, t.tip]);
 
   it('includes the lines from the brief', () => {
@@ -101,7 +107,14 @@ describe('dialogue content', () => {
 
   it('uses Australian spelling', () => {
     const us = /\b(center|centered|color|flavor|favorite|honor|apologize|realize|mom)\b/i;
-    for (const text of [...all, ...tips]) expect(text).not.toMatch(us);
+    for (const text of [...all, ...tips, ...customerLines]) expect(text).not.toMatch(us);
+  });
+
+  it('gives every Day 2 customer a full set of lines', () => {
+    for (const c of CUSTOMERS) {
+      for (const [k, v] of Object.entries(c.lines))
+        if (typeof v === 'string') expect(v.trim().length, `${c.id}.${k}`).toBeGreaterThan(0);
+    }
   });
 
   it('has a coaching tip for every fault', () => {

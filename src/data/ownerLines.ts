@@ -33,6 +33,20 @@ export const GREETING: readonly LineDef[] = [
   },
 ];
 
+/** Day 2 opening, said in order. */
+export const RUSH_INTRO: readonly LineDef[] = [
+  { text: "Righto, you're on the books. Welcome to your first paid shift.", mood: 'smug' },
+  {
+    text: "Seven o'clock rush. Tradies, nurses, Nan Beryl, the lot. Keep the line moving.",
+    mood: 'neutral',
+    gesture: 'point',
+  },
+  {
+    text: 'Take the order, make the drink, hand it to the right person. Flat whites and long blacks. Easy.',
+    mood: 'sceptical',
+  },
+];
+
 export const OWNER_LINES: LineBook = {
   'grind.intro': {
     tiers: [
@@ -591,6 +605,158 @@ export const OWNER_LINES: LineBook = {
       [{ text: 'Went backwards there, champ.' }, { text: 'Worse. How is that even possible?' }],
     ],
     mood: 'annoyed',
+  },
+  'water.overflow': {
+    tiers: [[{ text: "Whoa, that's a bath, not a long black. Leave room for the shot!" }]],
+    mood: 'shocked',
+    gesture: 'throwHands',
+  },
+  // ------------------------------------------------------------ Day 2: the morning rush
+  // {name}, {ordered} and {drink} are filled in by core/rush.ts.
+  'rush.firstCustomer': {
+    tiers: [[{ text: 'Here comes {name}. Take the order, mate.', gesture: 'point' }]],
+    mood: 'neutral',
+  },
+  'rush.registerNag': {
+    tiers: [
+      [
+        { text: 'Customer at the register, mate!' },
+        { text: 'You gonna take that order or just admire them?' },
+      ],
+      [{ text: "{name}'s been standing there for ages. Order!" }],
+      [{ text: 'Take. The. Order.' }],
+    ],
+    mood: 'annoyed',
+    gesture: 'point',
+    cooldown: 9,
+  },
+  'rush.slow': {
+    tiers: [
+      [
+        { text: 'Tickets are piling up. Move it.' },
+        { text: "That {ordered} isn't gonna make itself." },
+      ],
+      [{ text: "{name}'s been waiting forever. Speed it up." }],
+      [{ text: "We'll be here till lunch at this rate." }],
+    ],
+    mood: 'annoyed',
+    gesture: 'tapWatch',
+    cooldown: 14,
+  },
+  'rush.wrongDrink': {
+    tiers: [
+      [
+        { text: 'Wrong drink, champ. {name} ordered a {ordered}.' },
+        { text: '{name} wanted a {ordered}, not a {drink}. Read the ticket!' },
+      ],
+      [{ text: "Tickets, mate! {ordered}! It's written down!" }],
+      [{ text: 'Again with the wrong drink. Unbelievable.' }],
+    ],
+    mood: 'annoyed',
+    gesture: 'facepalm',
+  },
+  'rush.binned': {
+    tiers: [
+      [
+        { text: "Into the bin. That's money down the sink." },
+        { text: 'Binning it? Fair enough. Better than serving it.' },
+      ],
+    ],
+    mood: 'sceptical',
+    cooldown: 8,
+  },
+  'rush.walkout': {
+    tiers: [
+      [
+        { text: "And there goes {name}. They'll tell their mates." },
+        { text: 'Lost {name}. Lovely.' },
+      ],
+      [{ text: "Another walkout. We're a café, not a waiting room." }],
+      [{ text: "At this rate I'll be serving myself." }],
+    ],
+    mood: 'furious',
+    gesture: 'throwHands',
+  },
+  'rush.goodServe': {
+    tiers: [
+      [
+        { text: "Nice. Keep 'em coming." },
+        { text: "See? That's how it's done." },
+        { text: 'Not bad. {name} looked happy.' },
+      ],
+    ],
+    mood: 'impressed',
+    gesture: 'nod',
+    cooldown: 18,
+  },
+  'rush.poorServe': {
+    tiers: [[{ text: 'You served that? Bold.' }, { text: "{name}'s face says it all." }]],
+    mood: 'sceptical',
+    gesture: 'shakeHead',
+  },
+  'rush.coldDrink': {
+    tiers: [
+      [
+        { text: "Don't let drinks sit on the pass. They go cold." },
+        { text: 'That one sat there too long. Lukewarm.' },
+      ],
+    ],
+    mood: 'annoyed',
+  },
+  'rush.notHotEnough': {
+    tiers: [[{ text: '{name} asked for extra hot, mate. That was barely warm.' }]],
+    mood: 'annoyed',
+    gesture: 'facepalm',
+  },
+  'rush.noHeart': {
+    tiers: [[{ text: 'No heart? {name} asked nicely, too.' }]],
+    mood: 'sceptical',
+    gesture: 'shakeHead',
+  },
+  'rush.streakGood': {
+    tiers: [[{ text: 'Three in a row. Who are you and what have you done with the trainee?' }]],
+    mood: 'impressed',
+    gesture: 'thumbsUp',
+  },
+  'rush.streakBad': {
+    tiers: [[{ text: 'Two stuff-ups on the trot. Breathe, mate.' }]],
+    mood: 'annoyed',
+  },
+  'rush.karenManager': {
+    tiers: [[{ text: "I am the manager. And no, she's not getting a free one." }]],
+    mood: 'smug',
+  },
+  'rush.lastOrder': {
+    tiers: [[{ text: 'Last one. Finish strong.' }]],
+    mood: 'neutral',
+  },
+  'rush.wasteLeft': {
+    tiers: [[{ text: 'And you left a drink on the pass. Somebody paid for those beans.' }]],
+    mood: 'sceptical',
+  },
+  'rush.end.excellent': {
+    tiers: [[{ text: 'Bloody oath. Five for five. You might actually be good at this.' }]],
+    mood: 'impressed',
+    gesture: 'thumbsUp',
+  },
+  'rush.end.good': {
+    tiers: [[{ text: 'Not bad for a first shift. Not bad at all.' }]],
+    mood: 'pleased',
+    gesture: 'nod',
+  },
+  'rush.end.okay': {
+    tiers: [[{ text: 'We survived. Just. Tomorrow, faster.' }]],
+    mood: 'sceptical',
+  },
+  'rush.end.poor': {
+    tiers: [[{ text: 'That was rough, mate. Real rough. Practise your flatties tonight.' }]],
+    mood: 'annoyed',
+    gesture: 'shakeHead',
+  },
+  'rush.end.disaster': {
+    tiers: [[{ text: 'Half my regulars walked out. Go home, have a lie-down, try again.' }]],
+    mood: 'furious',
+    gesture: 'facepalm',
   },
   'verdict.disaster': {
     tiers: [
