@@ -520,7 +520,10 @@ async function boot(): Promise<void> {
         } else voice.speak(u.text, u.speaker, customerDef(u.speaker as CustomerId).voice);
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);
-        if (ev.phase === 'intro') crowd.clear();
+        if (ev.phase === 'intro') {
+          crowd.clear();
+          canvas.classList.remove('aim'); // a restart mid-pour must give the cursor back
+        }
       } else if (ev.type === 'station') canvas.classList.toggle('aim', ev.phase === 'pour');
       else if (ev.type === 'sfx') sfx.play(ev.id);
       else if (ev.type === 'ticket') sfx.play('tick');

@@ -158,7 +158,7 @@ describe('shift summary', () => {
 
   it('labels and money read naturally', () => {
     expect(orderLabel({ type: 'flatWhite', extraHot: true, heart: false })).toBe(
-      'flat white · extra hot',
+      'flat white · extra hot (68–74 °C)',
     );
     expect(formatCents(730)).toBe('$7.30');
   });

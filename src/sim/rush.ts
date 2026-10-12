@@ -88,7 +88,7 @@ export const DRINK_NAME: Record<DrinkType, string> = {
 /** "flat white · extra hot · heart on top" for the ticket. */
 export function orderLabel(o: Order): string {
   const parts = [DRINK_NAME[o.type]];
-  if (o.extraHot) parts.push('extra hot');
+  if (o.extraHot) parts.push(`extra hot (${EXTRA_HOT[0]}–${EXTRA_HOT[1]} °C)`);
   if (o.heart) parts.push('heart on top');
   return parts.join(' · ');
 }
