@@ -148,6 +148,38 @@ describe('trial shift, played headless', () => {
     expect(a.t.results.map((r) => r.total)).toEqual(b.t.results.map((r) => r.total));
   });
 
+  it('"Watch Gaz again" replays the demo and returns to the same result card', () => {
+    const t = createTrial(5);
+    const phases: Phase[] = [];
+    let replayed = false;
+    for (let n = 0; n < 600 / STEP; n++) {
+      const input = botInput(t, 'good', n);
+      if (t.phase === 'feedback') {
+        if (replayed) break;
+        input.action = 'demo';
+        replayed = true;
+      }
+      stepTrial(t, input, STEP);
+      for (const e of t.events) if (e.type === 'phase') phases.push(e.phase);
+      t.events.length = 0;
+    }
+    expect(replayed).toBe(true);
+    const fb = phases.indexOf('feedback');
+    expect(phases.slice(fb, fb + 3)).toEqual(['feedback', 'demo', 'feedback']);
+    expect(t.phase).toBe('feedback');
+    expect(t.results).toHaveLength(1);
+    expect(t.demoSeen).toBe(true);
+    expect(t.attempt).toBe(0);
+  });
+
+  it('only says "last go" on the last attempt', () => {
+    const { said } = play('lazy');
+    const pours = said.filter(
+      (k) => k.startsWith('pour.intro') || k === 'pour.again' || k === 'pour.last',
+    );
+    expect(pours).toEqual(['pour.intro', 'pour.again', 'pour.last']);
+  });
+
   it('restart goes back to the greeting with a clean slate', () => {
     const { t } = play('lazy');
     const input = emptyInput();

@@ -292,6 +292,11 @@ export function buildStation(scene: THREE.Scene): Station {
   // Arm holding the jug (the player's, or Gaz's during the demo).
   const skinM = std({ color: '#c99872', roughness: 0.6 });
   const sleeveM = std({ color: '#2d3a4a', roughness: 0.85 });
+  // Whose arm is on the jug: the player's, or Gaz's during the demo.
+  const PLAYER_SKIN = new THREE.Color('#c99872');
+  const PLAYER_SLEEVE = new THREE.Color('#2d3a4a');
+  const GAZ_SKIN = new THREE.Color('#e0b08e');
+  const GAZ_SLEEVE = new THREE.Color('#7a3b2e');
   const arm = new THREE.Group();
   arm.position.set(-0.078, 0.06, 0);
   jugBody.add(arm);
@@ -333,6 +338,9 @@ export function buildStation(scene: THREE.Scene): Station {
     opacity: 0.7,
     depthWrite: false,
   });
+  const AIM_MISS = new THREE.Color('#e0513f');
+  const AIM_LOW = new THREE.Color('#74a98c');
+  const AIM_HIGH = new THREE.Color('#f3c450');
   const aim = new THREE.Mesh(new THREE.RingGeometry(0.8, 1, 32), aimM);
   aim.rotation.x = -Math.PI / 2;
   aim.visible = false;
@@ -540,8 +548,8 @@ export function buildStation(scene: THREE.Scene): Station {
     const steaming = phase === 'steam' && !t.steam.done;
     jugBlend = pouring ? Math.min(1, jugBlend + dt / 0.35) : Math.max(0, jugBlend - dt / 0.5);
     arm.visible = pouring || steaming;
-    sleeveM.color.set(phase === 'demo' ? '#7a3b2e' : '#2d3a4a');
-    skinM.color.set(phase === 'demo' ? '#e0b08e' : '#c99872');
+    sleeveM.color.copy(phase === 'demo' ? GAZ_SLEEVE : PLAYER_SLEEVE);
+    skinM.color.copy(phase === 'demo' ? GAZ_SKIN : PLAYER_SKIN);
     let milkFrac = 1;
     let milkY = 0.075;
     if (pouring || jugBlend > 0) {
@@ -605,7 +613,7 @@ export function buildStation(scene: THREE.Scene): Station {
       aim.position.set(cupPos.x + p.x * RIM, (miss ? CT : surfaceY) + 0.0008, cupPos.z - p.y * RIM);
       aim.scale.setScalar(0.0045 + 0.0005 * Math.sin(now * 5));
       aimM.opacity = flow > 0.01 ? 0.15 : 0.75;
-      aimM.color.set(miss ? '#e0513f' : p.height <= 1.1 ? '#74a98c' : '#f3c450');
+      aimM.color.copy(miss ? AIM_MISS : p.height <= 1.1 ? AIM_LOW : AIM_HIGH);
     }
 
     // --- puddle from spills

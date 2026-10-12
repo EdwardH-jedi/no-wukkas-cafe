@@ -319,12 +319,16 @@ export const OWNER_LINES: LineBook = {
         { text: 'Again. And this time, make it look like something.' },
         { text: "Here's another cup. They're not free, you know." },
       ],
-      [
-        { text: 'Last go. Do me a favour and make it count.' },
-        { text: "One more. My blood pressure can't take many more." },
-      ],
+      [{ text: "Go again. My blood pressure can't take many more." }],
     ],
     mood: 'neutral',
+  },
+  'pour.last': {
+    tiers: [
+      [{ text: 'Last go. Make it count.' }, { text: 'Third and final cup. No pressure.' }],
+      [{ text: 'Last chance, champ. Do me a favour and make it count.' }],
+    ],
+    mood: 'smug',
   },
   'pour.outside': {
     tiers: [

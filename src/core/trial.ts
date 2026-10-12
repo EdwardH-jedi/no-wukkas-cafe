@@ -319,7 +319,10 @@ function enter(t: Trial, phase: Phase): void {
       break;
     case 'pour':
       resetPour(t);
-      sayNow(t, t.attempt === 0 ? 'pour.intro' : 'pour.again');
+      sayNow(
+        t,
+        t.attempt === 0 ? 'pour.intro' : t.attempt === ATTEMPTS - 1 ? 'pour.last' : 'pour.again',
+      );
       break;
     case 'inspect':
       judge(t);
