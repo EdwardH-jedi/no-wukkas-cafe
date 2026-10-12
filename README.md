@@ -55,7 +55,7 @@ npx serve prototype
 
 ```bash
 npm install
-npm run dev            # http://localhost:5173
+npm run dev            # http://localhost:5183 (opens automatically)
 npm test               # unit tests
 npm run balance        # 30-day economy simulation → reports/balance.csv
 ```
@@ -64,7 +64,7 @@ Full command list: [AGENTS.md §3](AGENTS.md#3-commands).
 
 ### Test on your iPhone
 
-1. `npm run dev -- --host` and open the printed network URL on the iPhone (same Wi-Fi).
+1. `npm run dev -- --host` and open the printed network URL (port 5183) on the iPhone (same Wi-Fi).
 2. On the iPhone: **Settings → Apps → Safari → Advanced → Web Inspector** on.
 3. On the Mac: **Safari → Settings → Advanced → "Show features for web developers"**, then **Develop → [your iPhone] → the page** to get the console and debugger.
 

@@ -29,14 +29,14 @@ Keep it true. If you change a command, folder or rule, update this file in the s
 
 ## 3. Commands
 
-> All scripts exist. `balance` is a stub until the economy is ported. `test:e2e` needs Playwright's Chromium (`npx playwright install chromium`) and starts its own dev server on port 5179.
+> All scripts exist. The dev server uses port **5183**, not Vite's default 5173: older sibling projects in `~/Desktop/Developer/cafe*` hold 5173, and a page that only says "No Wukkas Café" means you're looking at one of those. `balance` is a stub until the economy is ported. `test:e2e` needs Playwright's Chromium (`npx playwright install chromium`) and starts its own dev server on port 5179.
 
 ```bash
 npm install            # install deps (Node 24 LTS)
-npm run dev            # Vite dev server → http://localhost:5173
+npm run dev            # Vite dev server → http://localhost:5183 (opens the browser; port is strict)
 npm run dev -- --host  # same, reachable from an iPhone on the same Wi-Fi
 npm run build          # production build → dist/
-npm run preview        # serve dist/ locally
+npm run preview        # serve dist/ locally → http://localhost:4183
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
