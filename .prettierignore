@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+reports
+test-results
+playwright-report
+prototype
+docs
+.remember
+package-lock.json
+*.md
