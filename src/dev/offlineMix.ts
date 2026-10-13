@@ -3,10 +3,13 @@
 // ambience / sfx → master), with the manager's duck rule under a spoken line. Deterministic: the
 // same spec renders the same samples, so measurements can be regression-tested.
 
-import type { AudioManager, Bus } from '../audio/manager';
+import { DEFAULT_VOLUMES, type AudioManager, type Bus } from '../audio/manager';
+import { analyse, integratedLoudness } from '../audio/meter';
+import { mixFindings, type MixFinding, type MoodMeasure } from '../audio/mixCheck';
 import { createMusic } from '../audio/music';
 import { duckLevel, type MusicMood } from '../audio/musicPatterns';
 import { createSfx } from '../audio/sfx';
+import { clipFor } from '../data/voice';
 
 export interface MixSpec {
   mood: MusicMood | null;
@@ -87,4 +90,90 @@ export async function decodeClip(url: string, rate = 48000): Promise<AudioBuffer
   const r = await fetch(url);
   if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
   return new OfflineAudioContext(1, 1, rate).decodeAudioData(await r.arrayBuffer());
+}
+
+export interface Measurement {
+  at: string;
+  measures: MoodMeasure[];
+  speechLufs: number | null;
+  speechClips: string[];
+  findings: MixFinding[];
+}
+
+const ALL_FULL: Record<Bus, number> = { voice: 1, music: 1, ambience: 1, sfx: 1 };
+const MUSIC_ONLY: Record<Bus, number> = { voice: 0, music: 1, ambience: 0, sfx: 0 };
+
+/**
+ * Measure every mood: alone at 100% music, and in the worst-case mix with the loudest of `lines`
+ * (orders, as recorded clips) spoken over it. `onStatus` reports progress for the page.
+ */
+export async function measureMoods(
+  moods: readonly MusicMood[],
+  lines: ReadonlyArray<{ speaker: string; text: string; listen: boolean }>,
+  onStatus: (msg: string) => void,
+): Promise<Measurement> {
+  // Order clips (placeholders in development): their loudness, and the loudest for the worst case.
+  const speech: Array<{ id: string; buffer: AudioBuffer; gain: number; lufs: number }> = [];
+  for (const l of lines.filter((x) => x.listen)) {
+    const clip = clipFor(l.speaker, l.text);
+    if (!clip) continue;
+    try {
+      const buffer = await decodeClip(import.meta.env.BASE_URL + clip.file);
+      const lufs =
+        integratedLoudness([buffer.getChannelData(0)], buffer.sampleRate) +
+        20 * Math.log10(clip.playback.gain);
+      speech.push({ id: clip.file, buffer, gain: clip.playback.gain, lufs });
+    } catch {
+      /* clip not rendered locally: measure without speech */
+    }
+  }
+  const loudest = speech.reduce<(typeof speech)[number] | null>(
+    (a, b) => (!a || b.lufs > a.lufs ? b : a),
+    null,
+  );
+  const measures: MoodMeasure[] = [];
+  for (const mood of moods) {
+    onStatus(`Rendering ${mood}…`);
+    const alone = await renderMix({
+      mood,
+      seconds: 28,
+      volumes: MUSIC_ONLY,
+      crowd: null,
+      machine: false,
+      speech: null,
+    });
+    const worst = await renderMix({
+      mood,
+      seconds: 16,
+      volumes: ALL_FULL,
+      crowd: 1.7,
+      machine: true,
+      speech: loudest ? { buffer: loudest.buffer, gain: loudest.gain, at: 4, listen: true } : null,
+    });
+    measures.push({
+      mood,
+      music: analyse(channelsFrom(alone, 4), alone.sampleRate),
+      worst: analyse(channelsFrom(worst, 3), worst.sampleRate),
+    });
+  }
+  // Energy average of the order clips' loudness.
+  const speechLufs = speech.length
+    ? 10 * Math.log10(speech.reduce((s, x) => s + 10 ** (x.lufs / 10), 0) / speech.length)
+    : null;
+  onStatus(
+    speech.length
+      ? `Done. Speech: ${speech.length} order clips (placeholder voices).`
+      : 'Done. No order clips found locally (run npm run voices): speech checks skipped.',
+  );
+  return {
+    at: new Date().toISOString(),
+    measures,
+    speechLufs,
+    speechClips: speech.map((s) => s.id),
+    findings: mixFindings(measures, {
+      musicVolume: DEFAULT_VOLUMES.music,
+      duckListen: duckLevel(true, true),
+      speechLufs,
+    }),
+  };
 }

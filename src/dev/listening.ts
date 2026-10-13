@@ -3,6 +3,7 @@
 // ambience / effects volumes, real dialogue to test the music ducking, pause and resume, live
 // output meters, an offline measurement of every mood (loudness, true peak, clipping, DC, speech
 // over music) and per-mood listening ratings and notes, saved to disk or exported as JSON.
+// The HTML lives in listeningView.ts, the offline measurement in offlineMix.ts.
 
 import '@fontsource/bowlby-one/400.css';
 import '@fontsource/figtree/400.css';
@@ -10,49 +11,22 @@ import '@fontsource/figtree/600.css';
 import '@fontsource/figtree/800.css';
 import './dev.css';
 import { createAudioManager, DEFAULT_VOLUMES, type Bus } from '../audio/manager';
-import { analyse, dbfs, integratedLoudness, type LoudnessReport } from '../audio/meter';
-import { mixFindings, type MixFinding, type MoodMeasure } from '../audio/mixCheck';
+import { dbfs } from '../audio/meter';
 import { createMusic } from '../audio/music';
-import { duckLevel, MOODS, type MusicMood } from '../audio/musicPatterns';
+import type { MusicMood } from '../audio/musicPatterns';
 import { createSfx } from '../audio/sfx';
-import { clipFor } from '../data/voice';
 import { AUDITIONS } from '../data/voice/auditions';
 import { CAST_BRIEFS } from '../data/voice/casting';
-import { downloadJson, esc, fmt, loadFromDevServer, saveToDevServer, toast } from './devui';
-import { channelsFrom, decodeClip, renderMix } from './offlineMix';
-
-const MOOD_LIST: readonly MusicMood[] = ['opening', 'rush', 'afternoon'];
-const MOOD_INFO: Record<MusicMood, { title: string; style: string; when: string }> = {
-  opening: {
-    title: 'Opening',
-    style: 'Indie acoustic / light jazz: fingerpicked pluck, soft keys, brushes',
-    when: 'Title, Day 1, Day 2 intro',
-  },
-  rush: {
-    title: 'Rush',
-    style: 'Upbeat indie / surf / funk: kit, syncopated bass, tremolo surf lead',
-    when: 'Day 2 service',
-  },
-  afternoon: {
-    title: 'Afternoon',
-    style: 'Neo-soul / relaxed jazz: Rhodes-style keys, swung kit, walking bass',
-    when: 'Day 1 verdict, Day 2 wrap-up and report',
-  },
-};
-const BUSES = ['voice', 'music', 'ambience', 'sfx'] as const;
-const BUS_LABEL: Record<Bus, string> = {
-  voice: 'Voices',
-  music: 'Music',
-  ambience: 'Café ambience',
-  sfx: 'Machine & effects',
-};
-const RATINGS = {
-  fit: 'Fits the café',
-  mix: 'Sits under the voices',
-  fatigue: 'Easy to hear all shift',
-  variety: "Doesn't feel repetitive",
-} as const;
-type RatingKey = keyof typeof RATINGS;
+import { downloadJson, fmt, loadFromDevServer, saveToDevServer, toast } from './devui';
+import {
+  BUSES,
+  labHtml,
+  measurementHtml,
+  MOOD_INFO,
+  MOOD_LIST,
+  type RatingKey,
+} from './listeningView';
+import { measureMoods, type Measurement } from './offlineMix';
 
 /** Dialogue for the ducking test: real game lines (their clips are in the voice manifest). */
 const LINES = [
@@ -61,14 +35,6 @@ const LINES = [
   { label: "Priya's order", speaker: 'priya', text: AUDITIONS.priya?.[0] ?? '', listen: true },
   { label: 'Gaz chatting', speaker: 'gaz', text: AUDITIONS.gaz?.[1] ?? '', listen: false },
 ];
-
-interface Measurement {
-  at: string;
-  measures: MoodMeasure[];
-  speechLufs: number | null;
-  speechClips: string[];
-  findings: MixFinding[];
-}
 
 interface ListeningNotes {
   kind: 'nwc-listening-notes';
@@ -137,111 +103,7 @@ const persist = (): void => {
 // --- Page ----------------------------------------------------------------------------------------
 
 const app = document.getElementById('app') as HTMLElement;
-const ratingRow = (m: MusicMood, k: RatingKey): string =>
-  `<div class="rate" role="radiogroup" aria-label="${RATINGS[k]}: ${MOOD_INFO[m].title}"><span>${RATINGS[k]}</span>${[
-    1, 2, 3, 4, 5,
-  ]
-    .map(
-      (v) =>
-        `<label><input type="radio" name="${m}-${k}" value="${v}" data-k="${k}"><i>${v}</i></label>`,
-    )
-    .join('')}</div>`;
-
-app.innerHTML = `
-<header class="top">
-  <div>
-    <p class="kicker">No Wukkas Café · dev tool</p>
-    <h1>Café sound lab</h1>
-    <p class="sub">The game's three original music moods through the real audio engine. Switch
-    moods, balance the buses, test the duck under real dialogue, measure loudness and clipping,
-    and rate what you hear. Volumes here don't change your saved game settings.</p>
-  </div>
-  <div class="actions">
-    <button class="btn" data-act="start">▶ Start sound</button>
-    <button class="btn ghost" data-act="pause" disabled>Pause</button>
-  </div>
-</header>
-<p class="toast" role="status" aria-live="polite" data-toast></p>
-<div class="lab">
-  <div class="labmain">
-    <section class="panel" aria-labelledby="h-moods">
-      <h2 id="h-moods">Music</h2>
-      <div class="moods">
-        ${MOOD_LIST.map(
-          (m) => `<button class="mood" data-mood="${m}" aria-pressed="false" disabled>
-            <b>${MOOD_INFO[m].title}</b><span>${MOODS[m].bpm} bpm${MOODS[m].swing ? ', swung' : ''}</span>
-            <small>${MOOD_INFO[m].style}</small><small>In game: ${MOOD_INFO[m].when}</small></button>`,
-        ).join('')}
-      </div>
-      <div class="row"><button class="btn ghost small" data-mood="off" disabled>Music off</button>
-        <span class="fine" data-now>Press Start sound: browsers only play audio after a click.</span></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-mix">
-      <h2 id="h-mix">Mix</h2>
-      <div class="sliders">
-        ${BUSES.map(
-          (b) =>
-            `<label class="slider"><span>${BUS_LABEL[b]}</span><input type="range" min="0" max="100" step="5" data-bus="${b}" aria-label="${BUS_LABEL[b]} volume"><output data-out="${b}"></output></label>`,
-        ).join('')}
-      </div>
-      <div class="row">
-        <label class="field"><span>Crowd</span><select data-crowd>
-          <option value="0">Empty café</option><option value="1" selected>Normal morning</option><option value="1.7">Packed (Hard)</option></select></label>
-        <label class="tick"><input type="checkbox" data-machine> Espresso machine running (grinder, pump, steam, pour)</label>
-        <button class="btn ghost small" data-act="defaults">Reset to game defaults</button>
-      </div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-duck">
-      <h2 id="h-duck">Dialogue and ducking</h2>
-      <p class="fine">Real game lines. Music drops to ${duckLevel(true, true)} under an order the
-      player must hear and ${duckLevel(true, false)} under other talk, then comes back over about a
-      second.</p>
-      <div class="row">
-        ${LINES.map((l, i) => `<button class="btn small" data-line="${i}" disabled>${esc(l.label)}</button>`).join('')}
-        <button class="btn ghost small" data-act="rapid" disabled>3 lines, fast</button>
-        <button class="btn ghost small" data-act="stopvoice" disabled>Stop voice</button>
-      </div>
-      <p class="fine" data-speaking>Nobody's talking.</p>
-      <div class="meters">
-        <div class="meter" data-m="peak"><span>Peak (held)</span><b>−∞</b></div>
-        <div class="meter" data-m="rms"><span>RMS</span><b>−∞</b></div>
-        <div class="meter" data-m="duck"><span>Music duck</span><b>1.00</b></div>
-        <div class="meter" data-m="clips"><span>Clip events</span><b>0</b></div>
-        <div class="meter" data-m="voices"><span>Voices at once (max)</span><b>0</b></div>
-        <div class="meter" data-m="ctx"><span>Audio</span><b>off</b></div>
-      </div>
-      <canvas class="scope" data-scope aria-label="Last 12 seconds: output level and music duck"></canvas>
-      <p class="legend"><span><i style="background:#e3a55f"></i>output RMS</span><span><i style="background:#f6ede1"></i>output peak</span><span><i style="background:#74a98c"></i>music duck (0–1)</span><span><i style="background:#e0513f"></i>0 dBFS</span></p>
-    </section>
-
-    <section class="panel" aria-labelledby="h-measure">
-      <h2 id="h-measure">Measure</h2>
-      <p class="fine">Renders each mood offline through the game's own synth: 28 s of music alone
-      at 100% (its headroom), and 16 s of the worst case: every bus at 100%, a packed café, every
-      machine sound at once and an order spoken over the ducked music. Loudness is BS.1770
-      integrated (LUFS); peaks are true peaks (4× oversampled).</p>
-      <div class="row"><button class="btn" data-act="measure">Measure the three moods</button><span class="fine" data-mstatus></span></div>
-      <div class="tablewrap" data-mtable></div>
-      <ul class="findings" data-findings></ul>
-    </section>
-  </div>
-
-  <aside class="panel notes" aria-labelledby="h-notes">
-    <h2 id="h-notes">Listening notes</h2>
-    <label class="field"><span>Reviewer</span><input data-reviewer placeholder="Your name" autocomplete="name"></label>
-    <label class="field"><span>Listening on</span><input data-device placeholder="e.g. MacBook speakers, AirPods"></label>
-    ${MOOD_LIST.map(
-      (m) => `<fieldset class="review" data-notes-mood="${m}"><legend>${MOOD_INFO[m].title}</legend>
-        ${(Object.keys(RATINGS) as RatingKey[]).map((k) => ratingRow(m, k)).join('')}
-        <textarea data-mnotes aria-label="Notes on ${MOOD_INFO[m].title}" placeholder="What works, what grates, where it clashes with voices"></textarea>
-      </fieldset>`,
-    ).join('')}
-    <div class="row"><button class="btn" data-act="save">Save to disk</button><button class="btn ghost" data-act="export">Export JSON</button></div>
-    <p class="fine">Saves to reports/listening-notes.json with the current mix and the last measurement.</p>
-  </aside>
-</div>`;
+app.innerHTML = labHtml(LINES);
 
 const $ = <T extends Element = HTMLElement>(sel: string): T => app.querySelector(sel) as T;
 const $$ = <T extends Element = HTMLElement>(sel: string): T[] => [...app.querySelectorAll<T>(sel)];
@@ -468,92 +330,13 @@ requestAnimationFrame(frame);
 
 // --- Offline measurement -------------------------------------------------------------------------
 
-const ALL_FULL: Record<Bus, number> = { voice: 1, music: 1, ambience: 1, sfx: 1 };
-const MUSIC_ONLY: Record<Bus, number> = { voice: 0, music: 1, ambience: 0, sfx: 0 };
-
-async function measure(): Promise<Measurement> {
-  const status = $('[data-mstatus]');
-  // Order clips (placeholders in development): their loudness, and the loudest for the worst case.
-  const speech: Array<{ id: string; buffer: AudioBuffer; gain: number; lufs: number }> = [];
-  for (const l of LINES.filter((x) => x.listen)) {
-    const clip = clipFor(l.speaker, l.text);
-    if (!clip) continue;
-    try {
-      const buffer = await decodeClip(import.meta.env.BASE_URL + clip.file);
-      const lufs =
-        integratedLoudness([buffer.getChannelData(0)], buffer.sampleRate) +
-        20 * Math.log10(clip.playback.gain);
-      speech.push({ id: clip.file, buffer, gain: clip.playback.gain, lufs });
-    } catch {
-      /* clip not rendered locally: measure without speech */
-    }
-  }
-  const loudest = speech.reduce<(typeof speech)[number] | null>(
-    (a, b) => (!a || b.lufs > a.lufs ? b : a),
-    null,
-  );
-  const measures: MoodMeasure[] = [];
-  for (const mood of MOOD_LIST) {
-    status.textContent = `Rendering ${MOOD_INFO[mood].title}…`;
-    const alone = await renderMix({
-      mood,
-      seconds: 28,
-      volumes: MUSIC_ONLY,
-      crowd: null,
-      machine: false,
-      speech: null,
-    });
-    const worst = await renderMix({
-      mood,
-      seconds: 16,
-      volumes: ALL_FULL,
-      crowd: 1.7,
-      machine: true,
-      speech: loudest ? { buffer: loudest.buffer, gain: loudest.gain, at: 4, listen: true } : null,
-    });
-    measures.push({
-      mood,
-      music: analyse(channelsFrom(alone, 4), alone.sampleRate),
-      worst: analyse(channelsFrom(worst, 3), worst.sampleRate),
-    });
-  }
-  // Energy average of the order clips' loudness.
-  const speechLufs = speech.length
-    ? 10 * Math.log10(speech.reduce((s, x) => s + 10 ** (x.lufs / 10), 0) / speech.length)
-    : null;
-  status.textContent = speech.length
-    ? `Done. Speech: ${speech.length} order clips (placeholder voices).`
-    : 'Done. No order clips found locally (run npm run voices): speech checks skipped.';
-  return {
-    at: new Date().toISOString(),
-    measures,
-    speechLufs,
-    speechClips: speech.map((s) => s.id),
-    findings: mixFindings(measures, {
-      musicVolume: DEFAULT_VOLUMES.music,
-      duckListen: duckLevel(true, true),
-      speechLufs,
-    }),
-  };
-}
+const measure = (): Promise<Measurement> =>
+  measureMoods(MOOD_LIST, LINES, (msg) => ($('[data-mstatus]').textContent = msg));
 
 function showMeasurement(r: Measurement): void {
-  const cell = (v: string, bad = false, good = false): string =>
-    `<td class="${bad ? 'flag' : good ? 'okv' : ''}">${v}</td>`;
-  const row = (m: MoodMeasure): string => {
-    const a: LoudnessReport = m.music;
-    const atDefault = a.lufs + 20 * Math.log10(DEFAULT_VOLUMES.music);
-    const w = m.worst;
-    return `<tr><td>${MOOD_INFO[m.mood].title}</td>${cell(fmt(a.lufs))}${cell(fmt(atDefault))}${cell(fmt(a.truePeakDb), a.truePeakDb > -1)}${cell(fmt(a.crestDb))}${cell(a.dc.toFixed(4), a.dc > 0.001)}${cell(String(a.clipped), a.clipped > 0, a.clipped === 0)}${w ? `${cell(fmt(w.truePeakDb), w.truePeakDb > 0)}${cell(String(w.clipped), w.clipped > 0, w.clipped === 0)}` : '<td>–</td><td>–</td>'}</tr>`;
-  };
-  $('[data-mtable]').innerHTML =
-    `<table class="measure"><thead><tr><th>Mood</th><th>LUFS @100%</th><th>LUFS @${Math.round(DEFAULT_VOLUMES.music * 100)}%</th><th>True peak dBTP</th><th>Crest dB</th><th>DC</th><th>Clipped</th><th>Worst-case dBTP</th><th>Worst-case clipped</th></tr></thead><tbody>${r.measures.map(row).join('')}</tbody></table>`;
-  $('[data-findings]').innerHTML = r.findings
-    .map(
-      (f) =>
-        `<li class="${f.level}"><b>${f.level === 'defect' ? 'Defect' : f.level === 'warning' ? 'Warning' : 'Info'}:</b> ${esc(f.message)}</li>`,
-    )
-    .join('');
+  const { table, findings } = measurementHtml(r);
+  $('[data-mtable]').innerHTML = table;
+  $('[data-findings]').innerHTML = findings;
 }
 
 $('[data-act="measure"]').addEventListener('click', () => {
