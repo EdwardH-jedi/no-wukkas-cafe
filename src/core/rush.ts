@@ -173,6 +173,7 @@ export type RushEvent =
 export interface Rush {
   seed: number;
   difficulty: Difficulty;
+  lines: LineOverrides;
   rng: Rng;
   time: number;
   phase: RushPhase;
@@ -197,11 +198,20 @@ export interface Rush {
   events: RushEvent[];
 }
 
-export function createRush(seed: number, difficulty: Difficulty = 'normal'): Rush {
+/** Fix which curated order a customer says (by line id) instead of picking by difficulty. For
+ *  tests and debugging; kept across restarts. */
+export type LineOverrides = Partial<Record<CustomerId, string>>;
+
+export function createRush(
+  seed: number,
+  difficulty: Difficulty = 'normal',
+  lines: LineOverrides = {},
+): Rush {
   const rng = createRng(seed ^ 0x2d2);
   return {
     seed,
     difficulty,
+    lines,
     rng,
     time: 0,
     phase: 'intro',
@@ -211,7 +221,10 @@ export function createRush(seed: number, difficulty: Difficulty = 'normal'): Rus
     speech: createChannel(),
     barista: createBarista(),
     customers: CUSTOMERS.map((def) => {
-      const line = pickOrder(def.orders, difficulty, rng);
+      const picked = pickOrder(def.orders, difficulty, rng);
+      const forced = lines[def.id];
+      const line = forced ? def.orders.find((o) => o.id === forced) : picked;
+      if (!line) throw new Error(`${def.id} has no order line ${forced}`);
       return {
         def,
         line,
@@ -251,7 +264,7 @@ export function restartRush(r: Rush): void {
   const owner = r.owner;
   const rng = r.rng;
   const time = r.time;
-  Object.assign(r, createRush(r.seed, r.difficulty));
+  Object.assign(r, createRush(r.seed, r.difficulty, r.lines));
   r.rng = rng;
   r.time = time;
   r.owner = { ...owner, frustration: 0, lastAt: {} };
@@ -594,7 +607,8 @@ function listenAction(
     r.events.push({ type: 'ask', customer: c.def.id, text: 'Sorry, could you repeat that?' });
     const u = customerListen(r, c, `${c.line.id}.slow`, c.line.text, 'slow');
     if (c.state === 'ordering') c.orderLine = u;
-    if (c.listen.repeats === MAX_REPEATS) gaz(r, 'rush.askedTwice', 'live', varsFor(c));
+    // Queued after their repeat ('live' would never get a word in while they're talking).
+    if (c.listen.repeats === MAX_REPEATS) gaz(r, 'rush.askedTwice', 'react', varsFor(c));
   } else {
     if (!c.listen.clarified.includes(a.field)) c.listen.clarified.push(a.field);
     c.patience -= LISTEN_COST.clarify;
