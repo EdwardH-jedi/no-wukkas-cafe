@@ -83,9 +83,10 @@ async function boot(): Promise<void> {
   const trial = createTrial(seed);
   const clock = createClock();
   let listen: ListenSettings = loadListenSettings();
-  const audio = createAudioManager(import.meta.env.BASE_URL);
+  const audio = createAudioManager(import.meta.env.BASE_URL, {
+    voiceOff: params.get('voice') === '0',
+  });
   const sfx = createSfx(audio);
-  if (params.get('voice') === '0') audio.voiceEnabled = false;
   // Any click or key can bring back sound the browser blocked (autoplay policy, iOS).
   window.addEventListener('pointerdown', () => audio.unlock(), { capture: true });
   window.addEventListener('keydown', () => audio.unlock(), { capture: true });
@@ -617,6 +618,13 @@ async function boot(): Promise<void> {
         const c = r.customers.find((x) => x.def.id === ev.customer);
         if (c) rushHud.onTicket(c);
       } else if (ev.type === 'ask') rushHud.onAsk(ev.text);
+      else if (ev.type === 'served')
+        crowd.react(
+          ev.customer,
+          ev.result.satisfaction >= 75 ? 'cheer' : ev.result.satisfaction >= 45 ? 'nod' : 'huff',
+        );
+      else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
+      else if (ev.type === 'walkout') crowd.react(ev.customer, 'huff');
     }
     r.events.length = 0;
 
@@ -631,7 +639,14 @@ async function boot(): Promise<void> {
     sv.water = b.water;
     sv.dispensing = b.dispensing;
     station.update(sv, dt, viewTime);
-    crowd.update(r, dt, viewTime);
+    const customerTalking = r.speech.current !== null && r.speech.current.speaker !== 'gaz';
+    crowd.update(
+      r,
+      dt,
+      viewTime,
+      camera.position,
+      customerTalking && audio.clipPlaying ? voiceLevel : -1,
+    );
 
     const working = r.phase === 'service' && WORKING.has(b.phase);
     const gazTalking = r.speech.current?.speaker === 'gaz';

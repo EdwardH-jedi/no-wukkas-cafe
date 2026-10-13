@@ -343,11 +343,18 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
     }
   }
 
-  let drawnKey = '';
-  const drawFace = (mood: Mood, mouth: Mouth, blink: boolean): void => {
-    const key = `${mood}|${mouth}|${blink}`;
-    if (key === drawnKey) return;
-    drawnKey = key;
+  // What the canvas shows; redraw only when something changes (no per-frame string keys).
+  let shown = { mood: '' as string, mouth: '' as string, blink: false, gx: 99, gy: 99 };
+  const drawFace = (mood: Mood, mouth: Mouth, blink: boolean, gx = 0, gy = 0): void => {
+    if (
+      mood === shown.mood &&
+      mouth === shown.mouth &&
+      blink === shown.blink &&
+      gx === shown.gx &&
+      gy === shown.gy
+    )
+      return;
+    shown = { mood, mouth, blink, gx, gy };
     const g = fg;
     g.clearRect(0, 0, 256, 256);
     g.drawImage(stubble, 0, 0);
@@ -381,17 +388,20 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
       g.beginPath();
       g.ellipse(x, ey, 19, 14 * wide, 0, 0, 7);
       g.fill();
+      // Iris and pupil sit where he's looking: the eyes get there before the head does.
+      const px = x + 1 + gx;
+      const py = ey + 1 + gy;
       g.fillStyle = '#4a6a7a';
       g.beginPath();
-      g.arc(x + 1, ey + 1, 9.5 * Math.min(wide, 1.1), 0, 7);
+      g.arc(px, py, 9.5 * Math.min(wide, 1.1), 0, 7);
       g.fill();
       g.fillStyle = '#111';
       g.beginPath();
-      g.arc(x + 1, ey + 1, 4.6, 0, 7);
+      g.arc(px, py, 4.6, 0, 7);
       g.fill();
       g.fillStyle = '#fff';
       g.beginPath();
-      g.arc(x + 4, ey - 2, 1.8, 0, 7);
+      g.arc(px + 3, py - 3, 1.8, 0, 7);
       g.fill();
       if (lid > 0) {
         g.fillStyle = '#d99f80';
@@ -556,8 +566,10 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
       root.updateMatrixWorld();
       inv.copy(torso.matrixWorld).invert();
       tmp.copy(look).applyMatrix4(inv).sub(headG.position);
-      const wantYaw = clamp(Math.atan2(tmp.x, tmp.z), -0.9, 0.9);
-      const wantPitch = clamp(-Math.atan2(tmp.y, Math.hypot(tmp.x, tmp.z)), -0.45, 0.6);
+      const rawYaw = Math.atan2(tmp.x, tmp.z);
+      const rawPitch = -Math.atan2(tmp.y, Math.hypot(tmp.x, tmp.z));
+      const wantYaw = clamp(rawYaw, -0.9, 0.9);
+      const wantPitch = clamp(rawPitch, -0.45, 0.6);
       const k = 1 - Math.exp(-dt * 6);
       headYaw += (wantYaw - headYaw) * k;
       headPitch += (wantPitch - headPitch) * k;
@@ -593,7 +605,14 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
         const step = Math.floor(now * 9.5) % 3;
         mouth = step === 0 ? 'closed' : step === 1 ? 'open' : 'wide';
       }
-      drawFace(mood, mouth, now < blinkUntil);
+      // Gaze: the eyes lead the head toward the target (and cover what the neck can't), with a
+      // small deterministic saccade every couple of seconds so he doesn't stare like a statue.
+      const sacc = Math.floor(now / 1.9);
+      const jx = ((sacc * 7) % 3) - 1;
+      const jy = ((sacc * 5) % 3) - 1;
+      const gx = Math.round(clamp((rawYaw - headYaw) * 14, -6, 6)) + jx;
+      const gy = Math.round(clamp((rawPitch - headPitch) * 12, -4, 4)) + jy;
+      drawFace(mood, mouth, now < blinkUntil, gx, gy);
     },
     dispose() {
       disposeTree(root);

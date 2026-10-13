@@ -1,11 +1,12 @@
 // Moves the Day 2 customers around the café from their rush state. Scripted waypoints only (no
 // navigation): door → queue slot → register → waiting spot → (pick up) → door. Spawns a body when
-// someone walks in and disposes it when they've gone.
+// someone walks in and disposes it when they've gone. Also decides where each one looks (you at
+// the register or when they speak, the pass while they wait) and plays their reactions.
 
 import * as THREE from 'three';
 import type { Rush, RushCustomer } from '../core/rush';
 import type { Mood } from '../sim/owner';
-import { makeHuman, type HumanHandle } from './humans';
+import { makeHuman, type HumanHandle, type Reaction } from './humans';
 import { CT } from './layout';
 
 const DOOR = new THREE.Vector3(2.1, 0, -6.6);
@@ -25,6 +26,8 @@ const WAITING = [
   new THREE.Vector3(1.6, 0, -2.5),
 ];
 const SPEED = 1.25;
+/** Where waiting customers watch for their drink: the pass beside the machine. */
+const PASS_LOOK = new THREE.Vector3(0.1, CT + 0.15, -0.75);
 
 interface Walker {
   c: RushCustomer;
@@ -36,7 +39,10 @@ interface Walker {
 }
 
 export interface Crowd {
-  update(r: Rush, dt: number, now: number): void;
+  /** `player`: the camera (where "you" are); `voice`: loudness of the line being spoken (0..1),
+   *  or -1 when there's no recording playing. */
+  update(r: Rush, dt: number, now: number, player?: THREE.Vector3, voice?: number): void;
+  react(id: string, kind: Reaction): void;
   /** Where the customer at the register is (for Gaz's eyes); false if nobody. */
   registerPos(out: THREE.Vector3): boolean;
   readonly count: number;
@@ -117,7 +123,10 @@ export function createCrowd(scene: THREE.Scene): Crowd {
     get count() {
       return walkers.size;
     },
-    update(r, dt, now) {
+    react(id, kind) {
+      walkers.get(id)?.h.react(kind);
+    },
+    update(r, dt, now, player, voice = -1) {
       regHas = false;
       for (const c of r.customers) {
         let w = walkers.get(c.def.id);
@@ -166,7 +175,16 @@ export function createCrowd(scene: THREE.Scene): Crowd {
         }
         w.h.root.rotation.y = w.heading;
         w.h.setMood(moodFor(c));
-        w.h.setTalking(r.speech.current?.speaker === c.def.id);
+        const talking = r.speech.current?.speaker === c.def.id;
+        w.h.setTalking(talking);
+        w.h.setTalkLevel(talking ? voice : -1);
+        // Eye contact: you, when ordering or talking; otherwise the pass, waiting for the drink.
+        const atCounter =
+          c.state === 'register' || c.state === 'ordering' || c.state === 'deciding';
+        if (walking || c.state === 'leaving' || !player) w.h.lookAt(null);
+        else if (atCounter || talking) w.h.lookAt(player);
+        else if (c.state === 'waiting') w.h.lookAt(PASS_LOOK);
+        else w.h.lookAt(null);
         w.h.update(dt, walking, now);
         if (c.state === 'register' || c.state === 'ordering' || c.state === 'deciding') {
           regPos.set(pos.x, CT + 0.55, pos.z);

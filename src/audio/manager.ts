@@ -102,10 +102,13 @@ const loadSaved = (): Saved => {
   }
 };
 
-export function createAudioManager(base: string): AudioManager {
+/** `voiceOff`: start with voices off for this page only (the ?voice=0 test switch), without
+ *  touching the player's saved setting. */
+export function createAudioManager(base: string, opts: { voiceOff?: boolean } = {}): AudioManager {
   const saved = loadSaved();
   const vol: Record<Bus, number> = { voice: saved.voice, ambience: saved.ambience, sfx: saved.sfx };
-  let voiceEnabled = saved.voiceOn;
+  let voiceEnabled = saved.voiceOn && !opts.voiceOff;
+  let voicePref = saved.voiceOn; // what gets saved
   let ctx: AudioContext | null = null;
   const bus: Partial<Record<Bus, GainNode>> = {};
   let analyser: AnalyserNode | null = null;
@@ -136,7 +139,7 @@ export function createAudioManager(base: string): AudioManager {
   };
   const save = (): void => {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ ...vol, voiceOn: voiceEnabled }));
+      localStorage.setItem(STORE, JSON.stringify({ ...vol, voiceOn: voicePref }));
     } catch {
       /* private mode: settings just won't persist */
     }
@@ -407,6 +410,7 @@ export function createAudioManager(base: string): AudioManager {
     },
     set voiceEnabled(on: boolean) {
       voiceEnabled = on;
+      voicePref = on;
       if (!on) m.stopVoice();
       const g = bus.voice;
       if (g && ctx) g.gain.setTargetAtTime(on ? vol.voice : 0, ctx.currentTime, 0.03);

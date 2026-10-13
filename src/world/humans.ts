@@ -1,6 +1,10 @@
 // Customer bodies. Each one is cheap on purpose (AGENTS.md §7): the static body is merged into a
-// single vertex-coloured mesh, the two legs swing as separate meshes, and the face is one small
-// canvas redrawn only when the mood or mouth changes. 4 draw calls per person, no shadows.
+// single vertex-coloured mesh, the head (with hair/hat/glasses) into another so it can turn, the two
+// legs swing as separate meshes, and the face is one small canvas redrawn only when the mood, mouth
+// or a blink changes. 5 draw calls per person, no shadows.
+// Behaviour: they look at whoever matters (you at the register, the pass while waiting), their
+// mouth follows the loudness of their recorded line, they blink, and they react with their whole
+// head and body (nod, shake, cheer, huff).
 // The spawner must call dispose() (CLAUDE.md; fixes the prototype's removeHuman() leak).
 
 import * as THREE from 'three';
@@ -14,9 +18,21 @@ export interface HumanHandle {
   hand: THREE.Object3D;
   setMood(m: Mood): void;
   setTalking(on: boolean): void;
+  /** Loudness of their recorded line (0..1) drives the mouth; -1 = no clip, flap it. */
+  setTalkLevel(level: number): void;
+  /** Turn the head toward a world point (null: look ahead). */
+  lookAt(target: THREE.Vector3 | null): void;
+  react(kind: Reaction): void;
   update(dt: number, walking: boolean, now: number): void;
   dispose(): void;
 }
+
+export type Reaction = 'nod' | 'shake' | 'cheer' | 'huff';
+type Mouth = 'closed' | 'open' | 'wide';
+
+/** Neck pivot height (before the per-person height scale). */
+const NECK = 1.54;
+const REACT_TIME: Record<Reaction, number> = { nod: 1.1, shake: 1.2, cheer: 1.0, huff: 1.0 };
 
 // Shared by every customer; never disposed with one person.
 let bodyMat: THREE.MeshStandardMaterial | null = null;
@@ -29,6 +45,8 @@ const tmpE = new THREE.Euler();
 const tmpS = new THREE.Vector3();
 const tmpP = new THREE.Vector3();
 const tmpC = new THREE.Color();
+const tmpV = new THREE.Vector3();
+const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
 
 class Parts {
   list: THREE.BufferGeometry[] = [];
@@ -107,9 +125,22 @@ export function makeHuman(look: CustomerLook): HumanHandle {
     p.add(new THREE.SphereGeometry(0.043, 8, 6), look.skin, s * 0.22 * b, 0.87, 0.06);
   }
   p.add(new THREE.CylinderGeometry(0.05, 0.055, 0.1, 10), look.skin, 0, 1.53, 0);
-  p.add(new THREE.SphereGeometry(0.118, 16, 12), look.skin, 0, 1.66, 0, 0, 0, 0, [0.95, 1.06, 1]);
+  // Head parts are built relative to the neck pivot so the head can turn.
+  const hp = new Parts();
+  const head = (
+    geo: THREE.BufferGeometry,
+    color: string,
+    x: number,
+    y: number,
+    z: number,
+    rx = 0,
+    ry = 0,
+    rz = 0,
+    sc: [number, number, number] = [1, 1, 1],
+  ): void => hp.add(geo, color, x, y - NECK, z, rx, ry, rz, sc);
+  head(new THREE.SphereGeometry(0.118, 16, 12), look.skin, 0, 1.66, 0, 0, 0, 0, [0.95, 1.06, 1]);
   for (const s of [-1, 1])
-    p.add(
+    head(
       new THREE.SphereGeometry(0.026, 8, 6),
       look.skin,
       s * 0.112,
@@ -120,9 +151,9 @@ export function makeHuman(look: CustomerLook): HumanHandle {
       0,
       [0.5, 1, 0.8],
     );
-  p.add(new THREE.SphereGeometry(0.02, 8, 6), look.skin, 0, 1.645, 0.115);
+  head(new THREE.SphereGeometry(0.02, 8, 6), look.skin, 0, 1.645, 0.115);
   const hairCap = (theta: number, tilt = -0.25): void =>
-    p.add(
+    head(
       new THREE.SphereGeometry(0.124, 16, 8, 0, Math.PI * 2, 0, theta),
       look.hairC,
       0,
@@ -139,14 +170,14 @@ export function makeHuman(look: CustomerLook): HumanHandle {
       break;
     case 'pony':
       hairCap(1.25);
-      p.add(new THREE.SphereGeometry(0.045, 8, 6), look.hairC, 0, 1.69, -0.13);
-      p.add(new THREE.CylinderGeometry(0.03, 0.015, 0.2, 8), look.hairC, 0, 1.58, -0.16, 0.3);
+      head(new THREE.SphereGeometry(0.045, 8, 6), look.hairC, 0, 1.69, -0.13);
+      head(new THREE.CylinderGeometry(0.03, 0.015, 0.2, 8), look.hairC, 0, 1.58, -0.16, 0.3);
       break;
     case 'curly':
       for (let i = 0; i < 14; i++) {
         const a = (i / 14) * Math.PI * 2;
         const e = 0.25 + (i % 3) * 0.35;
-        p.add(
+        head(
           new THREE.SphereGeometry(0.045, 8, 6),
           look.hairC,
           Math.sin(e) * Math.cos(a) * 0.12,
@@ -157,11 +188,11 @@ export function makeHuman(look: CustomerLook): HumanHandle {
       break;
     case 'long':
       hairCap(1.3, -0.2);
-      p.add(new THREE.BoxGeometry(0.24, 0.34, 0.05), look.hairC, 0, 1.52, -0.1);
+      head(new THREE.BoxGeometry(0.24, 0.34, 0.05), look.hairC, 0, 1.52, -0.1);
       break;
     case 'bob':
       hairCap(1.3, -0.2);
-      p.add(
+      head(
         new THREE.CylinderGeometry(0.135, 0.145, 0.16, 16, 1, true, Math.PI * 0.32, Math.PI * 1.36),
         look.hairC,
         0,
@@ -173,36 +204,41 @@ export function makeHuman(look: CustomerLook): HumanHandle {
       break;
   }
   if (look.hat === 'hardhat') {
-    p.add(
+    head(
       new THREE.SphereGeometry(0.142, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
       '#f5d23a',
       0,
       1.69,
       0,
     );
-    p.add(new THREE.CylinderGeometry(0.17, 0.17, 0.014, 16), '#f5d23a', 0, 1.69, 0.02);
+    head(new THREE.CylinderGeometry(0.17, 0.17, 0.014, 16), '#f5d23a', 0, 1.69, 0.02);
   } else if (look.hat === 'cap') {
-    p.add(
+    head(
       new THREE.SphereGeometry(0.132, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
       look.hatC ?? '#223',
       0,
       1.69,
       0,
     );
-    p.add(new THREE.BoxGeometry(0.15, 0.012, 0.11), look.hatC ?? '#223', 0, 1.7, 0.15);
+    head(new THREE.BoxGeometry(0.15, 0.012, 0.11), look.hatC ?? '#223', 0, 1.7, 0.15);
   }
   if (look.glasses) {
     for (const s of [-1, 1])
-      p.add(new THREE.TorusGeometry(0.026, 0.004, 6, 14), '#1a1a1a', s * 0.043, 1.675, 0.118);
-    p.add(new THREE.BoxGeometry(0.03, 0.005, 0.005), '#1a1a1a', 0, 1.678, 0.122);
+      head(new THREE.TorusGeometry(0.026, 0.004, 6, 14), '#1a1a1a', s * 0.043, 1.675, 0.118);
+    head(new THREE.BoxGeometry(0.03, 0.005, 0.005), '#1a1a1a', 0, 1.678, 0.122);
   }
   if (look.sunnies)
     for (const s of [-1, 1])
-      p.add(new THREE.BoxGeometry(0.06, 0.03, 0.02), '#111', s * 0.044, 1.775, 0.085, -0.6);
+      head(new THREE.BoxGeometry(0.06, 0.03, 0.02), '#111', s * 0.044, 1.775, 0.085, -0.6);
   if (look.bag)
     p.add(new THREE.BoxGeometry(0.06, 0.32, 0.26), look.bag, 0.2 * b, 1.0, -0.02, 0, 0, 0.08);
   const body = p.mesh();
   root.add(body);
+  const headG = new THREE.Group();
+  headG.position.y = NECK;
+  body.add(headG);
+  const headMesh = hp.mesh();
+  headG.add(headMesh);
 
   // ---- legs (swing while walking)
   const legs: THREE.Mesh[] = [];
@@ -232,22 +268,36 @@ export function makeHuman(look: CustomerLook): HumanHandle {
     new THREE.SphereGeometry(0.1205, 18, 12, Math.PI / 2 - 0.95, 1.9, Math.PI / 2 - 0.85, 1.7),
     faceM,
   );
-  face.position.set(0, 1.66, 0);
+  face.position.set(0, 1.66 - NECK, 0);
   face.scale.set(0.95, 1.06, 1);
-  root.add(face);
+  headG.add(face);
 
   let mood: Mood = 'neutral';
   let talking = false;
-  let mouthOpen = false;
-  let drawn = '';
+  let level = -1;
+  let mouth: Mouth = 'closed';
+  let blink = false;
+  // What the canvas currently shows: redraw only when one of these changes (no per-frame work).
+  let shownMood: Mood | null = null;
+  let shownMouth: Mouth | null = null;
+  let shownBlink: boolean | null = null;
   const draw = (): void => {
-    const key = `${mood}|${mouthOpen}`;
-    if (key === drawn) return;
-    drawn = key;
+    if (mood === shownMood && mouth === shownMouth && blink === shownBlink) return;
+    shownMood = mood;
+    shownMouth = mouth;
+    shownBlink = blink;
     g.clearRect(0, 0, 128, 128);
     const ey = 58;
     const shock = mood === 'shocked';
     for (const x of [44, 84]) {
+      if (blink) {
+        g.strokeStyle = '#1b120c';
+        g.lineWidth = 3;
+        g.beginPath();
+        g.arc(x, ey - 2, 6, 0.25, Math.PI - 0.25);
+        g.stroke();
+        continue;
+      }
       g.fillStyle = '#1b120c';
       g.beginPath();
       g.ellipse(x, ey, 5.5, shock ? 8 : 6.5, 0, 0, 7);
@@ -290,8 +340,8 @@ export function makeHuman(look: CustomerLook): HumanHandle {
     g.fillStyle = '#5a1e16';
     g.lineWidth = 3.5;
     g.beginPath();
-    if (mouthOpen) {
-      g.ellipse(64, 86, 8, 6, 0, 0, 7);
+    if (mouth !== 'closed') {
+      g.ellipse(64, 86, mouth === 'wide' ? 9 : 8, mouth === 'wide' ? 9 : 5, 0, 0, 7);
       g.fill();
     } else {
       if (mood === 'pleased') g.arc(64, 78, 12, 0.3, Math.PI - 0.3);
@@ -313,6 +363,20 @@ export function makeHuman(look: CustomerLook): HumanHandle {
   root.scale.setScalar(look.height);
   let walkT = 0;
   let mouthT = 0;
+  let flapOpen = false;
+  // Look-at, smoothed; reactions play on top.
+  let yaw = 0;
+  let pitch = 0;
+  let wantYaw = 0;
+  let wantPitch = 0;
+  const target = new THREE.Vector3();
+  let hasTarget = false;
+  let reaction: Reaction | null = null;
+  let reactT = 0;
+  // Per-person blink rhythm so a queue doesn't blink in unison.
+  const phase = (look.height * 97.1 + look.build * 13.7) % 2.3;
+  let nextBlink = 1 + phase;
+  let blinkUntil = 0;
 
   return {
     root,
@@ -324,10 +388,17 @@ export function makeHuman(look: CustomerLook): HumanHandle {
     },
     setTalking(on) {
       talking = on;
-      if (!on && mouthOpen) {
-        mouthOpen = false;
-        draw();
-      }
+    },
+    setTalkLevel(l) {
+      level = l;
+    },
+    lookAt(t) {
+      hasTarget = t !== null;
+      if (t) target.copy(t);
+    },
+    react(kind) {
+      reaction = kind;
+      reactT = 0;
     },
     update(dt, walking, now) {
       if (walking) {
@@ -338,20 +409,67 @@ export function makeHuman(look: CustomerLook): HumanHandle {
         body.position.y = Math.abs(Math.cos(walkT)) * 0.025;
       } else {
         for (const l of legs) l.rotation.x *= 0.8;
-        body.position.y = Math.sin(now * 1.7 + look.height * 10) * 0.004;
+        // Idle: breathing plus a slow weight shift.
+        body.position.y = Math.sin(now * 1.7 + phase * 4) * 0.004;
       }
-      if (talking) {
+      body.rotation.z = walking ? 0 : Math.sin(now * 0.45 + phase * 3) * 0.012;
+      body.rotation.x = 0;
+
+      // Head: toward the target (in this person's own space), within a natural range.
+      if (hasTarget && !walking) {
+        root.updateMatrixWorld();
+        tmpV.copy(target);
+        root.worldToLocal(tmpV);
+        tmpV.y -= NECK + 0.12;
+        wantYaw = clamp(Math.atan2(tmpV.x, tmpV.z), -0.75, 0.75);
+        wantPitch = clamp(-Math.atan2(tmpV.y, Math.hypot(tmpV.x, tmpV.z)), -0.3, 0.35);
+      } else {
+        wantYaw = 0;
+        wantPitch = 0;
+      }
+      const k = 1 - Math.exp(-dt * 5);
+      yaw += (wantYaw - yaw) * k;
+      pitch += (wantPitch - pitch) * k;
+      let ry = yaw;
+      let rx = pitch;
+      if (reaction) {
+        reactT += dt;
+        const dur = REACT_TIME[reaction];
+        const fade = Math.max(0, 1 - reactT / dur);
+        if (reaction === 'nod') rx += Math.sin(reactT * 13) * 0.2 * fade;
+        else if (reaction === 'shake') ry += Math.sin(reactT * 15) * 0.32 * fade;
+        else if (reaction === 'cheer') {
+          body.position.y += Math.abs(Math.sin(reactT * 9)) * 0.05 * fade;
+          rx -= 0.15 * fade;
+        } else {
+          // Huff: lean back, chin up, then slump.
+          body.rotation.x = -Math.sin(Math.min(1, reactT / dur) * Math.PI) * 0.09;
+          rx -= 0.2 * fade;
+        }
+        if (reactT >= dur) reaction = null;
+      }
+      headG.rotation.set(rx, ry, 0, 'YXZ');
+
+      // Face: mouth from the voice (or a flap without a clip), blinks.
+      if (talking && level >= 0) mouth = level > 0.42 ? 'wide' : level > 0.1 ? 'open' : 'closed';
+      else if (talking) {
         mouthT += dt;
         if (mouthT > 0.11) {
           mouthT = 0;
-          mouthOpen = !mouthOpen;
-          draw();
+          flapOpen = !flapOpen;
         }
+        mouth = flapOpen ? 'open' : 'closed';
+      } else mouth = 'closed';
+      if (now > nextBlink) {
+        blinkUntil = now + 0.12;
+        nextBlink = now + 2.4 + ((now * 7.31 + phase) % 2.6);
       }
-      face.position.y = 1.66 + body.position.y;
+      blink = now < blinkUntil;
+      draw();
     },
     dispose() {
       body.geometry.dispose();
+      headMesh.geometry.dispose();
       for (const l of legs) l.geometry.dispose();
       face.geometry.dispose();
       faceM.dispose();
