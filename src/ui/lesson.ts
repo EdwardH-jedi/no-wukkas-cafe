@@ -66,6 +66,7 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
       <span class="hcm"></span>
       <span class="hmove"></span>
       <span class="hflow" title="Flow"><i></i></span>
+      <span class="hcup" title="Cup"></span>
     </div>
     <div class="hint hide"></div>
     <div class="sr" role="status" aria-live="polite"></div>`;
@@ -80,6 +81,7 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
   const hcm = q('.hcm');
   const hmove = q('.hmove');
   const hflow = q('.hflow i');
+  const hcup = q('.hcup');
   const hint = q('.hint');
   const sr = q('.sr');
 
@@ -97,6 +99,7 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
   let hk = -1;
   let cmText = '';
   let flowW = -1;
+  let cupText = '';
 
   const setText = (n: HTMLElement, v: string, cur: string): string => {
     if (v !== cur) n.textContent = v;
@@ -168,6 +171,7 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
               ? '→ right'
               : '← left';
       moveText = setText(hmove, move, moveText);
+      cupText = setText(hcup, `cup ${Math.round(v.pour.fill * 100)}%`, cupText);
       const fw = Math.round(pitcherFlow(p) * 100);
       if (fw !== flowW) {
         flowW = fw;

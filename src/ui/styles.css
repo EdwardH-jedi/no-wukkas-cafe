@@ -1342,6 +1342,10 @@ kbd {
   width: 0;
   background: var(--crema);
 }
+.lesson .hcup {
+  font-family: var(--mono);
+  color: var(--txt);
+}
 .lesson .hint {
   margin-top: 8px;
   color: var(--gold);
@@ -1451,16 +1455,27 @@ kbd {
 }
 
 @media (max-width: 720px) {
+  /* Below the top bar, which wraps to two rows on a phone. */
   .lesson {
     bottom: auto;
-    top: 60px;
+    top: 100px;
   }
-  .lesson li.done,
   .lesson li:not(.cur) {
     display: none;
   }
+  /* The strip mirrors height, flow and cup, so practice drops the gauge panel on a phone. */
+  #pgauges {
+    display: none;
+  }
   :is(#actionBar, #ractions, #pactions).side {
-    bottom: calc(150px + env(safe-area-inset-bottom, 0px) + 170px);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100vw - 32px);
+  }
+  #actionBar.side {
+    right: auto;
+    left: 16px;
   }
 }
 .paper kbd {
