@@ -56,3 +56,30 @@ into `dist/` (Codex audit A4).
   copy of the main checkout's `public/assets/voice/`.
 
 Genuinely clean checkouts (`git archive`) of every branch contain no audio files at all.
+
+## Music (2026-10-14)
+
+Three moods are generated in code, so no recordings, samples or third-party tracks are involved:
+
+| Mood | Style | Tempo | When |
+|---|---|---|---|
+| `opening` | indie acoustic / light jazz: fingerpicked pluck, soft keys, brushes | 92 bpm | title, Day 1, Day 2 intro |
+| `rush` | upbeat indie / surf / funk: kit, syncopated bass, tremolo surf lead | 118 bpm | Day 2 service |
+| `afternoon` | neo-soul / relaxed jazz: Rhodes-style keys, swung kit, walking bass | 78 bpm | Day 1 verdict, Day 2 wrap-up and report |
+
+**Sources:**
+- `src/audio/musicPatterns.ts` holds the notes: generic chord progressions, with melodies picked
+  from scales by a seeded RNG per bar.
+- `src/audio/music.ts` is the synth: FM keys, filtered pluck, sine/triangle bass, saw lead with
+  tremolo, and noise drums.
+
+**Provenance:** original to this repository. Chord progressions such as ii–V–I or Em7–A7–G–D7
+are common musical vocabulary, not copied works. No Spotify, commercial or library music is used.
+
+**Mixing:**
+- The music has its own bus and volume slider ("Music", default 45%).
+- It ducks under speech: to 0.28 under orders and answers, 0.55 under other talk, and back to
+  full about 1 s after the speech ends.
+
+**Replacing it later:** licensed tracks must go through `src/data/audio/provenance.json` and the
+build gate above.

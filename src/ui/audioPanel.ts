@@ -23,6 +23,7 @@ export interface AudioPanel {
 
 const BUS_LABEL: Record<Bus, string> = {
   voice: 'Voices',
+  music: 'Music',
   ambience: 'Café ambience',
   sfx: 'Machine & effects',
 };
@@ -49,7 +50,7 @@ export function createAudioPanel(
   panel.innerHTML = `<div class="box">
     <h3>Sound</h3>
     <p class="astatus"><i class="dot"></i><span></span></p>
-    ${(['voice', 'ambience', 'sfx'] as const)
+    ${(['voice', 'music', 'ambience', 'sfx'] as const)
       .map(
         (b) =>
           `<label class="slider"><span>${BUS_LABEL[b]}</span><input type="range" min="0" max="100" step="5" data-bus="${b}" aria-label="${BUS_LABEL[b]} volume"><output data-out="${b}"></output></label>`,

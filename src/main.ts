@@ -9,6 +9,8 @@ import './ui/styles.css';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAudioManager, type VoiceRequest } from './audio/manager';
+import { createMusic } from './audio/music';
+import { moodFor } from './audio/musicPatterns';
 import { createSfx } from './audio/sfx';
 import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
@@ -87,6 +89,7 @@ async function boot(): Promise<void> {
     voiceOff: params.get('voice') === '0',
   });
   const sfx = createSfx(audio);
+  const music = createMusic(audio);
   // Any click or key can bring back sound the browser blocked (autoplay policy, iOS).
   window.addEventListener('pointerdown', () => audio.unlock(), { capture: true });
   window.addEventListener('keydown', () => audio.unlock(), { capture: true });
@@ -478,6 +481,8 @@ async function boot(): Promise<void> {
         history: audio.history.map((h) => ({ ...h })),
         voices: audio.voices,
         output: audio.outputInfo,
+        music: { mood: music.mood, duck: audio.musicDuck, scheduled: music.scheduled },
+        masterRms: audio.masterRms(),
       };
     },
     /** Cheap per-frame snapshot for audio/subtitle sync tests (Day 1 or Day 2). */
@@ -636,7 +641,12 @@ async function boot(): Promise<void> {
         const u = ev.line;
         rushHud.onSay(u);
         if (u.speaker === 'gaz') owner.onSay(u, viewTime);
-        audio.say({ speaker: u.speaker, text: u.text, delivery: u.delivery ?? 'normal' });
+        audio.say({
+          speaker: u.speaker,
+          text: u.text,
+          delivery: u.delivery ?? 'normal',
+          listen: u.listen === true,
+        });
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {
@@ -745,6 +755,9 @@ async function boot(): Promise<void> {
     const dt = clock.paused ? 0 : real;
     viewTime += dt;
     voiceLevel = audio.voiceLevel();
+    audio.update();
+    music.setMood(moodFor(mode, mode === 'rush' && rush ? rush.phase : trial.phase));
+    music.update();
     if (mode === 'rush' && rush) {
       rushFrame(rush, dt);
       renderer.render(scene, camera);

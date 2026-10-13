@@ -10,9 +10,10 @@ import { clipFor, VOICE_MANIFEST } from '../data/voice';
 import type { Delivery } from '../data/voice/ids';
 import type { VoiceClip } from '../data/voice/manifest';
 import { VOICE_PROFILES } from '../data/voice/profiles';
+import { duckLevel } from './musicPatterns';
 import { createTts, type TtsStyle } from './voice';
 
-export type Bus = 'voice' | 'ambience' | 'sfx';
+export type Bus = 'voice' | 'music' | 'ambience' | 'sfx';
 
 /** ok: clips playing; fallback: browser voice standing in; blocked: browser refused to start
  *  audio; error: something failed; off: voice turned off; locked: before the first click. */
@@ -22,6 +23,8 @@ export interface VoiceRequest {
   speaker: string;
   text: string;
   delivery?: Delivery;
+  /** An order or answer the player must hear: the music ducks deeper under it. */
+  listen?: boolean;
 }
 
 export interface PlayRecord {
@@ -49,7 +52,14 @@ export interface PlayRecord {
 export interface AudioManager {
   readonly context: AudioContext | null;
   /** Where SFX and room tone connect. Null before unlock. */
-  output(bus: 'sfx' | 'ambience'): AudioNode | null;
+  /** Where SFX, room tone and music connect. Null before unlock. Music goes through the duck. */
+  output(bus: 'sfx' | 'ambience' | 'music'): AudioNode | null;
+  /** Call every frame: ducks the music under speech. */
+  update(): void;
+  /** Current music duck gain (1 = full), for tests. */
+  readonly musicDuck: number;
+  /** RMS after the master gain right now (everything audible), for tests. */
+  masterRms(): number;
   /** Call from inside a user gesture. Safe to call often. */
   unlock(): void;
   say(req: VoiceRequest): void;
@@ -102,13 +112,14 @@ const DECODED_CACHE = 16;
 
 interface Saved {
   voice: number;
+  music: number;
   ambience: number;
   sfx: number;
   voiceOn: boolean;
 }
 
 const loadSaved = (): Saved => {
-  const d: Saved = { voice: 1, ambience: 0.7, sfx: 0.8, voiceOn: true };
+  const d: Saved = { voice: 1, music: 0.45, ambience: 0.7, sfx: 0.8, voiceOn: true };
   try {
     const raw = localStorage.getItem(STORE);
     if (!raw) return d;
@@ -117,6 +128,7 @@ const loadSaved = (): Saved => {
       typeof x === 'number' && x >= 0 && x <= 1 ? x : f;
     return {
       voice: v(s.voice, d.voice),
+      music: v(s.music, d.music),
       ambience: v(s.ambience, d.ambience),
       sfx: v(s.sfx, d.sfx),
       voiceOn: typeof s.voiceOn === 'boolean' ? s.voiceOn : true,
@@ -130,7 +142,16 @@ const loadSaved = (): Saved => {
  *  touching the player's saved setting. */
 export function createAudioManager(base: string, opts: { voiceOff?: boolean } = {}): AudioManager {
   const saved = loadSaved();
-  const vol: Record<Bus, number> = { voice: saved.voice, ambience: saved.ambience, sfx: saved.sfx };
+  const vol: Record<Bus, number> = {
+    voice: saved.voice,
+    music: saved.music,
+    ambience: saved.ambience,
+    sfx: saved.sfx,
+  };
+  /** Music → duck → music volume. Ducking is separate from the player's volume. */
+  let duck: GainNode | null = null;
+  let duckTarget = 1;
+  let currentListen = false;
   let voiceEnabled = saved.voiceOn && !opts.voiceOff;
   let voicePref = saved.voiceOn; // what gets saved
   let ctx: AudioContext | null = null;
@@ -200,12 +221,14 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     masterTap.fftSize = 512;
     masterScope = new Float32Array(masterTap.fftSize);
     master.connect(masterTap);
-    for (const b of ['voice', 'ambience', 'sfx'] as const) {
+    for (const b of ['voice', 'music', 'ambience', 'sfx'] as const) {
       const g = ctx.createGain();
       g.gain.value = b === 'voice' && !voiceEnabled ? 0 : vol[b];
       g.connect(master);
       bus[b] = g;
     }
+    duck = ctx.createGain();
+    duck.connect(bus.music as GainNode);
     // Voice → analyser → voice volume. The analyser sits before the volume so mouths still move
     // when the player turns voices down.
     analyser = ctx.createAnalyser();
@@ -339,7 +362,27 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       return ctx;
     },
     output(b) {
+      if (b === 'music') return duck;
       return bus[b] ?? null;
+    },
+    update() {
+      if (!ctx || !duck) return;
+      const speaking = source !== null || tts.speaking;
+      const want = duckLevel(speaking, currentListen);
+      if (want === duckTarget) return;
+      // Duck fast (an order mustn't be masked), come back slowly.
+      duck.gain.setTargetAtTime(want, ctx.currentTime, want < duckTarget ? 0.05 : 0.4);
+      duckTarget = want;
+    },
+    get musicDuck() {
+      return duck?.gain.value ?? 1;
+    },
+    masterRms() {
+      if (!masterTap || !masterScope) return 0;
+      masterTap.getFloatTimeDomainData(masterScope);
+      let m = 0;
+      for (let i = 0; i < masterScope.length; i++) m += (masterScope[i] as number) ** 2;
+      return Math.sqrt(m / masterScope.length);
     },
     unlock() {
       try {
@@ -367,6 +410,7 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     },
     say(req) {
       lastLine = req;
+      currentListen = req.listen === true;
       const my = ++gen;
       pendingTts = null;
       stopSource();
