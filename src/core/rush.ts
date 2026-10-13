@@ -5,33 +5,18 @@
 // replay, repeat or clarify if needed), and the ticket, right or wrong, is what gets made.
 
 import { CUSTOMERS, type CustomerDef, type CustomerId } from '../data/customers';
-import { OWNER_LINES, RUSH_INTRO } from '../data/ownerLines';
-import { spokenDuration } from '../data/voice';
+import { RUSH_INTRO } from '../data/ownerLines';
 import type { Delivery } from '../data/voice/ids';
 import {
-  answerFor,
-  CLARIFY_QUESTION,
-  LISTEN_COST,
-  MAX_REPEATS,
   normaliseOrder,
-  orderTier,
   pickOrder,
-  wrongFields,
   type Difficulty,
   type ListenRecord,
   type OrderField,
   type OrderLine,
 } from '../sim/listening';
+import { addFrustration, createOwner, type Mood, type OwnerState } from '../sim/owner';
 import {
-  addFrustration,
-  createOwner,
-  pickLine,
-  type LineDef,
-  type Mood,
-  type OwnerState,
-} from '../sim/owner';
-import {
-  DRINK_NAME,
   drainRate,
   evaluateServe,
   REJECT_PENALTY,
@@ -56,16 +41,14 @@ import {
   type StationPhase,
 } from './barista';
 import { createRng, type Rng } from './rng';
+import { atCounter, fixMisheardTicket, listenAction, ringUp } from './rushListening';
+import { customerListen, customerSay, gaz, gazDef, startSay, varsFor } from './rushSpeech';
 import {
-  canOffer,
   channelBusy,
   createChannel,
-  interrupt,
-  offer,
   pending,
   updateChannel,
   type Channel,
-  type Priority,
   type Utterance,
 } from './speech';
 import type { SfxId } from './trial';
@@ -273,102 +256,7 @@ export function restartRush(r: Rush): void {
   beginIntro(r);
 }
 
-// ---------------------------------------------------------------- speech helpers
-
-const fill = (text: string, vars: Record<string, string>): string =>
-  text.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? `{${k}}`);
-
-function startSay(r: Rush): (u: Utterance) => void {
-  return (u) => r.events.push({ type: 'say', line: u });
-}
-
-/** Gaz says a line for `key`, if the channel will take it. */
-function gaz(r: Rush, key: string, priority: Priority, vars: Record<string, string> = {}): boolean {
-  if (!canOffer(r.speech, priority, r.time)) return false;
-  const picked = pickLine(r.owner, OWNER_LINES, key, r.rng, r.time, priority === 'live');
-  if (!picked) return false;
-  const text = fill(picked.text, vars);
-  if (text === r.lastGazText) return false;
-  r.lastGazText = text;
-  const u: Utterance = {
-    ...picked,
-    text,
-    duration: spokenDuration('gaz', text),
-    speaker: 'gaz',
-    priority,
-  };
-  return offer(r.speech, u, r.time, startSay(r));
-}
-
-function gazDef(r: Rush, key: string, def: LineDef): void {
-  const u: Utterance = {
-    speaker: 'gaz',
-    key,
-    text: def.text,
-    mood: def.mood ?? 'neutral',
-    gesture: def.gesture ?? 'none',
-    duration: spokenDuration('gaz', def.text),
-    priority: 'react',
-  };
-  offer(r.speech, u, r.time, startSay(r));
-}
-
-/** A customer speaks. Their lines are fixed (no randomness), so nothing repeats by chance. */
-function customerSay(
-  r: Rush,
-  c: RushCustomer,
-  key: string,
-  text: string,
-  mood: Mood,
-  priority: Priority,
-): Utterance | null {
-  const u: Utterance = {
-    speaker: c.def.id,
-    key,
-    text,
-    mood,
-    gesture: 'none',
-    duration: spokenDuration(c.def.id, text),
-    priority,
-  };
-  if (!canOffer(r.speech, priority, r.time, c.def.id)) return null;
-  return offer(r.speech, u, r.time, startSay(r)) ? u : null;
-}
-
-/** Something the player must hear: the order, a slower repeat, or an answer. Starts at once (the
- *  player asked for it) and becomes what Replay plays. */
-function customerListen(
-  r: Rush,
-  c: RushCustomer,
-  key: string,
-  text: string,
-  delivery: Delivery = 'normal',
-): Utterance {
-  const u: Utterance = {
-    speaker: c.def.id,
-    key,
-    text,
-    mood: 'neutral',
-    gesture: 'none',
-    duration: spokenDuration(c.def.id, text, delivery),
-    priority: 'order',
-    delivery,
-    listen: true,
-  };
-  c.lastListen = { text, delivery, key };
-  // Cut Gaz or themselves off, but never another customer mid-sentence.
-  const cur = r.speech.current;
-  if (!cur || cur.speaker === c.def.id || cur.speaker === 'gaz')
-    interrupt(r.speech, u, r.time, startSay(r));
-  else offer(r.speech, u, r.time, startSay(r));
-  return u;
-}
-
-const varsFor = (c: RushCustomer, drink?: DrinkType): Record<string, string> => ({
-  name: c.def.callName,
-  ordered: DRINK_NAME[c.order.type],
-  drink: drink ? DRINK_NAME[drink] : '',
-});
+export { atCounter };
 
 // ---------------------------------------------------------------- flow
 
@@ -395,11 +283,6 @@ const registerBusy = (r: Rush): boolean =>
 /** The customer at the register, if any (waiting for their order to be taken). */
 export function atRegister(r: Rush): RushCustomer | null {
   return r.customers.find((c) => c.state === 'register') ?? null;
-}
-
-/** The customer whose order is being taken (speaking or being rung up), if any. */
-export function atCounter(r: Rush): RushCustomer | null {
-  return r.customers.find((c) => c.state === 'ordering' || c.state === 'deciding') ?? null;
 }
 
 export function waitingCustomers(r: Rush): RushCustomer[] {
@@ -518,23 +401,8 @@ function serve(r: Rush, id: CustomerId): void {
       'annoyed',
       'order',
     );
-    // Made exactly what the ticket said? Then the ticket was wrong: a listening mistake.
-    const t = c.heard;
-    const matchesTicket =
-      t !== null &&
-      drink.type === t.type &&
-      (drink.type !== 'flatWhite' || drink.milkType === (t.milk ?? 'full'));
-    if (matchesTicket && t && wrongFields(t, c.order).length > 0) {
-      // They set you straight at the pass, and the ticket gets corrected: the cost was the
-      // wasted drink, the time and their patience.
-      if (wrongMilk) {
-        const text = answerFor(c.def.answers, c.order, 'milk');
-        customerSay(r, c, `${c.def.id}.answer.milk`, text, 'annoyed', 'order');
-      }
-      c.heard = { ...c.order };
-      r.events.push({ type: 'ticketFixed', customer: c.def.id });
-      gaz(r, 'rush.misheard', 'react', varsFor(c, drink.type));
-    } else gaz(r, 'rush.wrongDrink', 'react', varsFor(c, drink.type));
+    if (!fixMisheardTicket(r, c, drink, wrongMilk))
+      gaz(r, 'rush.wrongDrink', 'react', varsFor(c, drink.type));
     addFrustration(r.owner, 0.8);
     r.streak.good = 0;
     r.streak.bad++;
@@ -584,63 +452,6 @@ function serve(r: Rush, id: CustomerId): void {
     addFrustration(r.owner, 0.6);
     if (r.streak.bad === 2) gaz(r, 'rush.streakBad', 'react');
   }
-}
-
-/** Replay, "could you repeat that?" and clarifying questions, for the customer at the counter.
- *  Each costs them a little patience: listening aids are there, but they aren't free. */
-function listenAction(
-  r: Rush,
-  a: { type: 'replay' } | { type: 'repeat' } | { type: 'clarify'; field: OrderField },
-): void {
-  const c = atCounter(r);
-  if (!c) return;
-  if (a.type === 'replay') {
-    const l = c.lastListen ?? { text: c.line.text, delivery: 'normal' as Delivery, key: c.line.id };
-    c.listen.replays++;
-    c.patience -= LISTEN_COST.replay;
-    const u = customerListen(r, c, l.key, l.text, l.delivery);
-    if (c.state === 'ordering') c.orderLine = u;
-  } else if (a.type === 'repeat') {
-    if (c.listen.repeats >= MAX_REPEATS) return;
-    c.listen.repeats++;
-    c.patience -= LISTEN_COST.repeat;
-    r.events.push({ type: 'ask', customer: c.def.id, text: 'Sorry, could you repeat that?' });
-    const u = customerListen(r, c, `${c.line.id}.slow`, c.line.text, 'slow');
-    if (c.state === 'ordering') c.orderLine = u;
-    // Queued after their repeat ('live' would never get a word in while they're talking).
-    if (c.listen.repeats === MAX_REPEATS) gaz(r, 'rush.askedTwice', 'react', varsFor(c));
-  } else {
-    if (!c.listen.clarified.includes(a.field)) c.listen.clarified.push(a.field);
-    c.patience -= LISTEN_COST.clarify;
-    r.events.push({ type: 'ask', customer: c.def.id, text: CLARIFY_QUESTION[a.field] });
-    const text = answerFor(c.def.answers, c.order, a.field);
-    const u = customerListen(r, c, `${c.def.id}.answer.${a.field}`, text);
-    if (c.state === 'ordering') c.orderLine = u;
-  }
-}
-
-/** Print the ticket with what the player heard. Right or wrong, the ticket is what gets made. */
-function ringUp(r: Rush, heard: Order): void {
-  const c = atCounter(r);
-  if (!c || c.state !== 'deciding') return;
-  c.heard = normaliseOrder(heard);
-  const wrong = wrongFields(c.heard, c.order);
-  r.listening.push({
-    customer: c.def.id,
-    lineId: c.line.id,
-    tier: orderTier(c.line),
-    truth: c.order,
-    heard: c.heard,
-    wrong,
-    replays: c.listen.replays,
-    repeats: c.listen.repeats,
-    clarified: [...c.listen.clarified],
-  });
-  setState(c, 'waiting');
-  c.orderedAt = r.time;
-  c.ticket = r.nextTicket++;
-  r.events.push({ type: 'ticket', customer: c.def.id });
-  if (c === r.customers[r.customers.length - 1]) gaz(r, 'rush.lastOrder', 'react');
 }
 
 function handleBarista(r: Rush, out: BaristaEvent[]): void {
