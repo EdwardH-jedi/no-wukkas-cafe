@@ -4,11 +4,7 @@ import { dialogueId } from '../../src/data/voice/ids';
 import type { VoiceClip, VoiceManifest } from '../../src/data/voice/manifest';
 import { VOICE_PROFILES } from '../../src/data/voice/profiles';
 import { voiceScript } from '../../src/data/voice/script';
-import {
-  expectedFile,
-  validateManifest,
-  type IssueCode,
-} from '../../src/data/voice/validate';
+import { expectedFile, validateManifest, type IssueCode } from '../../src/data/voice/validate';
 
 const script = voiceScript();
 const opts = { script, profiles: VOICE_PROFILES };
