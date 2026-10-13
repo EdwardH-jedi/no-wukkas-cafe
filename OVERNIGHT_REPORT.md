@@ -215,9 +215,10 @@ The manifest (committed) lists every one.
     - the repeat cap;
     - difficulty picks the right tiers;
     - a hard shift.
-- `npm run test:e2e`: **4 passed (6.8 min)** after the last code change: the audio playback spec, the audio 404 spec, the Day 2 rush (listening) spec and the Day 1 trial spec.
-- `npm run build`: OK. JS 916 KB, 222 KB gzipped (was 821 KB). The difference is mostly the voice
-  manifest; trimming it is listed in §11.
+- `npm run test:e2e`: **4 passed (6.8 min)** after Phase 5: the audio playback spec, the audio 404 spec, the Day 2 rush (listening) spec and the Day 1 trial spec. After the final one-line register fix, the Day 2 spec was re-run and passed (3.9 min).
+- `npm run build`: OK after the last code change. JS 918 KB, 223.5 KB gzipped. After Phase 1 it
+  was 821 KB; the pre-session size wasn't measured. The growth is mostly the voice manifest;
+  trimming it is listed in §11.
 - `npm run balance` is still a stub. No economy exists yet, so there's no balance diff.
 
 ## 7. Browser playback verification (real Chrome, not "play() didn't throw")
@@ -301,7 +302,7 @@ trial":**
 ## 11. Remaining bugs and risks
 
 - **Placeholder voices** (§4–5) are the main open item.
-- `core/rush.ts` is now about 680 lines, over the ~400-line guideline. Split the listening
+- `core/rush.ts` is now 718 lines, over the ~400-line guideline. Split the listening
   orchestration out of it before it grows more.
 - The JS bundle carries the full manifest (~200 KB raw). The runtime only needs id → file,
   duration and playback settings. Generating a slim runtime map would save about 150 KB.
@@ -314,7 +315,9 @@ trial":**
   - `?voice=0` used to save "voices off" for later visits;
   - Enter didn't ring up with a register button focused;
   - a ticket's Make button was unreadable;
-  - macOS's new voice-list format hid Tara.
+  - macOS's new voice-list format hid Tara;
+  - the register kept the previous customer's buttons highlighted when the next customer arrived
+    in the same state.
 
 ## 12. How to run and play
 

@@ -159,6 +159,7 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
           sel = { drink: null, milk: 'full', temp: 'normal', heart: 'no' };
           asked.textContent = '';
           who.textContent = c.def.name;
+          stateKey = ''; // repaint: the last customer's choices must not stay lit
           fb.classList.add('hide');
         }
         deciding = c.state === 'deciding';
