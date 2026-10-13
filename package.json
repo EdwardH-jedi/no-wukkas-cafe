@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "balance": "node scripts/balance.ts"
+    "balance": "node scripts/balance.ts",
+    "voices": "node scripts/voices.ts"
   },
   "dependencies": {
     "@fontsource/bowlby-one": "^5.3.0",

@@ -11,8 +11,11 @@ export interface HudCallbacks {
   action(a: TrialAction): void;
   /** Start Day 2 (title screen or verdict). */
   day2(): void;
-  toggleVoice(): boolean;
-  toggleSound(): boolean;
+  /** Open the sound settings. */
+  sound(): void;
+  /** Replay + Sound buttons for the top bar, and how to wire them. */
+  audioButtonsHtml: string;
+  bindAudio(el: HTMLElement): void;
   pause(p: boolean): void;
   restart(): void;
   height(dir: -1 | 0 | 1): void;
@@ -22,6 +25,8 @@ export interface HudCallbacks {
 export interface Hud {
   readonly touch: boolean;
   onSay(line: SpokenLine): void;
+  /** Show a replayed line for `seconds`. */
+  onReplay(text: string, seconds: number): void;
   onPhase(phase: Phase, t: Trial): void;
   setPaused(p: boolean): void;
   update(t: Trial, dt: number): void;
@@ -36,8 +41,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
       <div class="chip"><span class="k">Goes</span><div class="pips"><i></i><i></i><i></i></div></div>
       <div class="chip" id="bestChip"><span class="k">Best</span><b id="bestV">–</b></div>
       <div class="spacer"></div>
-      <button class="iconbtn" id="voiceBtn" aria-label="Toggle voice">Voice</button>
-      <button class="iconbtn" id="sndBtn" aria-label="Toggle sound">Sound</button>
+      ${cb.audioButtonsHtml}
       <button class="iconbtn" id="pauseBtn" aria-label="Pause">❚❚</button>
     </div>
     <div id="instr" class="hide"><div class="h"></div><div class="b"></div></div>
@@ -64,22 +68,11 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   title.querySelectorAll<HTMLButtonElement>('button[data-act]').forEach((b) => {
     b.onclick = () => {
       if (b.dataset.act === 'day2') cb.day2();
-      else if (b.dataset.act === 'voice') {
-        const on = cb.toggleVoice();
-        b.textContent = `Voice: ${on ? 'on' : 'off'}`;
-        b.setAttribute('aria-pressed', String(on));
-        $('#voiceBtn').classList.toggle('off', !on);
-      } else cb.action('start');
+      else if (b.dataset.act === 'sound') cb.sound();
+      else cb.action('start');
     };
   });
-  $('#voiceBtn').onclick = (e) => {
-    const on = cb.toggleVoice();
-    (e.currentTarget as HTMLElement).classList.toggle('off', !on);
-  };
-  $('#sndBtn').onclick = (e) => {
-    const on = cb.toggleSound();
-    (e.currentTarget as HTMLElement).classList.toggle('off', !on);
-  };
+  cb.bindAudio(topbar);
   $('#pauseBtn').onclick = () => cb.pause(true);
   $('#resumeBtn').onclick = () => cb.pause(false);
   $('#restartBtn').onclick = () => cb.restart();
@@ -97,6 +90,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   let subFull = '';
   let subShown = 0;
   let subHideIn = 0;
+  let replayHold = 0;
   let lastQuote = '';
 
   // ---------------------------------------------------------------- gauges
@@ -137,6 +131,12 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
           : lastQuote;
       subs.classList.remove('gone');
     },
+    onReplay(text, seconds) {
+      subFull = text;
+      subShown = 0;
+      replayHold = seconds;
+      subs.classList.remove('gone');
+    },
     onPhase(phase, t) {
       title.classList.toggle('hide', phase !== 'title');
       topbar.classList.toggle('hide', phase === 'title');
@@ -153,7 +153,8 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     },
     update(t, dt) {
       // Subtitles: quick typewriter reveal, fade when he stops talking.
-      if (t.speech.current) {
+      if (replayHold > 0) replayHold -= dt;
+      if (t.speech.current || replayHold > 0) {
         subHideIn = 0.35;
         if (subShown < subFull.length) {
           subShown = Math.min(subFull.length, subShown + dt * 70);

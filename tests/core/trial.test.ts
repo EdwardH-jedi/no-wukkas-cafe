@@ -10,6 +10,7 @@ import {
   type TrialInput,
 } from '../../src/core/trial';
 import { OWNER_LINES } from '../../src/data/ownerLines';
+import { clipFor } from '../../src/data/voice';
 import { controlsAt, OWNER_DEMO, type TrackKey } from '../../src/sim/latte/demo';
 import { HEIGHT_PRESETS } from '../../src/sim/latte/pitcher';
 
@@ -130,6 +131,25 @@ describe('trial shift, played headless', () => {
       const { said } = play(style);
       for (const k of said) if (!k.startsWith('greet.')) expect(OWNER_LINES[k], k).toBeDefined();
     }
+  });
+
+  it('every line Gaz says has a voice recording, and holds the floor for it', () => {
+    const missing = new Set<string>();
+    for (const style of ['good', 'messy', 'lazy', 'blob'] as const) {
+      const t = createTrial(4);
+      for (let n = 0; n < 600 / STEP; n++) {
+        stepTrial(t, botInput(t, style, n), STEP);
+        for (const e of t.events) {
+          if (e.type !== 'say') continue;
+          const clip = clipFor('gaz', e.line.text);
+          if (!clip) missing.add(e.line.text);
+          else expect(e.line.duration).toBeGreaterThan(clip.duration);
+        }
+        t.events.length = 0;
+        if (t.phase === 'verdict' && t.phaseTime > 1) break;
+      }
+    }
+    expect([...missing]).toEqual([]);
   });
 
   it('never says the same line twice in a row', () => {

@@ -10,3 +10,6 @@ playwright-report/
 !.env.example
 .DS_Store
 *.log
+
+# Rendered voice clips (macOS system voices: personal use only, never commit or ship)
+public/assets/voice/

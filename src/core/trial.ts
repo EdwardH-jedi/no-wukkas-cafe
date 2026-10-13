@@ -3,6 +3,7 @@
 // `events` each frame.
 
 import { GREETING, GREETING_OPENERS, OWNER_LINES } from '../data/ownerLines';
+import { spokenDuration } from '../data/voice';
 import { ATTEMPTS, scoreAttempt, trialOutcome, bestValidIndex } from '../sim/attempt';
 import type { AttemptResult, TrialOutcome } from '../sim/attempt';
 import {
@@ -33,7 +34,6 @@ import { SILKY_MILK, type MilkQuality } from '../sim/milk';
 import {
   addFrustration,
   createOwner,
-  lineDuration,
   ownerTier,
   pickLine,
   type LineDef,
@@ -212,6 +212,8 @@ export function restartTrial(t: Trial): void {
 // ---------------------------------------------------------------- speech
 
 function startLine(t: Trial, line: SpokenLine): void {
+  // Hold the floor for as long as the recording runs (reading time if there's no clip).
+  line.duration = spokenDuration('gaz', line.text);
   t.speech.current = line;
   t.speech.started = t.time;
   t.events.push({ type: 'say', line });
@@ -223,7 +225,7 @@ function defLine(key: string, def: LineDef): SpokenLine {
     text: def.text,
     mood: def.mood ?? 'neutral',
     gesture: def.gesture ?? 'none',
-    duration: lineDuration(def.text),
+    duration: spokenDuration('gaz', def.text),
     live: false,
   };
 }

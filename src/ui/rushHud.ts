@@ -23,11 +23,15 @@ export interface RushHudCallbacks {
   title(): void;
   height(dir: -1 | 0 | 1): void;
   skip(): void;
+  audioButtonsHtml: string;
+  bindAudio(el: HTMLElement): void;
 }
 
 export interface RushHud {
   show(on: boolean): void;
   onSay(line: Utterance): void;
+  /** Show a replayed line for `seconds`. */
+  onReplay(speaker: string, text: string, seconds: number): void;
   onPhase(phase: RushPhase, r: Rush): void;
   setPaused(p: boolean): void;
   update(r: Rush, dt: number): void;
@@ -57,6 +61,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       <div class="chip"><span class="k">Served</span><b id="rserved">0/5</b></div>
       <div class="chip"><span class="k">Tips</span><b id="rtips">$0.00</b></div>
       <div class="spacer"></div>
+      ${cb.audioButtonsHtml}
       <button class="iconbtn" id="rpauseBtn" aria-label="Pause">❚❚</button>
     </div>
     <div id="rail" aria-label="Order tickets"></div>
@@ -86,6 +91,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const gauges = createGauges($('#rgauges'), touch);
 
   $('#rpauseBtn').onclick = () => cb.pause(true);
+  cb.bindAudio(topbar);
   pauseEl.querySelectorAll<HTMLButtonElement>('button[data-p]').forEach((b) => {
     b.onclick = () => {
       const p = b.dataset.p;
@@ -161,6 +167,20 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     }
   };
 
+  let replayHold = 0;
+  const showLine = (speaker: string, text: string): void => {
+    subFull = text;
+    subShown = 0;
+    subHideIn = 0;
+    if (speaker === 'gaz') subsWho.innerHTML = 'GAZ<small>Owner</small>';
+    else {
+      const d = customerDef(speaker as CustomerId);
+      subsWho.innerHTML = `${esc(d.name.toUpperCase())}<small>${esc(d.tag)}</small>`;
+    }
+    subs.classList.toggle('customer', speaker !== 'gaz');
+    subs.classList.remove('gone');
+  };
+
   const stationPhaseMode = (p: StationPhase): GaugeMode =>
     p === 'grind' || p === 'shot' || p === 'steam' || p === 'pour' || p === 'water' ? p : '';
 
@@ -170,16 +190,11 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     },
     onSay(line) {
       if (line.key.startsWith('rush.end.')) endQuote = line.text;
-      subFull = line.text;
-      subShown = 0;
-      subHideIn = 0;
-      if (line.speaker === 'gaz') subsWho.innerHTML = 'GAZ<small>Owner</small>';
-      else {
-        const d = customerDef(line.speaker as CustomerId);
-        subsWho.innerHTML = `${esc(d.name.toUpperCase())}<small>${esc(d.tag)}</small>`;
-      }
-      subs.classList.toggle('customer', line.speaker !== 'gaz');
-      subs.classList.remove('gone');
+      showLine(line.speaker, line.text);
+    },
+    onReplay(speaker, text, seconds) {
+      showLine(speaker, text);
+      replayHold = seconds;
     },
     onPhase(phase, r) {
       if (phase === 'intro') endQuote = '';
@@ -214,7 +229,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     },
     update(r, dt) {
       // Subtitles.
-      if (r.speech.current) {
+      if (replayHold > 0) replayHold -= dt;
+      if (r.speech.current || replayHold > 0) {
         subHideIn = 0.35;
         if (subShown < subFull.length) {
           subShown = Math.min(subFull.length, subShown + dt * 70);

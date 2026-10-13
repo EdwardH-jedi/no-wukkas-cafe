@@ -8,8 +8,8 @@ import '@fontsource/figtree/800.css';
 import './ui/styles.css';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { createAudioManager, type VoiceRequest } from './audio/manager';
 import { createSfx } from './audio/sfx';
-import { createVoice } from './audio/voice';
 import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
 import {
@@ -21,9 +21,11 @@ import {
   type RushAction,
 } from './core/rush';
 import { canFinish, createTrial, emptyInput, stepTrial, type TrialAction } from './core/trial';
-import { customerDef, type CustomerId } from './data/customers';
+import { GREETING, GREETING_OPENERS } from './data/ownerLines';
+import { spokenDuration, VOICE_MANIFEST } from './data/voice';
 import { surfacing } from './sim/latte/field';
 import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
+import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
 import { createRushHud, railOrder } from './ui/rushHud';
 import { buildCafe } from './world/cafe';
@@ -77,9 +79,27 @@ async function boot(): Promise<void> {
 
   const trial = createTrial(seed);
   const clock = createClock();
-  const sfx = createSfx();
-  const voice = createVoice();
-  if (params.get('voice') === '0') voice.enabled = false;
+  const audio = createAudioManager(import.meta.env.BASE_URL);
+  const sfx = createSfx(audio);
+  if (params.get('voice') === '0') audio.voiceEnabled = false;
+  // Any click or key can bring back sound the browser blocked (autoplay policy, iOS).
+  window.addEventListener('pointerdown', () => audio.unlock(), { capture: true });
+  window.addEventListener('keydown', () => audio.unlock(), { capture: true });
+
+  /** Download a day's clips up front (decoded only when played). Greeting first. */
+  const prefetchDay = (day: 1 | 2): void => {
+    const asReq = (text: string): VoiceRequest => ({ speaker: 'gaz', text });
+    if (day === 1) audio.prefetch([...GREETING_OPENERS, ...GREETING].map((d) => asReq(d.text)));
+    audio.prefetch(
+      VOICE_MANIFEST.clips
+        .filter((c) =>
+          day === 1
+            ? c.characterId === 'gaz' && !c.key.startsWith('rush.')
+            : c.characterId !== 'gaz' || c.key.startsWith('rush.'),
+        )
+        .map((c) => ({ speaker: c.characterId, text: c.transcript, delivery: c.delivery })),
+    );
+  };
 
   // Which day is running. Day 1's trial owns the title screen.
   let mode: 'trial' | 'rush' = 'trial';
@@ -100,10 +120,12 @@ async function boot(): Promise<void> {
   const hit = new THREE.Vector3();
 
   const act = (a: TrialAction): void => {
+    // Inside the click: this is what lets the browser play the owner's first line.
+    audio.unlock();
     sfx.unlock();
     if (a === 'start') {
-      voice.unlock();
       sfx.play('click');
+      prefetchDay(1);
     }
     input.action = a;
   };
@@ -112,9 +134,7 @@ async function boot(): Promise<void> {
     clock.paused = p;
     hud.setPaused(p);
     rushHud.setPaused(p);
-    sfx.setPaused(p);
-    if (p) voice.pause();
-    else voice.resume();
+    audio.setPaused(p);
     if (p) {
       held = false;
       spaceHeld = false;
@@ -134,10 +154,11 @@ async function boot(): Promise<void> {
 
   /** Start the morning rush (from the title or the trial verdict). */
   const startDay2 = (): void => {
+    audio.unlock();
     sfx.unlock();
-    voice.unlock();
-    voice.stop();
+    audio.stopVoice();
     sfx.play('click');
+    prefetchDay(2);
     clock.paused = false;
     hud.setPaused(false);
     rushHud.setPaused(false);
@@ -152,7 +173,7 @@ async function boot(): Promise<void> {
 
   /** Back to the title screen (fresh Day 1 trial). */
   const toTitle = (): void => {
-    voice.stop();
+    audio.stopVoice();
     clock.paused = false;
     hud.setPaused(false);
     rushHud.setPaused(false);
@@ -166,6 +187,19 @@ async function boot(): Promise<void> {
     hud.onPhase('title', trial);
   };
 
+  /** Say the last line again, with its subtitle. */
+  const replay = (): void => {
+    const l = audio.replay();
+    if (!l) return;
+    const secs = spokenDuration(l.speaker, l.text, l.delivery);
+    if (mode === 'rush') rushHud.onReplay(l.speaker, l.text, secs);
+    else hud.onReplay(l.text, secs);
+  };
+  const audioPanel = createAudioPanel(uiRoot, audio, {
+    replay,
+    test: () => audio.say({ speaker: 'gaz', text: (GREETING[0] as { text: string }).text }),
+  });
+
   const rushHud = createRushHud(hud2Root, {
     action: rushAct,
     pause: setPaused,
@@ -177,20 +211,19 @@ async function boot(): Promise<void> {
     title: toTitle,
     height: (d) => (touchHeight = d),
     skip: () => (input.skip = true),
+    audioButtonsHtml: audioPanel.buttonsHtml,
+    bindAudio: (el) => audioPanel.bind(el),
   });
 
   const hud = createHud(hud1Root, {
     action: act,
     day2: startDay2,
-    toggleVoice: () => {
-      voice.enabled = !voice.enabled;
-      if (!voice.enabled) voice.stop();
-      return voice.enabled;
+    sound: () => {
+      audio.unlock();
+      audioPanel.open();
     },
-    toggleSound: () => {
-      sfx.setMuted(!sfx.muted);
-      return !sfx.muted;
-    },
+    audioButtonsHtml: audioPanel.buttonsHtml,
+    bindAudio: (el) => audioPanel.bind(el),
     pause: setPaused,
     restart: () => {
       setPaused(false);
@@ -266,7 +299,8 @@ async function boot(): Promise<void> {
     } else if (k === 'w' || k === 'arrowup') keyHeight = 1;
     else if (k === 's' || k === 'arrowdown') keyHeight = -1;
     else if (k === 'm') sfx.setMuted(!sfx.muted);
-    else if (k === 'v') voice.enabled = !voice.enabled;
+    else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
+    else if (k === 'r') replay();
   });
   /** Day 2 keys: T take order, F/L make, B bin, Enter lock in / hand over, 1–5 serve or jug height. */
   function rushKey(r: Rush, k: string, e: KeyboardEvent): void {
@@ -290,7 +324,8 @@ async function boot(): Promise<void> {
     } else if (k === 'w' || k === 'arrowup') keyHeight = 1;
     else if (k === 's' || k === 'arrowdown') keyHeight = -1;
     else if (k === 'm') sfx.setMuted(!sfx.muted);
-    else if (k === 'v') voice.enabled = !voice.enabled;
+    else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
+    else if (k === 'r') replay();
   }
 
   window.addEventListener('keyup', (e) => {
@@ -394,6 +429,19 @@ async function boot(): Promise<void> {
     get phase() {
       return trial.phase;
     },
+    /** Audio evidence for tests: what played, how long the decoded buffer was, peak loudness. */
+    get audio() {
+      return {
+        status: audio.status,
+        message: audio.message,
+        contextState: audio.context?.state ?? 'none',
+        currentTime: audio.context?.currentTime ?? 0,
+        voiceEnabled: audio.voiceEnabled,
+        speaking: audio.speaking,
+        clipCount: audio.clipCount,
+        history: audio.history.map((h) => ({ ...h })),
+      };
+    },
     /** Day 2 state for tests (null on Day 1). */
     get rush() {
       const r = rush;
@@ -484,6 +532,8 @@ async function boot(): Promise<void> {
   // ---------------------------------------------------------------- loop
   let last = performance.now();
   let viewTime = 0;
+  /** Loudness of the line being spoken (0..1), for mouths. */
+  let voiceLevel = 0;
   const look = new THREE.Vector3();
   const focus = { cupRim: station.cupRim, ownerHead: owner.head };
 
@@ -514,10 +564,8 @@ async function boot(): Promise<void> {
       if (ev.type === 'say') {
         const u = ev.line;
         rushHud.onSay(u);
-        if (u.speaker === 'gaz') {
-          owner.onSay(u, viewTime);
-          voice.speak(u.text, 'gaz');
-        } else voice.speak(u.text, u.speaker, customerDef(u.speaker as CustomerId).voice);
+        if (u.speaker === 'gaz') owner.onSay(u, viewTime);
+        audio.say({ speaker: u.speaker, text: u.text });
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {
@@ -560,7 +608,7 @@ async function boot(): Promise<void> {
       /* looking at the customer at the register */
     } else if (working && !gazTalking) look.copy(station.cupRim);
     else look.copy(camera.position);
-    owner.update(ownerScene, dt, viewTime, look);
+    owner.update(ownerScene, dt, viewTime, look, gazTalking && audio.clipPlaying ? voiceLevel : -1);
 
     const camPhase =
       r.phase === 'intro'
@@ -602,6 +650,7 @@ async function boot(): Promise<void> {
     }
     const dt = clock.paused ? 0 : real;
     viewTime += dt;
+    voiceLevel = audio.voiceLevel();
     if (mode === 'rush' && rush) {
       rushFrame(rush, dt);
       renderer.render(scene, camera);
@@ -611,11 +660,11 @@ async function boot(): Promise<void> {
       if (ev.type === 'say') {
         hud.onSay(ev.line);
         owner.onSay(ev.line, viewTime);
-        voice.speak(ev.line.text, 'gaz');
+        audio.say({ speaker: 'gaz', text: ev.line.text });
       } else if (ev.type === 'phase') {
         hud.onPhase(ev.phase, trial);
         canvas.classList.toggle('aim', ev.phase === 'pour');
-        if (ev.phase === 'title' || ev.phase === 'intro') voice.stop();
+        if (ev.phase === 'title') audio.stopVoice();
       } else if (ev.type === 'sfx') sfx.play(ev.id);
     }
     trial.events.length = 0;
@@ -630,7 +679,7 @@ async function boot(): Promise<void> {
     if (working && !trial.speech.current) look.copy(station.cupRim);
     else if (trial.phase === 'inspect' && trial.phaseTime < 2.3) look.copy(station.cupRim);
     else look.copy(camera.position);
-    owner.update(trial, dt, viewTime, look);
+    owner.update(trial, dt, viewTime, look, audio.clipPlaying ? voiceLevel : -1);
     const pointerLook = !working && trial.phase !== 'demo';
     const px = pointer.has ? (pointer.x / window.innerWidth) * 2 - 1 : 0;
     const py = pointer.has ? (pointer.y / window.innerHeight) * 2 - 1 : 0;

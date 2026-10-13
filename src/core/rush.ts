@@ -4,8 +4,8 @@
 
 import { CUSTOMERS, type CustomerDef, type CustomerId } from '../data/customers';
 import { OWNER_LINES, RUSH_INTRO } from '../data/ownerLines';
+import { spokenDuration } from '../data/voice';
 import {
-  lineDuration,
   addFrustration,
   createOwner,
   pickLine,
@@ -214,7 +214,13 @@ function gaz(r: Rush, key: string, priority: Priority, vars: Record<string, stri
   const text = fill(picked.text, vars);
   if (text === r.lastGazText) return false;
   r.lastGazText = text;
-  const u: Utterance = { ...picked, text, duration: lineDuration(text), speaker: 'gaz', priority };
+  const u: Utterance = {
+    ...picked,
+    text,
+    duration: spokenDuration('gaz', text),
+    speaker: 'gaz',
+    priority,
+  };
   return offer(r.speech, u, r.time, startSay(r));
 }
 
@@ -225,7 +231,7 @@ function gazDef(r: Rush, key: string, def: LineDef): void {
     text: def.text,
     mood: def.mood ?? 'neutral',
     gesture: def.gesture ?? 'none',
-    duration: lineDuration(def.text),
+    duration: spokenDuration('gaz', def.text),
     priority: 'react',
   };
   offer(r.speech, u, r.time, startSay(r));
@@ -246,7 +252,7 @@ function customerSay(
     text,
     mood,
     gesture: 'none',
-    duration: lineDuration(text),
+    duration: spokenDuration(c.def.id, text),
     priority,
   };
   if (!canOffer(r.speech, priority, r.time, c.def.id)) return null;

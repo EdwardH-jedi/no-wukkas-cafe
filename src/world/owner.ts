@@ -162,7 +162,8 @@ export interface OwnerView {
   /** World position of his face (camera target). */
   readonly head: THREE.Vector3;
   onSay(line: OwnerLine, now: number): void;
-  update(t: OwnerScene, dt: number, now: number, look: THREE.Vector3): void;
+  /** `voice`: loudness of his recorded line (0..1) drives the mouth; -1 = no clip, animate. */
+  update(t: OwnerScene, dt: number, now: number, look: THREE.Vector3, voice?: number): void;
   dispose(): void;
 }
 
@@ -521,7 +522,7 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
         gestureStart = now;
       }
     },
-    update(t, dt, now, look) {
+    update(t, dt, now, look, voice = -1) {
       // Base pose for the phase, gesture on top for ~1.9 s.
       let base = 'crossed';
       if (
@@ -587,7 +588,8 @@ export function buildOwner(scene: THREE.Scene): OwnerView {
         nextBlink = now + 2.2 + ((now * 7.31) % 2.8);
       }
       let mouth: Mouth = 'closed';
-      if (speaking) {
+      if (speaking && voice >= 0) mouth = voice > 0.42 ? 'wide' : voice > 0.1 ? 'open' : 'closed';
+      else if (speaking) {
         const step = Math.floor(now * 9.5) % 3;
         mouth = step === 0 ? 'closed' : step === 1 ? 'open' : 'wide';
       }

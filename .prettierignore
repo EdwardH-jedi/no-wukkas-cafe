@@ -9,3 +9,4 @@ docs
 .remember
 package-lock.json
 *.md
+src/data/voice/manifest.json

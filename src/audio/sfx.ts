@@ -1,8 +1,11 @@
 // Synthesised café sounds (no files). Continuous machine sounds follow per-frame levels;
-// one-shots are fired by trial events. Created on the first user gesture (iOS needs that).
+// one-shots are fired by trial events. Built on the shared AudioContext from audio/manager.ts
+// (created on the first user gesture, which iOS needs): machine sounds go to the SFX bus, room
+// tone to the ambience bus, and pausing the manager freezes them all.
 
 import { createRng } from '../core/rng';
 import type { SfxId } from '../core/trial';
+import type { AudioManager } from './manager';
 
 export interface LoopLevels {
   grind: number;
@@ -24,12 +27,11 @@ export interface Sfx {
   muted: boolean;
   unlock(): void;
   setMuted(m: boolean): void;
-  setPaused(p: boolean): void;
   update(l: LoopLevels): void;
   play(id: SfxId | 'click' | 'tick'): void;
 }
 
-export function createSfx(): Sfx {
+export function createSfx(audio: AudioManager): Sfx {
   let ctx: AudioContext | null = null;
   let master: GainNode | null = null;
   let noise: AudioBuffer | null = null;
@@ -40,7 +42,13 @@ export function createSfx(): Sfx {
   let motor: GainNode | null = null;
   let muted = false;
 
-  const loopNoise = (buf: AudioBuffer, type: BiquadFilterType, f: number, q: number): Channel => {
+  const loopNoise = (
+    buf: AudioBuffer,
+    type: BiquadFilterType,
+    f: number,
+    q: number,
+    out: AudioNode = master as GainNode,
+  ): Channel => {
     const c = ctx as AudioContext;
     const src = c.createBufferSource();
     src.buffer = buf;
@@ -51,22 +59,19 @@ export function createSfx(): Sfx {
     filter.Q.value = q;
     const gain = c.createGain();
     gain.gain.value = 0;
-    src
-      .connect(filter)
-      .connect(gain)
-      .connect(master as GainNode);
+    src.connect(filter).connect(gain).connect(out);
     src.start();
     return { gain, filter };
   };
 
   const init = (): void => {
-    const C =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    ctx = new C();
+    audio.unlock();
+    const out = audio.output('sfx');
+    if (!audio.context || !out) return;
+    ctx = audio.context;
     master = ctx.createGain();
     master.gain.value = muted ? 0 : 0.6;
-    master.connect(ctx.destination);
+    master.connect(out);
     const rng = createRng(0x5f3759df);
     noise = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
     const d = noise.getChannelData(0);
@@ -79,8 +84,8 @@ export function createSfx(): Sfx {
       b[i] = last * 3.2;
     }
     // Room tone: low murmur of the street and the fridge.
-    const room = loopNoise(brown, 'bandpass', 380, 0.5);
-    room.gain.gain.value = 0.05;
+    const room = loopNoise(brown, 'bandpass', 380, 0.5, audio.output('ambience') ?? master);
+    room.gain.gain.value = 0.07;
     ch.grind = loopNoise(noise, 'bandpass', 2300, 0.7);
     ch.pump = loopNoise(brown, 'lowpass', 420, 2);
     ch.steam = loopNoise(noise, 'highpass', 3600, 0.7);
@@ -172,7 +177,7 @@ export function createSfx(): Sfx {
     unlock() {
       try {
         if (!ctx) init();
-        if (ctx && ctx.state === 'suspended') void ctx.resume();
+        else audio.unlock();
       } catch {
         ctx = null; // audio is optional
       }
@@ -180,11 +185,6 @@ export function createSfx(): Sfx {
     setMuted(m) {
       muted = m;
       if (master && ctx) master.gain.setTargetAtTime(m ? 0 : 0.6, ctx.currentTime, 0.05);
-    },
-    setPaused(p) {
-      if (!ctx) return;
-      if (p) void ctx.suspend();
-      else void ctx.resume();
     },
     update(l) {
       if (!ctx) return;

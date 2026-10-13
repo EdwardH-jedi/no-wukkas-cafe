@@ -1,0 +1,7062 @@
+{
+  "version": 1,
+  "provider": "macos-say (PLACEHOLDER: Apple system voices, personal/non-commercial use only)",
+  "clips": [
+    {
+      "dialogueId": "beryl:2a5cf9c0",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.happy",
+      "delivery": "normal",
+      "transcript": "Oh, look at that! A proper heart. You're a treasure.",
+      "file": "assets/voice/beryl/2a5cf9c0.mp3",
+      "duration": 3.761,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:2eaff6a9",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.impatient",
+      "delivery": "normal",
+      "transcript": "No rush, love. Well… a little rush.",
+      "file": "assets/voice/beryl/2eaff6a9.mp3",
+      "duration": 3.042,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:5b4c26fd",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.rejected",
+      "delivery": "normal",
+      "transcript": "Oh, I don't think that's mine, darl. Mine's the flat white with the heart.",
+      "file": "assets/voice/beryl/5b4c26fd.mp3",
+      "duration": 5.003,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:5c509233",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "Bit cool, darl, but never mind.",
+      "file": "assets/voice/beryl/5c509233.mp3",
+      "duration": 2.678,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:67d6b180",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.walkout",
+      "delivery": "normal",
+      "transcript": "I'll pop back later, love. That's my bus.",
+      "file": "assets/voice/beryl/67d6b180.mp3",
+      "duration": 3.186,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:8e27654d",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.angry",
+      "delivery": "normal",
+      "transcript": "I'm not getting any younger, darl.",
+      "file": "assets/voice/beryl/8e27654d.mp3",
+      "duration": 2.362,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:c26199e0",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.complaint.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart today? Never mind, love.",
+      "file": "assets/voice/beryl/c26199e0.mp3",
+      "duration": 2.81,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:ed223235",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.okay",
+      "delivery": "normal",
+      "transcript": "Thank you, love. Lovely and warm.",
+      "file": "assets/voice/beryl/ed223235.mp3",
+      "duration": 2.613,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:f22f6d80",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.order",
+      "delivery": "normal",
+      "transcript": "Hello love. A flat white, please, with one of those little hearts? My grandson says you do them now.",
+      "file": "assets/voice/beryl/f22f6d80.mp3",
+      "duration": 6.875,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:0477a142",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.rejected",
+      "delivery": "normal",
+      "transcript": "Nah mate, that's not mine. Flat white, remember?",
+      "file": "assets/voice/dazza/0477a142.mp3",
+      "duration": 3.211,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:467ed7af",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.walkout",
+      "delivery": "normal",
+      "transcript": "Forget it. I'll grab one from the servo.",
+      "file": "assets/voice/dazza/467ed7af.mp3",
+      "duration": 2.311,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:4d4ca5d5",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.happy",
+      "delivery": "normal",
+      "transcript": "Legend. Cheers, mate.",
+      "file": "assets/voice/dazza/4d4ca5d5.mp3",
+      "duration": 1.699,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:7fb68388",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.complaint.messy",
+      "delivery": "normal",
+      "transcript": "Half of it went in the saucer, mate.",
+      "file": "assets/voice/dazza/7fb68388.mp3",
+      "duration": 1.976,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:8c37a1c3",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.order",
+      "delivery": "normal",
+      "transcript": "Oi mate! Flattie, ta. Gotta be on site in ten.",
+      "file": "assets/voice/dazza/8c37a1c3.mp3",
+      "duration": 3.372,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:af43bda7",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.okay",
+      "delivery": "normal",
+      "transcript": "Yeah, she'll do. Ta.",
+      "file": "assets/voice/dazza/af43bda7.mp3",
+      "duration": 1.692,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:bef8a52b",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.impatient",
+      "delivery": "normal",
+      "transcript": "Mate, I've got a crane waiting on me.",
+      "file": "assets/voice/dazza/bef8a52b.mp3",
+      "duration": 2.043,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:d8d1b30f",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.complaint.badShot",
+      "delivery": "normal",
+      "transcript": "Tastes like the bottom of me ute. Ta anyway.",
+      "file": "assets/voice/dazza/d8d1b30f.mp3",
+      "duration": 2.601,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:ec8a9cf5",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.angry",
+      "delivery": "normal",
+      "transcript": "Strewth. Any day now, champ.",
+      "file": "assets/voice/dazza/ec8a9cf5.mp3",
+      "duration": 2.239,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:effc7cf9",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "Bit cold, mate. Whatever, gotta run.",
+      "file": "assets/voice/dazza/effc7cf9.mp3",
+      "duration": 2.656,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:009574f1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.okay",
+      "delivery": "normal",
+      "transcript": "We survived. Just. Tomorrow, faster.",
+      "file": "assets/voice/gaz/009574f1.mp3",
+      "duration": 3.013,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:014edd2d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.intro",
+      "delivery": "normal",
+      "transcript": "Pull the shot. Stop it between twenty-five and thirty. Watch the timer, not me.",
+      "file": "assets/voice/gaz/014edd2d.mp3",
+      "duration": 4.983,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0389f2ed",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.again",
+      "delivery": "normal",
+      "transcript": "Here's another cup. They're not free, you know.",
+      "file": "assets/voice/gaz/0389f2ed.mp3",
+      "duration": 2.819,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:04389924",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Beryl wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/04389924.mp3",
+      "duration": 3.751,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:04acdd71",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.good",
+      "delivery": "normal",
+      "transcript": "Not bad for a first shift. Not bad at all.",
+      "file": "assets/voice/gaz/04acdd71.mp3",
+      "duration": 2.729,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:04cdc57f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.over",
+      "delivery": "normal",
+      "transcript": "Over-extracted. That'll taste like an ashtray.",
+      "file": "assets/voice/gaz/04cdc57f.mp3",
+      "duration": 2.844,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:07052e99",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.light",
+      "delivery": "normal",
+      "transcript": "That's a dusting, not a dose. Whatever, keep going.",
+      "file": "assets/voice/gaz/07052e99.mp3",
+      "duration": 3.514,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0ef60672",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.tooHigh",
+      "delivery": "normal",
+      "transcript": "Lower! Closer to the coffee!",
+      "file": "assets/voice/gaz/0ef60672.mp3",
+      "duration": 1.796,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0f3bd7f9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.overflow",
+      "delivery": "normal",
+      "transcript": "My bench is swimming. Stop!",
+      "file": "assets/voice/gaz/0f3bd7f9.mp3",
+      "duration": 1.811,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0faae1f5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.improvedAgain",
+      "delivery": "normal",
+      "transcript": "Better again. Two in a row. Don't let it go to your head.",
+      "file": "assets/voice/gaz/0faae1f5.mp3",
+      "duration": 3.322,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0fde16af",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "water.overflow",
+      "delivery": "normal",
+      "transcript": "Whoa, that's a bath, not a long black. Leave room for the shot!",
+      "file": "assets/voice/gaz/0fde16af.mp3",
+      "duration": 3.821,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:10221724",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Priya looked happy.",
+      "file": "assets/voice/gaz/10221724.mp3",
+      "duration": 1.804,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:107a1593",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.empty",
+      "delivery": "normal",
+      "transcript": "There's nothing in the basket. Grind first, genius.",
+      "file": "assets/voice/gaz/107a1593.mp3",
+      "duration": 3.338,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:11720b3d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Priya. Lovely.",
+      "file": "assets/voice/gaz/11720b3d.mp3",
+      "duration": 1.426,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:12147740",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Jiwoo ordered a long black.",
+      "file": "assets/voice/gaz/12147740.mp3",
+      "duration": 3.087,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:12820a42",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Beryl's face says it all.",
+      "file": "assets/voice/gaz/12820a42.mp3",
+      "duration": 1.356,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:128d12a5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.split",
+      "delivery": "normal",
+      "transcript": "Pulled through way too hard. It's two blobs having a fight.",
+      "file": "assets/voice/gaz/128d12a5.mp3",
+      "duration": 3.155,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:13b99ab5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.2",
+      "delivery": "normal",
+      "transcript": "Take the order, make the drink, hand it to the right person. Flat whites and long blacks. Easy.",
+      "file": "assets/voice/gaz/13b99ab5.mp3",
+      "duration": 5.867,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:14ccb43c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.heavy",
+      "delivery": "normal",
+      "transcript": "Overdosed it. That basket's packed like a Sydney train.",
+      "file": "assets/voice/gaz/14ccb43c.mp3",
+      "duration": 3.503,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:158e5013",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noArt",
+      "delivery": "normal",
+      "transcript": "Where's the art? That's just a brown puddle.",
+      "file": "assets/voice/gaz/158e5013.mp3",
+      "duration": 2.373,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:171c0c33",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Karen asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/171c0c33.mp3",
+      "duration": 3.594,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:17f6be75",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Dazza looked happy.",
+      "file": "assets/voice/gaz/17f6be75.mp3",
+      "duration": 1.902,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:18ac417b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.offCentre",
+      "delivery": "normal",
+      "transcript": "Bit off to the side. Pour in the middle, not the suburbs.",
+      "file": "assets/voice/gaz/18ac417b.mp3",
+      "duration": 3.191,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:18c3abfc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.screech",
+      "delivery": "normal",
+      "transcript": "Oi! You're spraying milk everywhere. Tip in the milk!",
+      "file": "assets/voice/gaz/18c3abfc.mp3",
+      "duration": 3.064,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:1c2c92a7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Jiwoo's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/1c2c92a7.mp3",
+      "duration": 2.445,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:1fea297a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.outside",
+      "delivery": "normal",
+      "transcript": "That's the counter, mate. Cup's over here.",
+      "file": "assets/voice/gaz/1fea297a.mp3",
+      "duration": 2.514,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:20f695bc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Beryl ordered a long black.",
+      "file": "assets/voice/gaz/20f695bc.mp3",
+      "duration": 3.119,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:265978b0",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.intro",
+      "delivery": "normal",
+      "transcript": "Right. Watch and learn, 'cause I'm only doing this once.",
+      "file": "assets/voice/gaz/265978b0.mp3",
+      "duration": 3.434,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:27187c78",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Dazza's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/27187c78.mp3",
+      "duration": 2.45,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:273d17a0",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.intro",
+      "delivery": "normal",
+      "transcript": "Hold the grinder. I want eighteen to twenty grams on that scale.",
+      "file": "assets/voice/gaz/273d17a0.mp3",
+      "duration": 3.546,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:275e9e35",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.tooBig",
+      "delivery": "normal",
+      "transcript": "You've whited out the whole cup. That's not a heart, that's a snowfield.",
+      "file": "assets/voice/gaz/275e9e35.mp3",
+      "duration": 3.81,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:278eb269",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Dazza asked nicely, too.",
+      "file": "assets/voice/gaz/278eb269.mp3",
+      "duration": 2.78,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:287163b4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.failed",
+      "delivery": "normal",
+      "transcript": "Look, you tried. Badly, but you tried. Not today, mate.",
+      "file": "assets/voice/gaz/287163b4.mp3",
+      "duration": 4.446,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:289e141f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.again",
+      "delivery": "normal",
+      "transcript": "Shot is in. Steam some fresh milk. Same deal: stretch, spin, off at sixty.",
+      "file": "assets/voice/gaz/289e141f.mp3",
+      "duration": 5.924,
+      "meanDb": -17.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:296d151f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noCleft",
+      "delivery": "normal",
+      "transcript": "No dip at the top. Start the pull-through from the back edge.",
+      "file": "assets/voice/gaz/296d151f.mp3",
+      "duration": 3.129,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2b7e6683",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.lastOrder",
+      "delivery": "normal",
+      "transcript": "Last one. Finish strong.",
+      "file": "assets/voice/gaz/2b7e6683.mp3",
+      "duration": 1.876,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2bac4035",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Tickets, mate! long black! It's written down!",
+      "file": "assets/voice/gaz/2bac4035.mp3",
+      "duration": 2.847,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2c4273c3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.0",
+      "delivery": "normal",
+      "transcript": "Righto, you're on the books. Welcome to your first paid shift.",
+      "file": "assets/voice/gaz/2c4273c3.mp3",
+      "duration": 3.631,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2c915f3d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.last",
+      "delivery": "normal",
+      "transcript": "Third and final cup. No pressure.",
+      "file": "assets/voice/gaz/2c915f3d.mp3",
+      "duration": 2.084,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2e10cf4d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.good",
+      "delivery": "normal",
+      "transcript": "Silky, shiny, sixty. Who taught you that?",
+      "file": "assets/voice/gaz/2e10cf4d.mp3",
+      "duration": 3.393,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2fd8caad",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.tooMuchAir",
+      "delivery": "normal",
+      "transcript": "That's a bubble bath, not microfoam. Bury the tip!",
+      "file": "assets/voice/gaz/2fd8caad.mp3",
+      "duration": 3.28,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:30a87bc5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Priya asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/30a87bc5.mp3",
+      "duration": 3.555,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:30d4107e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "invalid.mostlySpilled",
+      "delivery": "normal",
+      "transcript": "Most of that's on my bench. Can't even judge it.",
+      "file": "assets/voice/gaz/30d4107e.mp3",
+      "duration": 2.699,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3330dc5e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.overflow",
+      "delivery": "normal",
+      "transcript": "Plus my bench is sticky now.",
+      "file": "assets/voice/gaz/3330dc5e.mp3",
+      "duration": 1.573,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:33e08ad2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "That long black isn't gonna make itself.",
+      "file": "assets/voice/gaz/33e08ad2.mp3",
+      "duration": 2.172,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3507eadf",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.dry",
+      "delivery": "normal",
+      "transcript": "Jug's empty. That's all you get.",
+      "file": "assets/voice/gaz/3507eadf.mp3",
+      "duration": 1.895,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3757af4e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.improved",
+      "delivery": "normal",
+      "transcript": "Better. See what happens when you listen?",
+      "file": "assets/voice/gaz/3757af4e.mp3",
+      "duration": 2.258,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:381b59a5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Again with the wrong drink. Unbelievable.",
+      "file": "assets/voice/gaz/381b59a5.mp3",
+      "duration": 2.386,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:38dad15e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Dazza asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/38dad15e.mp3",
+      "duration": 3.669,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:393087e5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.good",
+      "delivery": "normal",
+      "transcript": "Bang on. Even a broken clock, eh.",
+      "file": "assets/voice/gaz/393087e5.mp3",
+      "duration": 2.493,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3ae385fe",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.intro",
+      "delivery": "normal",
+      "transcript": "Your go. Mouse moves the jug, hold to pour. Scroll, or W and S, for up and down.",
+      "file": "assets/voice/gaz/3ae385fe.mp3",
+      "duration": 6.084,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3b952ff5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "At this rate I'll be serving myself.",
+      "file": "assets/voice/gaz/3b952ff5.mp3",
+      "duration": 2.105,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3c26389c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.again",
+      "delivery": "normal",
+      "transcript": "Milk. Again. Sixty degrees. It's not rocket science.",
+      "file": "assets/voice/gaz/3c26389c.mp3",
+      "duration": 3.866,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3ce70edb",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Take. The. Order.",
+      "file": "assets/voice/gaz/3ce70edb.mp3",
+      "duration": 1.325,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3f12f7ef",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.earlyLow",
+      "delivery": "normal",
+      "transcript": "Too early! Fill it up first, then go low.",
+      "file": "assets/voice/gaz/3f12f7ef.mp3",
+      "duration": 2.803,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:3ff9cd46",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Jiwoo's face says it all.",
+      "file": "assets/voice/gaz/3ff9cd46.mp3",
+      "duration": 1.319,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:40856116",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.tooSmall",
+      "delivery": "normal",
+      "transcript": "Is that a heart or a freckle? Bigger.",
+      "file": "assets/voice/gaz/40856116.mp3",
+      "duration": 1.97,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4086e863",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Jiwoo looked happy.",
+      "file": "assets/voice/gaz/4086e863.mp3",
+      "duration": 1.846,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:42817ced",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.lopsided",
+      "delivery": "normal",
+      "transcript": "It's leaning like a bloke at the pub at closing time.",
+      "file": "assets/voice/gaz/42817ced.mp3",
+      "duration": 2.626,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:43ff3c3b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.long",
+      "delivery": "normal",
+      "transcript": "That's past thirty, mate. It's turning to tar.",
+      "file": "assets/voice/gaz/43ff3c3b.mp3",
+      "duration": 2.986,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:445a33a6",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.karenManager",
+      "delivery": "normal",
+      "transcript": "I am the manager. And no, she's not getting a free one.",
+      "file": "assets/voice/gaz/445a33a6.mp3",
+      "duration": 3.438,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:47ad725b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.noAir",
+      "delivery": "normal",
+      "transcript": "That's just hot milk. No air, no foam, no art.",
+      "file": "assets/voice/gaz/47ad725b.mp3",
+      "duration": 3.627,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:47d9b07f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.great",
+      "delivery": "normal",
+      "transcript": "Bloody hell. That's a proper heart.",
+      "file": "assets/voice/gaz/47d9b07f.mp3",
+      "duration": 2.1,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:48730f27",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Dazza ordered a flat white.",
+      "file": "assets/voice/gaz/48730f27.mp3",
+      "duration": 3.286,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:488af6aa",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.hiredAfter",
+      "delivery": "normal",
+      "transcript": "Six sharp Monday. Bring your own apron.",
+      "file": "assets/voice/gaz/488af6aa.mp3",
+      "duration": 2.603,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4985b3bc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Karen's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/4985b3bc.mp3",
+      "duration": 2.503,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:49a3ce2e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.failedAgain",
+      "delivery": "normal",
+      "transcript": "Two duds in a row. Milk's not free, mate.",
+      "file": "assets/voice/gaz/49a3ce2e.mp3",
+      "duration": 2.902,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4aa81889",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Karen wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/4aa81889.mp3",
+      "duration": 3.746,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4ca0c83c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.intro",
+      "delivery": "normal",
+      "transcript": "Milk. Hold to steam. Tip just under the surface first till it goes tss-tss, then raise the jug and let it spin. Off at sixty.",
+      "file": "assets/voice/gaz/4ca0c83c.mp3",
+      "duration": 8.683,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4d189515",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.overflow",
+      "delivery": "normal",
+      "transcript": "And it overflowed. Wipe that up.",
+      "file": "assets/voice/gaz/4d189515.mp3",
+      "duration": 1.868,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4df47689",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.outside",
+      "delivery": "normal",
+      "transcript": "Wrong target. The cup's the round thing.",
+      "file": "assets/voice/gaz/4df47689.mp3",
+      "duration": 2.292,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4e77897f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noArt",
+      "delivery": "normal",
+      "transcript": "I asked for a heart and got a brown pond.",
+      "file": "assets/voice/gaz/4e77897f.mp3",
+      "duration": 2.162,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:51e930d4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.worse",
+      "delivery": "normal",
+      "transcript": "Went backwards there, champ.",
+      "file": "assets/voice/gaz/51e930d4.mp3",
+      "duration": 1.794,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:52cf14d9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.hesitate",
+      "delivery": "normal",
+      "transcript": "The milk's not getting any younger.",
+      "file": "assets/voice/gaz/52cf14d9.mp3",
+      "duration": 1.599,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:52eba16a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Priya's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/52eba16a.mp3",
+      "duration": 2.556,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:54004703",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.good",
+      "delivery": "normal",
+      "transcript": "Right on the money. Don't let it go to your head.",
+      "file": "assets/voice/gaz/54004703.mp3",
+      "duration": 2.45,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:547403f9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "invalid.halfEmpty",
+      "delivery": "normal",
+      "transcript": "Half a cup? Are we rationing now? Doesn't count.",
+      "file": "assets/voice/gaz/547403f9.mp3",
+      "duration": 3.286,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:56768163",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.great",
+      "delivery": "normal",
+      "transcript": "Okay. Okay! That's lovely, that is.",
+      "file": "assets/voice/gaz/56768163.mp3",
+      "duration": 2.998,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:56c1c8c3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.good",
+      "delivery": "normal",
+      "transcript": "Look at that crema. I'm almost impressed. Almost.",
+      "file": "assets/voice/gaz/56c1c8c3.mp3",
+      "duration": 3.236,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:58629bbe",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.pull",
+      "delivery": "normal",
+      "transcript": "Lift, ease off, and pull straight through. Done.",
+      "file": "assets/voice/gaz/58629bbe.mp3",
+      "duration": 3.172,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5b8563aa",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.tooHigh",
+      "delivery": "normal",
+      "transcript": "Drop the jug! The art won't happen from up there.",
+      "file": "assets/voice/gaz/5b8563aa.mp3",
+      "duration": 2.667,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5cf99d45",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Priya's face says it all.",
+      "file": "assets/voice/gaz/5cf99d45.mp3",
+      "duration": 1.428,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5d9aa3b3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.tooSmall",
+      "delivery": "normal",
+      "transcript": "Tiny. Get low sooner and let it bloom.",
+      "file": "assets/voice/gaz/5d9aa3b3.mp3",
+      "duration": 2.474,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5e18b152",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Beryl's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/5e18b152.mp3",
+      "duration": 2.434,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5e49b345",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.muddy",
+      "delivery": "normal",
+      "transcript": "Beige. Everything is beige. Get closer to the surface.",
+      "file": "assets/voice/gaz/5e49b345.mp3",
+      "duration": 3.405,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5eea1cd1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.blob",
+      "delivery": "normal",
+      "transcript": "Blob. Again. I didn't ask for a cloud.",
+      "file": "assets/voice/gaz/5eea1cd1.mp3",
+      "duration": 2.67,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:5ff30582",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.light",
+      "delivery": "normal",
+      "transcript": "Bit light, that. Shot'll gush through. Your funeral.",
+      "file": "assets/voice/gaz/5ff30582.mp3",
+      "duration": 3.436,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:60721c87",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Dazza. Take the order, mate.",
+      "file": "assets/voice/gaz/60721c87.mp3",
+      "duration": 2.62,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:61c8c4c8",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Karen ordered a flat white.",
+      "file": "assets/voice/gaz/61c8c4c8.mp3",
+      "duration": 3.175,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:62e188ff",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.disaster",
+      "delivery": "normal",
+      "transcript": "Half my regulars walked out. Go home, have a lie-down, try again.",
+      "file": "assets/voice/gaz/62e188ff.mp3",
+      "duration": 4.581,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:63bc29ca",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Tickets, mate! flat white! It's written down!",
+      "file": "assets/voice/gaz/63bc29ca.mp3",
+      "duration": 2.848,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:640e054b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.almost",
+      "delivery": "normal",
+      "transcript": "You're not hopeless. Weekend trial. Don't make me regret it.",
+      "file": "assets/voice/gaz/640e054b.mp3",
+      "duration": 3.895,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:64d9144a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.again",
+      "delivery": "normal",
+      "transcript": "Again. And this time, make it look like something.",
+      "file": "assets/voice/gaz/64d9144a.mp3",
+      "duration": 2.98,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:64fda9f6",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Karen. Take the order, mate.",
+      "file": "assets/voice/gaz/64fda9f6.mp3",
+      "duration": 2.686,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:650aac70",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Beryl asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/650aac70.mp3",
+      "duration": 3.599,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:650ea9a3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.drop",
+      "delivery": "normal",
+      "transcript": "Now drop it right down, close. Let the white come up and bloom.",
+      "file": "assets/voice/gaz/650ea9a3.mp3",
+      "duration": 3.734,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6544b4b9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "We'll be here till lunch at this rate.",
+      "file": "assets/voice/gaz/6544b4b9.mp3",
+      "duration": 1.893,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:65c12a13",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Beryl's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/65c12a13.mp3",
+      "duration": 2.483,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:667ec0d6",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.good",
+      "delivery": "normal",
+      "transcript": "Nice. Proper shot, that. Don't get used to compliments.",
+      "file": "assets/voice/gaz/667ec0d6.mp3",
+      "duration": 4.015,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:66fb5329",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.stiff",
+      "delivery": "normal",
+      "transcript": "That's cappuccino froth. Stiff as a board. It won't flow.",
+      "file": "assets/voice/gaz/66fb5329.mp3",
+      "duration": 3.763,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:67c1ed9f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.intro",
+      "delivery": "normal",
+      "transcript": "Hit the button to start, hit it again to stop. Twenty-five to thirty seconds.",
+      "file": "assets/voice/gaz/67c1ed9f.mp3",
+      "duration": 4.495,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:68114b44",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.handoff",
+      "delivery": "normal",
+      "transcript": "I'll pull the next shots myself. You're slower than a wet week.",
+      "file": "assets/voice/gaz/68114b44.mp3",
+      "duration": 3.635,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:684bdec9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Beryl ordered a flat white.",
+      "file": "assets/voice/gaz/684bdec9.mp3",
+      "duration": 3.196,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:690fcaad",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Jiwoo. Take the order, mate.",
+      "file": "assets/voice/gaz/690fcaad.mp3",
+      "duration": 2.638,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:69ba033a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.muddy",
+      "delivery": "normal",
+      "transcript": "It's all muddy. You were too high when you dropped in.",
+      "file": "assets/voice/gaz/69ba033a.mp3",
+      "duration": 2.71,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6ad310d5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.lopsided",
+      "delivery": "normal",
+      "transcript": "Crooked again. Straight line, mate. Straight.",
+      "file": "assets/voice/gaz/6ad310d5.mp3",
+      "duration": 3.242,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6be0a0e2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Priya ordered a flat white.",
+      "file": "assets/voice/gaz/6be0a0e2.mp3",
+      "duration": 3.157,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6c7ed1e4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.disaster",
+      "delivery": "normal",
+      "transcript": "That was a disaster. My insurance doesn't cover this. Off you go.",
+      "file": "assets/voice/gaz/6c7ed1e4.mp3",
+      "duration": 4.034,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6ca0b675",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.spill",
+      "delivery": "normal",
+      "transcript": "And there's milk all over my bench. Lovely.",
+      "file": "assets/voice/gaz/6ca0b675.mp3",
+      "duration": 2.306,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6d7581cd",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.over",
+      "delivery": "normal",
+      "transcript": "Whoa, whoa! That's a dose, not a sandcastle.",
+      "file": "assets/voice/gaz/6d7581cd.mp3",
+      "duration": 3.268,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6debc998",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Jiwoo wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/6debc998.mp3",
+      "duration": 3.698,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6df11d9d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.disaster",
+      "delivery": "normal",
+      "transcript": "Mate. I've had better coffee at a servo. Thanks for coming in. Door's that way.",
+      "file": "assets/voice/gaz/6df11d9d.mp3",
+      "duration": 4.82,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6f6677e2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.blob",
+      "delivery": "normal",
+      "transcript": "Another blob. I need a lie-down.",
+      "file": "assets/voice/gaz/6f6677e2.mp3",
+      "duration": 2.024,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6fa70237",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.fill",
+      "delivery": "normal",
+      "transcript": "Start high. Let it dive under the crema and fill the cup.",
+      "file": "assets/voice/gaz/6fa70237.mp3",
+      "duration": 3.175,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:711ced60",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.worse",
+      "delivery": "normal",
+      "transcript": "Worse. How is that even possible?",
+      "file": "assets/voice/gaz/711ced60.mp3",
+      "duration": 2.18,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:72f22b24",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.sameMistake",
+      "delivery": "normal",
+      "transcript": "Same stuff-up as last time. Were you even listening?",
+      "file": "assets/voice/gaz/72f22b24.mp3",
+      "duration": 3.033,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7370e705",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.overflow",
+      "delivery": "normal",
+      "transcript": "Whoa, whoa! It's a cup, not a bathtub!",
+      "file": "assets/voice/gaz/7370e705.mp3",
+      "duration": 2.898,
+      "meanDb": -18,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:74f3a44f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.streakBad",
+      "delivery": "normal",
+      "transcript": "Two stuff-ups on the trot. Breathe, mate.",
+      "file": "assets/voice/gaz/74f3a44f.mp3",
+      "duration": 2.727,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:754fd07a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.split",
+      "delivery": "normal",
+      "transcript": "You've cut it clean in half. That's a bum, not a heart.",
+      "file": "assets/voice/gaz/754fd07a.mp3",
+      "duration": 3.22,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:755ca131",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.outside",
+      "delivery": "normal",
+      "transcript": "You're pouring on my bench! The cup, mate!",
+      "file": "assets/voice/gaz/755ca131.mp3",
+      "duration": 2.684,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:77e8b1e9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "You gonna take that order or just admire them?",
+      "file": "assets/voice/gaz/77e8b1e9.mp3",
+      "duration": 2.313,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7878400f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dose.heavy",
+      "delivery": "normal",
+      "transcript": "That's way too much coffee. It'll choke. Your call.",
+      "file": "assets/voice/gaz/7878400f.mp3",
+      "duration": 3.248,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:79d9b323",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.again",
+      "delivery": "normal",
+      "transcript": "Righto, go again. Concentrate this time.",
+      "file": "assets/voice/gaz/79d9b323.mp3",
+      "duration": 2.911,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7a9c831b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Nice. Keep 'em coming.",
+      "file": "assets/voice/gaz/7a9c831b.mp3",
+      "duration": 1.591,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7aa0d65c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "greet.open",
+      "delivery": "normal",
+      "transcript": "Oi. You the trial? You're late. Well, you're not, but I like saying it.",
+      "file": "assets/voice/gaz/7aa0d65c.mp3",
+      "duration": 5.002,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7b96dc9d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wasteLeft",
+      "delivery": "normal",
+      "transcript": "And you left a drink on the pass. Somebody paid for those beans.",
+      "file": "assets/voice/gaz/7b96dc9d.mp3",
+      "duration": 3.614,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7bf135f3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.outside",
+      "delivery": "normal",
+      "transcript": "Are you blindfolded? Cup!",
+      "file": "assets/voice/gaz/7bf135f3.mp3",
+      "duration": 1.623,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7ca9951c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.noAir",
+      "delivery": "normal",
+      "transcript": "You've gotta stretch it, mate. Tip near the top, get some air in.",
+      "file": "assets/voice/gaz/7ca9951c.mp3",
+      "duration": 4.084,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7d281ddc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.cold",
+      "delivery": "normal",
+      "transcript": "Bit cool, that. Nobody wants a tepid flattie.",
+      "file": "assets/voice/gaz/7d281ddc.mp3",
+      "duration": 3.175,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7e15650f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.again",
+      "delivery": "normal",
+      "transcript": "Again? Alright. Eyes on the jug.",
+      "file": "assets/voice/gaz/7e15650f.mp3",
+      "duration": 2.278,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7f6f03c9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.hiredAfter",
+      "delivery": "normal",
+      "transcript": "Start Monday. Six on the dot. And no wukkas if you're early.",
+      "file": "assets/voice/gaz/7f6f03c9.mp3",
+      "duration": 3.771,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:7fbdc5d2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "inspect.look",
+      "delivery": "normal",
+      "transcript": "Right. Show me.",
+      "file": "assets/voice/gaz/7fbdc5d2.mp3",
+      "duration": 1.312,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:82669335",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Beryl. Take the order, mate.",
+      "file": "assets/voice/gaz/82669335.mp3",
+      "duration": 2.642,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:8293b86b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.sameMistake",
+      "delivery": "normal",
+      "transcript": "Same problem as your last cup. Read the card, mate.",
+      "file": "assets/voice/gaz/8293b86b.mp3",
+      "duration": 3.288,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:82cd1c7f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.hesitate",
+      "delivery": "normal",
+      "transcript": "Any day now.",
+      "file": "assets/voice/gaz/82cd1c7f.mp3",
+      "duration": 0.871,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:83672ab7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.blob",
+      "delivery": "normal",
+      "transcript": "My nan could pour better than that.",
+      "file": "assets/voice/gaz/83672ab7.mp3",
+      "duration": 1.661,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:84f57551",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.tooHigh",
+      "delivery": "normal",
+      "transcript": "Too high, it's all sinking. Get closer!",
+      "file": "assets/voice/gaz/84f57551.mp3",
+      "duration": 2.694,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:85c30dc2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Dazza. Lovely.",
+      "file": "assets/voice/gaz/85c30dc2.mp3",
+      "duration": 1.448,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:86be8997",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "greet.1",
+      "delivery": "normal",
+      "transcript": "Job is one flat white with a heart on top. Three goes. Impress me, or rack off.",
+      "file": "assets/voice/gaz/86be8997.mp3",
+      "duration": 5.104,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:873cf478",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.improved",
+      "delivery": "normal",
+      "transcript": "That's an improvement. Small mercies.",
+      "file": "assets/voice/gaz/873cf478.mp3",
+      "duration": 2.31,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:874531fc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.blob",
+      "delivery": "normal",
+      "transcript": "Mate, is that a heart or a dead possum?",
+      "file": "assets/voice/gaz/874531fc.mp3",
+      "duration": 2.206,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:88648eda",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Dazza ordered a long black.",
+      "file": "assets/voice/gaz/88648eda.mp3",
+      "duration": 3.203,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:8a2674ff",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.hired",
+      "delivery": "normal",
+      "transcript": "Bloody hell. Alright, you're hired.",
+      "file": "assets/voice/gaz/8a2674ff.mp3",
+      "duration": 2.383,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:8eb7f4df",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Priya's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/8eb7f4df.mp3",
+      "duration": 2.489,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:8f13bd33",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.good",
+      "delivery": "normal",
+      "transcript": "Now that's milk. Lovely texture.",
+      "file": "assets/voice/gaz/8f13bd33.mp3",
+      "duration": 2.085,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:91381ef2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Karen looked happy.",
+      "file": "assets/voice/gaz/91381ef2.mp3",
+      "duration": 1.894,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:976b95fc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noTip",
+      "delivery": "normal",
+      "transcript": "No point on it. Pull right through to the far side.",
+      "file": "assets/voice/gaz/976b95fc.mp3",
+      "duration": 2.834,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:98017115",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.short",
+      "delivery": "normal",
+      "transcript": "Pulled it early. Sour little shot, that one.",
+      "file": "assets/voice/gaz/98017115.mp3",
+      "duration": 2.767,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:990615f5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.failedAgain",
+      "delivery": "normal",
+      "transcript": "Another dud. I'm running out of cups and patience.",
+      "file": "assets/voice/gaz/990615f5.mp3",
+      "duration": 2.796,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9947507c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.screech",
+      "delivery": "normal",
+      "transcript": "Hear that screaming? That's the milk begging for help.",
+      "file": "assets/voice/gaz/9947507c.mp3",
+      "duration": 2.734,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9a5870ab",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.excellent",
+      "delivery": "normal",
+      "transcript": "Bloody oath. Five for five. You might actually be good at this.",
+      "file": "assets/voice/gaz/9a5870ab.mp3",
+      "duration": 3.682,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9d1e599f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.long",
+      "delivery": "normal",
+      "transcript": "Stop it! It's going bitter!",
+      "file": "assets/voice/gaz/9d1e599f.mp3",
+      "duration": 1.826,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9da8e38a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Tickets are piling up. Move it.",
+      "file": "assets/voice/gaz/9da8e38a.mp3",
+      "duration": 1.965,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9e37ac13",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Beryl asked nicely, too.",
+      "file": "assets/voice/gaz/9e37ac13.mp3",
+      "duration": 2.712,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9e67f001",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "invalid.nothingPoured",
+      "delivery": "normal",
+      "transcript": "You didn't even pour it. Bold strategy.",
+      "file": "assets/voice/gaz/9e67f001.mp3",
+      "duration": 2.586,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a191892b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Priya ordered a long black.",
+      "file": "assets/voice/gaz/a191892b.mp3",
+      "duration": 3.086,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a1a79343",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.cold",
+      "delivery": "normal",
+      "transcript": "Lukewarm. Customers'll think we've lost the plot.",
+      "file": "assets/voice/gaz/a1a79343.mp3",
+      "duration": 2.776,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a32816ac",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.blob",
+      "delivery": "normal",
+      "transcript": "That's a blob. A white blob. You forgot to pull through.",
+      "file": "assets/voice/gaz/a32816ac.mp3",
+      "duration": 3.1,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a4d10f24",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Dazza. They'll tell their mates.",
+      "file": "assets/voice/gaz/a4d10f24.mp3",
+      "duration": 2.418,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a572f590",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.tooEarly",
+      "delivery": "normal",
+      "transcript": "Barely warm. Keep it on.",
+      "file": "assets/voice/gaz/a572f590.mp3",
+      "duration": 1.671,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a5a581ca",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.binned",
+      "delivery": "normal",
+      "transcript": "Binning it? Fair enough. Better than serving it.",
+      "file": "assets/voice/gaz/a5a581ca.mp3",
+      "duration": 3.07,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a64049d9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.lopsided",
+      "delivery": "normal",
+      "transcript": "Lopsided. Keep the jug straight when you pull.",
+      "file": "assets/voice/gaz/a64049d9.mp3",
+      "duration": 2.623,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a8484b3f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Karen. Lovely.",
+      "file": "assets/voice/gaz/a8484b3f.mp3",
+      "duration": 1.523,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a85a5a48",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "You served that? Bold.",
+      "file": "assets/voice/gaz/a85a5a48.mp3",
+      "duration": 1.558,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:abb15478",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.long",
+      "delivery": "normal",
+      "transcript": "Stop the shot! Are you waiting for a written invitation?",
+      "file": "assets/voice/gaz/abb15478.mp3",
+      "duration": 3.028,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ad4a5fe9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Karen ordered a long black.",
+      "file": "assets/voice/gaz/ad4a5fe9.mp3",
+      "duration": 3.104,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ad9d7bce",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.decent",
+      "delivery": "normal",
+      "transcript": "Not bad. Not good. But not bad.",
+      "file": "assets/voice/gaz/ad9d7bce.mp3",
+      "duration": 2.344,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:adf18252",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Dazza wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/adf18252.mp3",
+      "duration": 3.807,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ae4720bb",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Priya. They'll tell their mates.",
+      "file": "assets/voice/gaz/ae4720bb.mp3",
+      "duration": 2.393,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ae7d12c7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.over",
+      "delivery": "normal",
+      "transcript": "Mate! Stop! The grinder's not a pokie machine.",
+      "file": "assets/voice/gaz/ae7d12c7.mp3",
+      "duration": 3.191,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:aef27522",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "inspect.look",
+      "delivery": "normal",
+      "transcript": "Let's have a look...",
+      "file": "assets/voice/gaz/aef27522.mp3",
+      "duration": 0.861,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:af68c057",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noTip",
+      "delivery": "normal",
+      "transcript": "Nice start, but you chickened out. Follow through!",
+      "file": "assets/voice/gaz/af68c057.mp3",
+      "duration": 2.995,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b032646d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Karen's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/b032646d.mp3",
+      "duration": 2.436,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b1ea7986",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.hot",
+      "delivery": "normal",
+      "transcript": "That's hot enough! Turn it off!",
+      "file": "assets/voice/gaz/b1ea7986.mp3",
+      "duration": 1.93,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b48b9502",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.hot",
+      "delivery": "normal",
+      "transcript": "Sixty-six, sixty-seven... you're cooking it.",
+      "file": "assets/voice/gaz/b48b9502.mp3",
+      "duration": 2.887,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b521bb66",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Jiwoo's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/b521bb66.mp3",
+      "duration": 2.382,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b5fae1de",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.screech",
+      "delivery": "normal",
+      "transcript": "It's screeching, mate! Get the tip back in!",
+      "file": "assets/voice/gaz/b5fae1de.mp3",
+      "duration": 2.859,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b703ac9b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Priya wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/b703ac9b.mp3",
+      "duration": 3.705,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b7d7b6e6",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Jiwoo. They'll tell their mates.",
+      "file": "assets/voice/gaz/b7d7b6e6.mp3",
+      "duration": 2.452,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:b9f748c1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.after",
+      "delivery": "normal",
+      "transcript": "See? Easy. Your turn. Don't stuff it up.",
+      "file": "assets/voice/gaz/b9f748c1.mp3",
+      "duration": 3.065,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:bb8cc78e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.bloom",
+      "delivery": "normal",
+      "transcript": "Ooh. Keep going...",
+      "file": "assets/voice/gaz/bb8cc78e.mp3",
+      "duration": 1.234,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:bc4bd5c7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.over",
+      "delivery": "normal",
+      "transcript": "Easy, champ. We're not feeding a horse.",
+      "file": "assets/voice/gaz/bc4bd5c7.mp3",
+      "duration": 2.679,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:bff60d4a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.hesitate",
+      "delivery": "normal",
+      "transcript": "Hello? Pour the milk.",
+      "file": "assets/voice/gaz/bff60d4a.mp3",
+      "duration": 1.375,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c038842c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Jiwoo asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/c038842c.mp3",
+      "duration": 3.576,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c0e055a0",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Jiwoo wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/c0e055a0.mp3",
+      "duration": 3.754,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c2a6ba71",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Karen. They'll tell their mates.",
+      "file": "assets/voice/gaz/c2a6ba71.mp3",
+      "duration": 2.48,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c2a8c279",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "greet.open",
+      "delivery": "normal",
+      "transcript": "G'day. You must be the trial. Coffee hasn't kicked in yet, so let's keep this quick.",
+      "file": "assets/voice/gaz/c2a8c279.mp3",
+      "duration": 5.297,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c76c2092",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.again",
+      "delivery": "normal",
+      "transcript": "Fresh jug of milk. Don't overthink it. Tss-tss, spin, sixty.",
+      "file": "assets/voice/gaz/c76c2092.mp3",
+      "duration": 5.48,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c78e6f10",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.binned",
+      "delivery": "normal",
+      "transcript": "Into the bin. That's money down the sink.",
+      "file": "assets/voice/gaz/c78e6f10.mp3",
+      "duration": 2.288,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c7f4a860",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Beryl. Lovely.",
+      "file": "assets/voice/gaz/c7f4a860.mp3",
+      "duration": 1.512,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c9d09652",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Dazza wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/c9d09652.mp3",
+      "duration": 3.752,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ca8dda5f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Karen's face says it all.",
+      "file": "assets/voice/gaz/ca8dda5f.mp3",
+      "duration": 1.34,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cb62fa21",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.again",
+      "delivery": "normal",
+      "transcript": "Fine. Watch closer this time.",
+      "file": "assets/voice/gaz/cb62fa21.mp3",
+      "duration": 2.086,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cce1a6bb",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.great",
+      "delivery": "normal",
+      "transcript": "Now we're talking. That's a heart.",
+      "file": "assets/voice/gaz/cce1a6bb.mp3",
+      "duration": 1.898,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cce83a8a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.over",
+      "delivery": "normal",
+      "transcript": "That's burnt. Smells like a tyre fire in here.",
+      "file": "assets/voice/gaz/cce83a8a.mp3",
+      "duration": 2.911,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cd227c5f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Beryl looked happy.",
+      "file": "assets/voice/gaz/cd227c5f.mp3",
+      "duration": 1.894,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cdec497d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noCleft",
+      "delivery": "normal",
+      "transcript": "That's a teardrop. Hearts have a dip at the top, mate.",
+      "file": "assets/voice/gaz/cdec497d.mp3",
+      "duration": 3.248,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ce7f1cf7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Jiwoo asked nicely, too.",
+      "file": "assets/voice/gaz/ce7f1cf7.mp3",
+      "duration": 2.684,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cf050aa4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Jiwoo. Lovely.",
+      "file": "assets/voice/gaz/cf050aa4.mp3",
+      "duration": 1.482,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cf945c4c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.coldDrink",
+      "delivery": "normal",
+      "transcript": "That one sat there too long. Lukewarm.",
+      "file": "assets/voice/gaz/cf945c4c.mp3",
+      "duration": 2.355,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cfe39e05",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Dazza's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/cfe39e05.mp3",
+      "duration": 2.504,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cff46fef",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.hotDone",
+      "delivery": "normal",
+      "transcript": "Too hot. It'll taste cooked. Off earlier next time.",
+      "file": "assets/voice/gaz/cff46fef.mp3",
+      "duration": 3.323,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d0baa731",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.underfilled",
+      "delivery": "normal",
+      "transcript": "Cup's not even full. Right to the brim next time.",
+      "file": "assets/voice/gaz/d0baa731.mp3",
+      "duration": 2.904,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d2002711",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "demo.after",
+      "delivery": "normal",
+      "transcript": "That's a heart. Now you have a crack.",
+      "file": "assets/voice/gaz/d2002711.mp3",
+      "duration": 2.031,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d2936b27",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.scalded",
+      "delivery": "normal",
+      "transcript": "Scalded. Lovely. Smells like burnt custard in here.",
+      "file": "assets/voice/gaz/d2936b27.mp3",
+      "duration": 3.449,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d2cbd440",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.offCentre",
+      "delivery": "normal",
+      "transcript": "It's hiding in the corner. Centre it.",
+      "file": "assets/voice/gaz/d2cbd440.mp3",
+      "duration": 2.181,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d2f7fbb9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.short",
+      "delivery": "normal",
+      "transcript": "That's sour as. Customers'd send it straight back.",
+      "file": "assets/voice/gaz/d2f7fbb9.mp3",
+      "duration": 2.917,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d3052523",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "See? That's how it's done.",
+      "file": "assets/voice/gaz/d3052523.mp3",
+      "duration": 1.732,
+      "meanDb": -17.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d34edaf5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.flat",
+      "delivery": "normal",
+      "transcript": "No foam in that. Flat as a tack. Good luck drawing with it.",
+      "file": "assets/voice/gaz/d34edaf5.mp3",
+      "duration": 3.892,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d3676116",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.decent",
+      "delivery": "normal",
+      "transcript": "Customers would take that. Wouldn't post it, but they'd take it.",
+      "file": "assets/voice/gaz/d3676116.mp3",
+      "duration": 3.643,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d3982474",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.last",
+      "delivery": "normal",
+      "transcript": "Last chance, champ. Do me a favour and make it count.",
+      "file": "assets/voice/gaz/d3982474.mp3",
+      "duration": 3.685,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d39b0327",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.sameMistake",
+      "delivery": "normal",
+      "transcript": "Same mistake. Again. I'm starting to think it's on purpose.",
+      "file": "assets/voice/gaz/d39b0327.mp3",
+      "duration": 3.879,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d49b880a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.streakGood",
+      "delivery": "normal",
+      "transcript": "Three in a row. Who are you and what have you done with the trainee?",
+      "file": "assets/voice/gaz/d49b880a.mp3",
+      "duration": 3.114,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d5efae8a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Customer at the register, mate!",
+      "file": "assets/voice/gaz/d5efae8a.mp3",
+      "duration": 2.062,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d9836099",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.1",
+      "delivery": "normal",
+      "transcript": "Seven o'clock rush. Tradies, nurses, Nan Beryl, the lot. Keep the line moving.",
+      "file": "assets/voice/gaz/d9836099.mp3",
+      "duration": 5.594,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:de69f418",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.again",
+      "delivery": "normal",
+      "transcript": "Go again. My blood pressure can't take many more.",
+      "file": "assets/voice/gaz/de69f418.mp3",
+      "duration": 2.731,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e1a129f8",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.noArt",
+      "delivery": "normal",
+      "transcript": "Nothing. Zip. Not even a smudge.",
+      "file": "assets/voice/gaz/e1a129f8.mp3",
+      "duration": 2.408,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e1f0850b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.failed",
+      "delivery": "normal",
+      "transcript": "Nah. Practise at home and come back when you can pour a heart.",
+      "file": "assets/voice/gaz/e1f0850b.mp3",
+      "duration": 3.283,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e30fa7b5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "inspect.look",
+      "delivery": "normal",
+      "transcript": "Hmm.",
+      "file": "assets/voice/gaz/e30fa7b5.mp3",
+      "duration": 0.447,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e31b31cd",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "greet.open",
+      "delivery": "normal",
+      "transcript": "Right, you're the new one. Doors open at seven, so you've got till then to impress me.",
+      "file": "assets/voice/gaz/e31b31cd.mp3",
+      "duration": 5.131,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e405daa4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Dazza's face says it all.",
+      "file": "assets/voice/gaz/e405daa4.mp3",
+      "duration": 1.394,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e42b3ef7",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "grind.intro",
+      "delivery": "normal",
+      "transcript": "Grinder first. Hold it down. Eighteen to twenty grams. Not a bucket.",
+      "file": "assets/voice/gaz/e42b3ef7.mp3",
+      "duration": 4.734,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e7b3b429",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Karen wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/e7b3b429.mp3",
+      "duration": 3.818,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e7db5d84",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.again",
+      "delivery": "normal",
+      "transcript": "Go again. Fresh cup. Breathe.",
+      "file": "assets/voice/gaz/e7db5d84.mp3",
+      "duration": 2.228,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e875032b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.again",
+      "delivery": "normal",
+      "transcript": "Fresh milk. Try listening to it this time.",
+      "file": "assets/voice/gaz/e875032b.mp3",
+      "duration": 2.563,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e8afc842",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "greet.0",
+      "delivery": "normal",
+      "transcript": "I'm Gaz. My café, my machine. Treat her better than you treat yourself.",
+      "file": "assets/voice/gaz/e8afc842.mp3",
+      "duration": 4.717,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e8ef80ee",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Beryl. They'll tell their mates.",
+      "file": "assets/voice/gaz/e8ef80ee.mp3",
+      "duration": 2.444,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e9033a3b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.failedAgain",
+      "delivery": "normal",
+      "transcript": "That's two in a row, champ. Shake it off.",
+      "file": "assets/voice/gaz/e9033a3b.mp3",
+      "duration": 2.831,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ec580473",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "That flat white isn't gonna make itself.",
+      "file": "assets/voice/gaz/ec580473.mp3",
+      "duration": 2.171,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ed60674e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "art.decent",
+      "delivery": "normal",
+      "transcript": "That's... actually a heart. Rough round the edges.",
+      "file": "assets/voice/gaz/ed60674e.mp3",
+      "duration": 2.819,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:eda44765",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.poor",
+      "delivery": "normal",
+      "transcript": "That was rough, mate. Real rough. Practise your flatties tonight.",
+      "file": "assets/voice/gaz/eda44765.mp3",
+      "duration": 4.31,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ee475fb5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Jiwoo ordered a flat white.",
+      "file": "assets/voice/gaz/ee475fb5.mp3",
+      "duration": 3.161,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:eec9b30c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Beryl wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/eec9b30c.mp3",
+      "duration": 3.676,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:eef55b7c",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Priya. Take the order, mate.",
+      "file": "assets/voice/gaz/eef55b7c.mp3",
+      "duration": 2.573,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ef1d92f1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.last",
+      "delivery": "normal",
+      "transcript": "Last go. Make it count.",
+      "file": "assets/voice/gaz/ef1d92f1.mp3",
+      "duration": 1.884,
+      "meanDb": -17.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ef921702",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.coldDrink",
+      "delivery": "normal",
+      "transcript": "Don't let drinks sit on the pass. They go cold.",
+      "file": "assets/voice/gaz/ef921702.mp3",
+      "duration": 2.825,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f1ccbf04",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "verdict.almost",
+      "delivery": "normal",
+      "transcript": "Close. Real close. Come back Saturday, do a proper shift, and we'll see.",
+      "file": "assets/voice/gaz/f1ccbf04.mp3",
+      "duration": 4.97,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f2029fd3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.tooEarly",
+      "delivery": "normal",
+      "transcript": "That's still cold. Keep going.",
+      "file": "assets/voice/gaz/f2029fd3.mp3",
+      "duration": 2.01,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f2044b13",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Priya wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/f2044b13.mp3",
+      "duration": 3.667,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f2678421",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Another walkout. We're a café, not a waiting room.",
+      "file": "assets/voice/gaz/f2678421.mp3",
+      "duration": 3.334,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f51df064",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Karen asked nicely, too.",
+      "file": "assets/voice/gaz/f51df064.mp3",
+      "duration": 2.69,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f66f7b58",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "extra.improvedAgain",
+      "delivery": "normal",
+      "transcript": "Getting better every cup. Keep that up and I'll have to pay you.",
+      "file": "assets/voice/gaz/f66f7b58.mp3",
+      "duration": 3.287,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f7cfe4cf",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.bloom",
+      "delivery": "normal",
+      "transcript": "That's it... that's it...",
+      "file": "assets/voice/gaz/f7cfe4cf.mp3",
+      "duration": 1.275,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:fba1f77e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Priya asked nicely, too.",
+      "file": "assets/voice/gaz/fba1f77e.mp3",
+      "duration": 2.661,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:fc2bbcba",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "steam.hot",
+      "delivery": "normal",
+      "transcript": "Off! Off! It is boiling, mate!",
+      "file": "assets/voice/gaz/fc2bbcba.mp3",
+      "duration": 2.52,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:fd51857d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "pour.overflow",
+      "delivery": "normal",
+      "transcript": "It's running over! Stop pouring!",
+      "file": "assets/voice/gaz/fd51857d.mp3",
+      "duration": 1.965,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:019f300b",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.happy",
+      "delivery": "normal",
+      "transcript": "Wah, perfect! 감사합니다! Thank you!",
+      "file": "assets/voice/jiwoo/019f300b.mp3",
+      "duration": 3.213,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:44891369",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.complaint.weak",
+      "delivery": "normal",
+      "transcript": "Hmm, a bit watery, but thank you.",
+      "file": "assets/voice/jiwoo/44891369.mp3",
+      "duration": 3.122,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:4c83f7f4",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.angry",
+      "delivery": "normal",
+      "transcript": "Sorry, I really have to go soon…",
+      "file": "assets/voice/jiwoo/4c83f7f4.mp3",
+      "duration": 2.249,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:6bcf8f1c",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.order",
+      "delivery": "normal",
+      "transcript": "안녕하세요! Ah, hi! A long black, please. Usually I get an 아아, but it's chilly this morning.",
+      "file": "assets/voice/jiwoo/6bcf8f1c.mp3",
+      "duration": 7.602,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:babe15a5",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.impatient",
+      "delivery": "normal",
+      "transcript": "Um, sorry, is my long black coming soon? My shift starts at eight.",
+      "file": "assets/voice/jiwoo/babe15a5.mp3",
+      "duration": 5.397,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:d2a1db39",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.rejected",
+      "delivery": "normal",
+      "transcript": "Oh, sorry, I ordered a long black.",
+      "file": "assets/voice/jiwoo/d2a1db39.mp3",
+      "duration": 2.539,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:dcccbca6",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.walkout",
+      "delivery": "normal",
+      "transcript": "Sorry, I can't wait. I'll be late for work.",
+      "file": "assets/voice/jiwoo/dcccbca6.mp3",
+      "duration": 3.782,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:fd18b61b",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.okay",
+      "delivery": "normal",
+      "transcript": "Thank you!",
+      "file": "assets/voice/jiwoo/fd18b61b.mp3",
+      "duration": 0.683,
+      "meanDb": -15.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:ff827258",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "It's a little cold… it's okay.",
+      "file": "assets/voice/jiwoo/ff827258.mp3",
+      "duration": 2.54,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:12648160",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.rejected",
+      "delivery": "normal",
+      "transcript": "That is not what I ordered. Flat white. Extra hot.",
+      "file": "assets/voice/karen/12648160.mp3",
+      "duration": 3.14,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:323c9d77",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.order",
+      "delivery": "normal",
+      "transcript": "Hi. I'll have a flat white. Extra hot. And I'll be watching.",
+      "file": "assets/voice/karen/323c9d77.mp3",
+      "duration": 4.005,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:38d08fa1",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.walkout",
+      "delivery": "normal",
+      "transcript": "Unbelievable. I'm leaving a review.",
+      "file": "assets/voice/karen/38d08fa1.mp3",
+      "duration": 1.987,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:5cb072b7",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.angry",
+      "delivery": "normal",
+      "transcript": "This is ridiculous. Is there a manager?",
+      "file": "assets/voice/karen/5cb072b7.mp3",
+      "duration": 2.141,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:7d606019",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.okay",
+      "delivery": "normal",
+      "transcript": "Fine.",
+      "file": "assets/voice/karen/7d606019.mp3",
+      "duration": 0.506,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:c950b1e2",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.impatient",
+      "delivery": "normal",
+      "transcript": "I'm timing this, you know.",
+      "file": "assets/voice/karen/c950b1e2.mp3",
+      "duration": 1.549,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:cea649da",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.happy",
+      "delivery": "normal",
+      "transcript": "Hm. Acceptable.",
+      "file": "assets/voice/karen/cea649da.mp3",
+      "duration": 1.335,
+      "meanDb": -18.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:f2fa2f93",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "It's lukewarm. Of course it is.",
+      "file": "assets/voice/karen/f2fa2f93.mp3",
+      "duration": 1.869,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:f4b4d292",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.complaint.notHotEnough",
+      "delivery": "normal",
+      "transcript": "This is not extra hot. I said extra hot.",
+      "file": "assets/voice/karen/f4b4d292.mp3",
+      "duration": 2.524,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:fb02d5aa",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.complaint.badShot",
+      "delivery": "normal",
+      "transcript": "This tastes burnt.",
+      "file": "assets/voice/karen/fb02d5aa.mp3",
+      "duration": 1.048,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:1fd3b2db",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.walkout",
+      "delivery": "normal",
+      "transcript": "I can't wait any longer. I need my bed.",
+      "file": "assets/voice/priya/1fd3b2db.mp3",
+      "duration": 2.666,
+      "meanDb": -18,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:22573871",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.complaint.strong",
+      "delivery": "normal",
+      "transcript": "Whoa. That's strong. I'll never sleep now.",
+      "file": "assets/voice/priya/22573871.mp3",
+      "duration": 3.035,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:242417c8",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.order",
+      "delivery": "normal",
+      "transcript": "Morning… a long black, please. Fourteen-hour shift at RPA.",
+      "file": "assets/voice/priya/242417c8.mp3",
+      "duration": 3.837,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:3e9843c6",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.rejected",
+      "delivery": "normal",
+      "transcript": "Sorry, I think that's someone else's. Mine's the long black.",
+      "file": "assets/voice/priya/3e9843c6.mp3",
+      "duration": 3.638,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:41684fdb",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.angry",
+      "delivery": "normal",
+      "transcript": "Please. I'm about to fall asleep on your counter.",
+      "file": "assets/voice/priya/41684fdb.mp3",
+      "duration": 2.883,
+      "meanDb": -19.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:bb1c4d26",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.complaint.weak",
+      "delivery": "normal",
+      "transcript": "Bit watery… thanks though.",
+      "file": "assets/voice/priya/bb1c4d26.mp3",
+      "duration": 1.4,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:bee75bcd",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "It's a bit cold, but honestly, I'll take it.",
+      "file": "assets/voice/priya/bee75bcd.mp3",
+      "duration": 2.371,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:e4b97143",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.happy",
+      "delivery": "normal",
+      "transcript": "Oh, that's perfect. You're a lifesaver.",
+      "file": "assets/voice/priya/e4b97143.mp3",
+      "duration": 2.499,
+      "meanDb": -18.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:eaf1017a",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.impatient",
+      "delivery": "normal",
+      "transcript": "Sorry… is mine nearly ready? I might fall asleep standing up.",
+      "file": "assets/voice/priya/eaf1017a.mp3",
+      "duration": 3.955,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:f026b992",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.okay",
+      "delivery": "normal",
+      "transcript": "Thanks. That'll keep me upright.",
+      "file": "assets/voice/priya/f026b992.mp3",
+      "duration": 2.267,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    }
+  ]
+}

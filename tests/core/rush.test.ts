@@ -13,6 +13,7 @@ import {
 } from '../../src/core/rush';
 import type { CustomerId } from '../../src/data/customers';
 import { OWNER_LINES } from '../../src/data/ownerLines';
+import { clipFor } from '../../src/data/voice';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
 
 interface BotOpts {
@@ -223,6 +224,21 @@ describe('Day 2 rush, played headless', () => {
         .map((e) => (e as { line: { text: string } }).line.text);
       for (let k = 1; k < texts.length; k++) expect(texts[k]).not.toBe(texts[k - 1]);
     }
+  });
+
+  it('every line anyone says has a voice recording', () => {
+    const missing = new Set<string>();
+    for (const o of [
+      {},
+      { idle: true },
+      { wrongFirst: true },
+      { binFirst: true },
+      { delay: 10 },
+    ] as BotOpts[])
+      for (const e of play(o).events)
+        if (e.type === 'say' && !clipFor(e.line.speaker, e.line.text))
+          missing.add(`${e.line.speaker}: ${e.line.text}`);
+    expect([...missing]).toEqual([]);
   });
 
   it('every customer ends up gone and the summary matches the records', () => {

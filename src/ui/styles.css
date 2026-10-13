@@ -858,3 +858,108 @@ kbd {
     width: 132px;
   }
 }
+
+/* ---------- sound panel + audio status ---------- */
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: 1px;
+  background: var(--txt-dim);
+}
+.dot.ok {
+  background: var(--gum);
+}
+.dot.warn {
+  background: var(--gold);
+}
+.dot.bad {
+  background: var(--flag);
+}
+#audioPanel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(22, 16, 12, 0.6);
+  pointer-events: auto;
+  z-index: 30;
+  padding: 16px;
+}
+#audioPanel .box {
+  width: min(420px, 100%);
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+#audioPanel h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+#audioPanel .astatus {
+  font-size: 13px;
+  color: var(--txt-dim);
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+#audioPanel .slider {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 3em;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin: 8px 0;
+}
+#audioPanel input[type='range'] {
+  width: 100%;
+  accent-color: var(--crema);
+}
+#audioPanel output {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--txt-dim);
+}
+#audioPanel .chk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin: 10px 0 4px;
+}
+#audioPanel .titleBtns {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+#audioPanel .fine {
+  font-size: 11px;
+  color: var(--txt-dim);
+  margin: 12px 0 0;
+}
+#audioToast {
+  position: absolute;
+  top: calc(60px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  background: var(--glass2);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 31;
+  transition: opacity 0.25s;
+}
+#audioToast.gone {
+  opacity: 0;
+  pointer-events: none;
+}
