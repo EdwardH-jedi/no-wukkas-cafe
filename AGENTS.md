@@ -11,7 +11,7 @@ Keep it true. If you change a command, folder or rule, update this file in the s
 
 - **Platform:** web first (desktop + mobile browsers, iOS Safari included). Static build, no backend.
 - **Stack (target):** Vite · TypeScript (strict) · Three.js (npm, latest) · Vitest · Playwright.
-- **Current state:** `src/` holds the Vite + TypeScript game. Playable days: the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner) and **Day 2, the morning rush** (five scripted customers, orders, serving, shift report); see `docs/ROADMAP.md` → "Day 1" / "Day 2". The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
+- **Current state:** `src/` holds the Vite + TypeScript game. Playable days: the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner) and **Day 2, the morning rush** (six customers whose spoken orders you ring up by ear, tickets, serving, shift report). Dialogue is pre-rendered voice clips played through Web Audio (placeholder macOS voices for now; see `OVERNIGHT_REPORT.md`); see `docs/ROADMAP.md` → "Day 1" / "Day 2". The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
 - **Owner:** Edward. Solo project with AI pair-programming.
 
 ## 2. Roles and working agreement
@@ -42,11 +42,14 @@ npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
 npm run test:e2e       # playwright: plays the Day 1 trial and a Day 2 shift with real input (~6 min)
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
+npm run voices         # macOS only: render voice clips → public/assets/voice/ + src/data/voice/manifest.json
 ```
+
+Voice clips: `public/assets/voice/` is **gitignored** (placeholder Apple system voices are personal-use only). Run `npm run voices` after cloning and after editing any spoken line; `tests/data/voice.test.ts` fails until every line has a clip. Without clips the game falls back to browser speech and says so.
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
-Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to mute TTS.
+Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
 
 ## 4. Architecture and hard boundaries
 
@@ -57,11 +60,14 @@ src/
                      fixed-step game clock with pause, seeded RNG; later: event bus, save/load
   sim/               PURE game logic: orders, recipe evaluation, pricing, customers, patience,
                      events, economy, stress, rating. No DOM. No three. No Date.now/Math.random.
-  data/              content as data: drinks, milks, slang dictionary, cast, events, shop items, news
+  data/              content as data: owner lines, customers, curated orders (orders.ts), voice
+                     profiles + manifest + script of every spoken line (voice/), later slang, events, shop
   world/             Three.js only: scene, café build, humans, cup visual, camera look, raycast picking
-  audio/             WebAudio SFX, voice playback (TTS now, pre-rendered clips later)
+  audio/             one AudioContext (manager.ts: voice/ambience/SFX buses, clips, replay, status),
+                     synthesised SFX, browser-speech fallback (voice.ts)
   ui/                DOM HUD, docket, bar, modals, shop, cheat sheet
 scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
+scripts/voices.ts    renders every spoken line to MP3 (macOS `say` + ffmpeg) and writes the manifest
 tests/               vitest unit tests (mirror src/ paths) + e2e/ for playwright
 public/assets/       audio clips, fonts, textures (bundled, never hot-linked)
 ```
@@ -115,7 +121,7 @@ These exist in `prototype/game.html`. Don't copy them into `src/`.
 - `Math.random()` is used everywhere, so days are not reproducible. Weather, specials and orders all need to come from the seeded RNG.
 - Canvas textures with text (neon, chalkboard, window decal) are drawn before web fonts load and fall back to Impact. Redraw them after `document.fonts.ready`.
 - Three.js r128 → latest migration: `outputEncoding`/`sRGBEncoding` became `outputColorSpace`/`SRGBColorSpace`. Lights are physically based by default since r155, so point-light intensities need rescaling (roughly ×π and adjusted for decay). `CapsuleGeometry` is now available for bodies.
-- Voices come from `speechSynthesis`. An `en-AU` voice is often missing (fallback en-GB/en-US), and iOS needs a user gesture before the first utterance. The plan is to move to pre-rendered clips (Roadmap Phase 2).
+- Voices came from `speechSynthesis`. **Done (2026-10-13):** pre-rendered clips through Web Audio, unlocked in the Start click; `speechSynthesis` is only the reported fallback. The clips are placeholders (macOS voices) until licensed recordings replace them.
 - Economy: branch income grows faster than counter income, so player skill stops mattering after about day 15. This is a known design debt (Roadmap Phase 4).
 
 ## 9. Review protocol (Codex)

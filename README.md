@@ -55,6 +55,7 @@ npx serve prototype
 
 ```bash
 npm install
+npm run voices         # macOS only: render the (placeholder) voice clips, ~1 min
 npm run dev            # http://localhost:5183 (opens automatically)
 npm test               # unit tests
 npm run balance        # 30-day economy simulation → reports/balance.csv

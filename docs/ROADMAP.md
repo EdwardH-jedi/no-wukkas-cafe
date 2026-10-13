@@ -21,7 +21,7 @@ Day 1 is now a job trial: the player applies at No Wukkas and makes one flat whi
 
 ## Day 2: The morning rush (first paid shift)
 
-Five scripted customers, one espresso station, Gaz watching. Reuses the Day 1 mechanics unchanged.
+Six customers (Mei joined on 2026-10-13), one espresso station, Gaz watching. Reuses the Day 1 mechanics unchanged; orders are now heard and rung up (see "Voice + listening").
 
 - [x] **D2.1 Orders + matching:** take orders (also mid-drink), tickets with patience, make a flat white or a long black, serve it to the customer you pick; wrong drinks are handed back and stay on the pass
 - [x] **D2.2 Drinks:** long black = hot water then the shot (crema kept); modifiers only where the mechanics can show them: extra hot (68–74 °C steam) and a requested heart (scored art); drinks cool on the pass
@@ -61,13 +61,24 @@ Goal: making a drink takes skill and timing, and rush hour becomes juggling.
 
 **Exit criteria:** playtesters want to "just do one more day" more than in Phase 0.
 
+## Voice + listening (overnight, 2026-10-13)
+
+See `OVERNIGHT_REPORT.md` for evidence and what is still placeholder.
+
+- [x] **V.1 Audio:** one AudioContext unlocked in the Start click; voice/ambience/SFX buses and volumes; recorded clips with decode checks; replay; pause freezes audio; visible status and fallback to browser speech
+- [x] **V.2 Voice pipeline:** every spoken line enumerated; `npm run voices` renders MP3s and a manifest (ids, character, accent, locale, transcript, duration); subtitle timing follows clip length
+- [ ] **V.3 Real voices:** replace the placeholder macOS voices (Gaz is a pitched-down female voice; all Australians share one voice) with licensed actors or a licensed TTS service; a native-speaker listen-through for each accent
+- [x] **V.4 Listening on Day 2:** 30 curated orders with answer keys (4 accent groups × tiers 1–3), register, replay / "repeat that?" / clarifying questions with costs, misheard tickets have consequences, Easy/Normal/Hard, subtitle rules, learning mode, listening stats in the report
+- [x] **V.5 NPCs:** eye contact, audio-driven mouths, blinks, reactions; ghosted jug while pouring
+- [ ] **V.6 Playtest** listening difficulty and aid costs with real players; iPhone Safari audio check
+
 ## Phase 2: Listen (real comprehension)
 
 - [ ] **2.1 Progressive text removal:** full subtitles on days 1–3, then fragments ("…lahj… flah… sugs"), then audio only on Hard. Café noise rises with the queue
-- [ ] **2.2 Clarifying questions:** instead of a full repeat, ask one targeted question ("Oat or almond?", "How many sugars?"). Cheaper than "Sorry?"
+- [x] **2.2 Clarifying questions:** instead of a full repeat, ask one targeted question ("Oat or almond?", "How many sugars?"). Cheaper than "Sorry?" *(Day 2: Drink? Milk? Hot? Heart?)*
 - [ ] **2.3 Pre-rendered voice clips:** real Australian-accent voices, assembled from segments (greeting / size / strength / milk / drink / sugar / closer); roughly 300 clips, lazy-loaded; TTS as fallback
 - [ ] **2.4 Slang expansion:** about 60 → 200 entries; regional voices (Western Sydney, Kiwi, Scottish backpacker); mishearing pairs (soy / sorry, flat / black)
-- [ ] **2.5 Difficulty modes:** Tourist / Local / True Blue
+- [x] **2.5 Difficulty modes:** Tourist / Local / True Blue *(as Easy / Normal / Hard for Day 2)*
 
 ## Phase 3: People and consequences
 
