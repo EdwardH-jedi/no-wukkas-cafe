@@ -15,18 +15,18 @@ import {
   stopShot,
 } from '../sim/espresso';
 import type { EspressoScore, EspressoState } from '../sim/espresso';
+import { createPourLog, trackPour, type PourLog } from '../sim/latte/coach';
 import { createPour, ESPRESSO_FILL, type PourState } from '../sim/latte/field';
 import {
+  applyPourInput,
   createPitcher,
-  HEIGHT_MAX,
-  HEIGHT_MIN,
+  createPourGate,
   HEIGHT_START,
   pitcherFlow,
   stepPourFrame,
 } from '../sim/latte/pitcher';
-import type { PitcherControls, PitcherState } from '../sim/latte/pitcher';
+import type { PitcherControls, PitcherState, PourGate } from '../sim/latte/pitcher';
 import { scorePattern } from '../sim/latte/score';
-import { clamp } from '../sim/math';
 import type { MilkQuality } from '../sim/milk';
 import { COOL_RATE, type DrinkType, type MadeDrink, type Milk } from '../sim/rush';
 import {
@@ -89,6 +89,10 @@ export interface Barista {
   pour: PourState;
   pitcher: PitcherState;
   controls: PitcherControls;
+  /** A button held from before the pour began doesn't pour until let go. */
+  gate: PourGate;
+  /** The four steps of the heart, live (lesson strip). */
+  log: PourLog;
   /** Long black: hot water in the cup, cup volumes. */
   water: number;
   dispensing: boolean;
@@ -121,6 +125,8 @@ export function createBarista(): Barista {
       targetHeight: HEIGHT_START,
       holding: false,
     },
+    gate: createPourGate(),
+    log: createPourLog(),
     water: 0,
     dispensing: false,
     ready: null,
@@ -150,6 +156,8 @@ function go(b: Barista, phase: StationPhase, out: BaristaEvent[]): void {
       targetHeight: HEIGHT_START,
       holding: false,
     };
+    b.gate = createPourGate();
+    b.log = createPourLog();
     b.watch = { idle: 0, lowEarly: 0, tooHighSaid: false, drySaid: false };
   }
 }
@@ -352,14 +360,9 @@ export function stepBarista(
     }
     case 'pour': {
       const c = b.controls;
-      if (input.hasCup) {
-        c.targetX = input.cupX;
-        c.targetY = input.cupY;
-      }
-      if (input.heightPreset !== null) c.targetHeight = input.heightPreset;
-      c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
-      c.holding = input.holding;
+      applyPourInput(c, b.gate, input);
       stepPourFrame(b.pour, b.pitcher, c, b.milk ?? milkQuality(b.steam), dt);
+      trackPour(b.log, b.pour, b.pitcher);
       const p = b.pour;
       const w = b.watch;
       const flowing = pitcherFlow(b.pitcher) > 0;

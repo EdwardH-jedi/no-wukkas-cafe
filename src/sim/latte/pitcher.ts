@@ -20,6 +20,9 @@ export const TILT_UP = 1.0;
 export const TILT_DOWN = 2.4;
 /** Milk only reaches the spout past this tilt. */
 export const LIP = 0.12;
+/** How far from the cup centre the spout can be aimed, in rim radii: past the rim (a careless pour
+ *  still lands on the bench) but never off the mat or out of the close-up. */
+export const AIM_LIMIT = 1.6;
 const FOLLOW = 0.045; // s, position smoothing time constant
 const HEIGHT_SPEED = 28; // cm/s
 
@@ -44,6 +47,65 @@ export interface PitcherState {
 
 export function createPitcher(): PitcherState {
   return { x: 0, y: -0.2, height: HEIGHT_START, tilt: 0, milk: PITCHER_MILK };
+}
+
+/** What one step of player input says about the jug (Day 1's TrialInput and Day 2's RushInput
+ *  both carry these fields). */
+export interface PourControlInput {
+  /** The pointer is over the pour plane: aim at (cupX, cupY), in cup-rim coordinates. */
+  hasCup: boolean;
+  cupX: number;
+  cupY: number;
+  /** Height change requested since the last step (scroll/keys), cm. */
+  heightDelta: number;
+  /** Jump the target height to this preset (cm), or null. */
+  heightPreset: number | null;
+  /** Pour button held. */
+  holding: boolean;
+}
+
+/** Guards against accidental pours: a button already held when the pour began (clicking through
+ *  Gaz's line, holding on from the demo or the steam) only pours once it has been let go. */
+export interface PourGate {
+  armed: boolean;
+}
+
+export function createPourGate(): PourGate {
+  return { armed: false };
+}
+
+/** Keep the aim within AIM_LIMIT of the cup centre (radially). */
+export function limitAim(c: PitcherControls): void {
+  const d = Math.hypot(c.targetX, c.targetY);
+  if (d > AIM_LIMIT) {
+    c.targetX *= AIM_LIMIT / d;
+    c.targetY *= AIM_LIMIT / d;
+  }
+}
+
+/** Turn one step of player input into pitcher controls, within the jug's limits. */
+export function applyPourInput(c: PitcherControls, gate: PourGate, input: PourControlInput): void {
+  if (input.hasCup) {
+    c.targetX = input.cupX;
+    c.targetY = input.cupY;
+    limitAim(c);
+  }
+  if (input.heightPreset !== null) c.targetHeight = input.heightPreset;
+  c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
+  if (!input.holding) gate.armed = true;
+  c.holding = input.holding && gate.armed;
+}
+
+/** Index into HEIGHT_PRESETS of the preset nearest a height (what key "1/2/3" it's closest to). */
+export function nearestPreset(height: number): number {
+  let best = 0;
+  for (let i = 1; i < HEIGHT_PRESETS.length; i++)
+    if (
+      Math.abs((HEIGHT_PRESETS[i] as number) - height) <
+      Math.abs((HEIGHT_PRESETS[best] as number) - height)
+    )
+      best = i;
+  return best;
 }
 
 export function stepPitcher(p: PitcherState, c: PitcherControls, dt: number): void {
