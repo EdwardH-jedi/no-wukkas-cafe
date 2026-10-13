@@ -10,7 +10,9 @@ The goal was to make the latte-art minigame more satisfying, readable and learna
 |---|---|
 | `11917ec` | sim/core: pour gate + aim limit, four-step pour log and `diagnose()`, teaching-pace demo player, practice state machine (+ tests), before screenshots |
 | `d70cf7b` | world/UI: straight-on close-up camera, jug ghosting, crema/foam/stream visuals, lesson strip, practice HUD and review card (+ camera tests, practice e2e) |
-| this report's commit (`git log -1`) | phone layout fixes, cup readout in the lesson strip, after screenshots, this report |
+| `93b5c72` | phone layout fixes, cup readout in the lesson strip, after screenshots, this report |
+| `f180e62` | fix: Day 2's pour buttons moved off the (now bigger) cup, with an e2e check |
+| the commit adding this table | report corrections only |
 
 ## 1. Camera and visual quality
 
@@ -47,7 +49,7 @@ Before, the 41° tilt meant pushing the mouse straight up moved the jug toward t
   - The lesson strip says why: the Space chip turns red with *"Let go, then press again to pour."*
   - A 0.1 s tap pours nothing (tested).
   - Day 1 and Day 2 now share this one input path; it replaces two copy-pasted versions.
-- **Buttons moved out of the steering area.** "Hand it over" sat in the middle of the screen, just below the cup. Hovering it swallowed the pointer moves that steer the jug, and a stray click ended the pour. Pour/demo buttons now sit at the right edge (Day 1 and practice). The Day 1 e2e asserts the button stays right of the cup.
+- **Buttons moved out of the steering area.** "Hand it over" sat in the middle of the screen, just below the cup. Hovering it swallowed the pointer moves that steer the jug, and a stray click ended the pour. Pour/demo buttons now sit at the right edge on Day 1, Day 2 and in practice. On Day 2 the closer camera had put "Hand it over" / "Bin it" right on the cup's near rim; that's fixed in `f180e62`, and the register still opens over them. The Day 1 and Day 2 e2e both assert the button stays right of the cup.
 - **Responsive steering.** The straight-on camera makes screen direction match cup direction (above), and the camera no longer sways under a still pointer.
 - **Control boundaries.** The aim is clamped to 1.6 rim radii, which is past the rim (a careless pour still lands on the bench) but never off the mat or out of the close-up. Height stays within 0.4–10 cm for scroll, keys and presets.
 - **Intuitive height, clear flow.** The lesson strip's "hands" row shows the 1/2/3 preset the jug is nearest (lit), the height in cm, the jug's motion (*steady / ↑ forward / ↓ back / ← →*), a flow bar and the cup fill. The aim-ring shadow and plumb line show height in the scene itself.
@@ -109,7 +111,7 @@ All run on this worktree at the final code, except where noted.
 | `npm test` | **264 passed / 27 files** (base `7663b80`: 210 / 23) |
 | `npm run build` | pass. Audio gate ok. Main chunk 998 kB / 243 kB gzip (base 968 kB / 233 kB; the >900 kB warning already fired on base) |
 | `E2E_PORT=5197 npx playwright test tests/e2e/trial.spec.ts` | pass: full Day 1 (both hearts ≥ 75, the counter pour invalid, verdict, both restarts), now also checking the lesson strip and button placement |
-| `… rush.spec.ts` | pass (Day 2 full shift; shares the station, camera and pour input) |
+| `… rush.spec.ts` | pass (Day 2 full shift; shares the station, camera and pour input), re-run after `f180e62` with the new button check |
 | `… practice.spec.ts` (new) | pass: heart via mouse, review, Space held through restart pours nothing, reset, guide toggle, blob with "Blob, no pull-through", Gaz's demo, back to title |
 | `… ibis.spec.ts`, `music.spec.ts` | pass |
 | `… audio*.spec.ts` | 1 pass / 8 fail. **Identical on base `7663b80`** (re-run in a scratch clone): this worktree has no `voice-cache/` (gitignored, made by `npm run voices`, which this task must not touch), so the game falls back to browser speech ("expected clip, received tts"). Not caused by this branch. |
@@ -133,7 +135,7 @@ The same scene, Gaz's demo pour, on both builds: Chromium with the Apple Metal G
 | draw calls | 92 | 89 (practice review: 84) |
 
 - That's about **+0.4 ms/frame**, from the heavier coffee shader (bump, ripples, guide, noise) now covering about 2× the screen pixels, plus the jug's fade shader. It leaves about 6× headroom under the 16.7 ms (60 fps) budget, with draw calls well under 150.
-- No per-frame allocations were added. The station reuses vectors, and the lesson strip and practice HUD touch the DOM only when a value changes.
+- No allocations were added to the sim tick or the 3D update/render path (the station reuses vectors). The HUDs, like the existing ones, build a few small strings per frame, but they touch the DOM only when a value changes.
 - The guide's distance field is built once, the first time the guide is shown.
 - The pour log counts white coverage only when the foam field changes (16k reads).
 
@@ -144,7 +146,8 @@ The same scene, Gaz's demo pour, on both builds: Chromium with the Apple Metal G
 - The **lobes** step is taught as "hold steady and let the white spread". In this sim the two lobes appear when the pull-through cuts the bloom, which the copy explains. The sim has no lobe-shaping wiggle, and the demo track was deliberately not retuned.
 - Day 2 gets the camera, visuals and pour gate, but **not the lesson strip**: the rush HUD is busier, so it keeps its own instruction panel.
 - Practice history lives in memory only (not saved). Practice always uses silky milk; steaming isn't practised here.
-- On phones, practice hides the pour gauge panel (the lesson strip mirrors height, flow and cup), and the Day 1 phone layout keeps its gauge panel. Tested at 390×844 in the browser only.
+- On phones, practice hides the pour gauge panel (the lesson strip mirrors height, flow and cup). Only **practice** was checked at 390×844, in the browser. Day 1's phone placement of the lesson strip and of "Hand it over" (bottom-left on narrow screens) is unverified.
+- `pour.bloom` (the lobes narration) has a 12 s cooldown in Gaz's line book. If the demo is replayed within 12 s of him last saying it, that chapter plays without narration, at 1× speed; this is graceful, and the pattern is unaffected.
 - The audio e2e specs need the placeholder clips (`npm run voices`) to pass, here as on base.
 
 ## Manual playtest
