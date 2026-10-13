@@ -5,17 +5,23 @@
 //   npm run voices:audition -- --pipeline-test   render the macOS placeholders (proves the pipeline;
 //                                                NOT casting candidates)
 //   npm run voices:audition -- --import <dir>    import delivered takes: <dir>/<character>/<voice>/*.mp3|wav
+//                                                (file names start with the line number: 1.wav, 2b.wav;
+//                                                an optional source.json beside them records
+//                                                { licence, source, performer })
 //   npm run voices:audition -- --provider azure --allow-paid
 //                                                Azure candidates; needs AZURE_SPEECH_KEY and
 //                                                AZURE_SPEECH_REGION; prints the character count first
 //
-// Output: voice-auditions/ (gitignored) with one folder per character/candidate and index.html.
+// Output: voice-auditions/ (gitignored) with one folder per character/candidate and index.json,
+// the audition index the casting page reads (dev/casting.html on the dev server: `npm run dev`,
+// then /dev/casting.html). Every configured candidate is listed, with or without audio.
 
 import {
   copyFileSync,
   existsSync,
   mkdirSync,
   readdirSync,
+  readFileSync,
   rmSync,
   statSync,
   writeFileSync,
@@ -27,7 +33,10 @@ import { azureSsml, azureSynthesize } from './tts-azure.ts';
 
 const { AUDITIONS } = await import('../src/data/voice/auditions.ts');
 const { CASTING, PIPELINE_TEST } = await import('../src/data/voice/casting.ts');
+const { auditionCoverage, buildAuditionIndex, candidateSlug, lineOfTake } =
+  await import('../src/data/voice/auditionIndex.ts');
 type Candidate = import('../src/data/voice/casting.ts').Candidate;
+type FoundCandidate = import('../src/data/voice/auditionIndex.ts').FoundCandidate;
 
 const OUT = join(ROOT, 'voice-auditions');
 const args = process.argv.slice(2);
@@ -35,7 +44,7 @@ const provider = argValue(args, '--provider');
 const allowPaid = args.includes('--allow-paid');
 const importDir = argValue(args, '--import');
 
-const slug = (c: Candidate): string => `${c.provider}-${c.voice}`.replace(/[^\w.-]+/g, '_');
+const slug = (c: Candidate): string => candidateSlug(c);
 
 async function encode(input: string, out: string): Promise<void> {
   await run('ffmpeg', [
@@ -115,55 +124,81 @@ async function importTakes(src: string): Promise<number> {
         else await encode(join(from, f), out);
         n++;
       }
+      // Licence and performer details delivered with the takes, if any.
+      const delivered = join(from, 'source.json');
+      const source = existsSync(delivered)
+        ? (JSON.parse(readFileSync(delivered, 'utf8')) as Record<string, unknown>)
+        : {};
+      const pick = (k: string): Record<string, string> =>
+        typeof source[k] === 'string' ? { [k]: source[k] } : {};
       writeFileSync(
         join(dir, 'candidate.json'),
-        JSON.stringify({ provider: 'files', voice, character: who }, null, 2),
+        JSON.stringify(
+          {
+            provider: 'files',
+            voice,
+            character: who,
+            ...pick('licence'),
+            ...pick('source'),
+            ...pick('performer'),
+          },
+          null,
+          2,
+        ),
       );
     }
   }
   return n;
 }
 
-async function sheet(): Promise<void> {
-  const rows: string[] = [];
-  if (!existsSync(OUT)) return;
-  for (const who of readdirSync(OUT).filter((d) => AUDITIONS[d])) {
-    for (const cand of readdirSync(join(OUT, who)).filter((d) =>
-      statSync(join(OUT, who, d)).isDirectory(),
-    )) {
-      const takes = readdirSync(join(OUT, who, cand))
-        .filter((f) => f.endsWith('.mp3'))
-        .sort();
-      const info = existsSync(join(OUT, who, cand, 'candidate.json')) ? cand : cand;
-      const test = cand.startsWith('macos-');
-      const players = await Promise.all(
-        takes.map(async (t, i) => {
-          const m = await measure(join(OUT, who, cand, t), false);
-          const line = AUDITIONS[who]?.[i] ?? '';
-          return `<div class="take"><audio controls src="${who}/${cand}/${t}"></audio><small>${m.duration.toFixed(2)} s · ${line.replace(/</g, '&lt;')}</small></div>`;
-        }),
-      );
-      const score = (k: string) =>
-        `<label>${k}<select data-k="${k}"><option></option>${[1, 2, 3, 4, 5].map((v) => `<option>${v}</option>`).join('')}</select></label>`;
-      rows.push(`<section data-c="${who}/${cand}"><h2>${who} · ${info}${test ? ' <span class="test">PIPELINE TEST ONLY: not a casting candidate</span>' : ''}</h2>${players.join('')}
-        <div class="scores">${score('naturalness')}${score('intelligibility')}${score('accent authenticity')}${score('fit to brief')}
-        <label><input type="checkbox" data-k="caricature risk"> caricature risk</label>
-        <label><input type="checkbox" data-k="licence cleared"> licence cleared</label>
-        <input data-k="notes" placeholder="notes"></div></section>`);
+/** Scan voice-auditions/ and write index.json (every candidate, with or without audio). */
+async function writeIndex(): Promise<void> {
+  const found: FoundCandidate[] = [];
+  if (existsSync(OUT))
+    for (const who of readdirSync(OUT).filter((d) => AUDITIONS[d])) {
+      const count = AUDITIONS[who]?.length ?? 0;
+      for (const cand of readdirSync(join(OUT, who)).filter((d) =>
+        statSync(join(OUT, who, d)).isDirectory(),
+      )) {
+        const dir = join(OUT, who, cand);
+        const infoFile = join(dir, 'candidate.json');
+        const info = existsSync(infoFile)
+          ? (JSON.parse(readFileSync(infoFile, 'utf8')) as FoundCandidate['info'])
+          : {};
+        const files = readdirSync(dir)
+          .filter((f) => f.endsWith('.mp3'))
+          .sort();
+        const takes = await Promise.all(
+          files.map(async (f) => ({
+            line: lineOfTake(f, count),
+            file: `${who}/${cand}/${f}`,
+            duration: (await measure(join(dir, f), false)).duration,
+          })),
+        );
+        found.push({ character: who, slug: cand, info, takes });
+      }
     }
-  }
+  const index = buildAuditionIndex({
+    lines: AUDITIONS,
+    casting: CASTING,
+    found,
+    generatedAt: new Date().toISOString(),
+  });
+  mkdirSync(OUT, { recursive: true });
+  writeFileSync(join(OUT, 'index.json'), `${JSON.stringify(index, null, 2)}\n`);
+  // The old static review sheet is replaced by the casting page; leave a pointer to it.
   writeFileSync(
     join(OUT, 'index.html'),
     `<!doctype html><meta charset="utf-8"><title>Voice auditions</title>
-<style>body{font:15px system-ui;margin:24px;max-width:960px}section{border:1px solid #ccc;border-radius:8px;padding:12px;margin:12px 0}
-.take{display:flex;gap:12px;align-items:center;margin:6px 0}.test{background:#fde68a;padding:2px 6px;border-radius:4px;font-size:12px}
-.scores{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}textarea{width:100%;height:160px}</style>
-<h1>Voice auditions</h1><p>Score each candidate (docs/VOICE_CASTING.md). Accent authenticity should come from a native or heritage speaker. Nothing here is approved for release until the licence is cleared.</p>
-${rows.join('\n') || '<p>No takes yet.</p>'}
-<h2>Scores (copy into the casting decision)</h2><button id="x">Export scores as JSON</button><textarea id="out"></textarea>
-<script>document.getElementById('x').onclick=()=>{const r={};document.querySelectorAll('section').forEach(s=>{const o={};s.querySelectorAll('[data-k]').forEach(e=>{o[e.dataset.k]=e.type==='checkbox'?e.checked:e.value});r[s.dataset.c]=o});document.getElementById('out').value=JSON.stringify(r,null,2)};</script>`,
+<p>The review sheet moved to the casting page: run <code>npm run dev</code> and open
+<a href="http://localhost:5183/dev/casting.html">/dev/casting.html</a>.</p>`,
   );
-  console.log(`review sheet: ${join(OUT, 'index.html')}`);
+  console.log('Audition coverage (real candidates with audio / placeholders / missing):');
+  for (const [who, c] of Object.entries(auditionCoverage(index)))
+    console.log(
+      `  ${who.padEnd(6)} ${c.real} real, ${c.placeholder} placeholder, ${c.missing} missing`,
+    );
+  console.log(`audition index: ${join(OUT, 'index.json')}`);
 }
 
 async function main(): Promise<void> {
@@ -202,12 +237,19 @@ async function main(): Promise<void> {
     for (const [who, cs] of Object.entries(CASTING))
       for (const c of cs.filter((x) => x.provider === 'azure'))
         await renderAzure(who, c, key, region);
+  } else if (provider) {
+    // Google candidates are listed to hear on Google's own voice list (docs/VOICE_PROVIDERS.md);
+    // there's no account and no renderer yet, so nothing is called.
+    console.error(
+      `No renderer for provider "${provider}". Listen on the provider's own page, or deliver takes with --import.`,
+    );
+    process.exitCode = 1;
   } else {
     console.log(
       'Dry run: nothing rendered. See the header of scripts/voices-audition.ts for options.',
     );
   }
-  await sheet();
+  await writeIndex();
 }
 
 await main();

@@ -44,10 +44,13 @@ npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, audio specs (~9 m
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)
+npm run voices:audition # casting auditions → voice-auditions/ + index.json (dry run by default; see docs/VOICE_CASTING.md)
 npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
 ```
 
 Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line. `npm test` checks the manifest only (it passes on a clean clone with no audio files); `npm run voices:check` checks the files themselves and fails on missing audio. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.
+
+**Audio review pages (dev server only, never built):** `/dev/casting.html` (voice casting: auditions side by side, ratings, decisions → JSON; docs/VOICE_CASTING.md).
 
 **Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder voice clips are removed. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
 
@@ -70,8 +73,11 @@ src/
   audio/             one AudioContext (manager.ts: voice/ambience/SFX buses, clips, replay, status),
                      synthesised SFX, browser-speech fallback (voice.ts)
   ui/                DOM HUD, docket, bar, modals, shop, cheat sheet
+  dev/               dev-only review pages (casting), loaded by dev/*.html; never in a build
 scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
 scripts/voices.ts    renders every spoken line to MP3 (macOS `say` + ffmpeg) and writes the manifest
+scripts/vite-dev-tools.ts  dev-server plumbing for the review pages (serves voice-auditions/, fixed save paths)
+dev/                 the review pages' HTML (served by `npm run dev`; `vite build` only builds index.html)
 tests/               vitest unit tests (mirror src/ paths) + e2e/ for playwright
 public/assets/       audio clips, fonts, textures (bundled, never hot-linked)
 ```

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import { devTools } from './scripts/vite-dev-tools.ts';
 import { voiceAssets } from './scripts/vite-voice.ts';
 
 // This game runs on its own port. Older sibling projects (~/Desktop/Developer/cafe*) claim 5173
@@ -7,7 +8,8 @@ import { voiceAssets } from './scripts/vite-voice.ts';
 export const DEV_PORT = 5183;
 
 export default defineConfig({
-  plugins: [voiceAssets(import.meta.dirname)],
+  // devTools: dev-server-only plumbing for the audio review pages in dev/ (never built).
+  plugins: [voiceAssets(import.meta.dirname), devTools(import.meta.dirname)],
   server: { port: DEV_PORT, strictPort: true },
   preview: { port: 4183, strictPort: true },
   build: { target: 'es2022', chunkSizeWarningLimit: 900 },

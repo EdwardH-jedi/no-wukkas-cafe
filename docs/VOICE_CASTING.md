@@ -1,9 +1,12 @@
 # Voice casting plan
 
-**Status (2026-10-14): plan and pipeline only.**
+**Status (2026-10-14): plan, pipeline and casting page; no real auditions yet.**
 - No replacement voices have been generated.
 - No paid service has been used.
 - No credits have been bought.
+- The casting page (`/dev/casting.html`, below) is ready for takes; today it holds only the macOS
+  pipeline-test takes, which are not candidates.
+- Provider research with prices, licences and risks: `docs/VOICE_PROVIDERS.md`.
 
 Today's voices are macOS placeholders, with four Australian characters sharing one female voice
 through pitch shifts (docs/VOICE_ASSETS.md).
@@ -42,7 +45,9 @@ them as people.
 
 Voice catalogues change: check every name below against the provider's current list before
 auditioning. "Natural" and "authentic" are judgements for Edward and native-speaker reviewers,
-not for automated checks.
+not for automated checks. **Superseded in detail by `docs/VOICE_PROVIDERS.md` (checked
+2026-10-14)**: Azure has no male HD Australian voice, Google Chirp 3 HD has the widest en-AU range
+and public previews, and no provider supports Korean- or Mandarin-accented English as a feature.
 
 | Source | Australians | Indian English | Korean- / Mandarin-accented English | Notes |
 |---|---|---|---|---|
@@ -74,7 +79,7 @@ These are taken from the game's real lines and defined in `src/data/voice/auditi
 | Jiwoo | the 아아 order · "Wah, perfect! 감사합니다! Thank you!" |
 | Mei | "Oat flat white, extra hot. Sorry, I'm on a call." · "Sorry, this is the wrong milk." |
 
-Score every candidate on the review sheet (`voice-auditions/index.html`):
+Score every candidate on the casting page (`npm run dev`, then `/dev/casting.html`):
 - naturalness 1–5;
 - intelligibility 1–5 (could a learner catch the order?);
 - accent authenticity 1–5, from a native or heritage speaker for the Indian, Korean and Mandarin
@@ -103,12 +108,33 @@ Score every candidate on the review sheet (`voice-auditions/index.html`):
   Data only.
 - `npm run voices:audition`:
   - renders the audition lines for every candidate into `voice-auditions/` (gitignored), and
-    writes a review sheet;
+    writes `voice-auditions/index.json`: every configured candidate with its takes (line,
+    duration) or, when it has none, what it needs (`src/data/voice/auditionIndex.ts`);
   - **providers:**
-    - `macos`: pipeline test only, and the sheet marks it "not a candidate";
-    - `files`: import recordings an actor or provider delivered;
+    - `macos`: pipeline test only, and the page marks it "not a candidate";
+    - `files`: import recordings an actor or provider delivered (`--import <dir>`, files named by
+      line number, optional `source.json` with `licence`, `source`, `performer`);
     - `azure`: prepared but untested (no credentials); it refuses to run without `--allow-paid`
-      and `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION`, and prints the character count first.
+      and `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION`, and prints the character count first;
+    - `google`: listed to hear on Google's public voice list; no renderer and no account, so
+      `--provider google` refuses.
+- **The casting page** (`dev/casting.html`, dev server only, never built):
+  - an identity card per character (portrait drawn from the 3D look data, brief, line count, and
+    the placeholder voice the game uses today, flagged when shared or pitch-shifted);
+  - a lines × candidates grid: play / replay any take, compare one line across candidates back
+    to back, waveform, duration, integrated loudness (LUFS) and true peak per take, measured in
+    the browser (`src/audio/meter.ts`);
+  - one take plays at a time (a single shared player: starting one stops the other);
+  - missing assets: a dashed "No take" cell per missing line, a "No audio yet" chip and what the
+    candidate needs, a banner when a character has no real audio, links to the provider's own
+    preview page (never embedded or stored);
+  - ratings (naturalness, accent authenticity, acting and emotion, intelligibility, fit; 1–5),
+    caricature risk, licence cleared, notes; a decision per character;
+  - live checks with the release rules (`src/data/voice/decision.ts`): placeholders can't be
+    cast, no two characters share a base voice, the licence must be cleared, no caricature risk,
+    and Priya / Jiwoo / Mei's accents should be confirmed by a native or heritage speaker;
+  - **Export JSON** (download), **Save to disk** (`voice-auditions/decisions.json`), **Import
+    JSON**; decisions also persist in the browser.
 - **Release rules in the validator (`voices:check --release`):**
   - no placeholder;
   - a licence on every clip;
