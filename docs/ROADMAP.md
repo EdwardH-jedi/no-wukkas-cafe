@@ -18,6 +18,7 @@ Day 1 is now a job trial: the player applies at No Wukkas and makes one flat whi
 - [x] **D1.6 Checks:** sim/core unit tests, Playwright e2e playing the whole trial with real mouse input
 - [x] **D1.7 Trackpad + replay:** Space to tip and 1/2/3 height presets (no click-and-scroll needed), pinch can't zoom the page, restart from the pause menu; Gaz remembers streaks (same mistake twice, improving twice, failing twice)
 - [ ] **D1.8 Playtest** on a real MacBook trackpad and iPhone Safari; tune pour feel and steam timing from what people actually do
+- [~] **D1.9 Latte art v2** (`LATTE_V2_REPORT.md`): straight-on close-up pour camera, spout-solid ghost jug, crema/microfoam relief, stream that trails the jug, ripples where it lands; pour gate (no accidental pours), aim limit, height-shadow aim ring; lesson strip with the controls doing the pour; Gaz's demo in four narrated chapters at a teaching pace (bit-identical heart); latte-art practice mode (heart guide, reset, review that says why)
 
 ## Day 2: The morning rush (first paid shift)
 

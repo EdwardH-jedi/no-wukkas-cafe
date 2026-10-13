@@ -39,6 +39,7 @@ type Shot =
   | 'shot'
   | 'steam'
   | 'pour'
+  | 'review'
   | 'closeUp'
   | 'inspect'
   | 'feedback'
@@ -52,6 +53,7 @@ const SHOTS = new Set<string>([
   'shot',
   'steam',
   'pour',
+  'review',
   'inspect',
   'feedback',
   'verdict',
@@ -126,9 +128,27 @@ export function createCameraRig(): CameraRig {
         wantFov = 44;
         break;
       case 'pour':
-        // From the upper left: the jug hangs off to the right, out of the line of sight.
-        wantPos.copy(f.cupRim).add(tmp.set(-0.11, 0.26, 0.09));
-        wantTarget.copy(f.cupRim).add(tmp.set(0.006, -0.014, -0.006));
+        // Close in, straight from the barista's side and looking down at the coffee: the cup
+        // fills about half the screen, the far side of the cup is up, so pushing the mouse up
+        // pulls the jug forward (the pull-through) and the heart's point grows up the screen.
+        // The jug hangs off to the right. It never moves while you pour (steering maps the
+        // pointer through this camera).
+        wantPos.copy(f.cupRim).add(tmp.set(-0.012, 0.19, 0.1));
+        wantTarget.copy(f.cupRim).add(tmp.set(0, -0.018, -0.004));
+        wantFov = 40;
+        break;
+      case 'review':
+        // Practice: straight down on the cup so the heart reads undistorted, the cup shifted
+        // clear of the review card (right on wide screens, below on narrow ones).
+        wantPos.copy(f.cupRim).add(tmp.set(0, 0.24, 0.045));
+        wantTarget.copy(f.cupRim).add(tmp.set(0, -0.03, 0));
+        if (aspect > 1.1) {
+          wantPos.x += 0.05;
+          wantTarget.x += 0.05;
+        } else {
+          wantPos.z += 0.055;
+          wantTarget.z += 0.055;
+        }
         wantFov = 40;
         break;
       case 'closeUp':
@@ -164,7 +184,7 @@ export function createCameraRig(): CameraRig {
         fromPos.copy(pos);
         fromTarget.copy(target);
         fromFov = fov;
-        duration = s === 'pour' || shot === 'pour' || s === 'closeUp' ? 0.9 : 1.1;
+        duration = s === 'pour' || shot === 'pour' || s === 'closeUp' || s === 'review' ? 0.9 : 1.1;
         if (shot === 'title') duration = 1.8;
         shot = s;
         progress = 0;
@@ -187,7 +207,9 @@ export function createCameraRig(): CameraRig {
       pitch += (wantPitch - pitch) * f;
 
       camera.position.copy(pos);
-      camera.position.y += Math.sin(now * 1.1) * (shot === 'pour' ? 0.0004 : 0.003);
+      // A breath of idle sway, except over the cup: there the pointer maps through this camera,
+      // so it holds perfectly still.
+      if (shot !== 'pour' && shot !== 'review') camera.position.y += Math.sin(now * 1.1) * 0.003;
       camera.lookAt(target);
       camera.rotateY(yaw);
       camera.rotateX(pitch);

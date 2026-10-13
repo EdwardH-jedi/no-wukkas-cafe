@@ -9,7 +9,7 @@
 
 import { band, clamp } from '../math';
 import { CELL, GRID } from './field';
-import { heartTemplate, inHeart, type HeartTemplate } from './heart';
+import { GUIDE_SCALE, heartTemplate, inHeart, type HeartTemplate } from './heart';
 
 export const FOAM_THRESHOLD = 0.5;
 const MAX_ANGLE = (20 * Math.PI) / 180;
@@ -137,7 +137,7 @@ let calib: Calibration | null = null;
 /** Measure the template itself once, so feature scores are relative to a perfect heart. */
 function calibration(t: HeartTemplate): Calibration {
   if (calib) return calib;
-  const scale = 1.1; // ≈ 38% coverage
+  const scale = GUIDE_SCALE; // ≈ 38% coverage
   const cells: number[] = [];
   for (let k = 0; k < GRID * GRID; k++) {
     const x = -1 + ((k % GRID) + 0.5) * CELL;
