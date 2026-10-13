@@ -1,11 +1,15 @@
 // Sound settings: per-bus volume, voice on/off, a test line, replay, and a visible status so a
-// silent voice is never a mystery. Also owns the toast that pops up when audio fails.
+// silent voice is never a mystery; plus the listening settings (difficulty, order subtitles,
+// learning mode). Also owns the toast that pops up when audio fails.
 
 import type { AudioManager, AudioStatus, Bus } from '../audio/manager';
+import type { Difficulty } from '../sim/listening';
+import type { ListenSettings } from './settings';
 
 export interface AudioPanelCallbacks {
   replay(): void;
   test(): void;
+  listen: { get(): ListenSettings; set(s: ListenSettings): void };
 }
 
 export interface AudioPanel {
@@ -52,6 +56,18 @@ export function createAudioPanel(
       )
       .join('')}
     <label class="chk"><input type="checkbox" data-voice-on> Voices on</label>
+    <h4>Listening (Day 2)</h4>
+    <label class="sel"><span>Difficulty</span><select data-l="difficulty">
+      <option value="easy">Easy: clear orders, quiet café</option>
+      <option value="normal">Normal</option>
+      <option value="hard">Hard: fast, slangy, noisy</option></select></label>
+    <label class="sel"><span>Order subtitles</span><select data-l="subtitles">
+      <option value="auto">Auto (by difficulty)</option>
+      <option value="always">Always</option>
+      <option value="afterRepeat">Only after “repeat that?”</option>
+      <option value="off">Off</option></select></label>
+    <label class="chk"><input type="checkbox" data-l="learning"> Learning mode: show what they said once you ring it up</label>
+    <p class="fine">Difficulty changes start with the next shift.</p>
     <div class="titleBtns">
       <button class="btn small" data-a="test">Test voice</button>
       <button class="btn small ghost" data-a="replay">Replay last line</button>
@@ -69,6 +85,22 @@ export function createAudioPanel(
   const statusDot = panel.querySelector('.astatus .dot') as HTMLElement;
   const voiceOn = panel.querySelector('[data-voice-on]') as HTMLInputElement;
   const sliders = panel.querySelectorAll<HTMLInputElement>('input[data-bus]');
+  const diffSel = panel.querySelector('[data-l="difficulty"]') as HTMLSelectElement;
+  const subSel = panel.querySelector('[data-l="subtitles"]') as HTMLSelectElement;
+  const learnChk = panel.querySelector('[data-l="learning"]') as HTMLInputElement;
+  const syncListen = (): void => {
+    const l = cb.listen.get();
+    diffSel.value = l.difficulty;
+    subSel.value = l.subtitles;
+    learnChk.checked = l.learning;
+  };
+  const setListen = (): void =>
+    cb.listen.set({
+      difficulty: diffSel.value as Difficulty,
+      subtitles: subSel.value as ListenSettings['subtitles'],
+      learning: learnChk.checked,
+    });
+  diffSel.onchange = subSel.onchange = learnChk.onchange = setListen;
 
   let toastTimer = 0;
   let lastToast = '';
@@ -148,6 +180,7 @@ export function createAudioPanel(
     },
     open() {
       sync();
+      syncListen();
       panel.classList.remove('hide');
       (panel.querySelector('button[data-a="close"]') as HTMLElement).focus();
     },

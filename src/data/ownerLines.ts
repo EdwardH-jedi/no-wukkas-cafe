@@ -42,7 +42,7 @@ export const RUSH_INTRO: readonly LineDef[] = [
     gesture: 'point',
   },
   {
-    text: 'Take the order, make the drink, hand it to the right person. Flat whites and long blacks. Easy.',
+    text: 'Listen to the order and ring it up right. Flat whites, long blacks, oat, soy, almond. Then make it and hand it to the right person. Easy.',
     mood: 'sceptical',
   },
 ];
@@ -654,6 +654,40 @@ export const OWNER_LINES: LineBook = {
     ],
     mood: 'annoyed',
     gesture: 'facepalm',
+  },
+  'rush.misheard': {
+    tiers: [
+      [
+        { text: "That's what the ticket says, mate, but it's not what {name} said. Listen first." },
+        { text: 'You rang that up wrong. {name} told you exactly what they wanted.' },
+      ],
+      [{ text: 'Ears, mate! Listen to the customer, then ring it up.' }],
+      [{ text: "Wrong ticket again. If you didn't catch it, ask!" }],
+    ],
+    mood: 'annoyed',
+    gesture: 'point',
+  },
+  'rush.posNag': {
+    tiers: [
+      [
+        { text: "Ring it up, mate. {name}'s not getting any younger." },
+        { text: "Didn't catch it? Ask. Then ring it up." },
+      ],
+      [{ text: 'Today, champ. Ring. It. Up.' }],
+    ],
+    mood: 'annoyed',
+    gesture: 'tapWatch',
+    cooldown: 12,
+  },
+  'rush.askedTwice': {
+    tiers: [
+      [
+        { text: 'Twice? Write it on your hand next time.' },
+        { text: "Listen harder, mate. They won't say it a third time." },
+      ],
+    ],
+    mood: 'sceptical',
+    cooldown: 20,
   },
   'rush.binned': {
     tiers: [

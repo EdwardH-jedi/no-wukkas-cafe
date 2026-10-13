@@ -64,8 +64,12 @@ async function installedVoices(): Promise<Set<string>> {
   const { stdout } = await run('say', ['-v', '?']);
   const names = new Set<string>();
   for (const line of stdout.split('\n')) {
-    const m = /^(.+?)\s{2,}[a-z]{2,3}_[A-Za-z0-9]+\s+#/.exec(line);
-    if (m?.[1]) names.add(m[1].trim());
+    const m = /^(.+?)\s+[a-z]{2,3}_[A-Za-z0-9]+\s+#/.exec(line);
+    if (!m?.[1]) continue;
+    // Newer macOS lists some voices as "Tara (English (India))"; `say -v Tara` still works.
+    const name = m[1].trim();
+    names.add(name);
+    names.add(name.replace(/\s*\(.*\)$/, ''));
   }
   return names;
 }
@@ -113,7 +117,7 @@ async function measure(file: string): Promise<{ duration: number; meanDb: number
 }
 
 async function renderOne(line: ScriptLine, c: Casting, file: string): Promise<void> {
-  const rate = Math.round(c.rate * (line.delivery === 'slow' ? 0.8 : 1));
+  const rate = Math.round(c.rate * line.rate);
   const wav = join(TMP, `${Math.abs(hash(file))}.wav`);
   await run('say', [
     '-v',
@@ -221,7 +225,7 @@ async function main(): Promise<void> {
       source: {
         engine: 'macos-say',
         voice: c.voice,
-        rate: c.rate,
+        rate: Math.round(c.rate * line.rate),
         pitch: c.pitch,
         placeholder: true,
       },
@@ -230,7 +234,7 @@ async function main(): Promise<void> {
     const same =
       old &&
       old.source.voice === c.voice &&
-      old.source.rate === c.rate &&
+      old.source.rate === Math.round(c.rate * line.rate) &&
       old.source.pitch === c.pitch &&
       existsSync(abs);
     if (!force && same && (!only || !only.has(line.speaker))) {

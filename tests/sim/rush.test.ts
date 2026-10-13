@@ -16,6 +16,7 @@ const esp: EspressoScore = { dose: 1, time: 1, total: 1, faults: [] };
 const heart = { art: 0.9, heartness: 1 } as PatternScore;
 const flatWhite = (over: Partial<MadeDrink> = {}): MadeDrink => ({
   type: 'flatWhite',
+  milkType: 'full',
   espresso: esp,
   milk: { temp: 1, texture: 1, total: 1, faults: [] },
   pattern: heart,
@@ -28,6 +29,7 @@ const flatWhite = (over: Partial<MadeDrink> = {}): MadeDrink => ({
 });
 const longBlack = (over: Partial<MadeDrink> = {}): MadeDrink => ({
   type: 'longBlack',
+  milkType: null,
   espresso: esp,
   milk: null,
   pattern: null,
@@ -38,7 +40,7 @@ const longBlack = (over: Partial<MadeDrink> = {}): MadeDrink => ({
   madeAt: 0,
   ...over,
 });
-const FW: Order = { type: 'flatWhite', extraHot: false, heart: false };
+const FW: Order = { type: 'flatWhite', milk: 'full', extraHot: false, heart: false };
 const ctx = (over: Partial<ServeContext> = {}): ServeContext => ({
   waited: 20,
   patience: 100,
@@ -157,8 +159,14 @@ describe('shift summary', () => {
   });
 
   it('labels and money read naturally', () => {
-    expect(orderLabel({ type: 'flatWhite', extraHot: true, heart: false })).toBe(
+    expect(orderLabel({ type: 'flatWhite', milk: 'full', extraHot: true, heart: false })).toBe(
       'flat white · extra hot (68–74 °C)',
+    );
+    expect(orderLabel({ type: 'flatWhite', milk: 'oat', extraHot: false, heart: true })).toBe(
+      'oat flat white · heart on top',
+    );
+    expect(orderLabel({ type: 'longBlack', milk: null, extraHot: false, heart: false })).toBe(
+      'long black',
     );
     expect(formatCents(730)).toBe('$7.30');
   });

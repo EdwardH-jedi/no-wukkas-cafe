@@ -13,6 +13,7 @@ import { createSfx } from './audio/sfx';
 import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
 import {
+  atCounter,
   atRegister,
   createRush,
   emptyRushInput,
@@ -23,11 +24,13 @@ import {
 import { canFinish, createTrial, emptyInput, stepTrial, type TrialAction } from './core/trial';
 import { GREETING, GREETING_OPENERS } from './data/ownerLines';
 import { spokenDuration, VOICE_MANIFEST } from './data/voice';
+import { DIFFICULTY } from './sim/listening';
 import { surfacing } from './sim/latte/field';
 import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
 import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
-import { createRushHud, railOrder } from './ui/rushHud';
+import { createRushHud, nextTicket, railOrder } from './ui/rushHud';
+import { loadListenSettings, saveListenSettings, type ListenSettings } from './ui/settings';
 import { buildCafe } from './world/cafe';
 import { createCameraRig } from './world/camera';
 import { createCrowd } from './world/crowd';
@@ -79,6 +82,7 @@ async function boot(): Promise<void> {
 
   const trial = createTrial(seed);
   const clock = createClock();
+  let listen: ListenSettings = loadListenSettings();
   const audio = createAudioManager(import.meta.env.BASE_URL);
   const sfx = createSfx(audio);
   if (params.get('voice') === '0') audio.voiceEnabled = false;
@@ -163,7 +167,8 @@ async function boot(): Promise<void> {
     hud.setPaused(false);
     rushHud.setPaused(false);
     crowd.clear();
-    rush = createRush(seed);
+    rush = createRush(seed, listen.difficulty);
+    sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
     mode = 'rush';
     hud1Root.classList.add('hide');
     hud2Root.classList.remove('hide');
@@ -196,8 +201,18 @@ async function boot(): Promise<void> {
     else hud.onReplay(l.text, secs);
   };
   const audioPanel = createAudioPanel(uiRoot, audio, {
-    replay,
+    replay: () => {
+      if (mode === 'rush' && rush && atCounter(rush)) rushAct({ type: 'replay' });
+      else replay();
+    },
     test: () => audio.say({ speaker: 'gaz', text: (GREETING[0] as { text: string }).text }),
+    listen: {
+      get: () => listen,
+      set: (s) => {
+        listen = s;
+        saveListenSettings(s);
+      },
+    },
   });
 
   const rushHud = createRushHud(hud2Root, {
@@ -206,6 +221,9 @@ async function boot(): Promise<void> {
     restart: () => {
       setPaused(false);
       crowd.clear();
+      // A restart picks up a difficulty changed mid-shift.
+      if (rush) rush.difficulty = listen.difficulty;
+      sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
       rushAct({ type: 'restart' });
     },
     title: toTitle,
@@ -213,6 +231,7 @@ async function boot(): Promise<void> {
     skip: () => (input.skip = true),
     audioButtonsHtml: audioPanel.buttonsHtml,
     bindAudio: (el) => audioPanel.bind(el),
+    settings: () => listen,
   });
 
   const hud = createHud(hud1Root, {
@@ -302,20 +321,26 @@ async function boot(): Promise<void> {
     else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
     else if (k === 'r') replay();
   });
-  /** Day 2 keys: T take order, F/L make, B bin, Enter lock in / hand over, 1–5 serve or jug height. */
+  /** Day 2 keys: T take order, R replay, Enter ring up / lock in / hand over, F/L make, B bin,
+   *  1–6 serve or jug height. */
   function rushKey(r: Rush, k: string, e: KeyboardEvent): void {
     const b = r.barista;
     if (k === 'enter') {
-      if ((e.target as HTMLElement).tagName === 'BUTTON') return;
+      const t = e.target as HTMLElement;
+      // Enter rings up even with a register option focused (it would just re-press it).
+      if (t.tagName === 'BUTTON' && !(t.closest('#pos') && atCounter(r))) return;
       e.preventDefault();
       if (b.phase === 'grind' || b.phase === 'pour') rushAct({ type: 'next' });
+      else if (atCounter(r)) rushHud.ringUp();
       else if (atRegister(r)) rushAct({ type: 'takeOrder' });
       else input.skip = true;
     } else if (k === 't') rushAct({ type: 'takeOrder' });
-    else if (k === 'f') rushAct({ type: 'make', drink: 'flatWhite' });
-    else if (k === 'l') rushAct({ type: 'make', drink: 'longBlack' });
-    else if (k === 'b') rushAct({ type: 'bin' });
-    else if (/^[1-5]$/.test(k)) {
+    else if (k === 'f' || k === 'l') {
+      // Make the oldest ticket (F) or the oldest long black (L), with the milk it says.
+      const c = nextTicket(r, k === 'l' ? 'longBlack' : undefined);
+      if (c?.heard) rushAct({ type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
+    } else if (k === 'b') rushAct({ type: 'bin' });
+    else if (/^[1-6]$/.test(k)) {
       if (b.phase === 'pour') input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
       else if (b.ready) {
         const c = railOrder(r)[Number(k) - 1];
@@ -325,7 +350,11 @@ async function boot(): Promise<void> {
     else if (k === 's' || k === 'arrowdown') keyHeight = -1;
     else if (k === 'm') sfx.setMuted(!sfx.muted);
     else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
-    else if (k === 'r') replay();
+    else if (k === 'r') {
+      // At the register, Replay is part of listening (counted, costs patience): the sim does it.
+      if (atCounter(r)) rushAct({ type: 'replay' });
+      else replay();
+    }
   }
 
   window.addEventListener('keyup', (e) => {
@@ -461,7 +490,9 @@ async function boot(): Promise<void> {
         aeration: b.steam.aeration,
         steamDone: b.steam.done,
         water: b.water,
-        ready: b.ready ? { type: b.ready.type, temp: b.ready.temp } : null,
+        ready: b.ready
+          ? { type: b.ready.type, temp: b.ready.temp, milkType: b.ready.milkType }
+          : null,
         fill: b.pour.fill,
         controls: { ...b.controls },
         customers: r.customers.map((c) => ({
@@ -473,7 +504,13 @@ async function boot(): Promise<void> {
           outcome: c.outcome,
           rejected: c.rejected,
           satisfaction: c.result?.satisfaction ?? null,
+          lineId: c.line.id,
+          order: { ...c.order },
+          heard: c.heard ? { ...c.heard } : null,
+          listen: { ...c.listen, clarified: [...c.listen.clarified] },
         })),
+        difficulty: r.difficulty,
+        listening: r.listening.map((x) => ({ ...x, wrong: [...x.wrong] })),
         records: r.records.map((x) => ({ ...x })),
         summary: r.summary,
         line: r.speech.current
@@ -481,6 +518,7 @@ async function boot(): Promise<void> {
               speaker: r.speech.current.speaker,
               key: r.speech.current.key,
               text: r.speech.current.text,
+              delivery: r.speech.current.delivery ?? 'normal',
             }
           : null,
         crowd: crowd.count,
@@ -565,7 +603,7 @@ async function boot(): Promise<void> {
         const u = ev.line;
         rushHud.onSay(u);
         if (u.speaker === 'gaz') owner.onSay(u, viewTime);
-        audio.say({ speaker: u.speaker, text: u.text });
+        audio.say({ speaker: u.speaker, text: u.text, delivery: u.delivery ?? 'normal' });
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {
@@ -574,7 +612,11 @@ async function boot(): Promise<void> {
         }
       } else if (ev.type === 'station') canvas.classList.toggle('aim', ev.phase === 'pour');
       else if (ev.type === 'sfx') sfx.play(ev.id);
-      else if (ev.type === 'ticket') sfx.play('tick');
+      else if (ev.type === 'ticket') {
+        sfx.play('tick');
+        const c = r.customers.find((x) => x.def.id === ev.customer);
+        if (c) rushHud.onTicket(c);
+      } else if (ev.type === 'ask') rushHud.onAsk(ev.text);
     }
     r.events.length = 0;
 

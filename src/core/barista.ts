@@ -28,7 +28,7 @@ import type { PitcherControls, PitcherState } from '../sim/latte/pitcher';
 import { scorePattern } from '../sim/latte/score';
 import { clamp } from '../sim/math';
 import type { MilkQuality } from '../sim/milk';
-import { COOL_RATE, type DrinkType, type MadeDrink } from '../sim/rush';
+import { COOL_RATE, type DrinkType, type MadeDrink, type Milk } from '../sim/rush';
 import {
   createSteam,
   milkQuality,
@@ -79,6 +79,8 @@ export interface Barista {
   phase: StationPhase;
   phaseTime: number;
   drink: DrinkType | null;
+  /** Carton in the jug for this flat white (from the ticket being made). */
+  milkType: Milk | null;
   espresso: EspressoState;
   espressoScore: EspressoScore | null;
   steam: SteamState;
@@ -105,6 +107,7 @@ export function createBarista(): Barista {
     phase: 'idle',
     phaseTime: 0,
     drink: null,
+    milkType: null,
     espresso: createEspresso(),
     espressoScore: null,
     steam: createSteam(),
@@ -152,9 +155,15 @@ function go(b: Barista, phase: StationPhase, out: BaristaEvent[]): void {
 }
 
 /** Start a new drink. Only from idle with nothing waiting on the pass. */
-export function startDrink(b: Barista, type: DrinkType, out: BaristaEvent[]): boolean {
+export function startDrink(
+  b: Barista,
+  type: DrinkType,
+  out: BaristaEvent[],
+  milk: Milk = 'full',
+): boolean {
   if (b.phase !== 'idle' || b.ready) return false;
   b.drink = type;
+  b.milkType = type === 'flatWhite' ? milk : null;
   b.espresso = createEspresso();
   b.espressoScore = null;
   b.milk = null;
@@ -190,6 +199,7 @@ export function takeReady(b: Barista, out: BaristaEvent[]): MadeDrink | null {
 export function returnReady(b: Barista, d: MadeDrink): void {
   b.ready = d;
   b.drink = d.type;
+  b.milkType = d.milkType;
   b.phase = 'ready';
 }
 
@@ -199,6 +209,7 @@ function finishDrink(b: Barista, now: number, out: BaristaEvent[]): void {
     const total = b.water + ESPRESSO_FILL;
     b.ready = {
       type: 'longBlack',
+      milkType: null,
       espresso: esp,
       milk: null,
       pattern: null,
@@ -212,6 +223,7 @@ function finishDrink(b: Barista, now: number, out: BaristaEvent[]): void {
     const milk = b.milk ?? milkQuality(b.steam);
     b.ready = {
       type: 'flatWhite',
+      milkType: b.milkType ?? 'full',
       espresso: esp,
       milk: b.milkScore ?? scoreMilk(milk),
       pattern: scorePattern(b.pour.foam),

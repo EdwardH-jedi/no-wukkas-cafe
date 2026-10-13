@@ -1,10 +1,13 @@
-// Day 2 customers, in arrival order. Names, looks, voices and personalities come from the
-// prototype CAST (prototype/game.html); orders are limited to what the current mechanics can make.
-// AGENTS.md §6: difficult behaviour belongs to a personality (Karen), never to a background.
+// Day 2 customers, in arrival order. Names, looks and personalities come from the prototype CAST
+// (prototype/game.html); Mei is new. What they order is in data/orders.ts, how they sound in
+// data/voice/profiles.ts. AGENTS.md §6: difficult behaviour belongs to a personality (Karen), never
+// to a background, and pace, politeness and fluency vary by person, not by accent.
 
-import type { Complaint, Order } from '../sim/rush';
+import type { ClarifyAnswers, OrderLine } from '../sim/listening';
+import type { Complaint, DrinkType } from '../sim/rush';
+import { CLARIFY_ANSWERS, ORDER_LINES } from './orders';
 
-export type CustomerId = 'dazza' | 'priya' | 'beryl' | 'jiwoo' | 'karen';
+export type CustomerId = 'dazza' | 'priya' | 'beryl' | 'mei' | 'jiwoo' | 'karen';
 
 export interface CustomerLook {
   skin: string;
@@ -23,12 +26,14 @@ export interface CustomerLook {
 }
 
 export interface CustomerLines {
-  order: string;
   impatient: string;
   angry: string;
   happy: string;
   okay: string;
-  rejected: string;
+  /** Handed the wrong drink, by what they actually ordered. */
+  rejected: Record<DrinkType, string>;
+  /** Handed a flat white with the wrong milk. */
+  rejectedMilk: string;
   walkout: string;
   /** Specific grumbles when the drink is accepted but not right. */
   complaint: Partial<Record<Complaint, string>>;
@@ -40,9 +45,11 @@ export interface CustomerDef {
   /** What Gaz calls them. */
   callName: string;
   tag: string;
-  voice: { pitch: number; rate: number; female?: boolean };
   look: CustomerLook;
-  order: Order;
+  /** Ways they might order today (one is picked per shift). */
+  orders: readonly OrderLine[];
+  /** Their answers to clarifying questions. */
+  answers: ClarifyAnswers;
   /** Seconds after the doors open that they walk in. */
   arriveAt: number;
   /** Seconds of patience from reaching the register. */
@@ -60,7 +67,6 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Dazza',
     name: 'Dazza',
     tag: 'Tradie · regular',
-    voice: { pitch: 0.7, rate: 1.12 },
     look: {
       skin: '#e3ab86',
       hair: 'short',
@@ -71,18 +77,22 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       build: 1.12,
       height: 1.03,
     },
-    order: { type: 'flatWhite', extraHot: false, heart: false },
+    orders: ORDER_LINES.dazza as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.dazza as ClarifyAnswers,
     arriveAt: 1,
     patience: 75,
     tipCents: 300,
     tolerance: 1,
     lines: {
-      order: 'Oi mate! Flattie, ta. Gotta be on site in ten.',
       impatient: "Mate, I've got a crane waiting on me.",
       angry: 'Strewth. Any day now, champ.',
       happy: 'Legend. Cheers, mate.',
       okay: "Yeah, she'll do. Ta.",
-      rejected: "Nah mate, that's not mine. Flat white, remember?",
+      rejected: {
+        flatWhite: "Nah mate, that's not mine. Flat white, remember?",
+        longBlack: "Nah mate, that's not mine. Long black, remember?",
+      },
+      rejectedMilk: "Wrong milk, mate. Can't do that one.",
       walkout: "Forget it. I'll grab one from the servo.",
       complaint: {
         lukewarm: 'Bit cold, mate. Whatever, gotta run.',
@@ -96,7 +106,6 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Priya',
     name: 'Priya',
     tag: 'Nurse · post night-shift',
-    voice: { pitch: 1.0, rate: 0.95, female: true },
     look: {
       skin: '#b98262',
       hair: 'pony',
@@ -106,18 +115,22 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       build: 0.95,
       height: 0.98,
     },
-    order: { type: 'longBlack', extraHot: false, heart: false },
-    arriveAt: 14,
+    orders: ORDER_LINES.priya as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.priya as ClarifyAnswers,
+    arriveAt: 16,
     patience: 95,
     tipCents: 200,
     tolerance: 1.05,
     lines: {
-      order: 'Morning… a long black, please. Fourteen-hour shift at RPA.',
       impatient: 'Sorry… is mine nearly ready? I might fall asleep standing up.',
       angry: "Please. I'm about to fall asleep on your counter.",
       happy: "Oh, that's perfect. You're a lifesaver.",
       okay: "Thanks. That'll keep me upright.",
-      rejected: "Sorry, I think that's someone else's. Mine's the long black.",
+      rejected: {
+        flatWhite: "Sorry, I think that's someone else's. Mine's a flat white.",
+        longBlack: "Sorry, I think that's someone else's. Mine's the long black.",
+      },
+      rejectedMilk: "Sorry, I think that's the wrong milk. I can't have that one.",
       walkout: "I can't wait any longer. I need my bed.",
       complaint: {
         weak: 'Bit watery… thanks though.',
@@ -131,7 +144,6 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Beryl',
     name: 'Nan Beryl',
     tag: 'Regular since 1987',
-    voice: { pitch: 1.25, rate: 0.82, female: true },
     look: {
       skin: '#f1cdb4',
       hair: 'curly',
@@ -142,19 +154,22 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       height: 0.93,
       glasses: true,
     },
-    order: { type: 'flatWhite', extraHot: false, heart: true },
-    arriveAt: 40,
+    orders: ORDER_LINES.beryl as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.beryl as ClarifyAnswers,
+    arriveAt: 42,
     patience: 130,
     tipCents: 100,
     tolerance: 1.12,
     lines: {
-      order:
-        'Hello love. A flat white, please, with one of those little hearts? My grandson says you do them now.',
       impatient: 'No rush, love. Well… a little rush.',
       angry: "I'm not getting any younger, darl.",
       happy: "Oh, look at that! A proper heart. You're a treasure.",
       okay: 'Thank you, love. Lovely and warm.',
-      rejected: "Oh, I don't think that's mine, darl. Mine's the flat white with the heart.",
+      rejected: {
+        flatWhite: "Oh, I don't think that's mine, darl. Mine's a flat white.",
+        longBlack: "Oh, I don't think that's mine, darl. I asked for a long black.",
+      },
+      rejectedMilk: "Oh, that's not my milk, love. My tummy won't thank me for that.",
       walkout: "I'll pop back later, love. That's my bus.",
       complaint: {
         noHeart: 'No heart today? Never mind, love.',
@@ -163,11 +178,50 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
   },
   {
+    id: 'mei',
+    callName: 'Mei',
+    name: 'Mei 美',
+    tag: 'Product manager · always on a call',
+    look: {
+      skin: '#eccaa8',
+      hair: 'bob',
+      hairC: '#16110f',
+      top: '#2e3a4c',
+      legs: '#24272d',
+      build: 0.94,
+      height: 0.99,
+      bag: '#8c2f39',
+    },
+    orders: ORDER_LINES.mei as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.mei as ClarifyAnswers,
+    arriveAt: 66,
+    patience: 95,
+    tipCents: 250,
+    tolerance: 1,
+    lines: {
+      impatient: "Sorry, how long will it be? I've got a meeting in five.",
+      angry: "I really can't wait much longer.",
+      happy: 'Perfect, thank you. Lifesaver.',
+      okay: 'Thanks.',
+      rejected: {
+        flatWhite: "Sorry, that's not mine. I ordered a flat white.",
+        longBlack: "Sorry, that's not mine. I ordered a long black.",
+      },
+      rejectedMilk: 'Sorry, this is the wrong milk.',
+      walkout: "Forget it. I'll be late. Bye.",
+      complaint: {
+        notHotEnough: 'I did say extra hot.',
+        lukewarm: "It's a bit cold, but okay.",
+        badShot: 'Hm. Tastes a bit burnt.',
+        weak: 'Bit watery, but fine.',
+      },
+    },
+  },
+  {
     id: 'jiwoo',
     callName: 'Jiwoo',
     name: 'Jiwoo 지우',
     tag: 'Working holiday',
-    voice: { pitch: 1.2, rate: 1.1, female: true },
     look: {
       skin: '#f3d4bc',
       hair: 'long',
@@ -178,19 +232,22 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       height: 0.97,
       bag: '#c5a37a',
     },
-    order: { type: 'longBlack', extraHot: false, heart: false },
-    arriveAt: 68,
+    orders: ORDER_LINES.jiwoo as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.jiwoo as ClarifyAnswers,
+    arriveAt: 90,
     patience: 110,
     tipCents: 100,
     tolerance: 1,
     lines: {
-      order:
-        "안녕하세요! Ah, hi! A long black, please. Usually I get an 아아, but it's chilly this morning.",
-      impatient: 'Um, sorry, is my long black coming soon? My shift starts at eight.',
+      impatient: 'Um, sorry, is my coffee coming soon? My shift starts at eight.',
       angry: 'Sorry, I really have to go soon…',
       happy: 'Wah, perfect! 감사합니다! Thank you!',
       okay: 'Thank you!',
-      rejected: 'Oh, sorry, I ordered a long black.',
+      rejected: {
+        flatWhite: 'Oh, sorry, I ordered a flat white.',
+        longBlack: 'Oh, sorry, I ordered a long black.',
+      },
+      rejectedMilk: "Oh, sorry, I think it's the wrong milk.",
       walkout: "Sorry, I can't wait. I'll be late for work.",
       complaint: {
         weak: 'Hmm, a bit watery, but thank you.',
@@ -203,7 +260,6 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     callName: 'Karen',
     name: 'Karen',
     tag: 'Wants the manager',
-    voice: { pitch: 1.1, rate: 1.05, female: true },
     look: {
       skin: '#f3cfb6',
       hair: 'bob',
@@ -214,18 +270,22 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       height: 1,
       sunnies: true,
     },
-    order: { type: 'flatWhite', extraHot: true, heart: false },
-    arriveAt: 92,
+    orders: ORDER_LINES.karen as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.karen as ClarifyAnswers,
+    arriveAt: 114,
     patience: 105,
     tipCents: 50,
     tolerance: 0.88,
     lines: {
-      order: "Hi. I'll have a flat white. Extra hot. And I'll be watching.",
       impatient: "I'm timing this, you know.",
       angry: 'This is ridiculous. Is there a manager?',
       happy: 'Hm. Acceptable.',
       okay: 'Fine.',
-      rejected: 'That is not what I ordered. Flat white. Extra hot.',
+      rejected: {
+        flatWhite: 'That is not what I ordered. I said a flat white.',
+        longBlack: 'That is not what I ordered. I said a long black.',
+      },
+      rejectedMilk: 'That is the wrong milk. Do you people listen?',
       walkout: "Unbelievable. I'm leaving a review.",
       complaint: {
         notHotEnough: 'This is not extra hot. I said extra hot.',

@@ -8,8 +8,13 @@ import type { MilkScore } from './steam';
 
 export type DrinkType = 'flatWhite' | 'longBlack';
 
+/** Milk for a flat white. The barista steams whichever carton the ticket says. */
+export type Milk = 'full' | 'oat' | 'soy' | 'almond';
+
 export interface Order {
   type: DrinkType;
+  /** Flat white only (null for a long black). Full cream unless they say otherwise. */
+  milk: Milk | null;
   /** Steam the milk to 68–74 °C (flat white only). */
   extraHot: boolean;
   /** Wants a latte-art heart on top (flat white only). */
@@ -19,6 +24,8 @@ export interface Order {
 /** A finished drink waiting on the pass. */
 export interface MadeDrink {
   type: DrinkType;
+  /** Carton used (flat white only). */
+  milkType: Milk | null;
   espresso: EspressoScore;
   /** Flat white only. */
   milk: MilkScore | null;
@@ -36,6 +43,7 @@ export interface MadeDrink {
 
 export type Complaint =
   | 'wrongDrink'
+  | 'wrongMilk'
   | 'notHotEnough'
   | 'tooHot'
   | 'lukewarm'
@@ -85,9 +93,17 @@ export const DRINK_NAME: Record<DrinkType, string> = {
   longBlack: 'long black',
 };
 
-/** "flat white · extra hot · heart on top" for the ticket. */
+export const MILK_NAME: Record<Milk, string> = {
+  full: 'full cream',
+  oat: 'oat',
+  soy: 'soy',
+  almond: 'almond',
+};
+
+/** "oat flat white · extra hot · heart on top" for the ticket. Full cream goes unsaid. */
 export function orderLabel(o: Order): string {
-  const parts = [DRINK_NAME[o.type]];
+  const milk = o.type === 'flatWhite' && o.milk && o.milk !== 'full' ? `${MILK_NAME[o.milk]} ` : '';
+  const parts = [`${milk}${DRINK_NAME[o.type]}`];
   if (o.extraHot) parts.push(`extra hot (${EXTRA_HOT[0]}–${EXTRA_HOT[1]} °C)`);
   if (o.heart) parts.push('heart on top');
   return parts.join(' · ');
@@ -140,6 +156,17 @@ export function evaluateServe(order: Order, drink: MadeDrink, ctx: ServeContext)
       satisfaction: 0,
       tipCents: 0,
       complaints: ['wrongDrink'],
+    };
+  }
+  // The wrong milk is handed back too: oat or soy is often an intolerance, not a whim.
+  if (drink.type === 'flatWhite' && (drink.milkType ?? 'full') !== (order.milk ?? 'full')) {
+    return {
+      accepted: false,
+      correct: false,
+      quality: 0,
+      satisfaction: 0,
+      tipCents: 0,
+      complaints: ['wrongMilk'],
     };
   }
   const complaints: Complaint[] = [];

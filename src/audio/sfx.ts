@@ -27,6 +27,8 @@ export interface Sfx {
   muted: boolean;
   unlock(): void;
   setMuted(m: boolean): void;
+  /** Café crowd level: 0 = empty, 1 = normal morning, ~1.7 = packed (listening difficulty). */
+  setNoise(level: number): void;
   update(l: LoopLevels): void;
   play(id: SfxId | 'click' | 'tick'): void;
 }
@@ -41,6 +43,8 @@ export function createSfx(audio: AudioManager): Sfx {
   let screech: GainNode | null = null;
   let motor: GainNode | null = null;
   let muted = false;
+  let noise_ = 0.6;
+  let murmur: GainNode | null = null;
 
   const loopNoise = (
     buf: AudioBuffer,
@@ -84,8 +88,24 @@ export function createSfx(audio: AudioManager): Sfx {
       b[i] = last * 3.2;
     }
     // Room tone: low murmur of the street and the fridge.
-    const room = loopNoise(brown, 'bandpass', 380, 0.5, audio.output('ambience') ?? master);
+    const amb = audio.output('ambience') ?? master;
+    const room = loopNoise(brown, 'bandpass', 380, 0.5, amb);
     room.gain.gain.value = 0.07;
+    // Crowd murmur: speech-band noise with a slow, uneven swell, scaled by setNoise().
+    const crowd = loopNoise(noise, 'bandpass', 520, 0.9, amb);
+    murmur = crowd.gain;
+    murmur.gain.value = 0.02 * noise_;
+    for (const [f, d] of [
+      [0.23, 0.35],
+      [0.61, 0.25],
+    ] as const) {
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = f;
+      const depth = ctx.createGain();
+      depth.gain.value = 0.02 * d;
+      lfo.connect(depth).connect(murmur.gain);
+      lfo.start();
+    }
     ch.grind = loopNoise(noise, 'bandpass', 2300, 0.7);
     ch.pump = loopNoise(brown, 'lowpass', 420, 2);
     ch.steam = loopNoise(noise, 'highpass', 3600, 0.7);
@@ -181,6 +201,10 @@ export function createSfx(audio: AudioManager): Sfx {
       } catch {
         ctx = null; // audio is optional
       }
+    },
+    setNoise(level) {
+      noise_ = Math.max(0, level);
+      if (murmur && ctx) murmur.gain.setTargetAtTime(0.02 * noise_, ctx.currentTime, 0.4);
     },
     setMuted(m) {
       muted = m;

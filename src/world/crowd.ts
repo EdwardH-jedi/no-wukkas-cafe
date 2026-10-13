@@ -79,6 +79,7 @@ export function createCrowd(scene: THREE.Scene): Crowd {
       }
       case 'register':
       case 'ordering':
+      case 'deciding':
         goal = REGISTER;
         key = 'register';
         break;
@@ -101,7 +102,13 @@ export function createCrowd(scene: THREE.Scene): Crowd {
 
   const moodFor = (c: RushCustomer): Mood => {
     if (c.reaction) return c.reaction;
-    if (c.state !== 'waiting' && c.state !== 'register' && c.state !== 'queue') return 'neutral';
+    if (
+      c.state !== 'waiting' &&
+      c.state !== 'register' &&
+      c.state !== 'deciding' &&
+      c.state !== 'queue'
+    )
+      return 'neutral';
     const f = c.patience / c.def.patience;
     return f > 0.5 ? 'neutral' : f > 0.22 ? 'annoyed' : 'furious';
   };
@@ -161,7 +168,7 @@ export function createCrowd(scene: THREE.Scene): Crowd {
         w.h.setMood(moodFor(c));
         w.h.setTalking(r.speech.current?.speaker === c.def.id);
         w.h.update(dt, walking, now);
-        if (c.state === 'register' || c.state === 'ordering') {
+        if (c.state === 'register' || c.state === 'ordering' || c.state === 'deciding') {
           regPos.set(pos.x, CT + 0.55, pos.z);
           regHas = true;
         }

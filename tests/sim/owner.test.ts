@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../src/core/rng';
+import { voiceScript } from '../../src/data/voice/script';
 import { CUSTOMERS } from '../../src/data/customers';
 import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../../src/data/ownerLines';
 import { FAULT_TEXT } from '../../src/data/tips';
@@ -82,10 +83,10 @@ describe('dialogue content', () => {
     ...RUSH_INTRO,
     ...Object.values(OWNER_LINES).flatMap((p) => p.tiers.flat()),
   ].map((l) => l.text);
-  const customerLines = CUSTOMERS.flatMap((c) => {
-    const { complaint, ...rest } = c.lines;
-    return [...Object.values(rest), ...Object.values(complaint)];
-  });
+  // Everything customers can say: orders, answers, reactions.
+  const customerLines = voiceScript()
+    .filter((l) => l.speaker !== 'gaz')
+    .map((l) => l.text);
   const tips = Object.values(FAULT_TEXT).flatMap((t) => [t.label, t.tip]);
 
   it('includes the lines from the brief', () => {

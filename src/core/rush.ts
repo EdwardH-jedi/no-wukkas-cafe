@@ -1,10 +1,27 @@
-// Day 2, the morning rush: five scripted customers, one espresso station, Gaz watching.
+// Day 2, the morning rush: six scripted customers, one espresso station, Gaz watching.
 // A DOM-free state machine like core/trial.ts: the view feeds RushInput every fixed step and
 // drains `events` each frame. Movement is timed states (no navigation); the view interpolates.
+// Listening: each customer says their order once; the player rings up what they heard (asking to
+// replay, repeat or clarify if needed), and the ticket, right or wrong, is what gets made.
 
 import { CUSTOMERS, type CustomerDef, type CustomerId } from '../data/customers';
 import { OWNER_LINES, RUSH_INTRO } from '../data/ownerLines';
 import { spokenDuration } from '../data/voice';
+import type { Delivery } from '../data/voice/ids';
+import {
+  answerFor,
+  CLARIFY_QUESTION,
+  LISTEN_COST,
+  MAX_REPEATS,
+  normaliseOrder,
+  orderTier,
+  pickOrder,
+  wrongFields,
+  type Difficulty,
+  type ListenRecord,
+  type OrderField,
+  type OrderLine,
+} from '../sim/listening';
 import {
   addFrustration,
   createOwner,
@@ -20,6 +37,8 @@ import {
   REJECT_PENALTY,
   summariseShift,
   type DrinkType,
+  type Milk,
+  type Order,
   type ServeRecord,
   type ServeResult,
   type ShiftSummary,
@@ -41,6 +60,7 @@ import {
   canOffer,
   channelBusy,
   createChannel,
+  interrupt,
   offer,
   pending,
   updateChannel,
@@ -52,8 +72,18 @@ import type { SfxId } from './trial';
 
 export type RushPhase = 'intro' | 'service' | 'wrapup' | 'summary';
 
+/** register: waiting for "Take order"; ordering: saying it; deciding: the player is ringing it up
+ *  (and may ask them to replay, repeat or clarify); waiting: ticket on the rail. */
 export type CustomerState =
-  'outside' | 'entering' | 'queue' | 'register' | 'ordering' | 'waiting' | 'leaving' | 'gone';
+  | 'outside'
+  | 'entering'
+  | 'queue'
+  | 'register'
+  | 'ordering'
+  | 'deciding'
+  | 'waiting'
+  | 'leaving'
+  | 'gone';
 
 /** Seconds to walk from the door to the queue, to step up to the register, and to leave. */
 export const ENTER_TIME = 3.5;
@@ -62,6 +92,14 @@ export const LEAVE_TIME = 4;
 
 export interface RushCustomer {
   def: CustomerDef;
+  /** How they order today (picked for the difficulty), and what that means: the answer key. */
+  line: OrderLine;
+  order: Order;
+  /** What the player rang up: the ticket. Null until rung up. */
+  heard: Order | null;
+  listen: { replays: number; repeats: number; clarified: OrderField[] };
+  /** The last thing they said for the player to hear (order, repeat or answer), for Replay. */
+  lastListen: { text: string; delivery: Delivery; key: string } | null;
   state: CustomerState;
   stateTime: number;
   /** Seconds of patience left. */
@@ -77,14 +115,21 @@ export interface RushCustomer {
   reaction: Mood | null;
   said: { impatient: boolean; angry: boolean };
   /** Times Gaz has nagged about this customer (capped so it never becomes a loop). */
-  nags: { register: number; slow: number };
+  nags: { register: number; slow: number; pos: number };
   orderLine: Utterance | null;
 }
 
 export type RushAction =
   | { type: 'start' }
   | { type: 'takeOrder' }
-  | { type: 'make'; drink: DrinkType }
+  /** Hear the customer's last line again (free but for the time it takes). */
+  | { type: 'replay' }
+  /** "Sorry, could you repeat that?": they say the order again, slower. */
+  | { type: 'repeat' }
+  | { type: 'clarify'; field: OrderField }
+  /** Print the ticket with what the player heard. */
+  | { type: 'ringUp'; order: Order }
+  | { type: 'make'; drink: DrinkType; milk?: Milk }
   | { type: 'serve'; customer: CustomerId }
   | { type: 'bin' }
   | { type: 'next' }
@@ -116,6 +161,10 @@ export type RushEvent =
   | { type: 'station'; phase: StationPhase }
   | { type: 'sfx'; id: SfxId }
   | { type: 'ticket'; customer: CustomerId }
+  /** A misheard ticket corrected after the customer handed the drink back. */
+  | { type: 'ticketFixed'; customer: CustomerId }
+  /** The player asked a customer something (shown as the player's subtitle). */
+  | { type: 'ask'; customer: CustomerId; text: string }
   | { type: 'served'; customer: CustomerId; result: ServeResult }
   | { type: 'rejected'; customer: CustomerId }
   | { type: 'walkout'; customer: CustomerId }
@@ -123,6 +172,7 @@ export type RushEvent =
 
 export interface Rush {
   seed: number;
+  difficulty: Difficulty;
   rng: Rng;
   time: number;
   phase: RushPhase;
@@ -134,6 +184,8 @@ export interface Rush {
   barista: Barista;
   customers: RushCustomer[];
   records: ServeRecord[];
+  /** One per ticket rung up: what was said vs what was heard. */
+  listening: ListenRecord[];
   summary: ShiftSummary | null;
   nextTicket: number;
   streak: { good: number; bad: number };
@@ -145,10 +197,12 @@ export interface Rush {
   events: RushEvent[];
 }
 
-export function createRush(seed: number): Rush {
+export function createRush(seed: number, difficulty: Difficulty = 'normal'): Rush {
+  const rng = createRng(seed ^ 0x2d2);
   return {
     seed,
-    rng: createRng(seed ^ 0x2d2),
+    difficulty,
+    rng,
     time: 0,
     phase: 'intro',
     phaseTime: 0,
@@ -156,23 +210,32 @@ export function createRush(seed: number): Rush {
     owner: createOwner(),
     speech: createChannel(),
     barista: createBarista(),
-    customers: CUSTOMERS.map((def) => ({
-      def,
-      state: 'outside',
-      stateTime: 0,
-      patience: def.patience,
-      registerAt: null,
-      orderedAt: null,
-      ticket: null,
-      rejected: 0,
-      outcome: null,
-      result: null,
-      reaction: null,
-      said: { impatient: false, angry: false },
-      nags: { register: 0, slow: 0 },
-      orderLine: null,
-    })),
+    customers: CUSTOMERS.map((def) => {
+      const line = pickOrder(def.orders, difficulty, rng);
+      return {
+        def,
+        line,
+        order: normaliseOrder(line.order),
+        heard: null,
+        listen: { replays: 0, repeats: 0, clarified: [] },
+        lastListen: null,
+        state: 'outside' as CustomerState,
+        stateTime: 0,
+        patience: def.patience,
+        registerAt: null,
+        orderedAt: null,
+        ticket: null,
+        rejected: 0,
+        outcome: null,
+        result: null,
+        reaction: null,
+        said: { impatient: false, angry: false },
+        nags: { register: 0, slow: 0, pos: 0 },
+        orderLine: null,
+      };
+    }),
     records: [],
+    listening: [],
     summary: null,
     nextTicket: 1,
     streak: { good: 0, bad: 0 },
@@ -188,7 +251,7 @@ export function restartRush(r: Rush): void {
   const owner = r.owner;
   const rng = r.rng;
   const time = r.time;
-  Object.assign(r, createRush(r.seed));
+  Object.assign(r, createRush(r.seed, r.difficulty));
   r.rng = rng;
   r.time = time;
   r.owner = { ...owner, frustration: 0, lastAt: {} };
@@ -259,9 +322,38 @@ function customerSay(
   return offer(r.speech, u, r.time, startSay(r)) ? u : null;
 }
 
+/** Something the player must hear: the order, a slower repeat, or an answer. Starts at once (the
+ *  player asked for it) and becomes what Replay plays. */
+function customerListen(
+  r: Rush,
+  c: RushCustomer,
+  key: string,
+  text: string,
+  delivery: Delivery = 'normal',
+): Utterance {
+  const u: Utterance = {
+    speaker: c.def.id,
+    key,
+    text,
+    mood: 'neutral',
+    gesture: 'none',
+    duration: spokenDuration(c.def.id, text, delivery),
+    priority: 'order',
+    delivery,
+    listen: true,
+  };
+  c.lastListen = { text, delivery, key };
+  // Cut Gaz or themselves off, but never another customer mid-sentence.
+  const cur = r.speech.current;
+  if (!cur || cur.speaker === c.def.id || cur.speaker === 'gaz')
+    interrupt(r.speech, u, r.time, startSay(r));
+  else offer(r.speech, u, r.time, startSay(r));
+  return u;
+}
+
 const varsFor = (c: RushCustomer, drink?: DrinkType): Record<string, string> => ({
   name: c.def.callName,
-  ordered: DRINK_NAME[c.def.order.type],
+  ordered: DRINK_NAME[c.order.type],
   drink: drink ? DRINK_NAME[drink] : '',
 });
 
@@ -283,11 +375,18 @@ function setState(c: RushCustomer, s: CustomerState): void {
 }
 
 const registerBusy = (r: Rush): boolean =>
-  r.customers.some((c) => c.state === 'register' || c.state === 'ordering');
+  r.customers.some(
+    (c) => c.state === 'register' || c.state === 'ordering' || c.state === 'deciding',
+  );
 
 /** The customer at the register, if any (waiting for their order to be taken). */
 export function atRegister(r: Rush): RushCustomer | null {
   return r.customers.find((c) => c.state === 'register') ?? null;
+}
+
+/** The customer whose order is being taken (speaking or being rung up), if any. */
+export function atCounter(r: Rush): RushCustomer | null {
+  return r.customers.find((c) => c.state === 'ordering' || c.state === 'deciding') ?? null;
 }
 
 export function waitingCustomers(r: Rush): RushCustomer[] {
@@ -336,13 +435,14 @@ function stepCustomers(r: Rush, dt: number): void {
         }
         break;
       case 'ordering':
-        // Their order line carries the order: the ticket prints when they finish saying it.
-        if (!c.orderLine || !pending(r.speech, c.orderLine)) {
-          setState(c, 'waiting');
-          c.orderedAt = r.time;
-          c.ticket = r.nextTicket++;
-          r.events.push({ type: 'ticket', customer: c.def.id });
-          if (c === r.customers[r.customers.length - 1]) gaz(r, 'rush.lastOrder', 'react');
+        // Once they've said it, it's over to the player to ring it up.
+        c.patience -= drainRate(false) * dt;
+        if (!c.orderLine || !pending(r.speech, c.orderLine)) setState(c, 'deciding');
+        break;
+      case 'deciding':
+        c.patience -= drainRate(false) * dt;
+        if (c.stateTime > 14 && c.nags.pos < 1 && !channelBusy(r.speech)) {
+          if (gaz(r, 'rush.posNag', 'live', varsFor(c))) c.nags.pos++;
         }
         break;
       case 'waiting':
@@ -366,7 +466,14 @@ function stepCustomers(r: Rush, dt: number): void {
       case 'gone':
         break;
     }
-    if ((c.state === 'queue' || c.state === 'register' || c.state === 'waiting') && c.patience <= 0)
+    if (
+      (c.state === 'queue' ||
+        c.state === 'register' ||
+        c.state === 'ordering' ||
+        c.state === 'deciding' ||
+        c.state === 'waiting') &&
+      c.patience <= 0
+    )
       walkout(r, c);
   }
 }
@@ -377,7 +484,7 @@ function serve(r: Rush, id: CustomerId): void {
   if (!b.ready || !c || c.state !== 'waiting') return;
   const drink = takeReady(b, []);
   if (!drink) return;
-  const result = evaluateServe(c.def.order, drink, {
+  const result = evaluateServe(c.order, drink, {
     waited: r.time - (c.registerAt ?? r.time),
     patience: c.def.patience,
     tolerance: c.def.tolerance,
@@ -389,8 +496,32 @@ function serve(r: Rush, id: CustomerId): void {
     c.rejected++;
     c.patience = Math.max(1, c.patience - c.def.patience * REJECT_PENALTY);
     c.reaction = 'annoyed';
-    customerSay(r, c, `${c.def.id}.rejected`, c.def.lines.rejected, 'annoyed', 'order');
-    gaz(r, 'rush.wrongDrink', 'react', varsFor(c, drink.type));
+    const wrongMilk = result.complaints.includes('wrongMilk');
+    customerSay(
+      r,
+      c,
+      wrongMilk ? `${c.def.id}.rejectedMilk` : `${c.def.id}.rejected`,
+      wrongMilk ? c.def.lines.rejectedMilk : c.def.lines.rejected[c.order.type],
+      'annoyed',
+      'order',
+    );
+    // Made exactly what the ticket said? Then the ticket was wrong: a listening mistake.
+    const t = c.heard;
+    const matchesTicket =
+      t !== null &&
+      drink.type === t.type &&
+      (drink.type !== 'flatWhite' || drink.milkType === (t.milk ?? 'full'));
+    if (matchesTicket && t && wrongFields(t, c.order).length > 0) {
+      // They set you straight at the pass, and the ticket gets corrected: the cost was the
+      // wasted drink, the time and their patience.
+      if (wrongMilk) {
+        const text = answerFor(c.def.answers, c.order, 'milk');
+        customerSay(r, c, `${c.def.id}.answer.milk`, text, 'annoyed', 'order');
+      }
+      c.heard = { ...c.order };
+      r.events.push({ type: 'ticketFixed', customer: c.def.id });
+      gaz(r, 'rush.misheard', 'react', varsFor(c, drink.type));
+    } else gaz(r, 'rush.wrongDrink', 'react', varsFor(c, drink.type));
     addFrustration(r.owner, 0.8);
     r.streak.good = 0;
     r.streak.bad++;
@@ -440,6 +571,62 @@ function serve(r: Rush, id: CustomerId): void {
     addFrustration(r.owner, 0.6);
     if (r.streak.bad === 2) gaz(r, 'rush.streakBad', 'react');
   }
+}
+
+/** Replay, "could you repeat that?" and clarifying questions, for the customer at the counter.
+ *  Each costs them a little patience: listening aids are there, but they aren't free. */
+function listenAction(
+  r: Rush,
+  a: { type: 'replay' } | { type: 'repeat' } | { type: 'clarify'; field: OrderField },
+): void {
+  const c = atCounter(r);
+  if (!c) return;
+  if (a.type === 'replay') {
+    const l = c.lastListen ?? { text: c.line.text, delivery: 'normal' as Delivery, key: c.line.id };
+    c.listen.replays++;
+    c.patience -= LISTEN_COST.replay;
+    const u = customerListen(r, c, l.key, l.text, l.delivery);
+    if (c.state === 'ordering') c.orderLine = u;
+  } else if (a.type === 'repeat') {
+    if (c.listen.repeats >= MAX_REPEATS) return;
+    c.listen.repeats++;
+    c.patience -= LISTEN_COST.repeat;
+    r.events.push({ type: 'ask', customer: c.def.id, text: 'Sorry, could you repeat that?' });
+    const u = customerListen(r, c, `${c.line.id}.slow`, c.line.text, 'slow');
+    if (c.state === 'ordering') c.orderLine = u;
+    if (c.listen.repeats === MAX_REPEATS) gaz(r, 'rush.askedTwice', 'live', varsFor(c));
+  } else {
+    if (!c.listen.clarified.includes(a.field)) c.listen.clarified.push(a.field);
+    c.patience -= LISTEN_COST.clarify;
+    r.events.push({ type: 'ask', customer: c.def.id, text: CLARIFY_QUESTION[a.field] });
+    const text = answerFor(c.def.answers, c.order, a.field);
+    const u = customerListen(r, c, `${c.def.id}.answer.${a.field}`, text);
+    if (c.state === 'ordering') c.orderLine = u;
+  }
+}
+
+/** Print the ticket with what the player heard. Right or wrong, the ticket is what gets made. */
+function ringUp(r: Rush, heard: Order): void {
+  const c = atCounter(r);
+  if (!c || c.state !== 'deciding') return;
+  c.heard = normaliseOrder(heard);
+  const wrong = wrongFields(c.heard, c.order);
+  r.listening.push({
+    customer: c.def.id,
+    lineId: c.line.id,
+    tier: orderTier(c.line),
+    truth: c.order,
+    heard: c.heard,
+    wrong,
+    replays: c.listen.replays,
+    repeats: c.listen.repeats,
+    clarified: [...c.listen.clarified],
+  });
+  setState(c, 'waiting');
+  c.orderedAt = r.time;
+  c.ticket = r.nextTicket++;
+  r.events.push({ type: 'ticket', customer: c.def.id });
+  if (c === r.customers[r.customers.length - 1]) gaz(r, 'rush.lastOrder', 'react');
 }
 
 function handleBarista(r: Rush, out: BaristaEvent[]): void {
@@ -494,16 +681,12 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
         const c = atRegister(r);
         if (c) {
           setState(c, 'ordering');
-          c.orderLine = customerSay(
-            r,
-            c,
-            `${c.def.id}.order`,
-            c.def.lines.order,
-            'neutral',
-            'order',
-          );
+          c.orderLine = customerListen(r, c, c.line.id, c.line.text);
         }
-      } else if (a?.type === 'make') startDrink(r.barista, a.drink, baristaOut);
+      } else if (a?.type === 'replay' || a?.type === 'repeat' || a?.type === 'clarify')
+        listenAction(r, a);
+      else if (a?.type === 'ringUp') ringUp(r, a.order);
+      else if (a?.type === 'make') startDrink(r.barista, a.drink, baristaOut, a.milk);
       else if (a?.type === 'serve') serve(r, a.customer);
       else if (a?.type === 'bin') {
         if (binDrink(r.barista, baristaOut)) gaz(r, 'rush.binned', 'react');

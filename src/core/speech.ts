@@ -6,6 +6,7 @@
 //           something unread, and not more than one every 1.4 s
 //   ambient nags and asides: only when nobody is talking and nothing is queued
 
+import type { Delivery } from '../data/voice/ids';
 import type { Gesture, Mood } from '../sim/owner';
 
 export type Priority = 'order' | 'react' | 'live' | 'ambient';
@@ -19,6 +20,10 @@ export interface Utterance {
   gesture: Gesture;
   duration: number;
   priority: Priority;
+  /** Which recording: 'slow' is the "could you repeat that?" take. Default normal. */
+  delivery?: Delivery;
+  /** An order or a clarifying answer: what the player must hear (subtitle rules apply). */
+  listen?: boolean;
 }
 
 export interface Channel {
@@ -113,6 +118,19 @@ export function offer(
       begin();
       return true;
   }
+}
+
+/** Start a line right now, dropping whatever was being said: the player asked for it (replay,
+ *  "could you repeat that?", a clarifying question). Queued lines stay queued. */
+export function interrupt(
+  ch: Channel,
+  u: Utterance,
+  now: number,
+  start: (u: Utterance) => void,
+): void {
+  ch.current = u;
+  ch.started = now;
+  start(u);
 }
 
 /** Advance the channel: finish the current line on time (or when skipped), start the next. */

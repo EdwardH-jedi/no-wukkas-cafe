@@ -3,6 +3,7 @@
 
 import type { StationPhase } from '../core/barista';
 import {
+  atCounter,
   atRegister,
   type Rush,
   type RushAction,
@@ -11,10 +12,26 @@ import {
 } from '../core/rush';
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
-import { DRINK_NAME, formatCents, LUKEWARM, orderLabel, type ShiftSummary } from '../sim/rush';
+import {
+  cueSpans,
+  summariseListening,
+  transcriptVisible,
+  wrongFields,
+  type ListenStage,
+} from '../sim/listening';
+import {
+  DRINK_NAME,
+  formatCents,
+  LUKEWARM,
+  MILK_NAME,
+  orderLabel,
+  type ShiftSummary,
+} from '../sim/rush';
 import { createGauges, type GaugeMode } from './gauges';
 import { instruction } from './instructions';
+import { createPos, marked } from './pos';
 import { esc } from './screens';
+import { subtitleMode, type ListenSettings } from './settings';
 
 export interface RushHudCallbacks {
   action(a: RushAction): void;
@@ -25,6 +42,7 @@ export interface RushHudCallbacks {
   skip(): void;
   audioButtonsHtml: string;
   bindAudio(el: HTMLElement): void;
+  settings(): ListenSettings;
 }
 
 export interface RushHud {
@@ -33,9 +51,47 @@ export interface RushHud {
   /** Show a replayed line for `seconds`. */
   onReplay(speaker: string, text: string, seconds: number): void;
   onPhase(phase: RushPhase, r: Rush): void;
+  /** The player asked the customer something. */
+  onAsk(text: string): void;
+  onTicket(c: RushCustomer): void;
+  /** Enter at the register: ring up the selection. */
+  ringUp(): boolean;
   setPaused(p: boolean): void;
   update(r: Rush, dt: number): void;
 }
+
+/** The ticket being made next for a drink type (oldest first), or the oldest of any. */
+export function nextTicket(r: Rush, type?: string): RushCustomer | null {
+  return railOrder(r).find((c) => c.heard && (!type || c.heard.type === type)) ?? null;
+}
+
+const DIFF_NAME = { easy: 'Easy', normal: 'Normal', hard: 'Hard' } as const;
+
+/** Receipt rows for the listening side of the shift. */
+function listenRows(r: Rush): string {
+  const l = summariseListening(r.listening);
+  return `<div class="kv"><span>Orders heard right (${DIFF_NAME[r.difficulty]})</span><b>${l.heardRight}/${l.orders}</b></div>
+    <div class="kv"><span>Replays · repeats · questions</span><b>${l.replays} · ${l.repeats} · ${l.questions}</b></div>`;
+}
+
+/** What was actually said, for every ticket rung up wrong, with the missed words marked. */
+function misheardList(r: Rush): string {
+  const items = r.listening
+    .filter((x) => x.wrong.length > 0)
+    .map((x) => {
+      const c = r.customers.find((k) => k.def.id === x.customer);
+      if (!c || !x.heard) return '';
+      const wrong = wrongFields(x.heard, x.truth);
+      return `<li><b>${esc(c.def.callName)}</b> said “${marked(c.line.text, cueSpans(c.line), wrong)}”<br><small>You rang up ${esc(orderLabel(x.heard))} · they wanted ${esc(orderLabel(x.truth))}</small></li>`;
+    })
+    .join('');
+  return items
+    ? `<div class="misheard"><div class="mh">Listen again</div><ul>${items}</ul></div>`
+    : '';
+}
+
+const stageOf = (c: RushCustomer): ListenStage =>
+  c.state === 'ordering' ? 'speaking' : c.state === 'deciding' ? 'deciding' : 'rungUp';
 
 const GRADE_TEXT: Record<ShiftSummary['grade'], string> = {
   excellent: 'Cracker of a shift',
@@ -89,6 +145,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const summary = $('#rsummary');
   const pauseEl = $('#rpause');
   const gauges = createGauges($('#rgauges'), touch);
+  const pos = createPos(root, touch, cb.action);
 
   $('#rpauseBtn').onclick = () => cb.pause(true);
   cb.bindAudio(topbar);
@@ -126,18 +183,25 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     actions.querySelectorAll<HTMLButtonElement>('button[data-a]').forEach((b) => {
       b.onclick = () => {
         const a = b.dataset.a as string;
-        if (a === 'flatWhite' || a === 'longBlack') cb.action({ type: 'make', drink: a });
-        else cb.action({ type: a } as RushAction);
+        if (a === 'makeNext') {
+          if (lastRush) makeFor(nextTicket(lastRush));
+        } else cb.action({ type: a } as RushAction);
       };
     });
   };
   const btn = (a: string, label: string, key: string, primary = true): string =>
     `<button class="btn small${primary ? '' : ' ghost'}" data-a="${a}">${esc(label)}${touch ? '' : ` <kbd>${key}</kbd>`}</button>`;
 
+  let lastRush: Rush | null = null;
+  const makeFor = (c: RushCustomer | null): void => {
+    if (c?.heard) cb.action({ type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
+  };
+
   const renderRail = (r: Rush): void => {
     const list = railOrder(r);
     const ready = r.barista.ready !== null;
-    const key = `${list.map((c) => c.def.id).join(',')}|${ready}`;
+    const canMake = r.barista.phase === 'idle' && !ready;
+    const key = `${list.map((c) => `${c.def.id}:${c.heard ? orderLabel(c.heard) : ''}`).join(',')}|${ready}|${canMake}`;
     if (key !== railKey) {
       railKey = key;
       rail.innerHTML = '';
@@ -145,13 +209,16 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       list.forEach((c, i) => {
         const el = document.createElement('div');
         el.className = 'ticket';
+        // The ticket shows what was rung up, right or wrong: that's what gets made.
         el.innerHTML = `<div class="tn">#${c.ticket} · ${esc(c.def.name)}</div>
           <div class="tt">${esc(c.def.tag)}</div>
-          <div class="to">${esc(orderLabel(c.def.order))}</div>
+          <div class="to">${esc(c.heard ? orderLabel(c.heard) : '')}</div>
           <div class="tp"><i></i></div>
-          <button class="btn small serve" data-c="${c.def.id}" ${ready ? '' : 'disabled'}>Serve${touch || !ready ? '' : ` <kbd>${i + 1}</kbd>`}</button>`;
-        (el.querySelector('button') as HTMLButtonElement).onclick = () =>
+          <div class="tb"><button class="btn small ghost make" ${canMake ? '' : 'disabled'}>Make</button>
+          <button class="btn small serve" data-c="${c.def.id}" ${ready ? '' : 'disabled'}>Serve${touch || !ready ? '' : ` <kbd>${i + 1}</kbd>`}</button></div>`;
+        (el.querySelector('.serve') as HTMLButtonElement).onclick = () =>
           cb.action({ type: 'serve', customer: c.def.id as CustomerId });
+        (el.querySelector('.make') as HTMLButtonElement).onclick = () => makeFor(c);
         rail.appendChild(el);
         ticketEls.set(c.def.id, el);
       });
@@ -168,6 +235,9 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   };
 
   let replayHold = 0;
+  /** The order/answer being said, whose transcript follows the subtitle rules. */
+  let listenLine: Utterance | null = null;
+  let listenShown: boolean | null = null;
   const showLine = (speaker: string, text: string): void => {
     subFull = text;
     subShown = 0;
@@ -190,7 +260,18 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     },
     onSay(line) {
       if (line.key.startsWith('rush.end.')) endQuote = line.text;
-      showLine(line.speaker, line.text);
+      listenLine = line.listen ? line : null;
+      listenShown = null;
+      showLine(line.speaker, line.listen ? '' : line.text);
+    },
+    onAsk(text) {
+      pos.onAsk(text);
+    },
+    onTicket(c) {
+      pos.onTicket(c, cb.settings().learning);
+    },
+    ringUp() {
+      return pos.ringUp();
     },
     onReplay(speaker, text, seconds) {
       showLine(speaker, text);
@@ -214,7 +295,9 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
             <div class="kv"><span>Customer satisfaction</span><b>${s.satisfaction}%</b></div>
             <div class="kv"><span>Tips</span><b>${formatCents(s.tipsCents)}</b></div>
             <div class="kv"><span>Drinks wasted</span><b>${s.wasted}</b></div>
+            ${listenRows(r)}
           </div>
+          ${misheardList(r)}
           ${quote ? `<div class="quote">“${esc(quote)}”<br><small>— Gaz, owner</small></div>` : ''}
           <div class="cardBtns"><button class="btn" data-s="again">Run the rush again</button><button class="btn ghost" data-s="title">Title screen</button></div>
         </div></div>`;
@@ -228,7 +311,20 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       pauseEl.classList.toggle('hide', !p);
     },
     update(r, dt) {
-      // Subtitles.
+      // Subtitles. Orders and answers only show when the rules allow: listening is the game.
+      if (listenLine && r.speech.current === listenLine) {
+        const c = r.customers.find((x) => x.def.id === listenLine?.speaker);
+        const s = cb.settings();
+        const vis = c
+          ? transcriptVisible(subtitleMode(s), s.learning, stageOf(c), c.listen.repeats)
+          : true;
+        if (vis !== listenShown) {
+          listenShown = vis;
+          subFull = vis ? listenLine.text : '';
+          subShown = 0;
+          subsText.innerHTML = vis ? '' : '<i class="listen">🔊 Listen…</i>';
+        }
+      }
       if (replayHold > 0) replayHold -= dt;
       if (r.speech.current || replayHold > 0) {
         subHideIn = 0.35;
@@ -262,28 +358,38 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         r.records.reduce((s, x) => s + x.tipCents, 0),
       );
 
+      lastRush = r;
       renderRail(r);
+      pos.update(r);
       const b = r.barista;
       const reg = r.phase === 'service' ? atRegister(r) : null;
+      const counter = r.phase === 'service' ? atCounter(r) : null;
+      const next = nextTicket(r);
 
       // The pass.
       if (b.ready) {
         const cold = b.ready.temp < LUKEWARM + 4;
         pass.classList.remove('hide');
         pass.classList.toggle('cold', cold);
-        pass.innerHTML = `<span class="k">On the pass</span> <b>${DRINK_NAME[b.ready.type]}</b> · ${b.ready.temp.toFixed(0)} °C${cold ? ' · going cold!' : ''}`;
+        const milk =
+          b.ready.milkType && b.ready.milkType !== 'full' ? `${MILK_NAME[b.ready.milkType]} ` : '';
+        pass.innerHTML = `<span class="k">On the pass</span> <b>${milk}${DRINK_NAME[b.ready.type]}</b> · ${b.ready.temp.toFixed(0)} °C${cold ? ' · going cold!' : ''}`;
       } else pass.classList.add('hide');
 
       // Actions.
       const parts: string[] = [];
-      let key = `${r.phase}|${b.phase}|${reg?.def.id ?? ''}|${b.ready ? 1 : 0}|${b.espresso.dose >= 8 && !b.espresso.grinding}|${b.pour.poured > 0}`;
+      let key = `${r.phase}|${b.phase}|${reg?.def.id ?? ''}|${b.ready ? 1 : 0}|${b.espresso.dose >= 8 && !b.espresso.grinding}|${b.pour.poured > 0}|${next?.def.id ?? ''}`;
       if (r.phase === 'service') {
         if (reg) parts.push(btn('takeOrder', `Take ${reg.def.name.split(' ')[0]}'s order`, 'T'));
         if (b.phase === 'idle' && !b.ready) {
-          parts.push(
-            btn('flatWhite', 'Make a flat white', 'F'),
-            btn('longBlack', 'Make a long black', 'L'),
-          );
+          if (next?.heard)
+            parts.push(
+              btn(
+                'makeNext',
+                `Make #${next.ticket}: ${orderLabel(next.heard).split(' · ')[0]}`,
+                'F',
+              ),
+            );
         } else if (b.phase === 'grind' && b.espresso.dose >= 8 && !b.espresso.grinding) {
           parts.push(btn('next', 'Tamp & lock in', 'Enter'));
         } else if (b.phase === 'pour' && b.pour.poured > 0)
@@ -296,7 +402,15 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       // Instruction.
       let ins: { title: string; html: string } | null = null;
       if (r.phase === 'service') {
-        if (b.phase === 'idle') {
+        if (counter) {
+          ins = {
+            title: 'Take the order',
+            html:
+              counter.state === 'ordering'
+                ? `Listen to ${esc(counter.def.callName)}…`
+                : `Ring up what ${esc(counter.def.callName)} said. Didn't catch it? Replay${touch ? '' : ' (<kbd>R</kbd>)'}, ask them to repeat, or ask about one thing.`,
+          };
+        } else if (b.phase === 'idle') {
           const waiting = railOrder(r).length;
           ins =
             reg && waiting === 0
@@ -307,7 +421,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
               : waiting > 0
                 ? {
                     title: 'Make a drink',
-                    html: `Check the tickets, then make a <b>flat white</b> or a <b>long black</b>${touch ? '' : ' (<kbd>F</kbd> / <kbd>L</kbd>)'}.`,
+                    html: `Make the next ticket${touch ? '' : ' (<kbd>F</kbd>)'}, or click <b>Make</b> on any ticket. The ticket says what you rang up.`,
                   }
                 : { title: 'Ready', html: 'Waiting for the next customer…' };
         } else if (b.phase === 'ready') {

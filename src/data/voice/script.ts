@@ -3,6 +3,7 @@
 
 import { CUSTOMERS } from '../customers';
 import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../ownerLines';
+import { PACE_RATE, type Pace } from '../../sim/listening';
 import { DRINK_NAME } from '../../sim/rush';
 import type { Delivery } from './ids';
 
@@ -12,7 +13,12 @@ export interface ScriptLine {
   key: string;
   text: string;
   delivery: Delivery;
+  /** Speaking-rate multiplier on top of the speaker's own (order pace; slower for repeats). */
+  rate: number;
 }
+
+/** "Could you repeat that?": the same words, noticeably slower. */
+export const SLOW_RATE = 0.8;
 
 const fillAll = (text: string): string[] => {
   if (!/\{\w+\}/.test(text)) return [text];
@@ -34,8 +40,15 @@ const fillAll = (text: string): string[] => {
 
 export function voiceScript(): ScriptLine[] {
   const lines: ScriptLine[] = [];
-  const add = (speaker: string, key: string, text: string, delivery: Delivery = 'normal'): void => {
-    lines.push({ speaker, key, text, delivery });
+  const add = (
+    speaker: string,
+    key: string,
+    text: string,
+    delivery: Delivery = 'normal',
+    pace: Pace = 'normal',
+  ): void => {
+    const rate = PACE_RATE[pace] * (delivery === 'slow' ? SLOW_RATE : 1);
+    lines.push({ speaker, key, text, delivery, rate: Math.round(rate * 1000) / 1000 });
   };
   GREETING_OPENERS.forEach((d) => add('gaz', 'greet.open', d.text));
   GREETING.forEach((d, i) => add('gaz', `greet.${i}`, d.text));
@@ -44,8 +57,22 @@ export function voiceScript(): ScriptLine[] {
     for (const tier of pool.tiers)
       for (const d of tier) for (const t of fillAll(d.text)) add('gaz', key, t);
   for (const c of CUSTOMERS) {
-    const { complaint, ...rest } = c.lines;
+    for (const o of c.orders) {
+      add(c.id, o.id, o.text, 'normal', o.pace);
+      add(c.id, `${o.id}.slow`, o.text, 'slow', o.pace);
+    }
+    const a = c.answers;
+    for (const [field, group] of Object.entries({
+      drink: a.drink,
+      milk: a.milk,
+      temp: a.temp,
+      heart: a.heart,
+    }))
+      for (const [k, text] of Object.entries(group))
+        add(c.id, `${c.id}.answer.${field}.${k}`, text);
+    const { complaint, rejected, ...rest } = c.lines;
     for (const [k, text] of Object.entries(rest)) add(c.id, `${c.id}.${k}`, text);
+    for (const [k, text] of Object.entries(rejected)) add(c.id, `${c.id}.rejected.${k}`, text);
     for (const [k, text] of Object.entries(complaint))
       if (text) add(c.id, `${c.id}.complaint.${k}`, text);
   }

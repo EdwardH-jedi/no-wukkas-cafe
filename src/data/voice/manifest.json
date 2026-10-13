@@ -3,6 +3,54 @@
   "provider": "macos-say (PLACEHOLDER: Apple system voices, personal/non-commercial use only)",
   "clips": [
     {
+      "dialogueId": "beryl:07bdba99",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.1.slow",
+      "delivery": "slow",
+      "transcript": "Hello love. A flat white, please, with one of those little hearts? My grandson says you do them now.",
+      "file": "assets/voice/beryl/07bdba99-slow.mp3",
+      "duration": 7.498,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 106,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:1e17e9b5",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.2",
+      "delivery": "normal",
+      "transcript": "Morning, darl. I'll have a soy flat white today. The doctor says I've got to cut back on the dairy, would you believe.",
+      "file": "assets/voice/beryl/1e17e9b5.mp3",
+      "duration": 7.779,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 132,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "beryl:2a5cf9c0",
       "characterId": "beryl",
       "voiceId": "macos:Karen",
@@ -51,17 +99,17 @@
       }
     },
     {
-      "dialogueId": "beryl:5b4c26fd",
+      "dialogueId": "beryl:3fea3475",
       "characterId": "beryl",
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "beryl.rejected",
+      "key": "beryl.answer.drink.longBlack",
       "delivery": "normal",
-      "transcript": "Oh, I don't think that's mine, darl. Mine's the flat white with the heart.",
-      "file": "assets/voice/beryl/5b4c26fd.mp3",
-      "duration": 5.003,
-      "meanDb": -16.8,
+      "transcript": "Just a long black, love.",
+      "file": "assets/voice/beryl/3fea3475.mp3",
+      "duration": 1.774,
+      "meanDb": -17.3,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -70,6 +118,30 @@
         "engine": "macos-say",
         "voice": "Karen",
         "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:4578ffbc",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.4",
+      "delivery": "normal",
+      "transcript": "Oh, hello darl. Now, I'd like a flat white, extra hot, because I always let them go cold while I'm nattering. Almond milk, please, and a little heart if you've got time.",
+      "file": "assets/voice/beryl/4578ffbc.mp3",
+      "duration": 12.318,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 132,
         "pitch": 1,
         "placeholder": true
       }
@@ -86,6 +158,30 @@
       "file": "assets/voice/beryl/5c509233.mp3",
       "duration": 2.678,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:5e930ae6",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "No milk, love. It's a long black.",
+      "file": "assets/voice/beryl/5e930ae6.mp3",
+      "duration": 2.508,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -123,6 +219,102 @@
       }
     },
     {
+      "dialogueId": "beryl:6a9eb1e8",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "A flat white, love.",
+      "file": "assets/voice/beryl/6a9eb1e8.mp3",
+      "duration": 1.538,
+      "meanDb": -18.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:6ad44db0",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "Oh, I don't think that's mine, darl. Mine's a flat white.",
+      "file": "assets/voice/beryl/6ad44db0.mp3",
+      "duration": 4.435,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:770fb69e",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Oh, that's not my milk, love. My tummy won't thank me for that.",
+      "file": "assets/voice/beryl/770fb69e.mp3",
+      "duration": 4.562,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:83641850",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Just normal, love.",
+      "file": "assets/voice/beryl/83641850.mp3",
+      "duration": 1.484,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "beryl:8e27654d",
       "characterId": "beryl",
       "voiceId": "macos:Karen",
@@ -134,6 +326,222 @@
       "file": "assets/voice/beryl/8e27654d.mp3",
       "duration": 2.362,
       "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:93ddd5a3",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond milk, please, love.",
+      "file": "assets/voice/beryl/93ddd5a3.mp3",
+      "duration": 2.105,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:98b13f14",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.2.slow",
+      "delivery": "slow",
+      "transcript": "Morning, darl. I'll have a soy flat white today. The doctor says I've got to cut back on the dairy, would you believe.",
+      "file": "assets/voice/beryl/98b13f14-slow.mp3",
+      "duration": 8.485,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 106,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:9a02f04a",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.3",
+      "delivery": "normal",
+      "transcript": "Just a long black for me today, love. My Les always had them, bless him.",
+      "file": "assets/voice/beryl/9a02f04a.mp3",
+      "duration": 5.048,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 132,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:a1c6124b",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No, don't fuss, love.",
+      "file": "assets/voice/beryl/a1c6124b.mp3",
+      "duration": 2.057,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:a2cbb977",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot, please, darl. I'm a slow drinker.",
+      "file": "assets/voice/beryl/a2cbb977.mp3",
+      "duration": 3.789,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:af96fc19",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy, darl. Doctor's orders.",
+      "file": "assets/voice/beryl/af96fc19.mp3",
+      "duration": 2.687,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:b410b824",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.rejected.longBlack",
+      "delivery": "normal",
+      "transcript": "Oh, I don't think that's mine, darl. I asked for a long black.",
+      "file": "assets/voice/beryl/b410b824.mp3",
+      "duration": 4.846,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:b506987d",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "Not on a long black, love.",
+      "file": "assets/voice/beryl/b506987d.mp3",
+      "duration": 1.8,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:ba2b8706",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "Oh, however it comes, love.",
+      "file": "assets/voice/beryl/ba2b8706.mp3",
+      "duration": 2.287,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -171,6 +579,126 @@
       }
     },
     {
+      "dialogueId": "beryl:c5520087",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Oh, ordinary milk's fine, love.",
+      "file": "assets/voice/beryl/c5520087.mp3",
+      "duration": 2.658,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:d13b6a7b",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.4.slow",
+      "delivery": "slow",
+      "transcript": "Oh, hello darl. Now, I'd like a flat white, extra hot, because I always let them go cold while I'm nattering. Almond milk, please, and a little heart if you've got time.",
+      "file": "assets/voice/beryl/d13b6a7b-slow.mp3",
+      "duration": 13.427,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 106,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:d415770f",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat, love.",
+      "file": "assets/voice/beryl/d415770f.mp3",
+      "duration": 0.986,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:d7e332d5",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Oh yes, a little heart, please!",
+      "file": "assets/voice/beryl/d7e332d5.mp3",
+      "duration": 2.406,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "beryl:e63fd657",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.3.slow",
+      "delivery": "slow",
+      "transcript": "Just a long black for me today, love. My Les always had them, bless him.",
+      "file": "assets/voice/beryl/e63fd657-slow.mp3",
+      "duration": 5.511,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 106,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "beryl:ed223235",
       "characterId": "beryl",
       "voiceId": "macos:Karen",
@@ -200,7 +728,7 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "beryl.order",
+      "key": "beryl.1",
       "delivery": "normal",
       "transcript": "Hello love. A flat white, please, with one of those little hearts? My grandson says you do them now.",
       "file": "assets/voice/beryl/f22f6d80.mp3",
@@ -213,7 +741,7 @@
       "source": {
         "engine": "macos-say",
         "voice": "Karen",
-        "rate": 150,
+        "rate": 132,
         "pitch": 1,
         "placeholder": true
       }
@@ -224,12 +752,132 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "dazza.rejected",
+      "key": "dazza.rejected.flatWhite",
       "delivery": "normal",
       "transcript": "Nah mate, that's not mine. Flat white, remember?",
       "file": "assets/voice/dazza/0477a142.mp3",
       "duration": 3.211,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:11f02e32",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.3",
+      "delivery": "normal",
+      "transcript": "Mornin'. Long black, cheers, mate. Big day on the tools.",
+      "file": "assets/voice/dazza/11f02e32.mp3",
+      "duration": 3.86,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:16a2b4cf",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.3.slow",
+      "delivery": "slow",
+      "transcript": "Mornin'. Long black, cheers, mate. Big day on the tools.",
+      "file": "assets/voice/dazza/16a2b4cf-slow.mp3",
+      "duration": 4.347,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 164,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:33fc1ad4",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "Flat white, mate.",
+      "file": "assets/voice/dazza/33fc1ad4.mp3",
+      "duration": 1.296,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:424304f3",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yeah, chuck a heart on it.",
+      "file": "assets/voice/dazza/424304f3.mp3",
+      "duration": 1.61,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:43b05b74",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat, mate.",
+      "file": "assets/voice/dazza/43b05b74.mp3",
+      "duration": 0.927,
+      "meanDb": -16.4,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -267,6 +915,30 @@
       }
     },
     {
+      "dialogueId": "dazza:49ad064d",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "Long black, mate.",
+      "file": "assets/voice/dazza/49ad064d.mp3",
+      "duration": 1.224,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "dazza:4d4ca5d5",
       "characterId": "dazza",
       "voiceId": "macos:Karen",
@@ -278,6 +950,126 @@
       "file": "assets/voice/dazza/4d4ca5d5.mp3",
       "duration": 1.699,
       "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:4e1ec062",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.1",
+      "delivery": "normal",
+      "transcript": "Morning, mate. Just a flat white, thanks.",
+      "file": "assets/voice/dazza/4e1ec062.mp3",
+      "duration": 3.071,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:5e4d57d0",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.4",
+      "delivery": "normal",
+      "transcript": "Oat flattie, extra hot, ta. The missus has got me off the dairy.",
+      "file": "assets/voice/dazza/5e4d57d0.mp3",
+      "duration": 3.551,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 230,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:626266dd",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.1.slow",
+      "delivery": "slow",
+      "transcript": "Morning, mate. Just a flat white, thanks.",
+      "file": "assets/voice/dazza/626266dd-slow.mp3",
+      "duration": 3.439,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 164,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:741a2c73",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "No milk, mate. It's a long black.",
+      "file": "assets/voice/dazza/741a2c73.mp3",
+      "duration": 2.157,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:749b2613",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot, mate. Scorching.",
+      "file": "assets/voice/dazza/749b2613.mp3",
+      "duration": 2.151,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -320,12 +1112,84 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "dazza.order",
+      "key": "dazza.2",
       "delivery": "normal",
       "transcript": "Oi mate! Flattie, ta. Gotta be on site in ten.",
       "file": "assets/voice/dazza/8c37a1c3.mp3",
-      "duration": 3.372,
+      "duration": 3.07,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 230,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:9c26a4c4",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond.",
+      "file": "assets/voice/dazza/9c26a4c4.mp3",
+      "duration": 0.434,
       "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:a266e81c",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Just normal.",
+      "file": "assets/voice/dazza/a266e81c.mp3",
+      "duration": 0.741,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:a86fa6ec",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy.",
+      "file": "assets/voice/dazza/a86fa6ec.mp3",
+      "duration": 0.463,
+      "meanDb": -17.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -387,6 +1251,102 @@
       }
     },
     {
+      "dialogueId": "dazza:c1691a4b",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "However it comes.",
+      "file": "assets/voice/dazza/c1691a4b.mp3",
+      "duration": 1,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:c2a9f3de",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.2.slow",
+      "delivery": "slow",
+      "transcript": "Oi mate! Flattie, ta. Gotta be on site in ten.",
+      "file": "assets/voice/dazza/c2a9f3de-slow.mp3",
+      "duration": 3.648,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 184,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:c8b483ff",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.rejected.longBlack",
+      "delivery": "normal",
+      "transcript": "Nah mate, that's not mine. Long black, remember?",
+      "file": "assets/voice/dazza/c8b483ff.mp3",
+      "duration": 3.126,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:d6a3d79d",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.4.slow",
+      "delivery": "slow",
+      "transcript": "Oat flattie, extra hot, ta. The missus has got me off the dairy.",
+      "file": "assets/voice/dazza/d6a3d79d-slow.mp3",
+      "duration": 4.222,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 184,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "dazza:d8d1b30f",
       "characterId": "dazza",
       "voiceId": "macos:Karen",
@@ -398,6 +1358,78 @@
       "file": "assets/voice/dazza/d8d1b30f.mp3",
       "duration": 2.601,
       "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:db3d7119",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Just normal milk.",
+      "file": "assets/voice/dazza/db3d7119.mp3",
+      "duration": 0.965,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:e7c30c90",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "On a long black? Nah.",
+      "file": "assets/voice/dazza/e7c30c90.mp3",
+      "duration": 1.446,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "dazza:ec4c5b3f",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "Nah, don't worry about it.",
+      "file": "assets/voice/dazza/ec4c5b3f.mp3",
+      "duration": 1.642,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -459,6 +1491,54 @@
       }
     },
     {
+      "dialogueId": "dazza:f0fc5cf1",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Wrong milk, mate. Can't do that one.",
+      "file": "assets/voice/dazza/f0fc5cf1.mp3",
+      "duration": 2.203,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:009239fa",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Priya said. Listen first.",
+      "file": "assets/voice/gaz/009239fa.mp3",
+      "duration": 4.643,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:009574f1",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -507,6 +1587,30 @@
       }
     },
     {
+      "dialogueId": "gaz:02823a2e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Beryl told you exactly what they wanted.",
+      "file": "assets/voice/gaz/02823a2e.mp3",
+      "duration": 3.492,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:0389f2ed",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -542,6 +1646,30 @@
       "file": "assets/voice/gaz/04389924.mp3",
       "duration": 3.751,
       "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0483c3a2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Mei looked happy.",
+      "file": "assets/voice/gaz/0483c3a2.mp3",
+      "duration": 1.767,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -614,6 +1742,30 @@
       "file": "assets/voice/gaz/07052e99.mp3",
       "duration": 3.514,
       "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0ef5f3d1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Mei's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/0ef5f3d1.mp3",
+      "duration": 2.3,
+      "meanDb": -16.8,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -867,30 +2019,6 @@
       }
     },
     {
-      "dialogueId": "gaz:13b99ab5",
-      "characterId": "gaz",
-      "voiceId": "macos:Karen",
-      "accent": "australian",
-      "locale": "en-AU",
-      "key": "rush.intro.2",
-      "delivery": "normal",
-      "transcript": "Take the order, make the drink, hand it to the right person. Flat whites and long blacks. Easy.",
-      "file": "assets/voice/gaz/13b99ab5.mp3",
-      "duration": 5.867,
-      "meanDb": -16.8,
-      "playback": {
-        "gain": 1,
-        "rate": 1
-      },
-      "source": {
-        "engine": "macos-say",
-        "voice": "Karen",
-        "rate": 182,
-        "pitch": 0.88,
-        "placeholder": true
-      }
-    },
-    {
       "dialogueId": "gaz:14ccb43c",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1035,6 +2163,30 @@
       }
     },
     {
+      "dialogueId": "gaz:19da2695",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Mei wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/19da2695.mp3",
+      "duration": 3.708,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:1c2c92a7",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1083,6 +2235,30 @@
       }
     },
     {
+      "dialogueId": "gaz:2032b4e1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Karen told you exactly what they wanted.",
+      "file": "assets/voice/gaz/2032b4e1.mp3",
+      "duration": 3.516,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:20f695bc",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1094,6 +2270,30 @@
       "file": "assets/voice/gaz/20f695bc.mp3",
       "duration": 3.119,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:258824bd",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Karen's not getting any younger.",
+      "file": "assets/voice/gaz/258824bd.mp3",
+      "duration": 3.002,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -1563,6 +2763,30 @@
       }
     },
     {
+      "dialogueId": "gaz:368234a3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Dazza said. Listen first.",
+      "file": "assets/voice/gaz/368234a3.mp3",
+      "duration": 4.654,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:3757af4e",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1755,6 +2979,30 @@
       }
     },
     {
+      "dialogueId": "gaz:3d5efa89",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Mei's not getting any younger.",
+      "file": "assets/voice/gaz/3d5efa89.mp3",
+      "duration": 2.854,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:3f12f7ef",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1875,6 +3123,30 @@
       }
     },
     {
+      "dialogueId": "gaz:43e647e0",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Karen said. Listen first.",
+      "file": "assets/voice/gaz/43e647e0.mp3",
+      "duration": 4.736,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:43ff3c3b",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1923,6 +3195,30 @@
       }
     },
     {
+      "dialogueId": "gaz:469d54e3",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Mei's face says it all.",
+      "file": "assets/voice/gaz/469d54e3.mp3",
+      "duration": 1.226,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:47ad725b",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1934,6 +3230,30 @@
       "file": "assets/voice/gaz/47ad725b.mp3",
       "duration": 3.627,
       "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:47d1c070",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Mei said. Listen first.",
+      "file": "assets/voice/gaz/47d1c070.mp3",
+      "duration": 4.575,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -2126,6 +3446,30 @@
       "file": "assets/voice/gaz/4d189515.mp3",
       "duration": 1.868,
       "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4db8f2cb",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Priya told you exactly what they wanted.",
+      "file": "assets/voice/gaz/4db8f2cb.mp3",
+      "duration": 3.41,
+      "meanDb": -16.8,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -2523,6 +3867,30 @@
       }
     },
     {
+      "dialogueId": "gaz:5f636158",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Mei asked nicely, too.",
+      "file": "assets/voice/gaz/5f636158.mp3",
+      "duration": 2.599,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:5ff30582",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2835,6 +4203,30 @@
       }
     },
     {
+      "dialogueId": "gaz:66d126e2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Mei. Take the order, mate.",
+      "file": "assets/voice/gaz/66d126e2.mp3",
+      "duration": 2.553,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:66fb5329",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2990,6 +4382,30 @@
       "file": "assets/voice/gaz/6ad310d5.mp3",
       "duration": 3.242,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:6b9a1c8e",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "Wrong ticket again. If you didn't catch it, ask!",
+      "file": "assets/voice/gaz/6b9a1c8e.mp3",
+      "duration": 2.912,
+      "meanDb": -16.9,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -3891,6 +5307,30 @@
       }
     },
     {
+      "dialogueId": "gaz:8d22f6f1",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Mei told you exactly what they wanted.",
+      "file": "assets/voice/gaz/8d22f6f1.mp3",
+      "duration": 3.379,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:8eb7f4df",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -3915,6 +5355,30 @@
       }
     },
     {
+      "dialogueId": "gaz:8ee6d484",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Dazza told you exactly what they wanted.",
+      "file": "assets/voice/gaz/8ee6d484.mp3",
+      "duration": 3.54,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:8f13bd33",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -3926,6 +5390,30 @@
       "file": "assets/voice/gaz/8f13bd33.mp3",
       "duration": 2.085,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:90ac040a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Jiwoo's not getting any younger.",
+      "file": "assets/voice/gaz/90ac040a.mp3",
+      "duration": 2.942,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -4083,6 +5571,30 @@
       }
     },
     {
+      "dialogueId": "gaz:9bbd229f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.askedTwice",
+      "delivery": "normal",
+      "transcript": "Twice? Write it on your hand next time.",
+      "file": "assets/voice/gaz/9bbd229f.mp3",
+      "duration": 2.342,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:9d1e599f",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -4179,6 +5691,30 @@
       }
     },
     {
+      "dialogueId": "gaz:9ff1701d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Beryl said. Listen first.",
+      "file": "assets/voice/gaz/9ff1701d.mp3",
+      "duration": 4.682,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:a191892b",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -4238,6 +5774,30 @@
       "file": "assets/voice/gaz/a32816ac.mp3",
       "duration": 3.1,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a4214682",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Beryl's not getting any younger.",
+      "file": "assets/voice/gaz/a4214682.mp3",
+      "duration": 2.982,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -4382,6 +5942,54 @@
       "file": "assets/voice/gaz/a85a5a48.mp3",
       "duration": 1.558,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a875dcab",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Mei. Lovely.",
+      "file": "assets/voice/gaz/a875dcab.mp3",
+      "duration": 1.394,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:a881d5f0",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.2",
+      "delivery": "normal",
+      "transcript": "Listen to the order and ring it up right. Flat whites, long blacks, oat, soy, almond. Then make it and hand it to the right person. Easy.",
+      "file": "assets/voice/gaz/a881d5f0.mp3",
+      "duration": 8.609,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -4827,6 +6435,30 @@
       }
     },
     {
+      "dialogueId": "gaz:bc85fa45",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Mei wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/bc85fa45.mp3",
+      "duration": 3.639,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:bff60d4a",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -4899,6 +6531,30 @@
       }
     },
     {
+      "dialogueId": "gaz:c2573310",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Mei's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/c2573310.mp3",
+      "duration": 2.363,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:c2a6ba71",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -4934,6 +6590,78 @@
       "file": "assets/voice/gaz/c2a8c279.mp3",
       "duration": 5.297,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c3675484",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Mei ordered a flat white.",
+      "file": "assets/voice/gaz/c3675484.mp3",
+      "duration": 3.088,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c425f1b9",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Today, champ. Ring. It. Up.",
+      "file": "assets/voice/gaz/c425f1b9.mp3",
+      "duration": 2.949,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c5281df8",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "Ears, mate! Listen to the customer, then ring it up.",
+      "file": "assets/voice/gaz/c5281df8.mp3",
+      "duration": 3.223,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5067,6 +6795,30 @@
       }
     },
     {
+      "dialogueId": "gaz:caa98b55",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.askedTwice",
+      "delivery": "normal",
+      "transcript": "Listen harder, mate. They won't say it a third time.",
+      "file": "assets/voice/gaz/caa98b55.mp3",
+      "duration": 3.223,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:cb62fa21",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -5078,6 +6830,30 @@
       "file": "assets/voice/gaz/cb62fa21.mp3",
       "duration": 2.086,
       "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cb9a4e27",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Priya's not getting any younger.",
+      "file": "assets/voice/gaz/cb9a4e27.mp3",
+      "duration": 3.058,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5246,6 +7022,30 @@
       "file": "assets/voice/gaz/cf945c4c.mp3",
       "duration": 2.355,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:cfc40d61",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Jiwoo said. Listen first.",
+      "file": "assets/voice/gaz/cfc40d61.mp3",
+      "duration": 4.658,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5571,6 +7371,30 @@
       }
     },
     {
+      "dialogueId": "gaz:d5a71a00",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Dazza's not getting any younger.",
+      "file": "assets/voice/gaz/d5a71a00.mp3",
+      "duration": 3.015,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:d5efae8a",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -5582,6 +7406,30 @@
       "file": "assets/voice/gaz/d5efae8a.mp3",
       "duration": 2.062,
       "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:d7e2404f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Mei asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/d7e2404f.mp3",
+      "duration": 3.503,
+      "meanDb": -16.8,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5774,6 +7622,30 @@
       "file": "assets/voice/gaz/e42b3ef7.mp3",
       "duration": 4.734,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:e560e9ed",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Mei ordered a long black.",
+      "file": "assets/voice/gaz/e560e9ed.mp3",
+      "duration": 3.017,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6267,6 +8139,78 @@
       }
     },
     {
+      "dialogueId": "gaz:f694fd40",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Didn't catch it? Ask. Then ring it up.",
+      "file": "assets/voice/gaz/f694fd40.mp3",
+      "duration": 2.554,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f6ea2d32",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Jiwoo told you exactly what they wanted.",
+      "file": "assets/voice/gaz/f6ea2d32.mp3",
+      "duration": 3.482,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f792b695",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Mei. They'll tell their mates.",
+      "file": "assets/voice/gaz/f792b695.mp3",
+      "duration": 2.35,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "gaz:f7cfe4cf",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -6387,6 +8331,198 @@
       }
     },
     {
+      "dialogueId": "jiwoo:06d70a90",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.3.slow",
+      "delivery": "slow",
+      "transcript": "Hello! Can I get a flat white with a heart? My friend in Seoul wants a photo.",
+      "file": "assets/voice/jiwoo/06d70a90-slow.mp3",
+      "duration": 6.39,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 138,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:1467d5f7",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.3",
+      "delivery": "normal",
+      "transcript": "Hello! Can I get a flat white with a heart? My friend in Seoul wants a photo.",
+      "file": "assets/voice/jiwoo/1467d5f7.mp3",
+      "duration": 5.811,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:1fff7f8f",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.1.slow",
+      "delivery": "slow",
+      "transcript": "안녕하세요! Ah, hi! A long black, please. Usually I get an 아아, but it's chilly this morning.",
+      "file": "assets/voice/jiwoo/1fff7f8f-slow.mp3",
+      "duration": 8.367,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 138,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:234ef65e",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No, it's okay!",
+      "file": "assets/voice/jiwoo/234ef65e.mp3",
+      "duration": 1.298,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:34487c63",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy milk, please.",
+      "file": "assets/voice/jiwoo/34487c63.mp3",
+      "duration": 1.658,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:365bb63c",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Normal milk is okay!",
+      "file": "assets/voice/jiwoo/365bb63c.mp3",
+      "duration": 1.6,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:3ef058cb",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.4.slow",
+      "delivery": "slow",
+      "transcript": "Um, a long black, please. Can you make it quick? My shift starts at eight.",
+      "file": "assets/voice/jiwoo/3ef058cb-slow.mp3",
+      "duration": 6.753,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 138,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:41403b12",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.4",
+      "delivery": "normal",
+      "transcript": "Um, a long black, please. Can you make it quick? My shift starts at eight.",
+      "file": "assets/voice/jiwoo/41403b12.mp3",
+      "duration": 6.151,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "jiwoo:44891369",
       "characterId": "jiwoo",
       "voiceId": "macos:Yuna",
@@ -6435,12 +8571,36 @@
       }
     },
     {
+      "dialogueId": "jiwoo:59f12eae",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.impatient",
+      "delivery": "normal",
+      "transcript": "Um, sorry, is my coffee coming soon? My shift starts at eight.",
+      "file": "assets/voice/jiwoo/59f12eae.mp3",
+      "duration": 5.188,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "jiwoo:6bcf8f1c",
       "characterId": "jiwoo",
       "voiceId": "macos:Yuna",
       "accent": "korean",
       "locale": "ko-KR",
-      "key": "jiwoo.order",
+      "key": "jiwoo.1",
       "delivery": "normal",
       "transcript": "안녕하세요! Ah, hi! A long black, please. Usually I get an 아아, but it's chilly this morning.",
       "file": "assets/voice/jiwoo/6bcf8f1c.mp3",
@@ -6459,17 +8619,17 @@
       }
     },
     {
-      "dialogueId": "jiwoo:babe15a5",
+      "dialogueId": "jiwoo:7c109bb0",
       "characterId": "jiwoo",
       "voiceId": "macos:Yuna",
       "accent": "korean",
       "locale": "ko-KR",
-      "key": "jiwoo.impatient",
+      "key": "jiwoo.answer.temp.none",
       "delivery": "normal",
-      "transcript": "Um, sorry, is my long black coming soon? My shift starts at eight.",
-      "file": "assets/voice/jiwoo/babe15a5.mp3",
-      "duration": 5.397,
-      "meanDb": -17,
+      "transcript": "Just normal is okay.",
+      "file": "assets/voice/jiwoo/7c109bb0.mp3",
+      "duration": 1.648,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6483,12 +8643,252 @@
       }
     },
     {
+      "dialogueId": "jiwoo:7c74a1d5",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.5",
+      "delivery": "normal",
+      "transcript": "Hi! Soy flat white, extra hot, please. 감사합니다!",
+      "file": "assets/voice/jiwoo/7c74a1d5.mp3",
+      "duration": 4.946,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:8482813e",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "Oh, no milk. Long black!",
+      "file": "assets/voice/jiwoo/8482813e.mp3",
+      "duration": 2.064,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:8c7476f7",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.2",
+      "delivery": "normal",
+      "transcript": "Hi! One flat white, please. With oat milk, if you have it.",
+      "file": "assets/voice/jiwoo/8c7476f7.mp3",
+      "duration": 5.092,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:959e8246",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "A long black, please!",
+      "file": "assets/voice/jiwoo/959e8246.mp3",
+      "duration": 1.728,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:a831370b",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot, please!",
+      "file": "assets/voice/jiwoo/a831370b.mp3",
+      "duration": 1.635,
+      "meanDb": -18.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:b28a1a96",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.5.slow",
+      "delivery": "slow",
+      "transcript": "Hi! Soy flat white, extra hot, please. 감사합니다!",
+      "file": "assets/voice/jiwoo/b28a1a96-slow.mp3",
+      "duration": 5.431,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 138,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:b2a4ae7e",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.6",
+      "delivery": "normal",
+      "transcript": "Okay, so, one almond flattie with the heart, extra hot. It's my first week here, so I'm celebrating!",
+      "file": "assets/voice/jiwoo/b2a4ae7e.mp3",
+      "duration": 7.58,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 193,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:bc838738",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "Oh, sorry, I ordered a flat white.",
+      "file": "assets/voice/jiwoo/bc838738.mp3",
+      "duration": 2.935,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:c48c4b8b",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "A flat white, please!",
+      "file": "assets/voice/jiwoo/c48c4b8b.mp3",
+      "duration": 2.146,
+      "meanDb": -18.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:c72b95aa",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.2.slow",
+      "delivery": "slow",
+      "transcript": "Hi! One flat white, please. With oat milk, if you have it.",
+      "file": "assets/voice/jiwoo/c72b95aa-slow.mp3",
+      "duration": 5.59,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 138,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "jiwoo:d2a1db39",
       "characterId": "jiwoo",
       "voiceId": "macos:Yuna",
       "accent": "korean",
       "locale": "ko-KR",
-      "key": "jiwoo.rejected",
+      "key": "jiwoo.rejected.longBlack",
       "delivery": "normal",
       "transcript": "Oh, sorry, I ordered a long black.",
       "file": "assets/voice/jiwoo/d2a1db39.mp3",
@@ -6507,6 +8907,30 @@
       }
     },
     {
+      "dialogueId": "jiwoo:d88c8477",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.6.slow",
+      "delivery": "slow",
+      "transcript": "Okay, so, one almond flattie with the heart, extra hot. It's my first week here, so I'm celebrating!",
+      "file": "assets/voice/jiwoo/d88c8477-slow.mp3",
+      "duration": 8.994,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 154,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "jiwoo:dcccbca6",
       "characterId": "jiwoo",
       "voiceId": "macos:Yuna",
@@ -6517,6 +8941,150 @@
       "transcript": "Sorry, I can't wait. I'll be late for work.",
       "file": "assets/voice/jiwoo/dcccbca6.mp3",
       "duration": 3.782,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:e3cb35dc",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "No heart. It's a long black!",
+      "file": "assets/voice/jiwoo/e3cb35dc.mp3",
+      "duration": 2.075,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:e4ced10a",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Just normal, please.",
+      "file": "assets/voice/jiwoo/e4ced10a.mp3",
+      "duration": 1.691,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:ed46796e",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat milk, please.",
+      "file": "assets/voice/jiwoo/ed46796e.mp3",
+      "duration": 1.623,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:ee365f38",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yes, a heart, please!",
+      "file": "assets/voice/jiwoo/ee365f38.mp3",
+      "duration": 2.249,
+      "meanDb": -18.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:f150a94b",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond milk, please.",
+      "file": "assets/voice/jiwoo/f150a94b.mp3",
+      "duration": 1.821,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:f6162e0c",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Oh, sorry, I think it's the wrong milk.",
+      "file": "assets/voice/jiwoo/f6162e0c.mp3",
+      "duration": 2.935,
       "meanDb": -16.9,
       "playback": {
         "gain": 1,
@@ -6579,17 +9147,65 @@
       }
     },
     {
-      "dialogueId": "karen:12648160",
+      "dialogueId": "karen:00b303f4",
       "characterId": "karen",
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "karen.rejected",
+      "key": "karen.answer.milk.full",
       "delivery": "normal",
-      "transcript": "That is not what I ordered. Flat white. Extra hot.",
-      "file": "assets/voice/karen/12648160.mp3",
-      "duration": 3.14,
-      "meanDb": -17.1,
+      "transcript": "Regular milk.",
+      "file": "assets/voice/karen/00b303f4.mp3",
+      "duration": 0.808,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:08c67006",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "A flat white. As I said.",
+      "file": "assets/voice/karen/08c67006.mp3",
+      "duration": 1.709,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:0fe88b7f",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.rejected.longBlack",
+      "delivery": "normal",
+      "transcript": "That is not what I ordered. I said a long black.",
+      "file": "assets/voice/karen/0fe88b7f.mp3",
+      "duration": 2.557,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6608,7 +9224,7 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "karen.order",
+      "key": "karen.1",
       "delivery": "normal",
       "transcript": "Hi. I'll have a flat white. Extra hot. And I'll be watching.",
       "file": "assets/voice/karen/323c9d77.mp3",
@@ -6651,6 +9267,78 @@
       }
     },
     {
+      "dialogueId": "karen:41b7f5d4",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Normal.",
+      "file": "assets/voice/karen/41b7f5d4.mp3",
+      "duration": 0.518,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:49f512e3",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No. No heart.",
+      "file": "assets/voice/karen/49f512e3.mp3",
+      "duration": 1.207,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:4c6ad58a",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.1.slow",
+      "delivery": "slow",
+      "transcript": "Hi. I'll have a flat white. Extra hot. And I'll be watching.",
+      "file": "assets/voice/karen/4c6ad58a-slow.mp3",
+      "duration": 4.737,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 154,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "karen:5cb072b7",
       "characterId": "karen",
       "voiceId": "macos:Karen",
@@ -6662,6 +9350,126 @@
       "file": "assets/voice/karen/5cb072b7.mp3",
       "duration": 2.141,
       "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:624e0e96",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.2.slow",
+      "delivery": "slow",
+      "transcript": "Long black. Quickly, please. I have pilates at eight.",
+      "file": "assets/voice/karen/624e0e96-slow.mp3",
+      "duration": 4.274,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 154,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:682a4c81",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat. Obviously.",
+      "file": "assets/voice/karen/682a4c81.mp3",
+      "duration": 1.25,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:69e51069",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yes. A heart.",
+      "file": "assets/voice/karen/69e51069.mp3",
+      "duration": 1.124,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:70642f0e",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "That is not what I ordered. I said a flat white.",
+      "file": "assets/voice/karen/70642f0e.mp3",
+      "duration": 2.615,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:73c12c69",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot. I did say.",
+      "file": "assets/voice/karen/73c12c69.mp3",
+      "duration": 1.662,
+      "meanDb": -17.4,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6694,6 +9502,174 @@
         "engine": "macos-say",
         "voice": "Karen",
         "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:83b31c34",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "It's a long black.",
+      "file": "assets/voice/karen/83b31c34.mp3",
+      "duration": 0.907,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:8c3bdf1b",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.3.slow",
+      "delivery": "slow",
+      "transcript": "Almond flat white, extra hot. Not warm. Extra hot. And no, I don't want a heart.",
+      "file": "assets/voice/karen/8c3bdf1b-slow.mp3",
+      "duration": 6.106,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 172,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:a57c3c7c",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "That is the wrong milk. Do you people listen?",
+      "file": "assets/voice/karen/a57c3c7c.mp3",
+      "duration": 2.38,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:a86fa6ec",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy.",
+      "file": "assets/voice/karen/a86fa6ec.mp3",
+      "duration": 0.482,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:b18f3ea0",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond. Almond milk.",
+      "file": "assets/voice/karen/b18f3ea0.mp3",
+      "duration": 1.338,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:b36ae48d",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.2",
+      "delivery": "normal",
+      "transcript": "Long black. Quickly, please. I have pilates at eight.",
+      "file": "assets/voice/karen/b36ae48d.mp3",
+      "duration": 3.604,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:b3b36142",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.3",
+      "delivery": "normal",
+      "transcript": "Almond flat white, extra hot. Not warm. Extra hot. And no, I don't want a heart.",
+      "file": "assets/voice/karen/b3b36142.mp3",
+      "duration": 5.165,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 215,
         "pitch": 1.03,
         "placeholder": true
       }
@@ -6734,6 +9710,30 @@
       "file": "assets/voice/karen/cea649da.mp3",
       "duration": 1.335,
       "meanDb": -18.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:df7f7cd0",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "It's a long black. No milk.",
+      "file": "assets/voice/karen/df7f7cd0.mp3",
+      "duration": 1.764,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6795,6 +9795,30 @@
       }
     },
     {
+      "dialogueId": "karen:f5099d21",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "A long black. As I said.",
+      "file": "assets/voice/karen/f5099d21.mp3",
+      "duration": 1.685,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "karen:fb02d5aa",
       "characterId": "karen",
       "voiceId": "macos:Karen",
@@ -6815,6 +9839,1062 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "karen:ffd229fd",
+      "characterId": "karen",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "karen.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "On a long black? Really?",
+      "file": "assets/voice/karen/ffd229fd.mp3",
+      "duration": 1.545,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 192,
+        "pitch": 1.03,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:01308d56",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "Normal's fine.",
+      "file": "assets/voice/mei/01308d56.mp3",
+      "duration": 1.085,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:08c197fd",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.2.slow",
+      "delivery": "slow",
+      "transcript": "Just a long black, thank you.",
+      "file": "assets/voice/mei/08c197fd-slow.mp3",
+      "duration": 2.463,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 142,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:10b5bf88",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Regular milk is fine.",
+      "file": "assets/voice/mei/10b5bf88.mp3",
+      "duration": 1.829,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:128a1684",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.walkout",
+      "delivery": "normal",
+      "transcript": "Forget it. I'll be late. Bye.",
+      "file": "assets/voice/mei/128a1684.mp3",
+      "duration": 2.556,
+      "meanDb": -18.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:17554bf1",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.1",
+      "delivery": "normal",
+      "transcript": "Hi, one flat white, please. Thanks.",
+      "file": "assets/voice/mei/17554bf1.mp3",
+      "duration": 3.69,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:1e99382a",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.2",
+      "delivery": "normal",
+      "transcript": "Just a long black, thank you.",
+      "file": "assets/voice/mei/1e99382a.mp3",
+      "duration": 2.246,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:294cd871",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.3.slow",
+      "delivery": "slow",
+      "transcript": "Long black, please. Quick one, I've got a meeting at half past.",
+      "file": "assets/voice/mei/294cd871-slow.mp3",
+      "duration": 5.363,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 142,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:298100e6",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Normal temperature.",
+      "file": "assets/voice/mei/298100e6.mp3",
+      "duration": 1.341,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:31a6f277",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.complaint.badShot",
+      "delivery": "normal",
+      "transcript": "Hm. Tastes a bit burnt.",
+      "file": "assets/voice/mei/31a6f277.mp3",
+      "duration": 2.522,
+      "meanDb": -18.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:31bfa2b3",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.5",
+      "delivery": "normal",
+      "transcript": "Can I get a flat white with almond milk? And a heart, please. It's for my boss.",
+      "file": "assets/voice/mei/31bfa2b3.mp3",
+      "duration": 6.517,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:38542d49",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.angry",
+      "delivery": "normal",
+      "transcript": "I really can't wait much longer.",
+      "file": "assets/voice/mei/38542d49.mp3",
+      "duration": 2.174,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:3ff207c3",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.4.slow",
+      "delivery": "slow",
+      "transcript": "Oat flat white, extra hot. Sorry, I'm on a call.",
+      "file": "assets/voice/mei/3ff207c3-slow.mp3",
+      "duration": 3.938,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 159,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:4011ef37",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No heart, thanks.",
+      "file": "assets/voice/mei/4011ef37.mp3",
+      "duration": 1.782,
+      "meanDb": -18.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:44617cab",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.complaint.weak",
+      "delivery": "normal",
+      "transcript": "Bit watery, but fine.",
+      "file": "assets/voice/mei/44617cab.mp3",
+      "duration": 2.239,
+      "meanDb": -18,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:4be8efe3",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.rejected.longBlack",
+      "delivery": "normal",
+      "transcript": "Sorry, that's not mine. I ordered a long black.",
+      "file": "assets/voice/mei/4be8efe3.mp3",
+      "duration": 3.659,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:4e7fce03",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.complaint.notHotEnough",
+      "delivery": "normal",
+      "transcript": "I did say extra hot.",
+      "file": "assets/voice/mei/4e7fce03.mp3",
+      "duration": 1.535,
+      "meanDb": -18.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:4f2469ea",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.1.slow",
+      "delivery": "slow",
+      "transcript": "Hi, one flat white, please. Thanks.",
+      "file": "assets/voice/mei/4f2469ea-slow.mp3",
+      "duration": 4.059,
+      "meanDb": -17.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 142,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:54aa0707",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.impatient",
+      "delivery": "normal",
+      "transcript": "Sorry, how long will it be? I've got a meeting in five.",
+      "file": "assets/voice/mei/54aa0707.mp3",
+      "duration": 4.228,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:5c22962f",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "Flat white.",
+      "file": "assets/voice/mei/5c22962f.mp3",
+      "duration": 0.956,
+      "meanDb": -18.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:70b78e1f",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "No, it's a long black.",
+      "file": "assets/voice/mei/70b78e1f.mp3",
+      "duration": 1.826,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:75741b71",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "It's a bit cold, but okay.",
+      "file": "assets/voice/mei/75741b71.mp3",
+      "duration": 2.533,
+      "meanDb": -19.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:7da96814",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.5.slow",
+      "delivery": "slow",
+      "transcript": "Can I get a flat white with almond milk? And a heart, please. It's for my boss.",
+      "file": "assets/voice/mei/7da96814-slow.mp3",
+      "duration": 7.161,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 142,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:98dc467e",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.6",
+      "delivery": "normal",
+      "transcript": "Morning. Soy flat white, please. Not extra hot, just normal, thanks.",
+      "file": "assets/voice/mei/98dc467e.mp3",
+      "duration": 6.362,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:9c26a4c4",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond.",
+      "file": "assets/voice/mei/9c26a4c4.mp3",
+      "duration": 0.653,
+      "meanDb": -17.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:a2404936",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.7",
+      "delivery": "normal",
+      "transcript": "Hey, a long black, and… no, wait, a flat white, extra hot. Full cream. Sorry, long morning.",
+      "file": "assets/voice/mei/a2404936.mp3",
+      "duration": 7.909,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 199,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:b33e32ba",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "Sorry, that's not mine. I ordered a flat white.",
+      "file": "assets/voice/mei/b33e32ba.mp3",
+      "duration": 3.903,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:bc6f2b29",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.7.slow",
+      "delivery": "slow",
+      "transcript": "Hey, a long black, and… no, wait, a flat white, extra hot. Full cream. Sorry, long morning.",
+      "file": "assets/voice/mei/bc6f2b29-slow.mp3",
+      "duration": 8.522,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 159,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:bf9bfa5a",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy, please.",
+      "file": "assets/voice/mei/bf9bfa5a.mp3",
+      "duration": 0.943,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:bfac22aa",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.4",
+      "delivery": "normal",
+      "transcript": "Oat flat white, extra hot. Sorry, I'm on a call.",
+      "file": "assets/voice/mei/bfac22aa.mp3",
+      "duration": 3.65,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 199,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:cbedf1a2",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.3",
+      "delivery": "normal",
+      "transcript": "Long black, please. Quick one, I've got a meeting at half past.",
+      "file": "assets/voice/mei/cbedf1a2.mp3",
+      "duration": 4.88,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:d02bf14f",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat.",
+      "file": "assets/voice/mei/d02bf14f.mp3",
+      "duration": 0.364,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:d2861804",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot.",
+      "file": "assets/voice/mei/d2861804.mp3",
+      "duration": 0.92,
+      "meanDb": -19.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:d9771942",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "Long black.",
+      "file": "assets/voice/mei/d9771942.mp3",
+      "duration": 0.724,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:e0a259da",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.okay",
+      "delivery": "normal",
+      "transcript": "Thanks.",
+      "file": "assets/voice/mei/e0a259da.mp3",
+      "duration": 0.741,
+      "meanDb": -19.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:e3c05353",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.6.slow",
+      "delivery": "slow",
+      "transcript": "Morning. Soy flat white, please. Not extra hot, just normal, thanks.",
+      "file": "assets/voice/mei/e3c05353-slow.mp3",
+      "duration": 6.989,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 142,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:ec312f5c",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.happy",
+      "delivery": "normal",
+      "transcript": "Perfect, thank you. Lifesaver.",
+      "file": "assets/voice/mei/ec312f5c.mp3",
+      "duration": 3.023,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:ed365da5",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yes, a heart, please.",
+      "file": "assets/voice/mei/ed365da5.mp3",
+      "duration": 2.24,
+      "meanDb": -17.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:eeae909e",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "No milk. It's a long black.",
+      "file": "assets/voice/mei/eeae909e.mp3",
+      "duration": 2.049,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "mei:f97e5bbb",
+      "characterId": "mei",
+      "voiceId": "macos:Tingting",
+      "accent": "chinese",
+      "locale": "zh-CN",
+      "key": "mei.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Sorry, this is the wrong milk.",
+      "file": "assets/voice/mei/f97e5bbb.mp3",
+      "duration": 2.289,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tingting",
+        "rate": 178,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:00ea540c",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No, that's okay, thanks.",
+      "file": "assets/voice/priya/00ea540c.mp3",
+      "duration": 1.587,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:08110a53",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "Sorry, I think that's someone else's. Mine's a flat white.",
+      "file": "assets/voice/priya/08110a53.mp3",
+      "duration": 3.58,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:082aac0e",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.6.slow",
+      "delivery": "slow",
+      "transcript": "Soy flattie, extra hot, and a heart if you can. Sorry, I'm half asleep.",
+      "file": "assets/voice/priya/082aac0e-slow.mp3",
+      "duration": 5.164,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 132,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:1308c505",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.2.slow",
+      "delivery": "slow",
+      "transcript": "Hi, could I please get a flat white with oat milk? Thank you.",
+      "file": "assets/voice/priya/1308c505-slow.mp3",
+      "duration": 4.262,
+      "meanDb": -17.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 132,
+        "pitch": 1,
         "placeholder": true
       }
     },
@@ -6867,17 +10947,65 @@
       }
     },
     {
+      "dialogueId": "priya:23a2d184",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.4.slow",
+      "delivery": "slow",
+      "transcript": "Just a long black. Actually, no, sorry, make that a flat white. Full cream's fine.",
+      "file": "assets/voice/priya/23a2d184-slow.mp3",
+      "duration": 6.68,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 132,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "priya:242417c8",
       "characterId": "priya",
       "voiceId": "macos:Tara",
       "accent": "indian",
       "locale": "en-IN",
-      "key": "priya.order",
+      "key": "priya.1",
       "delivery": "normal",
       "transcript": "Morning… a long black, please. Fourteen-hour shift at RPA.",
       "file": "assets/voice/priya/242417c8.mp3",
-      "duration": 3.837,
-      "meanDb": -17.2,
+      "duration": 3.434,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 145,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:34487c63",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy milk, please.",
+      "file": "assets/voice/priya/34487c63.mp3",
+      "duration": 1.35,
+      "meanDb": -17.3,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6896,7 +11024,7 @@
       "voiceId": "macos:Tara",
       "accent": "indian",
       "locale": "en-IN",
-      "key": "priya.rejected",
+      "key": "priya.rejected.longBlack",
       "delivery": "normal",
       "transcript": "Sorry, I think that's someone else's. Mine's the long black.",
       "file": "assets/voice/priya/3e9843c6.mp3",
@@ -6939,6 +11067,222 @@
       }
     },
     {
+      "dialogueId": "priya:47e58a07",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "Oh, no milk. It's a long black.",
+      "file": "assets/voice/priya/47e58a07.mp3",
+      "duration": 2.319,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:5217cb15",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.1.slow",
+      "delivery": "slow",
+      "transcript": "Morning… a long black, please. Fourteen-hour shift at RPA.",
+      "file": "assets/voice/priya/5217cb15-slow.mp3",
+      "duration": 3.765,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 116,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:5921c029",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.6",
+      "delivery": "normal",
+      "transcript": "Soy flattie, extra hot, and a heart if you can. Sorry, I'm half asleep.",
+      "file": "assets/voice/priya/5921c029.mp3",
+      "duration": 4.78,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:7fab1716",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.5",
+      "delivery": "normal",
+      "transcript": "A flat white with a heart, please? It's been a rough night, I could use one.",
+      "file": "assets/voice/priya/7fab1716.mp3",
+      "duration": 4.363,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 145,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:9479ffb9",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.3",
+      "delivery": "normal",
+      "transcript": "Can I get a flat white, extra hot, with almond milk, please? It's got to survive the bus home.",
+      "file": "assets/voice/priya/9479ffb9.mp3",
+      "duration": 8.576,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:987c5405",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.4",
+      "delivery": "normal",
+      "transcript": "Just a long black. Actually, no, sorry, make that a flat white. Full cream's fine.",
+      "file": "assets/voice/priya/987c5405.mp3",
+      "duration": 6.201,
+      "meanDb": -17.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:a5313252",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot, please.",
+      "file": "assets/voice/priya/a5313252.mp3",
+      "duration": 1.124,
+      "meanDb": -18.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:b58aeaee",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.2",
+      "delivery": "normal",
+      "transcript": "Hi, could I please get a flat white with oat milk? Thank you.",
+      "file": "assets/voice/priya/b58aeaee.mp3",
+      "duration": 3.963,
+      "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:b71ff042",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "Sorry, a long black, please.",
+      "file": "assets/voice/priya/b71ff042.mp3",
+      "duration": 1.866,
+      "meanDb": -17.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "priya:bb1c4d26",
       "characterId": "priya",
       "voiceId": "macos:Tara",
@@ -6948,7 +11292,7 @@
       "delivery": "normal",
       "transcript": "Bit watery… thanks though.",
       "file": "assets/voice/priya/bb1c4d26.mp3",
-      "duration": 1.4,
+      "duration": 1.398,
       "meanDb": -16.9,
       "playback": {
         "gain": 1,
@@ -6958,6 +11302,30 @@
         "engine": "macos-say",
         "voice": "Tara",
         "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:bdcb4d97",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.5.slow",
+      "delivery": "slow",
+      "transcript": "A flat white with a heart, please? It's been a rough night, I could use one.",
+      "file": "assets/voice/priya/bdcb4d97-slow.mp3",
+      "duration": 4.661,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 116,
         "pitch": 1,
         "placeholder": true
       }
@@ -6974,6 +11342,78 @@
       "file": "assets/voice/priya/bee75bcd.mp3",
       "duration": 2.371,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:c089ce2b",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "However it comes is fine.",
+      "file": "assets/voice/priya/c089ce2b.mp3",
+      "duration": 1.549,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:c87e5adb",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "Sorry, a flat white, please.",
+      "file": "assets/voice/priya/c87e5adb.mp3",
+      "duration": 1.874,
+      "meanDb": -18.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:cd2d3904",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yes, a heart would be lovely.",
+      "file": "assets/voice/priya/cd2d3904.mp3",
+      "duration": 1.678,
+      "meanDb": -17.5,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -7011,6 +11451,30 @@
       }
     },
     {
+      "dialogueId": "priya:e9b1ca2c",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.3.slow",
+      "delivery": "slow",
+      "transcript": "Can I get a flat white, extra hot, with almond milk, please? It's got to survive the bus home.",
+      "file": "assets/voice/priya/e9b1ca2c-slow.mp3",
+      "duration": 9.247,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 132,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
       "dialogueId": "priya:eaf1017a",
       "characterId": "priya",
       "voiceId": "macos:Tara",
@@ -7020,8 +11484,56 @@
       "delivery": "normal",
       "transcript": "Sorry… is mine nearly ready? I might fall asleep standing up.",
       "file": "assets/voice/priya/eaf1017a.mp3",
-      "duration": 3.955,
-      "meanDb": -17.1,
+      "duration": 3.987,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:eb8027fc",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "Oh, it's a long black. No heart.",
+      "file": "assets/voice/priya/eb8027fc.mp3",
+      "duration": 2.501,
+      "meanDb": -18.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:ed46796e",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat milk, please.",
+      "file": "assets/voice/priya/ed46796e.mp3",
+      "duration": 1.187,
+      "meanDb": -16.8,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -7046,6 +11558,102 @@
       "file": "assets/voice/priya/f026b992.mp3",
       "duration": 2.267,
       "meanDb": -17.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:f150a94b",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond milk, please.",
+      "file": "assets/voice/priya/f150a94b.mp3",
+      "duration": 1.283,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:f277818e",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Sorry, I think that's the wrong milk. I can't have that one.",
+      "file": "assets/voice/priya/f277818e.mp3",
+      "duration": 3.58,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:fa385567",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Just regular milk, thanks.",
+      "file": "assets/voice/priya/fa385567.mp3",
+      "duration": 1.535,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Tara",
+        "rate": 165,
+        "pitch": 1,
+        "placeholder": true
+      }
+    },
+    {
+      "dialogueId": "priya:fd57825b",
+      "characterId": "priya",
+      "voiceId": "macos:Tara",
+      "accent": "indian",
+      "locale": "en-IN",
+      "key": "priya.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Normal is fine, thanks.",
+      "file": "assets/voice/priya/fd57825b.mp3",
+      "duration": 1.539,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
