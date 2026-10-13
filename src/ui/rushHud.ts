@@ -398,6 +398,9 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           parts.push(btn('bin', b.ready ? 'Bin it' : 'Bin it, start again', 'B', false));
       } else key = r.phase;
       setActions(key, parts.join(''));
+      // While pouring, the buttons sit off to the side, clear of the cup the pointer steers over
+      // (as on Day 1): a button under the pointer swallows its moves, and a stray click ends it.
+      actions.classList.toggle('side', r.phase === 'service' && b.phase === 'pour');
 
       // Instruction.
       let ins: { title: string; html: string } | null = null;

@@ -211,6 +211,12 @@ async function steamAndPour(page: Page, extraHot: boolean, shotName: string): Pr
     if (!pourShot && t > 5.6) {
       pourShot = true;
       await snap(page, shotName);
+      // The pour buttons sit off to the side, clear of the cup the pointer steers across.
+      const box = await page.getByRole('button', { name: /Hand it over/ }).boundingBox();
+      const rim = await page.evaluate(() =>
+        (window as unknown as { __trial: Debug }).__trial.project(1.25, 0),
+      );
+      expect(box?.x ?? 0).toBeGreaterThan(rim.x);
     }
   }
   if (held) await page.mouse.up();
