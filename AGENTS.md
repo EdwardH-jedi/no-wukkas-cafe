@@ -40,7 +40,7 @@ npm run preview        # serve dist/ locally → http://localhost:4183
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
-npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, audio specs (~9 min); E2E_PORT=… to run beside another checkout
+npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, audio specs, dev review pages (~11 min); E2E_PORT=… to run beside another checkout
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)

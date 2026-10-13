@@ -110,8 +110,9 @@ audio engine (manager, music synth, SFX):
 | afternoon | −20.3 | −27.2 | −1.4 dBTP | −0.8 dBTP | 0 |
 
 - The moods are within 0.4 LU of each other: a mood change isn't a volume jump.
-- The placeholder order clips average −17.5 LUFS, about **21 LU above the ducked music** at
-  default volumes.
+- The placeholder order clips average −14.5 LUFS as heard in the game (mono, up-mixed to both
+  channels; the files themselves read −17.5), about **24 LU above the ducked music** at default
+  volumes.
 - Measured duck: 0.28 under an order and 0.55 under chat, as designed.
 - Nothing clips, even in the worst case. Its 0.5 dB of headroom is the smallest margin; if
   louder release voices arrive, re-measure before adding a limiter.
@@ -121,7 +122,11 @@ carrier's own frequency, which puts a 0 Hz sideband into every chord. Soloing ea
 offline traced it to the keys (afternoon keys alone: DC −0.0047, every other instrument below
 −62 dBFS). Mixes measured 0.0013 (opening), 0.0032 (rush) and 0.0035 (afternoon). A 20 Hz
 high-pass at the synth's output (`src/audio/music.ts`) removes it: DC is now ≤ 0.00001, and
-loudness moved by ≤ 0.2 LU. The notes, instruments and mix are unchanged. Regression:
+loudness moved by ≤ 0.2 LU. The notes, instruments and mix are unchanged.
+
+The output isn't bit-identical: the filter's low-frequency phase shift moved the music-alone true
+peaks (opening −4.8 → −4.1, rush −3.4 → −2.5, afternoon −1.1 → −1.4 dBTP). The worst case moved by
+less than 0.3 dB. Regression:
 `tests/e2e/listening.spec.ts` (DC < 0.0005 per mood) fails on the old synth and passes now.
 
 **Not judged by measurement:** whether the moods sound good, fit the café, or tire the ear over a

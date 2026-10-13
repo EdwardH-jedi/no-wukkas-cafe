@@ -119,10 +119,19 @@ export async function measureMoods(
     if (!clip) continue;
     try {
       const buffer = await decodeClip(import.meta.env.BASE_URL + clip.file);
-      const lufs =
-        integratedLoudness([buffer.getChannelData(0)], buffer.sampleRate) +
-        20 * Math.log10(clip.playback.gain);
-      speech.push({ id: clip.file, buffer, gain: clip.playback.gain, lufs });
+      const gain = clip.playback.gain;
+      // Through the same stereo graph as the music: the mono clip is up-mixed to both channels,
+      // as in the game, so it reads 3 LU louder than the mono file itself.
+      const alone = await renderMix({
+        mood: null,
+        seconds: buffer.duration + 0.1,
+        volumes: { voice: 1, music: 0, ambience: 0, sfx: 0 },
+        crowd: null,
+        machine: false,
+        speech: { buffer, gain, at: 0, listen: true },
+      });
+      const lufs = integratedLoudness(channelsFrom(alone, 0), alone.sampleRate);
+      speech.push({ id: clip.file, buffer, gain, lufs });
     } catch {
       /* clip not rendered locally: measure without speech */
     }
