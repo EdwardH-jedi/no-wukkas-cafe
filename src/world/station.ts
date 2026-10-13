@@ -21,6 +21,9 @@ const POUR_YAW = Math.atan2(0.35, -1);
 const STEAM_YAW = Math.PI / 2;
 const JUG_TIP = new THREE.Vector3(0.052, 0.118, 0); // spout tip relative to the jug base (unscaled)
 const JUG_SCALE = 0.8; // a small latte-art jug
+/** Jug + arm opacity while pouring: they sit between the camera and the art, so they go ghostly
+ *  and the pattern forming under them stays visible. */
+const JUG_GHOST = 0.3;
 const WAND_TIP = new THREE.Vector3(LAYOUT.wand.x, CT + 0.17, LAYOUT.wand.z);
 const JUG_REST = new THREE.Vector3(-0.38, CT, -1.0);
 /** Day 2 long black: the cup sits under the hot-water tap first. */
@@ -321,6 +324,9 @@ export function buildStation(scene: THREE.Scene): Station {
   const arm = new THREE.Group();
   arm.position.set(-0.078, 0.06, 0);
   jugBody.add(arm);
+  const ghostMats = [jugM, milkM, skinM, sleeveM];
+  for (const m of ghostMats) m.transparent = true;
+  let jugOpacity = 1;
   const hand = new THREE.Mesh(new THREE.SphereGeometry(0.021, 12, 10), skinM);
   hand.scale.set(1, 1.35, 0.8);
   arm.add(hand);
@@ -611,6 +617,14 @@ export function buildStation(scene: THREE.Scene): Station {
     arm.visible = pouring || steaming;
     sleeveM.color.copy(phase === 'demo' ? GAZ_SLEEVE : PLAYER_SLEEVE);
     skinM.color.copy(phase === 'demo' ? GAZ_SKIN : PLAYER_SKIN);
+    // Ghost the jug and arm once they're over the cup, so the art is never hidden.
+    const wantOpacity = pouring && jugBlend > 0.85 ? JUG_GHOST : 1;
+    jugOpacity += (wantOpacity - jugOpacity) * Math.min(1, dt * 8);
+    if (Math.abs(jugOpacity - wantOpacity) < 0.005) jugOpacity = wantOpacity;
+    for (const m of ghostMats) {
+      m.opacity = jugOpacity;
+      m.depthWrite = jugOpacity > 0.99;
+    }
     let milkFrac = 1;
     let milkY = 0.075;
     if (pouring || jugBlend > 0) {
