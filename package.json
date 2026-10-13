@@ -19,7 +19,8 @@
     "balance": "node scripts/balance.ts",
     "voices": "node scripts/voices.ts",
     "voices:check": "node scripts/voices-check.ts",
-    "release:check": "node scripts/voices-check.ts --release && npm run build"
+    "release:check": "node scripts/voices-check.ts --release && npm run build",
+    "voices:audition": "node scripts/voices-audition.ts"
   },
   "dependencies": {
     "@fontsource/bowlby-one": "^5.3.0",

@@ -6,7 +6,6 @@ import { VOICE_PROFILES } from '../../src/data/voice/profiles';
 import { voiceScript } from '../../src/data/voice/script';
 import {
   expectedFile,
-  summarise,
   validateManifest,
   type IssueCode,
 } from '../../src/data/voice/validate';
@@ -33,10 +32,15 @@ describe('the committed voice manifest', () => {
     }
   });
 
-  it('fails a release check: every clip is placeholder audio', () => {
+  it('fails a release check: placeholders, pitch-shifted and shared voices', () => {
     const issues = validateManifest(VOICE_MANIFEST, { ...opts, release: true });
-    expect(summarise(issues).errors).toBe(VOICE_MANIFEST.clips.length);
-    expect(new Set(issues.map((i) => i.code))).toEqual(new Set(['placeholder-in-release']));
+    const by = (code: string): number => issues.filter((i) => i.code === code).length;
+    expect(by('placeholder-in-release')).toBe(VOICE_MANIFEST.clips.length);
+    // Gaz, Dazza and Karen are Karen pitched; Beryl is plain Karen.
+    expect(by('pitch-shift')).toBe(VOICE_MANIFEST.clips.filter((c) => c.source.pitch !== 1).length);
+    expect(issues.find((i) => i.code === 'shared-voice')?.message).toMatch(
+      /beryl, dazza, gaz, karen/,
+    );
   });
 
   it('records which voices render reproducibly (Tara does not)', () => {
@@ -129,6 +133,14 @@ describe('validation catches broken manifests', () => {
       };
     }
     licensed.status = 'release';
+    // Still not shippable: the Australians share one voice and three of them are pitch-shifted.
+    const codes2 = new Set(
+      validateManifest(licensed, { ...opts, release: true }).map((i) => i.code),
+    );
+    expect(codes2).toEqual(new Set(['shared-voice', 'pitch-shift']));
+    // Cast properly: a voice of their own each, no pitch shift.
+    for (const c of licensed.clips)
+      c.source = { ...c.source, voice: `cast-${c.characterId}`, pitch: 1 };
     expect(validateManifest(licensed, { ...opts, release: true })).toEqual([]);
   });
 

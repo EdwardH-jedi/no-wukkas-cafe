@@ -26,7 +26,9 @@ export type IssueCode =
   | 'placeholder-in-release'
   | 'no-licence'
   | 'missing-clip'
-  | 'stale-clip';
+  | 'stale-clip'
+  | 'shared-voice'
+  | 'pitch-shift';
 
 export interface Issue {
   level: 'error' | 'warn';
@@ -136,6 +138,25 @@ export function validateManifest(m: VoiceManifest, o: ValidateOptions): Issue[] 
       err('no-licence', 'release clip without a licence statement', id);
     if (o.release && c.source.placeholder !== false)
       err('placeholder-in-release', 'placeholder audio cannot ship', id);
+    // A character identity can't be another voice pitched up or down (docs/VOICE_CASTING.md).
+    if (o.release && c.source.pitch !== 1)
+      err('pitch-shift', `pitch ${c.source.pitch}: release voices are cast, not pitch-shifted`, id);
+  }
+
+  // Release: one base voice per character, never shared between characters.
+  if (o.release) {
+    const owners = new Map<string, Set<string>>();
+    for (const c of m.clips) {
+      const v = `${c.source?.engine}:${c.source?.voice}`;
+      if (!owners.has(v)) owners.set(v, new Set());
+      owners.get(v)!.add(c.characterId);
+    }
+    for (const [v, who] of owners)
+      if (who.size > 1)
+        err(
+          'shared-voice',
+          `${v} voices ${[...who].sort().join(', ')}: each character needs their own voice`,
+        );
   }
 
   const scripted = new Set<string>();
