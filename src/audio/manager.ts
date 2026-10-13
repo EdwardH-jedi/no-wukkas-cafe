@@ -37,6 +37,10 @@ export interface PlayRecord {
   endedAt: number | null;
   /** Loudest RMS seen on the voice bus while it played (sampled once per frame). */
   maxRms: number;
+  /** Loudest RMS seen after the master gain, the last node before the output device. */
+  maxMasterRms: number;
+  /** Cut off by a newer line (or stopVoice) instead of playing to its end. */
+  interrupted: boolean;
   /** ms from request to the first sample. */
   latencyMs: number;
   error: string | null;
@@ -71,6 +75,17 @@ export interface AudioManager {
   readonly clipPlaying: boolean;
   readonly history: readonly PlayRecord[];
   readonly clipCount: number;
+  /** Test evidence: voice sources playing now / at most at once (fading ones counted apart). */
+  readonly voices: { live: number; fading: number; maxLive: number; maxAudible: number };
+  /** Test evidence: what the context reports about the output path. */
+  readonly outputInfo: {
+    state: string;
+    sampleRate: number;
+    baseLatency: number;
+    outputLatency: number;
+    destinationChannels: number;
+    sinkId: string;
+  } | null;
 }
 
 const STORE = 'nwc.audio.v1';
@@ -118,6 +133,13 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
   const bus: Partial<Record<Bus, GainNode>> = {};
   let analyser: AnalyserNode | null = null;
   let scope: Float32Array<ArrayBuffer> | null = null;
+  let masterTap: AnalyserNode | null = null;
+  let masterScope: Float32Array<ArrayBuffer> | null = null;
+  // Voice sources started and not yet ended; `fading` = being faded out by a newer line.
+  const live = new Set<AudioBufferSourceNode>();
+  const fading = new Set<AudioBufferSourceNode>();
+  let maxLive = 0;
+  let maxAudible = 0;
   let status: AudioStatus = 'locked';
   let message = 'Click Start to turn on sound.';
   const listeners: Array<() => void> = [];
@@ -165,6 +187,11 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     ctx = new C({ latencyHint: 'interactive' });
     const master = ctx.createGain();
     master.connect(ctx.destination);
+    // Side tap after the master gain: proves signal reaches the node feeding the output device.
+    masterTap = ctx.createAnalyser();
+    masterTap.fftSize = 512;
+    masterScope = new Float32Array(masterTap.fftSize);
+    master.connect(masterTap);
     for (const b of ['voice', 'ambience', 'sfx'] as const) {
       const g = ctx.createGain();
       g.gain.value = b === 'voice' && !voiceEnabled ? 0 : vol[b];
@@ -224,6 +251,9 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
 
   const stopSource = (): void => {
     if (source && sourceGain && ctx) {
+      fading.add(source);
+      const r = current;
+      if (r && r.via === 'clip' && r.endedAt === null) r.interrupted = true;
       const t = ctx.currentTime;
       sourceGain.gain.cancelScheduledValues(t);
       sourceGain.gain.setValueAtTime(sourceGain.gain.value, t);
@@ -265,6 +295,8 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       maxRms: 0,
       latencyMs: 0,
       error: why,
+      maxMasterRms: 0,
+      interrupted: false,
     };
     record(r);
     if (!tts.available) {
@@ -349,9 +381,13 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
             maxRms: 0,
             latencyMs: Math.round(performance.now() - asked),
             error: null,
+            maxMasterRms: 0,
+            interrupted: false,
           };
           s.onended = () => {
             r.endedAt = ctx?.currentTime ?? 0;
+            live.delete(s);
+            fading.delete(s);
             if (source === s) {
               source = null;
               sourceGain = null;
@@ -360,6 +396,9 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
           s.start();
           source = s;
           sourceGain = g;
+          live.add(s);
+          maxLive = Math.max(maxLive, live.size);
+          maxAudible = Math.max(maxAudible, live.size - fading.size);
           record(r);
           if (status === 'fallback' || status === 'error') setStatus('ok', okMessage());
         },
@@ -440,6 +479,13 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       for (let i = 0; i < scope.length; i++) sum += (scope[i] as number) ** 2;
       const rms = Math.sqrt(sum / scope.length);
       if (current && current.via === 'clip' && rms > current.maxRms) current.maxRms = rms;
+      if (masterTap && masterScope && current && current.via === 'clip') {
+        masterTap.getFloatTimeDomainData(masterScope);
+        let m = 0;
+        for (let i = 0; i < masterScope.length; i++) m += (masterScope[i] as number) ** 2;
+        const mr = Math.sqrt(m / masterScope.length);
+        if (mr > current.maxMasterRms) current.maxMasterRms = mr;
+      }
       return Math.min(1, rms * 5);
     },
     get speaking() {
@@ -453,6 +499,21 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     },
     get clipCount() {
       return VOICE_MANIFEST.clips.length;
+    },
+    get voices() {
+      return { live: live.size, fading: fading.size, maxLive, maxAudible };
+    },
+    get outputInfo() {
+      if (!ctx) return null;
+      const sink = (ctx as AudioContext & { sinkId?: unknown }).sinkId;
+      return {
+        state: ctx.state,
+        sampleRate: ctx.sampleRate,
+        baseLatency: ctx.baseLatency ?? 0,
+        outputLatency: ctx.outputLatency ?? 0,
+        destinationChannels: ctx.destination.maxChannelCount,
+        sinkId: typeof sink === 'string' ? sink : sink ? 'device' : '',
+      };
     },
   };
   return m;

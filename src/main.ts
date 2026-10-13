@@ -470,6 +470,29 @@ async function boot(): Promise<void> {
         speaking: audio.speaking,
         clipCount: audio.clipCount,
         history: audio.history.map((h) => ({ ...h })),
+        voices: audio.voices,
+        output: audio.outputInfo,
+      };
+    },
+    /** Cheap per-frame snapshot for audio/subtitle sync tests (Day 1 or Day 2). */
+    get audioTick() {
+      const last = audio.history[audio.history.length - 1];
+      const line = mode === 'rush' ? (rush?.speech.current ?? null) : trial.speech.current;
+      const c = rush?.customers.find((x) => x.state === 'ordering' || x.state === 'deciding');
+      return {
+        t: audio.context?.currentTime ?? 0,
+        sim: mode === 'rush' ? (rush?.time ?? 0) : trial.time,
+        clip: last ? { text: last.text, endedAt: last.endedAt, via: last.via } : null,
+        playing: audio.clipPlaying,
+        line: line ? line.text : null,
+        subs:
+          (
+            document.querySelector(
+              mode === 'rush' ? '#rsubs .text' : '#subs .text',
+            ) as HTMLElement | null
+          )?.textContent ?? '',
+        counter: c ? { id: c.def.id, state: c.state } : null,
+        live: audio.voices.live - audio.voices.fading,
       };
     },
     /** Day 2 state for tests (null on Day 1). */
