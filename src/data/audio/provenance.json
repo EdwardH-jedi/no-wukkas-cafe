@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "note": "Every audio FILE that ships (music, SFX, voices outside the voice manifest) must be listed here with a verified licence. Procedural audio generated in code (src/audio/sfx.ts, src/audio/music.ts) is original to this repo and has no files. See docs/AUDIO_PROVENANCE.md.",
+  "files": []
+}

@@ -12,8 +12,16 @@
 // is orphaned. Exit code 1 on any error.
 
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { cachePath, listClips, MANIFEST, measure, pool, publicPath, ROOT } from './voice-node.ts';
+import {
+  CACHE_DIR,
+  cachePath,
+  listClips,
+  MANIFEST,
+  measure,
+  pool,
+  publicPath,
+  ROOT,
+} from './voice-node.ts';
 
 const { voiceScript } = await import('../src/data/voice/script.ts');
 const { VOICE_PROFILES } = await import('../src/data/voice/profiles.ts');
@@ -69,7 +77,7 @@ if (!manifestOnly) {
         message: `file is ${got.duration} s, manifest says ${c.duration} s (re-run npm run voices)`,
       });
   });
-  for (const f of listClips(join(ROOT, 'voice-cache')))
+  for (const f of listClips(CACHE_DIR))
     if (!m.clips.some((c) => c.file === f))
       issues.push({
         level: 'warn',

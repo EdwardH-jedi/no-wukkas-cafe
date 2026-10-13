@@ -14,6 +14,8 @@ export interface TtsStyle {
   locale?: string;
   /** System voice names to prefer, best first. */
   prefer?: readonly string[];
+  /** 0..1, the player's voice volume (browser speech can't go through the Web Audio buses). */
+  volume?: number;
 }
 
 export interface Tts {
@@ -127,6 +129,7 @@ export function createTts(): Tts {
           lastVoice = voice?.name ?? `(default ${u.lang})`;
           u.pitch = style.pitch;
           u.rate = style.rate;
+          u.volume = Math.max(0, Math.min(1, style.volume ?? 1));
           u.onstart = () => {
             if (my === gen) started = true;
           };

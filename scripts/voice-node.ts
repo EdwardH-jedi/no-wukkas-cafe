@@ -21,12 +21,14 @@ registerHooks({
 
 export const run = promisify(execFile);
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const MANIFEST = join(ROOT, 'src/data/voice/manifest.json');
+/** Overridable for tests (VOICES_MANIFEST / VOICES_CACHE) so they never touch the real files. */
+export const MANIFEST = process.env.VOICES_MANIFEST ?? join(ROOT, 'src/data/voice/manifest.json');
+const CACHE = process.env.VOICES_CACHE ?? join(ROOT, 'voice-cache');
 
 const URL_PREFIX = 'assets/voice/';
 /** Placeholder clips: gitignored cache, served by the dev server only. */
-export const cachePath = (file: string): string =>
-  join(ROOT, 'voice-cache', file.slice(URL_PREFIX.length));
+export const cachePath = (file: string): string => join(CACHE, file.slice(URL_PREFIX.length));
+export const CACHE_DIR = CACHE;
 /** Release clips (and pre-2026-10-13 placeholder renders): bundled from public/. */
 export const publicPath = (file: string): string => join(ROOT, 'public', file);
 

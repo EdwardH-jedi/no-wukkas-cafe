@@ -63,7 +63,10 @@ function botInput(r: Rush, o: BotOpts, m: BotMemory): RushInput {
   const counter = atCounter(r);
   if (counter?.state === 'deciding') {
     const l = counter.listen;
-    if (o.aids && l.replays === 0) i.action = { type: 'replay' };
+    // A replay while their own line is still queued is ignored (nothing new to hear), so a
+    // sensible player waits for it to play before asking again.
+    const queued = r.speech.queue.some((q) => q.listen && q.speaker === counter.def.id);
+    if (o.aids && l.replays === 0) i.action = queued ? null : { type: 'replay' };
     else if (o.aids && l.repeats === 0 && counter.stateTime > 0.5) i.action = { type: 'repeat' };
     else if (o.aids && l.clarified.length === 0 && counter.stateTime > 0.5)
       i.action = { type: 'clarify', field: 'milk' };

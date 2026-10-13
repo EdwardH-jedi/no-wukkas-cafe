@@ -177,6 +177,8 @@ export interface ListenRecord {
   replays: number;
   repeats: number;
   clarified: OrderField[];
+  /** Questions asked (each costs patience), including repeats of the same question. */
+  questions: number;
 }
 
 export interface ListenSummary {
@@ -197,7 +199,7 @@ export function summariseListening(records: readonly ListenRecord[]): ListenSumm
     if (r.heard && r.wrong.length === 0) heardRight++;
     replays += r.replays;
     repeats += r.repeats;
-    questions += r.clarified.length;
+    questions += r.questions;
   }
   return { orders: records.length, heardRight, replays, repeats, questions };
 }

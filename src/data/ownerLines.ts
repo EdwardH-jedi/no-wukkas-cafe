@@ -689,6 +689,18 @@ export const OWNER_LINES: LineBook = {
     mood: 'sceptical',
     cooldown: 20,
   },
+  // A flat white with the wrong milk that wasn't a listening mistake (made for someone else).
+  'rush.wrongMilk': {
+    tiers: [
+      [
+        { text: "Wrong milk, champ. That's not what {name}'s ticket says." },
+        { text: "{name} can't have that milk. Check the ticket before you hand it over." },
+      ],
+      [{ text: 'Milk, mate! Read the ticket! Oat, soy, almond. It matters.' }],
+    ],
+    mood: 'annoyed',
+    gesture: 'facepalm',
+  },
   'rush.binned': {
     tiers: [
       [

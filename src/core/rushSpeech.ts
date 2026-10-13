@@ -8,7 +8,7 @@ import type { Delivery } from '../data/voice/ids';
 import { pickLine, type LineDef, type Mood } from '../sim/owner';
 import { DRINK_NAME, type DrinkType } from '../sim/rush';
 import type { Rush, RushCustomer } from './rush';
-import { canOffer, interrupt, offer, type Priority, type Utterance } from './speech';
+import { canOffer, dropQueued, interrupt, offer, type Priority, type Utterance } from './speech';
 
 const fill = (text: string, vars: Record<string, string>): string =>
   text.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? `{${k}}`);
@@ -96,12 +96,28 @@ export function customerListen(
     listen: true,
   };
   c.lastListen = { text, delivery, key };
+  // The same request asked again while it's still waiting replaces it instead of piling up
+  // (a customer has at most six distinct listening lines, so the queue stays bounded).
+  dropQueued(
+    r.speech,
+    (q) => q.listen === true && q.speaker === c.def.id && q.key === key && q.delivery === delivery,
+  );
   // Cut Gaz or themselves off, but never another customer mid-sentence.
   const cur = r.speech.current;
   if (!cur || cur.speaker === c.def.id || cur.speaker === 'gaz')
     interrupt(r.speech, u, r.time, startSay(r));
   else offer(r.speech, u, r.time, startSay(r));
   return u;
+}
+
+/** This customer has a listening line queued that hasn't started yet. */
+export function listenQueued(r: Rush, c: RushCustomer): boolean {
+  return r.speech.queue.some((q) => q.listen === true && q.speaker === c.def.id);
+}
+
+/** They've gone (or are going): nothing they queued should still be said. */
+export function forgetCustomer(r: Rush, c: RushCustomer, keepReactions: boolean): void {
+  dropQueued(r.speech, (q) => q.speaker === c.def.id && (q.listen === true || !keepReactions));
 }
 
 export const varsFor = (c: RushCustomer, drink?: DrinkType): Record<string, string> => ({

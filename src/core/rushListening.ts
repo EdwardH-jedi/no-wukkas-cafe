@@ -16,7 +16,7 @@ import {
 } from '../sim/listening';
 import type { MadeDrink, Order } from '../sim/rush';
 import type { Rush, RushCustomer } from './rush';
-import { customerListen, customerSay, gaz, varsFor } from './rushSpeech';
+import { customerListen, customerSay, gaz, listenQueued, varsFor } from './rushSpeech';
 
 /** The customer whose order is being taken (speaking or being rung up), if any. */
 export function atCounter(r: Rush): RushCustomer | null {
@@ -32,6 +32,9 @@ export function listenAction(
   const c = atCounter(r);
   if (!c) return;
   if (a.type === 'replay') {
+    // Something of theirs is already waiting to be said: that's what they'll hear next, so a
+    // replay request adds nothing (no line, no cost, not counted).
+    if (listenQueued(r, c)) return;
     const l = c.lastListen ?? { text: c.line.text, delivery: 'normal' as Delivery, key: c.line.id };
     c.listen.replays++;
     c.patience -= LISTEN_COST.replay;
@@ -48,6 +51,7 @@ export function listenAction(
     if (c.listen.repeats === MAX_REPEATS) gaz(r, 'rush.askedTwice', 'react', varsFor(c));
   } else {
     if (!c.listen.clarified.includes(a.field)) c.listen.clarified.push(a.field);
+    c.listen.questions++;
     c.patience -= LISTEN_COST.clarify;
     r.events.push({ type: 'ask', customer: c.def.id, text: CLARIFY_QUESTION[a.field] });
     const text = answerFor(c.def.answers, c.order, a.field);
@@ -72,6 +76,7 @@ export function ringUp(r: Rush, heard: Order): void {
     replays: c.listen.replays,
     repeats: c.listen.repeats,
     clarified: [...c.listen.clarified],
+    questions: c.listen.questions,
   });
   c.state = 'waiting';
   c.stateTime = 0;

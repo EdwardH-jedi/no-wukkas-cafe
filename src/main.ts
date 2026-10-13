@@ -157,6 +157,15 @@ async function boot(): Promise<void> {
     rushAction = a;
   };
 
+  /** Unpause everything together: game clock, menus and audio (A1: switching days from the
+   *  pause menu used to leave the AudioContext suspended). */
+  const resumeAll = (): void => {
+    clock.paused = false;
+    hud.setPaused(false);
+    rushHud.setPaused(false);
+    audio.setPaused(false);
+  };
+
   /** Start the morning rush (from the title or the trial verdict). */
   const startDay2 = (): void => {
     audio.unlock();
@@ -164,9 +173,7 @@ async function boot(): Promise<void> {
     audio.stopVoice();
     sfx.play('click');
     prefetchDay(2);
-    clock.paused = false;
-    hud.setPaused(false);
-    rushHud.setPaused(false);
+    resumeAll();
     crowd.clear();
     rush = createRush(seed, listen.difficulty);
     sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
@@ -180,9 +187,7 @@ async function boot(): Promise<void> {
   /** Back to the title screen (fresh Day 1 trial). */
   const toTitle = (): void => {
     audio.stopVoice();
-    clock.paused = false;
-    hud.setPaused(false);
-    rushHud.setPaused(false);
+    resumeAll();
     crowd.clear();
     rush = null;
     mode = 'trial';
@@ -417,6 +422,7 @@ async function boot(): Promise<void> {
     rushIn.heightDelta = input.heightDelta;
     rushIn.heightPreset = input.heightPreset;
     rushIn.skip = input.skip;
+    rushIn.voiceHold = input.voiceHold === true;
     rushIn.action = rushAction;
   };
 
@@ -593,6 +599,9 @@ async function boot(): Promise<void> {
 
   // ---------------------------------------------------------------- loop
   let last = performance.now();
+  /** Seconds the current line has been held waiting for its audio (see frame()). */
+  let voiceHoldFor = 0;
+  const MAX_VOICE_HOLD = 6;
   let viewTime = 0;
   /** Loudness of the line being spoken (0..1), for mouths. */
   let voiceLevel = 0;
@@ -718,6 +727,11 @@ async function boot(): Promise<void> {
     requestAnimationFrame(frame);
     const real = Math.min(0.1, Math.max(0, (ts - last) / 1000)) * timeScale;
     last = ts;
+    // While the current line's clip is still downloading/decoding, hold that line's clock (A3),
+    // but never for long: a stuck download mustn't freeze the game.
+    const loading = audio.loading && !clock.paused;
+    voiceHoldFor = loading ? voiceHoldFor + real : 0;
+    input.voiceHold = loading && voiceHoldFor < MAX_VOICE_HOLD;
     const steps = consumeFrame(clock, real);
     for (let i = 0; i < steps; i++) {
       sampleInput();

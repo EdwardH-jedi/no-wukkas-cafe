@@ -42,7 +42,15 @@ import {
 } from './barista';
 import { createRng, type Rng } from './rng';
 import { atCounter, fixMisheardTicket, listenAction, ringUp } from './rushListening';
-import { customerListen, customerSay, gaz, gazDef, startSay, varsFor } from './rushSpeech';
+import {
+  customerListen,
+  customerSay,
+  forgetCustomer,
+  gaz,
+  gazDef,
+  startSay,
+  varsFor,
+} from './rushSpeech';
 import {
   channelBusy,
   createChannel,
@@ -80,7 +88,7 @@ export interface RushCustomer {
   order: Order;
   /** What the player rang up: the ticket. Null until rung up. */
   heard: Order | null;
-  listen: { replays: number; repeats: number; clarified: OrderField[] };
+  listen: { replays: number; repeats: number; clarified: OrderField[]; questions: number };
   /** The last thing they said for the player to hear (order, repeat or answer), for Replay. */
   lastListen: { text: string; delivery: Delivery; key: string } | null;
   state: CustomerState;
@@ -120,6 +128,9 @@ export type RushAction =
 
 export interface RushInput extends Omit<BaristaInput, 'next'> {
   skip: boolean;
+  /** The current line's audio is still loading: hold its timer, and the patience of the
+   *  customer it belongs to (see core/speech.ts). */
+  voiceHold?: boolean;
   action: RushAction | null;
 }
 
@@ -213,7 +224,7 @@ export function createRush(
         line,
         order: normaliseOrder(line.order),
         heard: null,
-        listen: { replays: 0, repeats: 0, clarified: [] },
+        listen: { replays: 0, repeats: 0, clarified: [], questions: 0 },
         lastListen: null,
         state: 'outside' as CustomerState,
         stateTime: 0,
@@ -293,6 +304,7 @@ function walkout(r: Rush, c: RushCustomer): void {
   c.outcome = 'walkout';
   c.reaction = 'furious';
   setState(c, 'leaving');
+  forgetCustomer(r, c, true);
   customerSay(r, c, `${c.def.id}.walkout`, c.def.lines.walkout, 'furious', 'react');
   gaz(r, 'rush.walkout', 'react', varsFor(c));
   addFrustration(r.owner, 1.2);
@@ -300,7 +312,7 @@ function walkout(r: Rush, c: RushCustomer): void {
   r.events.push({ type: 'walkout', customer: c.def.id });
 }
 
-function stepCustomers(r: Rush, dt: number): void {
+function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
   for (const c of r.customers) {
     c.stateTime += dt;
     const max = c.def.patience;
@@ -331,8 +343,10 @@ function stepCustomers(r: Rush, dt: number): void {
         }
         break;
       case 'ordering':
-        // Once they've said it, it's over to the player to ring it up.
-        c.patience -= drainRate(false) * dt;
+        // Once they've said it, it's over to the player to ring it up. Their own order still
+        // loading doesn't count against them.
+        if (!(voiceHold && r.speech.current?.speaker === c.def.id))
+          c.patience -= drainRate(false) * dt;
         if (!c.orderLine || !pending(r.speech, c.orderLine)) setState(c, 'deciding');
         break;
       case 'deciding':
@@ -357,7 +371,10 @@ function stepCustomers(r: Rush, dt: number): void {
         }
         break;
       case 'leaving':
-        if (c.stateTime >= LEAVE_TIME) setState(c, 'gone');
+        if (c.stateTime >= LEAVE_TIME) {
+          setState(c, 'gone');
+          forgetCustomer(r, c, false); // gone means silent
+        }
         break;
       case 'gone':
         break;
@@ -401,8 +418,9 @@ function serve(r: Rush, id: CustomerId): void {
       'annoyed',
       'order',
     );
+    // A listening mistake, the wrong milk (drink made for someone else), or the wrong drink.
     if (!fixMisheardTicket(r, c, drink, wrongMilk))
-      gaz(r, 'rush.wrongDrink', 'react', varsFor(c, drink.type));
+      gaz(r, wrongMilk ? 'rush.wrongMilk' : 'rush.wrongDrink', 'react', varsFor(c, drink.type));
     addFrustration(r.owner, 0.8);
     r.streak.good = 0;
     r.streak.bad++;
@@ -413,6 +431,7 @@ function serve(r: Rush, id: CustomerId): void {
   c.outcome = 'served';
   c.result = result;
   setState(c, 'leaving');
+  forgetCustomer(r, c, true);
   r.records.push({
     customer: c.def.id,
     accepted: true,
@@ -484,6 +503,7 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
     r.time,
     input.skip || (r.phase === 'intro' && input.pressed),
     startSay(r),
+    input.voiceHold ? dt : 0,
   );
   const a = input.action;
   if (a?.type === 'restart') {
@@ -521,7 +541,7 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
       baristaIn.next = a?.type === 'next';
       stepBarista(r.barista, baristaIn, dt, r.time, baristaOut);
       handleBarista(r, baristaOut);
-      stepCustomers(r, dt);
+      stepCustomers(r, dt, input.voiceHold === true);
       if (r.customers.every((c) => c.state === 'gone')) {
         setPhase(r, 'wrapup');
         const wasted = r.barista.binned + (r.barista.ready || r.barista.phase !== 'idle' ? 1 : 0);

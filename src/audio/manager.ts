@@ -58,6 +58,7 @@ export interface AudioManager {
   readonly lastLine: VoiceRequest | null;
   stopVoice(): void;
   setPaused(p: boolean): void;
+  readonly paused: boolean;
   /** Download clips ahead of time (not decoded until played). */
   prefetch(reqs: readonly VoiceRequest[]): void;
   volume(bus: Bus): number;
@@ -73,6 +74,9 @@ export interface AudioManager {
   readonly speaking: boolean;
   /** True while a recorded clip is playing (voiceLevel() is meaningful). */
   readonly clipPlaying: boolean;
+  /** True while the latest line's clip is still being fetched/decoded (nothing audible yet).
+   *  The game holds that line's timer meanwhile so it never moves on before the line is heard. */
+  readonly loading: boolean;
   readonly history: readonly PlayRecord[];
   readonly clipCount: number;
   /** Test evidence: voice sources playing now / at most at once (fading ones counted apart). */
@@ -152,6 +156,10 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
   let gen = 0;
   let paused = false;
   let lastLine: VoiceRequest | null = null;
+  /** Generation whose clip is loading, or -1. */
+  let loadingGen = -1;
+  /** A browser-voice fallback that became due while paused: spoken on resume if still current. */
+  let pendingTts: { req: VoiceRequest; why: string | null; my: number } | null = null;
   let current: PlayRecord | null = null;
   const history: PlayRecord[] = [];
 
@@ -307,8 +315,18 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       return;
     }
     if (why) setStatus('fallback', `${why} Using the browser voice for now.`);
+    // Paused (e.g. a clip failed to load after the player paused): speak it on resume instead.
+    if (paused) {
+      pendingTts = { req, why, my };
+      return;
+    }
+    speakTts(req, r, my);
+  };
+
+  const speakTts = (req: VoiceRequest, r: PlayRecord, my: number): void => {
     const style = ttsStyle(req.speaker);
     if (req.delivery === 'slow') style.rate *= 0.82;
+    style.volume = voiceEnabled ? vol.voice : 0;
     tts.speak(req.text, style, (fail) => {
       if (my !== gen || paused) return;
       r.error = fail;
@@ -350,6 +368,7 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     say(req) {
       lastLine = req;
       const my = ++gen;
+      pendingTts = null;
       stopSource();
       tts.stop();
       if (!voiceEnabled) return;
@@ -359,8 +378,10 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
         return;
       }
       const asked = performance.now();
+      loadingGen = my;
       bufferFor(clip).then(
         (buf) => {
+          if (loadingGen === my) loadingGen = -1;
           if (my !== gen || !ctx) return;
           const g = ctx.createGain();
           g.gain.value = clip.playback.gain;
@@ -403,6 +424,7 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
           if (status === 'fallback' || status === 'error') setStatus('ok', okMessage());
         },
         (e: unknown) => {
+          if (loadingGen === my) loadingGen = -1;
           if (my !== gen) return;
           viaTts(req, `Couldn't load a voice clip (${(e as Error).message}).`, my);
         },
@@ -419,6 +441,8 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     },
     stopVoice() {
       gen++;
+      loadingGen = -1;
+      pendingTts = null;
       stopSource();
       tts.stop();
     },
@@ -430,7 +454,16 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       } else {
         tts.resume();
         if (ctx && ctx.state !== 'running') void ctx.resume().then(checkRunning);
+        const due = pendingTts;
+        pendingTts = null;
+        if (due && due.my === gen) {
+          const r = history[history.length - 1];
+          if (r && r.via === 'tts' && r.text === due.req.text) speakTts(due.req, r, due.my);
+        }
       }
+    },
+    get paused() {
+      return paused;
     },
     prefetch(reqs) {
       for (const q of reqs) {
@@ -443,6 +476,8 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     },
     setVolume(b, v) {
       vol[b] = Math.max(0, Math.min(1, v));
+      // Browser speech takes its volume when a line starts; muting stops the current one.
+      if (b === 'voice' && vol.voice === 0) tts.stop();
       const g = bus[b];
       if (g && ctx && !(b === 'voice' && !voiceEnabled))
         g.gain.setTargetAtTime(vol[b], ctx.currentTime, 0.03);
@@ -493,6 +528,9 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     },
     get clipPlaying() {
       return source !== null;
+    },
+    get loading() {
+      return loadingGen >= 0 && loadingGen === gen;
     },
     get history() {
       return history;

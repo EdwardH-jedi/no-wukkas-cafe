@@ -226,6 +226,8 @@ async function pourTrackpadStyle(page: Page): Promise<void> {
 test('Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart', async ({
   page,
 }) => {
+  // ~2.6 min alone in software GL; late in a full suite run it has gone past the 180 s default.
+  test.setTimeout(300_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?voice=0&seed=7');

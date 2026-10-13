@@ -76,6 +76,8 @@ export interface TrialInput {
   heightPreset: number | null;
   /** Advance the current subtitle. */
   skip: boolean;
+  /** The current line's audio is still loading: hold its timer (see core/speech.ts). */
+  voiceHold?: boolean;
   action: TrialAction | null;
 }
 
@@ -269,9 +271,11 @@ export function speaking(t: Trial): boolean {
   return t.speech.current !== null || t.speech.queue.length > 0;
 }
 
-function updateSpeech(t: Trial, skip: boolean): void {
+function updateSpeech(t: Trial, skip: boolean, hold = 0): void {
   const cur = t.speech.current;
   if (!cur) return;
+  // Audio still loading: the line's clock waits, so it can't end before it's heard.
+  if (hold > 0 && !skip) t.speech.started += hold;
   if (skip || t.time - t.speech.started >= cur.duration) {
     t.speech.current = null;
     const next = t.speech.queue.shift();
@@ -438,7 +442,7 @@ export function stepTrial(t: Trial, input: TrialInput, dt: number): void {
   // Clicks only skip subtitles in phases where the click isn't a gameplay input.
   const passive =
     t.phase === 'intro' || t.phase === 'inspect' || t.phase === 'verdict' || t.phase === 'lock';
-  updateSpeech(t, input.skip || (passive && input.pressed));
+  updateSpeech(t, input.skip || (passive && input.pressed), input.voiceHold ? dt : 0);
 
   // Restart is available from anywhere once the trial has begun (pause menu, verdict).
   if (input.action === 'restart' && t.phase !== 'title') {

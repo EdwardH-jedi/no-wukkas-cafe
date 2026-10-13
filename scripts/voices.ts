@@ -22,6 +22,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import {
   argValue,
+  CACHE_DIR,
   cachePath,
   listClips,
   MANIFEST,
@@ -242,6 +243,13 @@ async function main(): Promise<void> {
     if (c) castings.set(p.speaker, c);
     else missingVoices.push(`${p.speaker} (wants ${p.prefer.join(' / ')})`);
   }
+  // A speaker with no voice would silently lose every clip (Codex A5): stop before touching
+  // anything.
+  if (missingVoices.length) {
+    console.error(`no installed voice for: ${missingVoices.join('; ')}. Nothing was changed.`);
+    process.exitCode = 1;
+    return;
+  }
 
   // Before 2026-10-13 this script wrote placeholder clips into public/, where builds copy them.
   // Builds now strip placeholders, but the old folder should go.
@@ -394,7 +402,6 @@ async function main(): Promise<void> {
     licence: LICENCE,
     clips,
   };
-  writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
 
   const by = new Map<string, number>();
   for (const c of manifest.clips) by.set(c.characterId, (by.get(c.characterId) ?? 0) + 1);
@@ -404,12 +411,10 @@ async function main(): Promise<void> {
   );
   for (const [k, n] of by)
     console.log(`  ${k.padEnd(6)} ${String(n).padStart(4)}  ${castings.get(k)?.voice ?? '-'}`);
-  if (missingVoices.length) console.log(`no installed voice for: ${missingVoices.join('; ')}`);
-
-  if (prune) {
+  if (prune && !failures.length) {
     const listed = new Set(manifest.clips.map((c) => c.file));
     let removed = 0;
-    for (const f of listClips(join(ROOT, 'voice-cache')))
+    for (const f of listClips(CACHE_DIR))
       if (!listed.has(f)) {
         rmSync(cachePath(f), { force: true });
         removed++;
@@ -424,7 +429,20 @@ async function main(): Promise<void> {
   console.log(`manifest check: ${s.errors} error(s), ${s.warnings} warning(s)`);
   if (failures.length)
     console.error(`${failures.length} render failure(s):\n  ${failures.join('\n  ')}`);
-  if (failures.length || s.errors) process.exitCode = 1;
+  // Only a complete, valid manifest replaces the old one, and atomically (temp file + rename):
+  // a failed run leaves the committed manifest exactly as it was (Codex A5).
+  const text = `${JSON.stringify(manifest, null, 2)}\n`;
+  if (failures.length || s.errors) {
+    const rejected = join(CACHE_DIR, 'manifest.rejected.json');
+    mkdirSync(CACHE_DIR, { recursive: true });
+    writeFileSync(rejected, text);
+    console.error(`manifest NOT updated; this run's result is in ${rejected}`);
+    process.exitCode = 1;
+    return;
+  }
+  const tmp = `${MANIFEST}.tmp-${process.pid}`;
+  writeFileSync(tmp, text);
+  renameSync(tmp, MANIFEST);
 }
 
 await main();

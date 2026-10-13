@@ -1,17 +1,31 @@
-// Vite plugins for voice clips (docs/VOICE_ASSETS.md):
-//  - dev server: serves placeholder clips from voice-cache/ at /assets/voice/… (release clips in
-//    public/assets/voice/ are served by Vite as usual);
-//  - production build: strips any placeholder clip that ended up in dist/ (e.g. renders left in
-//    public/ from before 2026-10-13), so a build never redistributes placeholder audio.
+// Vite plugins for audio files (docs/VOICE_ASSETS.md, docs/AUDIO_PROVENANCE.md):
+//  - dev server: serves placeholder voice clips from voice-cache/ at /assets/voice/… (release
+//    clips in public/assets/voice/ are served by Vite as usual);
+//  - production build: every audio file in dist/ goes through the release gate
+//    (scripts/audio-gate.ts). Placeholder voice clips are removed; audio with unknown or
+//    unverified provenance FAILS the build, so nothing unlicensed ships silently.
 
 import { createReadStream, existsSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
-import { dirname, join, normalize, resolve } from 'node:path';
+import { dirname, join, normalize, relative, resolve } from 'node:path';
 import type { Plugin } from 'vite';
+import { classifyAudio, type ProvenanceLike, type VoiceManifestLike } from './audio-gate.ts';
 
 const URL_PREFIX = '/assets/voice/';
 
-interface ManifestLike {
-  clips: Array<{ file: string; source?: { placeholder?: boolean } }>;
+const readJson = <T>(path: string, fallback: T): T =>
+  existsSync(path) ? (JSON.parse(readFileSync(path, 'utf8')) as T) : fallback;
+
+function listFiles(dir: string): string[] {
+  const out: string[] = [];
+  const walk = (d: string): void => {
+    for (const name of readdirSync(d)) {
+      const p = join(d, name);
+      if (statSync(p).isDirectory()) walk(p);
+      else out.push(relative(dir, p).split('\\').join('/'));
+    }
+  };
+  if (existsSync(dir)) walk(dir);
+  return out;
 }
 
 export function voiceAssets(root: string): Plugin[] {
@@ -28,7 +42,7 @@ export function voiceAssets(root: string): Plugin[] {
           const path = url.startsWith(base) ? url.slice(base.length) : url;
           if (!path.startsWith(URL_PREFIX)) return next();
           const file = normalize(join(cache, decodeURIComponent(path.slice(URL_PREFIX.length))));
-          if (!file.startsWith(cache) || !existsSync(file) || !statSync(file).isFile())
+          if (!file.startsWith(cache + '/') || !existsSync(file) || !statSync(file).isFile())
             return next();
           res.setHeader('Content-Type', 'audio/mpeg');
           res.setHeader('Cache-Control', 'no-cache');
@@ -38,32 +52,40 @@ export function voiceAssets(root: string): Plugin[] {
       },
     },
     {
-      name: 'nwc-voice-release-only',
+      name: 'nwc-audio-release-gate',
       apply: 'build',
       configResolved(config) {
         outDir = resolve(config.root, config.build.outDir);
       },
       closeBundle() {
-        const manifestPath = resolve(root, 'src/data/voice/manifest.json');
-        if (!existsSync(manifestPath)) return;
-        const m = JSON.parse(readFileSync(manifestPath, 'utf8')) as ManifestLike;
-        let stripped = 0;
-        for (const c of m.clips) {
-          if (c.source?.placeholder === false) continue;
-          const f = join(outDir, c.file);
-          if (existsSync(f)) {
-            rmSync(f);
-            stripped++;
-            // Drop folders the stripping emptied.
-            for (let d = dirname(f); d.startsWith(join(outDir, 'assets')); d = dirname(d))
-              if (readdirSync(d).length === 0) rmSync(d, { recursive: true });
-              else break;
-          }
+        const voice = readJson<VoiceManifestLike>(resolve(root, 'src/data/voice/manifest.json'), {
+          clips: [],
+        });
+        const provenance = readJson<ProvenanceLike>(
+          resolve(root, 'src/data/audio/provenance.json'),
+          { files: [] },
+        );
+        const gate = classifyAudio(listFiles(outDir), voice, provenance);
+        for (const f of gate.strip) {
+          const p = join(outDir, f);
+          rmSync(p);
+          // Drop folders the stripping emptied.
+          for (let d = dirname(p); d.startsWith(join(outDir, 'assets')); d = dirname(d))
+            if (readdirSync(d).length === 0) rmSync(d, { recursive: true });
+            else break;
         }
-        if (stripped)
+        if (gate.strip.length)
           console.warn(
-            `[voice] stripped ${stripped} placeholder clip(s) from ${outDir}: placeholder audio never ships`,
+            `[audio-gate] removed ${gate.strip.length} placeholder voice clip(s) from ${outDir}: placeholder audio never ships`,
           );
+        if (gate.reject.length) {
+          const list = gate.reject.map((r) => `  ${r.file}: ${r.why}`).join('\n');
+          throw new Error(
+            `[audio-gate] ${gate.reject.length} audio file(s) in the build have no verified licence:\n${list}\n` +
+              'Remove them from public/, or record their licence (docs/AUDIO_PROVENANCE.md).',
+          );
+        }
+        console.log(`[audio-gate] ok: ${gate.keep.length} licensed audio file(s) in the build`);
       },
     },
   ];

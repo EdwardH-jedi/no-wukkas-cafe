@@ -133,15 +133,25 @@ export function interrupt(
   start(u);
 }
 
+/** Remove queued (not yet started) lines matching `pred`. */
+export function dropQueued(ch: Channel, pred: (u: Utterance) => boolean): void {
+  for (let i = ch.queue.length - 1; i >= 0; i--)
+    if (pred(ch.queue[i] as Utterance)) ch.queue.splice(i, 1);
+}
+
 /** Advance the channel: finish the current line on time (or when skipped), start the next. */
 export function updateChannel(
   ch: Channel,
   now: number,
   skip: boolean,
   start: (u: Utterance) => void,
+  /** Seconds to hold the current line's clock this step: its audio is still loading, so it
+   *  mustn't run out before anyone has heard it. An input, so the sim stays deterministic. */
+  hold = 0,
 ): void {
   const cur = ch.current;
   if (!cur) return;
+  if (hold > 0 && !skip) ch.started += hold;
   if (skip || now - ch.started >= cur.duration) {
     ch.current = null;
     const next = ch.queue.shift();

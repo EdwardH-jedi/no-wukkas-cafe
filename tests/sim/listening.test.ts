@@ -165,6 +165,7 @@ describe('cues and summary', () => {
       replays,
       repeats: 1,
       clarified: ['milk' as const],
+      questions: 1,
     });
     expect(summariseListening([rec([]), rec(['milk'], 2)])).toEqual({
       orders: 2,
