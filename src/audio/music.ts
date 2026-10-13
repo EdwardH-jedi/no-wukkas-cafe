@@ -6,7 +6,6 @@
 // suspended (paused) context stops the clock, so nothing new is scheduled while paused.
 
 import { createRng } from '../core/rng';
-import type { AudioManager } from './manager';
 import {
   barEvents,
   barSeconds,
@@ -16,11 +15,21 @@ import {
   type NoteEvent,
 } from './musicPatterns';
 
+/** What the synth plays into: the audio manager in the game, or an OfflineAudioContext and a gain
+ *  node when the listening lab (dev/listening.html) measures a mood. */
+export interface MusicHost {
+  readonly context: BaseAudioContext | null;
+  output(bus: 'music'): AudioNode | null;
+}
+
 export interface Music {
   /** Change mood (crossfades at the next bar); null fades the music out. */
   setMood(m: MusicMood | null): void;
   /** Call every frame: schedules the next bars ahead of the audio clock. */
   update(): void;
+  /** Schedule every bar that starts before `until` (audio-clock seconds), whatever the context
+   *  state. For offline rendering, where the clock doesn't run until rendering starts. */
+  renderAhead(until: number): void;
   readonly mood: MusicMood | null;
   /** Notes scheduled since start (debug/tests). */
   readonly scheduled: number;
@@ -31,8 +40,8 @@ const FADE = 1.6;
 
 const hz = (midi: number): number => 440 * 2 ** ((midi - 69) / 12);
 
-export function createMusic(audio: AudioManager): Music {
-  let ctx: AudioContext | null = null;
+export function createMusic(audio: MusicHost): Music {
+  let ctx: BaseAudioContext | null = null;
   let out: AudioNode | null = null;
   let reverb: ConvolverNode | null = null;
   let noise: AudioBuffer | null = null;
@@ -46,7 +55,15 @@ export function createMusic(audio: AudioManager): Music {
     const o = audio.output('music');
     if (!c || !o) return false;
     ctx = c;
-    out = o;
+    // DC blocker. The FM keys modulate at the carrier's own frequency, which puts a 0 Hz sideband
+    // into every chord (measured DC up to 0.0047 in the afternoon mood). A 20 Hz high-pass at the
+    // synth's output removes it and touches nothing audible (−0.2 dB at the kick's 45 Hz tail).
+    const dcBlock = c.createBiquadFilter();
+    dcBlock.type = 'highpass';
+    dcBlock.frequency.value = 20;
+    dcBlock.Q.value = Math.SQRT1_2;
+    dcBlock.connect(o);
+    out = dcBlock;
     const rng = createRng(0x6d75);
     noise = c.createBuffer(1, c.sampleRate, c.sampleRate);
     const nd = noise.getChannelData(0);
@@ -62,13 +79,13 @@ export function createMusic(audio: AudioManager): Music {
     reverb.buffer = ir;
     const wet = c.createGain();
     wet.gain.value = 0.35;
-    reverb.connect(wet).connect(o);
+    reverb.connect(wet).connect(dcBlock);
     return true;
   };
 
   /** One note, scheduled at audio time `t` (seconds), `dur` seconds long. */
   const play = (dest: GainNode, n: NoteEvent, t: number, dur: number): void => {
-    const c = ctx as AudioContext;
+    const c = ctx as BaseAudioContext;
     const amp = c.createGain();
     amp.connect(dest);
     const env = (attack: number, decay: number, peak = n.vel): void => {
@@ -225,7 +242,7 @@ export function createMusic(audio: AudioManager): Music {
   };
 
   const startMood = (m: MusicMood): void => {
-    const c = ctx as AudioContext;
+    const c = ctx as BaseAudioContext;
     const g = c.createGain();
     g.gain.setValueAtTime(0.0001, c.currentTime);
     g.gain.exponentialRampToValueAtTime(1, c.currentTime + FADE);
@@ -246,11 +263,22 @@ export function createMusic(audio: AudioManager): Music {
 
   // Disconnect a faded mood once it's silent (scheduled on the audio clock, no timers).
   const disconnectWhenSilent = (g: GainNode, at: number): void => {
-    const c = ctx as AudioContext;
+    const c = ctx as BaseAudioContext;
     const s = c.createConstantSource();
     s.onended = () => g.disconnect();
     s.start(at);
     s.stop(at + 0.01);
+  };
+
+  const scheduleUntil = (until: number): void => {
+    const p = playing;
+    if (!p) return;
+    const beat = 60 / MOODS[p.mood].bpm;
+    while (p.next < until) {
+      for (const n of barEvents(p.mood, p.bar)) play(p.gain, n, p.next + n.at * beat, n.len * beat);
+      p.bar++;
+      p.next += barSeconds(p.mood);
+    }
   };
 
   return {
@@ -269,17 +297,15 @@ export function createMusic(audio: AudioManager): Music {
     },
     update() {
       if (!init()) return;
-      const c = ctx as AudioContext;
+      const c = ctx as BaseAudioContext;
       if (mood && !playing) startMood(mood);
       if (!playing || c.state !== 'running') return;
-      const p = playing;
-      const beat = 60 / MOODS[p.mood].bpm;
-      while (p.next < c.currentTime + LOOKAHEAD) {
-        for (const n of barEvents(p.mood, p.bar))
-          play(p.gain, n, p.next + n.at * beat, n.len * beat);
-        p.bar++;
-        p.next += barSeconds(p.mood);
-      }
+      scheduleUntil(c.currentTime + LOOKAHEAD);
+    },
+    renderAhead(until) {
+      if (!init()) return;
+      if (mood && !playing) startMood(mood);
+      scheduleUntil(until);
     },
   };
 }

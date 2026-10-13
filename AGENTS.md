@@ -50,7 +50,7 @@ npm run release:check  # ship gate: every voice clip licensed + build with the a
 
 Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line. `npm test` checks the manifest only (it passes on a clean clone with no audio files); `npm run voices:check` checks the files themselves and fails on missing audio. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.
 
-**Audio review pages (dev server only, never built):** `/dev/casting.html` (voice casting: auditions side by side, ratings, decisions → JSON; docs/VOICE_CASTING.md).
+**Audio review pages (dev server only, never built):** `/dev/casting.html` (voice casting: auditions side by side, ratings, decisions → JSON; docs/VOICE_CASTING.md) and `/dev/listening.html` (café sound lab: the three music moods on the real engine, bus volumes, ducking under real dialogue, loudness/true-peak/clipping/DC measurement, listening notes → `reports/listening-notes.json`; docs/AUDIO_PROVENANCE.md).
 
 **Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder voice clips are removed. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
 
@@ -73,7 +73,7 @@ src/
   audio/             one AudioContext (manager.ts: voice/ambience/SFX buses, clips, replay, status),
                      synthesised SFX, browser-speech fallback (voice.ts)
   ui/                DOM HUD, docket, bar, modals, shop, cheat sheet
-  dev/               dev-only review pages (casting), loaded by dev/*.html; never in a build
+  dev/               dev-only review pages (casting, listening lab), loaded by dev/*.html; never built
 scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
 scripts/voices.ts    renders every spoken line to MP3 (macOS `say` + ffmpeg) and writes the manifest
 scripts/vite-dev-tools.ts  dev-server plumbing for the review pages (serves voice-auditions/, fixed save paths)

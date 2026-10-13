@@ -827,3 +827,13 @@ table.measure td.okv {
     transition: none;
   }
 }
+.labmain {
+  display: grid;
+  gap: 20px;
+}
+.findings li.defect {
+  color: #ff8a7a;
+}
+.findings li.warning {
+  color: var(--gold);
+}

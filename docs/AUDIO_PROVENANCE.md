@@ -83,3 +83,46 @@ are common musical vocabulary, not copied works. No Spotify, commercial or libra
 
 **Replacing it later:** licensed tracks must go through `src/data/audio/provenance.json` and the
 build gate above.
+
+## Listening lab and measurements (2026-10-14)
+
+`npm run dev`, then `/dev/listening.html` (dev server only, never built). It runs the game's own
+audio engine (manager, music synth, SFX):
+- switch between the three moods, or turn the music off;
+- separate voice / music / ambience / effects volumes (they don't touch the player's saved game
+  settings), crowd level and the espresso machine;
+- real dialogue to test the duck (orders vs chat), three lines fired quickly to test that only one
+  plays at a time, pause and resume;
+- live output peak (held), RMS, music duck, clip events and a 12-second level scope;
+- **Measure**: each mood rendered offline through the same synth: 28 s alone at 100% music, and a
+  16 s worst case (every bus at 100%, a packed café, every machine sound at once, an order over
+  the ducked music). Integrated loudness (BS.1770, `src/audio/meter.ts`), true peak (4×
+  oversampled), crest, DC and clipped samples, with findings from `src/audio/mixCheck.ts`;
+- ratings (fits the café, sits under the voices, easy to hear all shift, variety) and notes per
+  mood, saved to `reports/listening-notes.json` or exported.
+
+**Measured in Chrome 155 (headless, macOS), after the fix below:**
+
+| Mood | LUFS at 100% music | at the default 45% | True peak | Worst case | Clipped |
+|---|---|---|---|---|---|
+| opening | −20.1 | −27.1 | −4.1 dBTP | −0.5 dBTP | 0 |
+| rush | −20.5 | −27.4 | −2.5 dBTP | −0.6 dBTP | 0 |
+| afternoon | −20.3 | −27.2 | −1.4 dBTP | −0.8 dBTP | 0 |
+
+- The moods are within 0.4 LU of each other: a mood change isn't a volume jump.
+- The placeholder order clips average −17.5 LUFS, about **21 LU above the ducked music** at
+  default volumes.
+- Measured duck: 0.28 under an order and 0.55 under chat, as designed.
+- Nothing clips, even in the worst case. Its 0.5 dB of headroom is the smallest margin; if
+  louder release voices arrive, re-measure before adding a limiter.
+
+**Fixed: DC offset in the music (objective defect).** The FM electric-piano keys modulate at the
+carrier's own frequency, which puts a 0 Hz sideband into every chord. Soloing each instrument
+offline traced it to the keys (afternoon keys alone: DC −0.0047, every other instrument below
+−62 dBFS). Mixes measured 0.0013 (opening), 0.0032 (rush) and 0.0035 (afternoon). A 20 Hz
+high-pass at the synth's output (`src/audio/music.ts`) removes it: DC is now ≤ 0.00001, and
+loudness moved by ≤ 0.2 LU. The notes, instruments and mix are unchanged. Regression:
+`tests/e2e/listening.spec.ts` (DC < 0.0005 per mood) fails on the old synth and passes now.
+
+**Not judged by measurement:** whether the moods sound good, fit the café, or tire the ear over a
+shift. That needs people listening on real speakers, and phones: see the lab's notes.
