@@ -1,51 +1,78 @@
-// Renders every voice line to MP3 and writes src/data/voice/manifest.json.
+// Renders every voice line for DEVELOPMENT and writes src/data/voice/manifest.json.
 //
-//   npm run voices            render what's missing or changed
-//   npm run voices -- --force re-render everything
+//   npm run voices                     render what's missing or changed, re-measure the rest
+//   npm run voices -- --force          re-render every placeholder clip
 //   npm run voices -- --only gaz,priya
+//   npm run voices -- --jobs 4         parallel renders (default 6)
+//   npm run voices -- --prune          delete cached clips the manifest no longer lists
 //
-// PLACEHOLDER PIPELINE: uses macOS `say` voices (Apple licenses them for personal, non-commercial
-// use; the MP3s are gitignored and must not be shipped). Swap `renderOne` for a licensed provider
-// or real recordings later; the manifest format and the game don't change.
+// PLACEHOLDER PIPELINE (docs/VOICE_ASSETS.md): macOS `say` voices, which Apple licenses for
+// personal, non-commercial use. Clips go to voice-cache/ (gitignored), are served by the dev
+// server only and are stripped from production builds. Release clips (source.placeholder =
+// false, with a licence) are never touched by this script. No network, no paid APIs.
+//
+// Reproducibility: some voices don't render bit-identically (Tara, 2026-10-13: different audio
+// on every run, worse under parallel load). Each run probes every voice; unstable voices render
+// one clip at a time, every clip is sanity-checked (length, pace, loudness) and retried, and the
+// manifest always records what is on disk now.
 
-import { execFile } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { registerHooks } from 'node:module';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { promisify } from 'node:util';
-
-// src/ uses bundler-style extensionless imports; teach Node to try `.ts`.
-registerHooks({
-  resolve(spec, ctx, next) {
-    try {
-      return next(spec, ctx);
-    } catch (e) {
-      if (spec.startsWith('.') && !/\.\w+$/.test(spec)) return next(`${spec}.ts`, ctx);
-      throw e;
-    }
-  },
-});
+import { dirname, join } from 'node:path';
+import {
+  argValue,
+  cachePath,
+  listClips,
+  MANIFEST,
+  measure,
+  pool,
+  ROOT,
+  run,
+  type Measured,
+} from './voice-node.ts';
 
 const { voiceScript } = await import('../src/data/voice/script.ts');
 const { dialogueId } = await import('../src/data/voice/ids.ts');
 const { VOICE_PROFILES } = await import('../src/data/voice/profiles.ts');
+const { DURATION_RANGE, PACE_RANGE, QUIET_DB, expectedFile, summarise, validateManifest } =
+  await import('../src/data/voice/validate.ts');
 type ScriptLine = import('../src/data/voice/script.ts').ScriptLine;
 type VoiceProfile = import('../src/data/voice/profiles.ts').VoiceProfile;
 type Manifest = import('../src/data/voice/manifest.ts').VoiceManifest;
 type Clip = import('../src/data/voice/manifest.ts').VoiceClip;
 
-const run = promisify(execFile);
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const MANIFEST = join(ROOT, 'src/data/voice/manifest.json');
 const TMP = join(tmpdir(), 'nwc-voices');
 const SAMPLE_RATE = 22050;
+const SAY_TIMEOUT_MS = 30_000;
+const ATTEMPTS = 3;
+/** Takes per clip for voices that don't render deterministically (median length is kept). */
+const UNSTABLE_TAKES = 3;
+/** Voices seen rendering different audio for the same input. Tara (2026-10-13): 12 of 36 Priya
+ *  clips changed length between two forced renders, and parallel renders produced empty, hung
+ *  or garbled files, even though a short probe often repeats exactly. */
+const KNOWN_UNSTABLE = new Set(['Tara']);
+
+/** Probe phrases: a voice is deterministic only if every one renders identically twice. One
+ *  short phrase isn't enough: Tara often repeats a short line exactly but not a longer one. */
+const PROBES = [
+  'Probe line. One flat white with oat milk, and a long black, please.',
+  'Line number two. Can I get a flat white with almond milk, please? It has to survive the bus home.',
+  'Three. Sorry, a long black, extra hot, and a heart if you can. I am half asleep this morning.',
+];
+
+const PROVIDER = 'macos-say (PLACEHOLDER: Apple system voices, personal/non-commercial use only)';
+const LICENCE =
+  'PLACEHOLDER audio rendered locally with Apple macOS system voices (personal, non-commercial ' +
+  'use). Not for distribution: kept in voice-cache/ (gitignored), stripped from production ' +
+  'builds. Replace with licensed recordings before release (docs/VOICE_ASSETS.md).';
 
 const args = process.argv.slice(2);
 const force = args.includes('--force');
-const onlyArg = args[args.indexOf('--only') + 1];
-const only = args.includes('--only') && onlyArg ? new Set(onlyArg.split(',')) : null;
+const prune = args.includes('--prune');
+const onlyArg = argValue(args, '--only');
+const only = onlyArg ? new Set(onlyArg.split(',')) : null;
+const jobs = Number(argValue(args, '--jobs') ?? 6) || 6;
 
 /** What the TTS engine reads. Subtitles keep the original text. */
 export function forSay(text: string): string {
@@ -87,49 +114,43 @@ function cast(p: VoiceProfile, installed: Set<string>): Casting | null {
   return { voice, rate: p.rate, pitch };
 }
 
-async function measure(file: string): Promise<{ duration: number; meanDb: number; maxDb: number }> {
-  const probe = await run('ffprobe', [
-    '-v',
-    'error',
-    '-show_entries',
-    'format=duration',
-    '-of',
-    'csv=p=0',
-    file,
-  ]);
-  const vol = await run('ffmpeg', [
-    '-hide_banner',
-    '-i',
-    file,
-    '-af',
-    'volumedetect',
-    '-f',
-    'null',
-    '-',
-  ]);
-  const mean = /mean_volume:\s*(-?[\d.]+) dB/.exec(vol.stderr);
-  const max = /max_volume:\s*(-?[\d.]+) dB/.exec(vol.stderr);
-  return {
-    duration: Math.round(Number(probe.stdout.trim()) * 1000) / 1000,
-    meanDb: Number(mean?.[1] ?? -91),
-    maxDb: Number(max?.[1] ?? -91),
-  };
+let tmpN = 0;
+async function say(voice: string, rate: number, text: string): Promise<string> {
+  const wav = join(TMP, `${process.pid}-${tmpN++}.wav`);
+  await run(
+    'say',
+    [
+      '-v',
+      voice,
+      '-r',
+      String(rate),
+      '--file-format=WAVE',
+      `--data-format=LEI16@${SAMPLE_RATE}`,
+      '-o',
+      wav,
+      text,
+    ],
+    { timeout: SAY_TIMEOUT_MS },
+  );
+  return wav;
+}
+
+/** Does this voice render the same audio twice in a row? (Rendered one at a time.) */
+async function isDeterministic(voice: string): Promise<boolean> {
+  for (const text of PROBES) {
+    const hashes: string[] = [];
+    for (let i = 0; i < 2; i++) {
+      const wav = await say(voice, 175, text);
+      hashes.push(createHash('sha1').update(readFileSync(wav)).digest('hex'));
+      rmSync(wav, { force: true });
+    }
+    if (hashes[0] !== hashes[1]) return false;
+  }
+  return true;
 }
 
 async function renderOne(line: ScriptLine, c: Casting, file: string): Promise<void> {
-  const rate = Math.round(c.rate * line.rate);
-  const wav = join(TMP, `${Math.abs(hash(file))}.wav`);
-  await run('say', [
-    '-v',
-    c.voice,
-    '-r',
-    String(rate),
-    '--file-format=WAVE',
-    `--data-format=LEI16@${SAMPLE_RATE}`,
-    '-o',
-    wav,
-    forSay(line.text),
-  ]);
+  const wav = await say(c.voice, Math.round(c.rate * line.rate), forSay(line.text));
   const chain = [
     // Darken a voice without changing its speed (formants move too: a bigger, deeper speaker).
     ...(c.pitch !== 1
@@ -147,41 +168,64 @@ async function renderOne(line: ScriptLine, c: Casting, file: string): Promise<vo
     'loudnorm=I=-17:TP=-2:LRA=11',
   ].join(',');
   mkdirSync(dirname(file), { recursive: true });
-  await run('ffmpeg', [
-    '-hide_banner',
-    '-loglevel',
-    'error',
-    '-y',
-    '-i',
-    wav,
-    '-af',
-    chain,
-    '-ac',
-    '1',
-    '-ar',
-    '24000',
-    '-codec:a',
-    'libmp3lame',
-    '-b:a',
-    '48k',
-    file,
-  ]);
-  rmSync(wav, { force: true });
+  try {
+    await run('ffmpeg', [
+      '-hide_banner',
+      '-loglevel',
+      'error',
+      '-y',
+      '-i',
+      wav,
+      '-af',
+      chain,
+      '-ac',
+      '1',
+      '-ar',
+      '24000',
+      '-codec:a',
+      'libmp3lame',
+      '-b:a',
+      '48k',
+      file,
+    ]);
+  } finally {
+    rmSync(wav, { force: true });
+  }
 }
 
-function hash(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
-  return h;
+/** Why a freshly rendered clip doesn't look like this line spoken, or null if it does. */
+function insane(text: string, m: Measured): string | null {
+  if (m.duration < DURATION_RANGE[0] || m.duration > DURATION_RANGE[1])
+    return `duration ${m.duration} s`;
+  const pace = text.trim().split(/\s+/).length / m.duration;
+  if (pace < PACE_RANGE[0] || pace > PACE_RANGE[1]) return `pace ${pace.toFixed(2)} words/s`;
+  if (m.maxDb < -30 || !(m.meanDb > QUIET_DB)) return `too quiet (${m.meanDb} dB)`;
+  return null;
 }
 
-async function pool<T>(items: T[], n: number, fn: (t: T) => Promise<void>): Promise<void> {
-  let i = 0;
-  await Promise.all(
-    Array.from({ length: n }, async () => {
-      while (i < items.length) await fn(items[i++] as T);
-    }),
+/** One clip at a time for voices that aren't deterministic (they misbehave under load). */
+const voiceLocks = new Map<string, Promise<void>>();
+async function serially<T>(voice: string, fn: () => Promise<T>): Promise<T> {
+  const before = voiceLocks.get(voice) ?? Promise.resolve();
+  let release = (): void => undefined;
+  const mine = new Promise<void>((r) => (release = r));
+  voiceLocks.set(
+    voice,
+    before.then(() => mine),
   );
+  await before;
+  try {
+    return await fn();
+  } finally {
+    release();
+  }
+}
+
+interface Job {
+  line: ScriptLine;
+  c: Casting;
+  clip: Clip;
+  abs: string;
 }
 
 async function main(): Promise<void> {
@@ -199,16 +243,51 @@ async function main(): Promise<void> {
     else missingVoices.push(`${p.speaker} (wants ${p.prefer.join(' / ')})`);
   }
 
+  // Before 2026-10-13 this script wrote placeholder clips into public/, where builds copy them.
+  // Builds now strip placeholders, but the old folder should go.
+  const legacy = listClips(join(ROOT, 'public/assets/voice')).length;
+  if (legacy > 0)
+    console.warn(
+      `note: ${legacy} clip(s) in public/assets/voice/ (the old location). Placeholder clips now ` +
+        'live in voice-cache/; delete public/assets/voice/ unless it holds licensed release audio.',
+    );
+
+  // Which voices render the same audio every time?
+  const voices = [...new Set([...castings.values()].map((c) => c.voice))];
+  const deterministic = new Map<string, boolean>();
+  for (const v of voices)
+    deterministic.set(v, !KNOWN_UNSTABLE.has(v) && (await isDeterministic(v)));
+  console.log(
+    `voices: ${voices
+      .map((v) => `${v}${deterministic.get(v) ? '' : ' (not deterministic: one clip at a time)'}`)
+      .join(', ')}`,
+  );
+
   const script = voiceScript();
   const clips: Clip[] = [];
-  const todo: Array<{ line: ScriptLine; c: Casting; clip: Clip; abs: string }> = [];
+  const todo: Job[] = [];
+  const keep: Array<{ clip: Clip; abs: string }> = [];
   for (const line of script) {
     const p = VOICE_PROFILES[line.speaker];
-    const c = castings.get(line.speaker);
-    if (!p || !c) continue;
     const id = dialogueId(line.speaker, line.text, line.delivery);
-    const rel = `assets/voice/${line.speaker}/${id.split(':')[1]}${line.delivery === 'slow' ? '-slow' : ''}.mp3`;
-    const abs = join(ROOT, 'public', rel);
+    const old = prevById.get(id);
+    // Release audio belongs to whoever licensed it: never re-render or re-measure it here.
+    if (old && old.source.placeholder === false) {
+      clips.push(old);
+      continue;
+    }
+    const c = castings.get(line.speaker);
+    if (!p || !c) {
+      if (old) clips.push(old);
+      continue;
+    }
+    const rate = Math.round(c.rate * line.rate);
+    const file = expectedFile({
+      characterId: line.speaker,
+      dialogueId: id,
+      delivery: line.delivery,
+    });
+    const abs = cachePath(file);
     const clip: Clip = {
       dialogueId: id,
       characterId: line.speaker,
@@ -218,73 +297,134 @@ async function main(): Promise<void> {
       key: line.key,
       delivery: line.delivery,
       transcript: line.text,
-      file: rel,
+      file,
       duration: 0,
       meanDb: -91,
       playback: { gain: 1, rate: 1 },
       source: {
         engine: 'macos-say',
         voice: c.voice,
-        rate: Math.round(c.rate * line.rate),
+        rate,
         pitch: c.pitch,
         placeholder: true,
+        deterministic: deterministic.get(c.voice) ?? false,
       },
     };
-    const old = prevById.get(id);
     const same =
-      old &&
+      old !== undefined &&
       old.source.voice === c.voice &&
-      old.source.rate === Math.round(c.rate * line.rate) &&
+      old.source.rate === rate &&
       old.source.pitch === c.pitch &&
       existsSync(abs);
-    if (!force && same && (!only || !only.has(line.speaker))) {
-      clips.push({ ...clip, duration: old.duration, meanDb: old.meanDb });
-      continue;
-    }
-    if (only && !only.has(line.speaker)) {
-      if (old) clips.push(old);
-      continue;
-    }
-    todo.push({ line, c, clip, abs });
-    clips.push(clip);
+    const wanted = !only || only.has(line.speaker);
+    if (same && !(force && wanted)) keep.push({ clip, abs });
+    else if (wanted) todo.push({ line, c, clip, abs });
+    else if (old) clips.push(old);
   }
 
-  let done = 0;
-  const failures: string[] = [];
-  await pool(todo, 6, async ({ line, c, clip, abs }) => {
-    try {
-      await renderOne(line, c, abs);
-      const m = await measure(abs);
-      clip.duration = m.duration;
-      clip.meanDb = m.meanDb;
-      if (m.maxDb < -30 || m.duration < 0.3) failures.push(`${clip.dialogueId} looks silent/short`);
-    } catch (e) {
-      failures.push(`${clip.dialogueId}: ${(e as Error).message.split('\n')[0]}`);
+  // Kept clips: record what is actually on disk (it may have been re-rendered since), and
+  // re-render any that don't pass the same sanity check as a fresh render.
+  const lineFor = new Map(script.map((l) => [dialogueId(l.speaker, l.text, l.delivery), l]));
+  let remeasured = 0;
+  await pool(keep, 8, async ({ clip, abs }) => {
+    const m = await measure(abs);
+    const line = lineFor.get(clip.dialogueId);
+    const c = castings.get(clip.characterId);
+    if (insane(clip.transcript, m) && line && c) {
+      todo.push({ line, c, clip, abs });
+      return;
     }
+    clip.duration = m.duration;
+    clip.meanDb = m.meanDb;
+    clips.push(clip);
+    remeasured++;
+  });
+
+  let done = 0;
+  let retried = 0;
+  const failures: string[] = [];
+  await pool(todo, jobs, async ({ line, c, clip, abs }) => {
+    // An unstable voice gets several takes and keeps the median-length good one, so a take with a
+    // stray pause or a rushed read doesn't become the clip.
+    const takes = deterministic.get(c.voice) ? 1 : UNSTABLE_TAKES;
+    const render = async (): Promise<void> => {
+      let why = '';
+      for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+        const good: Array<{ file: string; m: Measured }> = [];
+        for (let t = 0; t < takes; t++) {
+          const file = takes === 1 ? abs : `${abs}.take${t}.mp3`;
+          try {
+            await renderOne(line, c, file);
+            const m = await measure(file);
+            const bad = insane(line.text, m);
+            if (bad) {
+              why = bad;
+              rmSync(file, { force: true });
+            } else good.push({ file, m });
+          } catch (e) {
+            why = (e as Error).message.split('\n')[0] ?? 'render failed';
+            rmSync(file, { force: true });
+          }
+        }
+        if (good.length === 0) continue;
+        good.sort((x, y) => x.m.duration - y.m.duration);
+        const pick = good[Math.floor((good.length - 1) / 2)] as { file: string; m: Measured };
+        for (const g of good) if (g !== pick) rmSync(g.file, { force: true });
+        if (pick.file !== abs) renameSync(pick.file, abs);
+        clip.duration = pick.m.duration;
+        clip.meanDb = pick.m.meanDb;
+        clips.push(clip);
+        if (attempt > 1 || good.length < takes) retried++;
+        return;
+      }
+      rmSync(abs, { force: true });
+      failures.push(`${clip.dialogueId} (${line.speaker}: "${line.text}"): ${why}`);
+    };
+    if (deterministic.get(c.voice)) await render();
+    else await serially(c.voice, render);
     done++;
     if (done % 25 === 0 || done === todo.length) process.stdout.write(`  ${done}/${todo.length}\n`);
   });
 
   clips.sort((a, b) => (a.dialogueId < b.dialogueId ? -1 : 1));
   const manifest: Manifest = {
-    version: 1,
-    provider: 'macos-say (PLACEHOLDER: Apple system voices, personal/non-commercial use only)',
-    clips: clips.filter((c) => c.duration > 0),
+    version: 2,
+    status: clips.some((c) => c.source.placeholder !== false) ? 'placeholder' : 'release',
+    provider: PROVIDER,
+    licence: LICENCE,
+    clips,
   };
   writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
 
   const by = new Map<string, number>();
   for (const c of manifest.clips) by.set(c.characterId, (by.get(c.characterId) ?? 0) + 1);
   console.log(
-    `rendered ${todo.length}, manifest has ${manifest.clips.length} clips of ${script.length} lines`,
+    `rendered ${todo.length - failures.length}/${todo.length} (${retried} needed a retry or lost a take), ` +
+      `kept and re-measured ${remeasured}; manifest has ${manifest.clips.length} clips for ${script.length} lines`,
   );
   for (const [k, n] of by)
     console.log(`  ${k.padEnd(6)} ${String(n).padStart(4)}  ${castings.get(k)?.voice ?? '-'}`);
   if (missingVoices.length) console.log(`no installed voice for: ${missingVoices.join('; ')}`);
-  if (failures.length) {
-    console.error(`${failures.length} failures:\n  ${failures.join('\n  ')}`);
-    process.exitCode = 1;
+
+  if (prune) {
+    const listed = new Set(manifest.clips.map((c) => c.file));
+    let removed = 0;
+    for (const f of listClips(join(ROOT, 'voice-cache')))
+      if (!listed.has(f)) {
+        rmSync(cachePath(f), { force: true });
+        removed++;
+      }
+    console.log(`pruned ${removed} cached clip(s) no longer in the manifest`);
   }
+
+  const issues = validateManifest(manifest, { script, profiles: VOICE_PROFILES });
+  const s = summarise(issues);
+  for (const i of issues.filter((x) => x.level === 'error').slice(0, 20))
+    console.error(`  ${i.code}: ${i.id ?? ''} ${i.message}`);
+  console.log(`manifest check: ${s.errors} error(s), ${s.warnings} warning(s)`);
+  if (failures.length)
+    console.error(`${failures.length} render failure(s):\n  ${failures.join('\n  ')}`);
+  if (failures.length || s.errors) process.exitCode = 1;
 }
 
 await main();

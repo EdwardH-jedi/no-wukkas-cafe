@@ -42,10 +42,11 @@ npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
 npm run test:e2e       # playwright: plays the Day 1 trial and a Day 2 shift with real input (~6 min)
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
-npm run voices         # macOS only: render voice clips → public/assets/voice/ + src/data/voice/manifest.json
+npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
+npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)
 ```
 
-Voice clips: `public/assets/voice/` is **gitignored** (placeholder Apple system voices are personal-use only). Run `npm run voices` after cloning and after editing any spoken line; `tests/data/voice.test.ts` fails until every line has a clip. Without clips the game falls back to browser speech and says so.
+Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line; the voice coverage tests fail until every line has a clip. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 

@@ -74,6 +74,11 @@ export interface AudioManager {
 }
 
 const STORE = 'nwc.audio.v1';
+
+/** Placeholder clips are development-only (docs/VOICE_ASSETS.md): production builds don't contain
+ *  them, so don't even ask the server for them there. */
+const shipped = (c: VoiceClip): boolean => import.meta.env.DEV || c.source.placeholder === false;
+const NOT_SHIPPED = 'Recorded voices are development-only placeholders and are not in this build.';
 const DECODED_CACHE = 16;
 
 interface Saved {
@@ -317,8 +322,8 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       tts.stop();
       if (!voiceEnabled) return;
       const clip = clipFor(req.speaker, req.text, req.delivery);
-      if (!clip || !ctx) {
-        viaTts(req, clip ? null : 'No recording for this line.', my);
+      if (!clip || !ctx || !shipped(clip)) {
+        viaTts(req, !clip ? 'No recording for this line.' : shipped(clip) ? null : NOT_SHIPPED, my);
         return;
       }
       const asked = performance.now();
@@ -391,7 +396,7 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     prefetch(reqs) {
       for (const q of reqs) {
         const c = clipFor(q.speaker, q.text, q.delivery);
-        if (c) fetchClip(c).catch(() => undefined);
+        if (c && shipped(c)) fetchClip(c).catch(() => undefined);
       }
     },
     volume(b) {

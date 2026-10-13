@@ -1,6 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
+  "status": "placeholder",
   "provider": "macos-say (PLACEHOLDER: Apple system voices, personal/non-commercial use only)",
+  "licence": "PLACEHOLDER audio rendered locally with Apple macOS system voices (personal, non-commercial use). Not for distribution: kept in voice-cache/ (gitignored), stripped from production builds. Replace with licensed recordings before release (docs/VOICE_ASSETS.md).",
   "clips": [
     {
       "dialogueId": "beryl:07bdba99",
@@ -23,7 +25,8 @@
         "voice": "Karen",
         "rate": 106,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -47,7 +50,8 @@
         "voice": "Karen",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -71,7 +75,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -95,7 +100,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -119,7 +125,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -143,7 +150,8 @@
         "voice": "Karen",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -167,7 +175,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -191,7 +200,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -215,7 +225,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -239,7 +250,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -263,7 +275,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -287,7 +300,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -311,7 +325,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -335,7 +350,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -359,7 +375,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -383,7 +400,8 @@
         "voice": "Karen",
         "rate": 106,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -407,7 +425,8 @@
         "voice": "Karen",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -431,7 +450,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -455,7 +475,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -479,7 +500,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -503,7 +525,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -527,7 +550,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -551,7 +575,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -575,7 +600,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -599,7 +625,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -623,7 +650,8 @@
         "voice": "Karen",
         "rate": 106,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -647,7 +675,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -671,7 +700,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -695,7 +725,8 @@
         "voice": "Karen",
         "rate": 106,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -719,7 +750,8 @@
         "voice": "Karen",
         "rate": 150,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -743,7 +775,8 @@
         "voice": "Karen",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -767,7 +800,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -791,7 +825,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -815,7 +850,8 @@
         "voice": "Karen",
         "rate": 164,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -839,7 +875,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -863,7 +900,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -887,7 +925,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -911,7 +950,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -935,7 +975,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -959,7 +1000,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -983,7 +1025,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1007,7 +1050,8 @@
         "voice": "Karen",
         "rate": 230,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1031,7 +1075,8 @@
         "voice": "Karen",
         "rate": 164,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1055,7 +1100,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1079,7 +1125,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1103,7 +1150,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1127,7 +1175,8 @@
         "voice": "Karen",
         "rate": 230,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1151,7 +1200,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1175,7 +1225,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1199,7 +1250,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1223,7 +1275,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1247,7 +1300,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1271,7 +1325,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1295,7 +1350,8 @@
         "voice": "Karen",
         "rate": 184,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1319,7 +1375,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1343,7 +1400,8 @@
         "voice": "Karen",
         "rate": 184,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1367,7 +1425,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1391,7 +1450,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1415,7 +1475,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1439,7 +1500,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1463,7 +1525,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1487,7 +1550,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1511,7 +1575,8 @@
         "voice": "Karen",
         "rate": 205,
         "pitch": 0.9,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1535,7 +1600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1559,7 +1625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1583,7 +1650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1607,7 +1675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1631,7 +1700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1655,7 +1725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1679,7 +1750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1703,7 +1775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1727,7 +1800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1751,7 +1825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1775,7 +1850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1799,7 +1875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1823,7 +1900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1847,7 +1925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1871,7 +1950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1895,7 +1975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1919,7 +2000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1943,7 +2025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1967,7 +2050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -1991,7 +2075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2015,7 +2100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2039,7 +2125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2063,7 +2150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2087,7 +2175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2111,7 +2200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2135,7 +2225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2159,7 +2250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2183,7 +2275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2207,7 +2300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2231,7 +2325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2255,7 +2350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2279,7 +2375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2303,7 +2400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2327,7 +2425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2351,7 +2450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2375,7 +2475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2399,7 +2500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2423,7 +2525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2447,7 +2550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2471,7 +2575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2495,7 +2600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2519,7 +2625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2543,7 +2650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2567,7 +2675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2591,7 +2700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2615,7 +2725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2639,7 +2750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2663,7 +2775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2687,7 +2800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2711,7 +2825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2735,7 +2850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2759,7 +2875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2783,7 +2900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2807,7 +2925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2831,7 +2950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2855,7 +2975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2879,7 +3000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2903,7 +3025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2927,7 +3050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2951,7 +3075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2975,7 +3100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -2999,7 +3125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3023,7 +3150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3047,7 +3175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3071,7 +3200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3095,7 +3225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3119,7 +3250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3143,7 +3275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3167,7 +3300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3191,7 +3325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3215,7 +3350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3239,7 +3375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3263,7 +3400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3287,7 +3425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3311,7 +3450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3335,7 +3475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3359,7 +3500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3383,7 +3525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3407,7 +3550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3431,7 +3575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3455,7 +3600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3479,7 +3625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3503,7 +3650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3527,7 +3675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3551,7 +3700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3575,7 +3725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3599,7 +3750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3623,7 +3775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3647,7 +3800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3671,7 +3825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3695,7 +3850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3719,7 +3875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3743,7 +3900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3767,7 +3925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3791,7 +3950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3815,7 +3975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3839,7 +4000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3863,7 +4025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3887,7 +4050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3911,7 +4075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3935,7 +4100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3959,7 +4125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -3983,7 +4150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4007,7 +4175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4031,7 +4200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4055,7 +4225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4079,7 +4250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4103,7 +4275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4127,7 +4300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4151,7 +4325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4175,7 +4350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4199,7 +4375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4223,7 +4400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4247,7 +4425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4271,7 +4450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4295,7 +4475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4319,7 +4500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4343,7 +4525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4367,7 +4550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4391,7 +4575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4415,7 +4600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4439,7 +4625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4463,7 +4650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4487,7 +4675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4511,7 +4700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4535,7 +4725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4559,7 +4750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4583,7 +4775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4607,7 +4800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4631,7 +4825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4655,7 +4850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4679,7 +4875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4703,7 +4900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4727,7 +4925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4751,7 +4950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4775,7 +4975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4799,7 +5000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4823,7 +5025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4847,7 +5050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4871,7 +5075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4895,7 +5100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4919,7 +5125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4943,7 +5150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4967,7 +5175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -4991,7 +5200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5015,7 +5225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5039,7 +5250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5063,7 +5275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5087,7 +5300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5111,7 +5325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5135,7 +5350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5159,7 +5375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5183,7 +5400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5207,7 +5425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5231,7 +5450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5255,7 +5475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5279,7 +5500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5303,7 +5525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5327,7 +5550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5351,7 +5575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5375,7 +5600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5399,7 +5625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5423,7 +5650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5447,7 +5675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5471,7 +5700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5495,7 +5725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5519,7 +5750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5543,7 +5775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5567,7 +5800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5591,7 +5825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5615,7 +5850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5639,7 +5875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5663,7 +5900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5687,7 +5925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5711,7 +5950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5735,7 +5975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5759,7 +6000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5783,7 +6025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5807,7 +6050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5831,7 +6075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5855,7 +6100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5879,7 +6125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5903,7 +6150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5927,7 +6175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5951,7 +6200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5975,7 +6225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -5999,7 +6250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6023,7 +6275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6047,7 +6300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6071,7 +6325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6095,7 +6350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6119,7 +6375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6143,7 +6400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6167,7 +6425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6191,7 +6450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6215,7 +6475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6239,7 +6500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6263,7 +6525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6287,7 +6550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6311,7 +6575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6335,7 +6600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6359,7 +6625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6383,7 +6650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6407,7 +6675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6431,7 +6700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6455,7 +6725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6479,7 +6750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6503,7 +6775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6527,7 +6800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6551,7 +6825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6575,7 +6850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6599,7 +6875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6623,7 +6900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6647,7 +6925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6671,7 +6950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6695,7 +6975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6719,7 +7000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6743,7 +7025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6767,7 +7050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6791,7 +7075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6815,7 +7100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6839,7 +7125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6863,7 +7150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6887,7 +7175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6911,7 +7200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6935,7 +7225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6959,7 +7250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -6983,7 +7275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7007,7 +7300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7031,7 +7325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7055,7 +7350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7079,7 +7375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7103,7 +7400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7127,7 +7425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7151,7 +7450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7175,7 +7475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7199,7 +7500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7223,7 +7525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7247,7 +7550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7271,7 +7575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7295,7 +7600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7319,7 +7625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7343,7 +7650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7367,7 +7675,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7391,7 +7700,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7415,7 +7725,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7439,7 +7750,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7463,7 +7775,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7487,7 +7800,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7511,7 +7825,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7535,7 +7850,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7559,7 +7875,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7583,7 +7900,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7607,7 +7925,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7631,7 +7950,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7655,7 +7975,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7679,7 +8000,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7703,7 +8025,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7727,7 +8050,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7751,7 +8075,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7775,7 +8100,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7799,7 +8125,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7823,7 +8150,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7847,7 +8175,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7871,7 +8200,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7895,7 +8225,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7919,7 +8250,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7943,7 +8275,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7967,7 +8300,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -7991,7 +8325,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8015,7 +8350,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8039,7 +8375,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8063,7 +8400,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8087,7 +8425,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8111,7 +8450,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8135,7 +8475,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8159,7 +8500,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8183,7 +8525,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8207,7 +8550,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8231,7 +8575,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8255,7 +8600,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8279,7 +8625,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8303,7 +8650,8 @@
         "voice": "Karen",
         "rate": 182,
         "pitch": 0.88,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8327,7 +8675,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8351,7 +8700,8 @@
         "voice": "Yuna",
         "rate": 138,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8375,7 +8725,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8399,7 +8750,8 @@
         "voice": "Yuna",
         "rate": 138,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8423,7 +8775,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8447,7 +8800,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8471,7 +8825,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8495,7 +8850,8 @@
         "voice": "Yuna",
         "rate": 138,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8519,7 +8875,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8543,7 +8900,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8567,7 +8925,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8591,7 +8950,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8615,7 +8975,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8639,7 +9000,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8663,7 +9025,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8687,7 +9050,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8711,7 +9075,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8735,7 +9100,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8759,7 +9125,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8783,7 +9150,8 @@
         "voice": "Yuna",
         "rate": 138,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8807,7 +9175,8 @@
         "voice": "Yuna",
         "rate": 193,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8831,7 +9200,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8855,7 +9225,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8879,7 +9250,8 @@
         "voice": "Yuna",
         "rate": 138,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8903,7 +9275,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8927,7 +9300,8 @@
         "voice": "Yuna",
         "rate": 154,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8951,7 +9325,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8975,7 +9350,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -8999,7 +9375,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9023,7 +9400,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9047,7 +9425,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9071,7 +9450,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9095,7 +9475,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9119,7 +9500,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9143,7 +9525,8 @@
         "voice": "Yuna",
         "rate": 172,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9167,7 +9550,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9191,7 +9575,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9215,7 +9600,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9239,7 +9625,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9263,7 +9650,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9287,7 +9675,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9311,7 +9700,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9335,7 +9725,8 @@
         "voice": "Karen",
         "rate": 154,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9359,7 +9750,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9383,7 +9775,8 @@
         "voice": "Karen",
         "rate": 154,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9407,7 +9800,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9431,7 +9825,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9455,7 +9850,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9479,7 +9875,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9503,7 +9900,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9527,7 +9925,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9551,7 +9950,8 @@
         "voice": "Karen",
         "rate": 172,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9575,7 +9975,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9599,7 +10000,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9623,7 +10025,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9647,7 +10050,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9671,7 +10075,8 @@
         "voice": "Karen",
         "rate": 215,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9695,7 +10100,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9719,7 +10125,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9743,7 +10150,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9767,7 +10175,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9791,7 +10200,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9815,7 +10225,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9839,7 +10250,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9863,7 +10275,8 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9887,7 +10300,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9911,7 +10325,8 @@
         "voice": "Tingting",
         "rate": 142,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9935,7 +10350,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9959,7 +10375,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -9983,7 +10400,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10007,7 +10425,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10031,7 +10450,8 @@
         "voice": "Tingting",
         "rate": 142,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10055,7 +10475,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10079,7 +10500,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10103,7 +10525,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10127,7 +10550,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10151,7 +10575,8 @@
         "voice": "Tingting",
         "rate": 159,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10175,7 +10600,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10199,7 +10625,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10223,7 +10650,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10247,7 +10675,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10271,7 +10700,8 @@
         "voice": "Tingting",
         "rate": 142,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10295,7 +10725,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10319,7 +10750,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10343,7 +10775,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10367,7 +10800,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10391,7 +10825,8 @@
         "voice": "Tingting",
         "rate": 142,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10415,7 +10850,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10439,7 +10875,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10463,7 +10900,8 @@
         "voice": "Tingting",
         "rate": 199,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10487,7 +10925,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10511,7 +10950,8 @@
         "voice": "Tingting",
         "rate": 159,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10535,7 +10975,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10559,7 +11000,8 @@
         "voice": "Tingting",
         "rate": 199,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10583,7 +11025,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10607,7 +11050,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10631,7 +11075,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10655,7 +11100,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10679,7 +11125,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10703,7 +11150,8 @@
         "voice": "Tingting",
         "rate": 142,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10727,7 +11175,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10751,7 +11200,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10775,7 +11225,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10799,7 +11250,8 @@
         "voice": "Tingting",
         "rate": 178,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": true
       }
     },
     {
@@ -10823,7 +11275,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10836,8 +11289,8 @@
       "delivery": "normal",
       "transcript": "Sorry, I think that's someone else's. Mine's a flat white.",
       "file": "assets/voice/priya/08110a53.mp3",
-      "duration": 3.58,
-      "meanDb": -17.2,
+      "duration": 3.582,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -10847,7 +11300,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10871,7 +11325,8 @@
         "voice": "Tara",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10895,7 +11350,8 @@
         "voice": "Tara",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10919,7 +11375,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10943,7 +11400,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10967,7 +11425,8 @@
         "voice": "Tara",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -10980,8 +11439,8 @@
       "delivery": "normal",
       "transcript": "Morning… a long black, please. Fourteen-hour shift at RPA.",
       "file": "assets/voice/priya/242417c8.mp3",
-      "duration": 3.434,
-      "meanDb": -17,
+      "duration": 4.018,
+      "meanDb": -17.3,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -10991,7 +11450,8 @@
         "voice": "Tara",
         "rate": 145,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11015,7 +11475,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11039,7 +11500,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11063,7 +11525,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11087,7 +11550,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11100,8 +11564,8 @@
       "delivery": "slow",
       "transcript": "Morning… a long black, please. Fourteen-hour shift at RPA.",
       "file": "assets/voice/priya/5217cb15-slow.mp3",
-      "duration": 3.765,
-      "meanDb": -17.1,
+      "duration": 4.274,
+      "meanDb": -17.5,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11111,7 +11575,8 @@
         "voice": "Tara",
         "rate": 116,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11135,7 +11600,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11149,7 +11615,7 @@
       "transcript": "A flat white with a heart, please? It's been a rough night, I could use one.",
       "file": "assets/voice/priya/7fab1716.mp3",
       "duration": 4.363,
-      "meanDb": -17.6,
+      "meanDb": -17.4,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11159,7 +11625,8 @@
         "voice": "Tara",
         "rate": 145,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11172,8 +11639,8 @@
       "delivery": "normal",
       "transcript": "Can I get a flat white, extra hot, with almond milk, please? It's got to survive the bus home.",
       "file": "assets/voice/priya/9479ffb9.mp3",
-      "duration": 8.576,
-      "meanDb": -17.2,
+      "duration": 5.967,
+      "meanDb": -17.5,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11183,7 +11650,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11196,8 +11664,8 @@
       "delivery": "normal",
       "transcript": "Just a long black. Actually, no, sorry, make that a flat white. Full cream's fine.",
       "file": "assets/voice/priya/987c5405.mp3",
-      "duration": 6.201,
-      "meanDb": -17.7,
+      "duration": 6.2,
+      "meanDb": -17.6,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11207,7 +11675,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11231,7 +11700,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11255,7 +11725,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11279,7 +11750,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11292,7 +11764,7 @@
       "delivery": "normal",
       "transcript": "Bit watery… thanks though.",
       "file": "assets/voice/priya/bb1c4d26.mp3",
-      "duration": 1.398,
+      "duration": 1.4,
       "meanDb": -16.9,
       "playback": {
         "gain": 1,
@@ -11303,7 +11775,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11327,7 +11800,8 @@
         "voice": "Tara",
         "rate": 116,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11341,7 +11815,7 @@
       "transcript": "It's a bit cold, but honestly, I'll take it.",
       "file": "assets/voice/priya/bee75bcd.mp3",
       "duration": 2.371,
-      "meanDb": -17.1,
+      "meanDb": -17.6,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11351,7 +11825,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11364,7 +11839,7 @@
       "delivery": "normal",
       "transcript": "However it comes is fine.",
       "file": "assets/voice/priya/c089ce2b.mp3",
-      "duration": 1.549,
+      "duration": 1.554,
       "meanDb": -17.2,
       "playback": {
         "gain": 1,
@@ -11375,7 +11850,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11399,7 +11875,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11423,7 +11900,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11447,7 +11925,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11460,8 +11939,8 @@
       "delivery": "slow",
       "transcript": "Can I get a flat white, extra hot, with almond milk, please? It's got to survive the bus home.",
       "file": "assets/voice/priya/e9b1ca2c-slow.mp3",
-      "duration": 9.247,
-      "meanDb": -17.3,
+      "duration": 6.421,
+      "meanDb": -17.6,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11471,7 +11950,8 @@
         "voice": "Tara",
         "rate": 132,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11495,7 +11975,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11519,7 +12000,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11543,7 +12025,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11567,7 +12050,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11580,8 +12064,8 @@
       "delivery": "normal",
       "transcript": "Almond milk, please.",
       "file": "assets/voice/priya/f150a94b.mp3",
-      "duration": 1.283,
-      "meanDb": -17.2,
+      "duration": 1.285,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -11591,7 +12075,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11615,7 +12100,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11639,7 +12125,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     },
     {
@@ -11663,7 +12150,8 @@
         "voice": "Tara",
         "rate": 165,
         "pitch": 1,
-        "placeholder": true
+        "placeholder": true,
+        "deterministic": false
       }
     }
   ]

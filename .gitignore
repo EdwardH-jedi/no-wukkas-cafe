@@ -13,3 +13,6 @@ playwright-report/
 
 # Rendered voice clips (macOS system voices: personal use only, never commit or ship)
 public/assets/voice/
+
+# Placeholder voice clips (development only; never commit or ship)
+voice-cache/
