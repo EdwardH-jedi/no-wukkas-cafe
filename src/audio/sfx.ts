@@ -30,7 +30,7 @@ export interface Sfx {
   /** Café crowd level: 0 = empty, 1 = normal morning, ~1.7 = packed (listening difficulty). */
   setNoise(level: number): void;
   update(l: LoopLevels): void;
-  play(id: SfxId | 'click' | 'tick'): void;
+  play(id: SfxId | 'click' | 'tick' | 'honk' | 'binRattle' | 'clap'): void;
 }
 
 export function createSfx(audio: AudioManager): Sfx {
@@ -267,6 +267,23 @@ export function createSfx(audio: AudioManager): Sfx {
           break;
         case 'tick':
           tone(1800, 0.03, 'sine', 0.02);
+          break;
+        case 'honk':
+          // Ibis: two hoarse, nasal grunts with a falling pitch.
+          tone(260, 0.18, 'sawtooth', 0.05, 170);
+          burst(0.12, 'bandpass', 900, 0.05);
+          tone(240, 0.22, 'sawtooth', 0.05, 150, 0.24);
+          burst(0.14, 'bandpass', 850, 0.05, 0.24);
+          break;
+        case 'binRattle':
+          burst(0.18, 'lowpass', 900, 0.18);
+          tone(520, 0.12, 'square', 0.02, 380, 0.05);
+          burst(0.1, 'bandpass', 2400, 0.08, 0.16);
+          break;
+        case 'clap':
+          // The player claps to shoo it.
+          burst(0.05, 'bandpass', 1800, 0.25);
+          burst(0.05, 'bandpass', 1600, 0.22, 0.12);
           break;
       }
     },

@@ -89,7 +89,7 @@ test.describe('audio state (Codex A1, A2, A3, A7)', () => {
   test('A1: pausing, going to the title and starting again keeps the audio running', async ({
     page,
   }) => {
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await page.getByRole('button', { name: /Day 2: The morning rush/ }).click();
     await expect.poll(async () => (await audio(page)).contextState).toBe('running');
@@ -120,7 +120,7 @@ test.describe('audio state (Codex A1, A2, A3, A7)', () => {
       await new Promise((ok) => setTimeout(ok, 1500));
       await r.fulfill({ status: 404, body: 'missing' });
     });
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await toDazzaAtRegister(page);
     await page.getByRole('button', { name: /Take Dazza's order/ }).click();
@@ -155,7 +155,7 @@ test.describe('audio state (Codex A1, A2, A3, A7)', () => {
       await new Promise((ok) => setTimeout(ok, 3000));
       await r.continue();
     });
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await toDazzaAtRegister(page);
     slow = true;
@@ -193,7 +193,7 @@ test.describe('audio state (Codex A1, A2, A3, A7)', () => {
     await page.route('**/assets/voice/dazza/**', (r) =>
       r.fulfill({ status: 404, body: 'missing' }),
     );
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await toDazzaAtRegister(page);
     await page.getByRole('button', { name: 'Sound settings' }).click();

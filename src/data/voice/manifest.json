@@ -1655,6 +1655,31 @@
       }
     },
     {
+      "dialogueId": "gaz:02632377",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.enter",
+      "delivery": "normal",
+      "transcript": "Not again. There's a bin chicken in my café.",
+      "file": "assets/voice/gaz/02632377.mp3",
+      "duration": 2.478,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:02823a2e",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2405,6 +2430,31 @@
       }
     },
     {
+      "dialogueId": "gaz:2131a570",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.bin",
+      "delivery": "normal",
+      "transcript": "Shoo it out, mate. Gently. Before a customer sees it.",
+      "file": "assets/voice/gaz/2131a570.mp3",
+      "duration": 3.874,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:258824bd",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2716,6 +2766,31 @@
       "file": "assets/voice/gaz/2c915f3d.mp3",
       "duration": 2.084,
       "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2dc04153",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.out",
+      "delivery": "normal",
+      "transcript": "And stay out, you feathery menace.",
+      "file": "assets/voice/gaz/2dc04153.mp3",
+      "duration": 2.039,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -3205,6 +3280,31 @@
       }
     },
     {
+      "dialogueId": "gaz:3fe3c092",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.enter",
+      "delivery": "normal",
+      "transcript": "Oi! Bin chicken! Who left the door open?",
+      "file": "assets/voice/gaz/3fe3c092.mp3",
+      "duration": 2.801,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:3ff9cd46",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -3565,6 +3665,31 @@
       "transcript": "Two duds in a row. Milk's not free, mate.",
       "file": "assets/voice/gaz/49a3ce2e.mp3",
       "duration": 2.902,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:49e4f551",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.bin",
+      "delivery": "normal",
+      "transcript": "It's in the bin. Of course it's in the bin.",
+      "file": "assets/voice/gaz/49e4f551.mp3",
+      "duration": 2.083,
       "meanDb": -16.8,
       "playback": {
         "gain": 1,
@@ -8055,6 +8180,31 @@
       }
     },
     {
+      "dialogueId": "gaz:da1ab401",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.ignored",
+      "delivery": "normal",
+      "transcript": "Great. It's had breakfast. Now I'm cleaning the bin.",
+      "file": "assets/voice/gaz/da1ab401.mp3",
+      "duration": 3.187,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:de69f418",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -8766,6 +8916,31 @@
       "file": "assets/voice/gaz/f51df064.mp3",
       "duration": 2.69,
       "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:f61e10db",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "ibis.out",
+      "delivery": "normal",
+      "transcript": "Nicely done. Out you go, champ.",
+      "file": "assets/voice/gaz/f61e10db.mp3",
+      "duration": 2.435,
+      "meanDb": -16.9,
       "playback": {
         "gain": 1,
         "rate": 1

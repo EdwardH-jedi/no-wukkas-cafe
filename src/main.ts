@@ -31,6 +31,9 @@ import { surfacing } from './sim/latte/field';
 import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
 import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
+import { stepRushIbis } from './core/rushIbis';
+import { createIbis, ibisPresent, type Ibis } from './sim/ibis';
+import { createIbisView } from './world/ibis';
 import { createRushHud, nextTicket, railOrder } from './ui/rushHud';
 import { loadListenSettings, saveListenSettings, type ListenSettings } from './ui/settings';
 import { buildCafe } from './world/cafe';
@@ -79,6 +82,7 @@ async function boot(): Promise<void> {
   const station = buildStation(scene);
   const owner = buildOwner(scene);
   const crowd = createCrowd(scene);
+  const ibisView = createIbisView(scene);
   const rig = createCameraRig();
   const camera = rig.camera;
 
@@ -113,6 +117,15 @@ async function boot(): Promise<void> {
   let mode: 'trial' | 'rush' = 'trial';
   let rush: Rush | null = null;
   const rushIn = emptyRushInput();
+  // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare.
+  const makeIbis = (): Ibis => {
+    const b = createIbis(seed, params.get('ibis') === '1');
+    if (params.get('ibis') === '0') b.scheduledAt = null;
+    return b;
+  };
+  let ibis = makeIbis();
+  let ibisShoo = false;
+  let ibisNoticed = false;
   let rushAction: RushAction | null = null;
 
   // ---------------------------------------------------------------- input
@@ -150,10 +163,15 @@ async function boot(): Promise<void> {
   };
 
   const uiRoot = document.getElementById('ui') as HTMLElement;
+  const ibisHint = document.createElement('div');
+  ibisHint.id = 'ibisHint';
+  ibisHint.className = 'hide';
+  ibisHint.setAttribute('role', 'status');
+  ibisHint.innerHTML = '<b>Bin chicken!</b> Shoo it out gently: click it, or press <kbd>I</kbd>.';
   const hud1Root = document.createElement('div');
   const hud2Root = document.createElement('div');
   hud2Root.classList.add('hide');
-  uiRoot.append(hud1Root, hud2Root);
+  uiRoot.append(hud1Root, hud2Root, ibisHint);
 
   const rushAct = (a: RushAction): void => {
     sfx.unlock();
@@ -179,6 +197,7 @@ async function boot(): Promise<void> {
     resumeAll();
     crowd.clear();
     rush = createRush(seed, listen.difficulty);
+    ibis = makeIbis();
     sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
     mode = 'rush';
     hud1Root.classList.add('hide');
@@ -195,6 +214,7 @@ async function boot(): Promise<void> {
     rush = null;
     mode = 'trial';
     Object.assign(trial, createTrial(seed));
+    ibis = makeIbis();
     hud2Root.classList.add('hide');
     hud1Root.classList.remove('hide');
     canvas.classList.remove('aim');
@@ -261,9 +281,20 @@ async function boot(): Promise<void> {
     skip: () => (input.skip = true),
   });
 
+  /** Is the pointer on the bin chicken? (Clicking it shoos it; hovering is "noticing" it.) */
+  const onIbis = (e: PointerEvent): boolean => {
+    if (mode !== 'rush' || !ibisPresent(ibis)) return false;
+    ndc.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    return ibisView.hit(ray);
+  };
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
     sfx.unlock();
+    if (onIbis(e)) {
+      ibisShoo = true;
+      return;
+    }
     try {
       canvas.setPointerCapture(e.pointerId);
     } catch {
@@ -284,6 +315,7 @@ async function boot(): Promise<void> {
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     pointer.has = true;
+    ibisNoticed = onIbis(e);
   });
   canvas.addEventListener(
     'wheel',
@@ -349,6 +381,7 @@ async function boot(): Promise<void> {
       const c = nextTicket(r, k === 'l' ? 'longBlack' : undefined);
       if (c?.heard) rushAct({ type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
     } else if (k === 'b') rushAct({ type: 'bin' });
+    else if (k === 'i' && ibisPresent(ibis)) ibisShoo = true;
     else if (/^[1-6]$/.test(k)) {
       if (b.phase === 'pour') input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
       else if (b.ready) {
@@ -483,6 +516,20 @@ async function boot(): Promise<void> {
         output: audio.outputInfo,
         music: { mood: music.mood, duck: audio.musicDuck, scheduled: music.scheduled },
         masterRms: audio.masterRms(),
+      };
+    },
+    /** The bin chicken, with where it is on screen (CSS px) for tests that click it. */
+    get ibis() {
+      projV.copy(ibisView.position).setY(0.5).project(camera);
+      return {
+        state: ibis.state,
+        scheduledAt: ibis.scheduledAt,
+        shoos: ibis.shoos,
+        binRaided: ibis.binRaided,
+        screen: {
+          x: ((projV.x + 1) / 2) * window.innerWidth,
+          y: ((1 - projV.y) / 2) * window.innerHeight,
+        },
       };
     },
     /** Cheap per-frame snapshot for audio/subtitle sync tests (Day 1 or Day 2). */
@@ -651,6 +698,7 @@ async function boot(): Promise<void> {
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {
           crowd.clear();
+          ibis = makeIbis(); // a restarted shift gets its bird (or not) afresh
           canvas.classList.remove('aim'); // a restart mid-pour must give the cursor back
         }
       } else if (ev.type === 'station') canvas.classList.toggle('aim', ev.phase === 'pour');
@@ -682,6 +730,11 @@ async function boot(): Promise<void> {
     sv.dispensing = b.dispensing;
     station.update(sv, dt, viewTime);
     const customerTalking = r.speech.current !== null && r.speech.current.speaker !== 'gaz';
+    ibisView.update(ibis, dt, viewTime);
+    ibisHint.classList.toggle(
+      'hide',
+      !(r.phase === 'service' && ibisPresent(ibis) && ibis.state !== 'leaving'),
+    );
     crowd.update(
       r,
       dt,
@@ -702,8 +755,11 @@ async function boot(): Promise<void> {
           : r.phase;
     ownerScene.speech.current = gazTalking ? r.speech.current : null;
     ownerScene.owner = r.owner;
-    // Gaz watches whoever is ordering, the cup while you work, and you when he talks.
-    if (!gazTalking && crowd.registerPos(look)) {
+    // Gaz watches whoever is ordering, the cup while you work, and you when he talks; when he's
+    // talking about the bin chicken, he looks at it.
+    if (gazTalking && r.speech.current?.key.startsWith('ibis.') && ibisPresent(ibis))
+      look.copy(ibisView.position).setY(0.5);
+    else if (!gazTalking && crowd.registerPos(look)) {
       /* looking at the customer at the register */
     } else if (working && !gazTalking) look.copy(station.cupRim);
     else look.copy(camera.position);
@@ -748,6 +804,11 @@ async function boot(): Promise<void> {
       if (mode === 'rush' && rush) {
         sampleRushInput();
         stepRush(rush, rushIn, STEP);
+        for (const e of stepRushIbis(rush, ibis, { shoo: ibisShoo, noticed: ibisNoticed }, STEP))
+          if (e.type === 'enter' || e.type === 'honk' || e.type === 'alert') sfx.play('honk');
+          else if (e.type === 'atBin') sfx.play('binRattle');
+          else if (e.type === 'shooed') sfx.play('clap');
+        ibisShoo = false;
       } else stepTrial(trial, input, STEP);
       clearEdges();
       tickStep(clock);
@@ -777,6 +838,8 @@ async function boot(): Promise<void> {
     trial.events.length = 0;
 
     station.update(trial, dt, viewTime);
+    ibisView.update(ibis, dt, viewTime);
+    ibisHint.classList.add('hide');
     // Gaz looks at you when talking or judging, at the cup while you work.
     const working =
       trial.phase === 'grind' ||

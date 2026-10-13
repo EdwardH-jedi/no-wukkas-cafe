@@ -242,7 +242,7 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   test.setTimeout(480_000); // a whole shift, including waiting out the walk-outs
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/?voice=0&seed=7');
+  await page.goto('/?voice=0&seed=7&ibis=0');
   await page.getByRole('button', { name: /Day 2: The morning rush/ }).click();
 
   // Gaz's intro, then Dazza walks in.

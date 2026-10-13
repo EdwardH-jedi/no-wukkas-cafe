@@ -105,7 +105,7 @@ test.describe('voice on', () => {
   test('owner speaks after Start; subtitles and the sim follow the audio; output path active', async ({
     page,
   }) => {
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();
     const ticks = await sample(page, 12_000);
@@ -154,7 +154,7 @@ test.describe('voice on', () => {
   test('a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause', async ({
     page,
   }) => {
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page);
     await toDazzaAtRegister(page);
     await page.getByRole('button', { name: /Take Dazza's order/ }).click();
@@ -240,7 +240,7 @@ test.describe('voice on', () => {
     await page.route('**/assets/voice/dazza/**', (r) =>
       r.fulfill({ status: 404, body: 'missing' }),
     );
-    await page.goto('/?seed=7');
+    await page.goto('/?seed=7&ibis=0');
     await needClips(page).catch(() => undefined); // dazza is 404 on purpose here
     const gazClip = manifest.clips.find((x) => x.characterId === 'gaz')!;
     test.skip(!(await page.request.get(`/${gazClip.file}`)).ok(), 'voice clips not rendered');

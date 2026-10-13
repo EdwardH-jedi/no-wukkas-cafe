@@ -41,7 +41,7 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
   const probe = await page.request.get(`/${first!.file}`);
   test.skip(!probe.ok(), 'voice clips not rendered on this machine (run `npm run voices`)');
 
-  await page.goto('/?seed=7');
+  await page.goto('/?seed=7&ibis=0');
   await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();
 
   // First line plays to the end.
@@ -90,7 +90,7 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
 
 test('a voice clip that fails to load is reported, not silent', async ({ page }) => {
   await page.route('**/assets/voice/**', (r) => r.fulfill({ status: 404, body: 'missing' }));
-  await page.goto('/?seed=7');
+  await page.goto('/?seed=7&ibis=0');
   await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();
   await expect.poll(async () => (await audio(page)).status, { timeout: 10_000 }).not.toBe('locked');
   await expect.poll(async () => (await audio(page)).status).toMatch(/fallback|error/);

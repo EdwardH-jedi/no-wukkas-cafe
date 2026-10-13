@@ -24,7 +24,7 @@ const audio = (page: Page): Promise<AudioDebug> =>
 
 test('music plays, follows the day and ducks under an order', async ({ page }) => {
   test.setTimeout(150_000);
-  await page.goto('/?seed=7');
+  await page.goto('/?seed=7&ibis=0');
   // Only music left at the master: everything else to zero.
   await page.getByRole('button', { name: 'Sound settings' }).click();
   for (const l of ['Voices volume', 'Café ambience volume', 'Machine & effects volume'])

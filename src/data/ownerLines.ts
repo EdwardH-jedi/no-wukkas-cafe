@@ -701,6 +701,39 @@ export const OWNER_LINES: LineBook = {
     mood: 'annoyed',
     gesture: 'facepalm',
   },
+  // ------------------------------------------------------------ the bin chicken (sim/ibis.ts)
+  'ibis.enter': {
+    tiers: [
+      [
+        { text: 'Oi! Bin chicken! Who left the door open?', gesture: 'point' },
+        { text: "Not again. There's a bin chicken in my café." },
+      ],
+    ],
+    mood: 'shocked',
+    gesture: 'throwHands',
+  },
+  'ibis.bin': {
+    tiers: [
+      [
+        { text: "It's in the bin. Of course it's in the bin." },
+        { text: 'Shoo it out, mate. Gently. Before a customer sees it.' },
+      ],
+    ],
+    mood: 'annoyed',
+    gesture: 'point',
+  },
+  'ibis.out': {
+    tiers: [
+      [{ text: 'And stay out, you feathery menace.' }, { text: 'Nicely done. Out you go, champ.' }],
+    ],
+    mood: 'pleased',
+    gesture: 'thumbsUp',
+  },
+  'ibis.ignored': {
+    tiers: [[{ text: "Great. It's had breakfast. Now I'm cleaning the bin." }]],
+    mood: 'annoyed',
+    gesture: 'facepalm',
+  },
   'rush.binned': {
     tiers: [
       [

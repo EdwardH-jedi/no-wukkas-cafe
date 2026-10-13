@@ -1178,3 +1178,23 @@ kbd {
     transform: none;
   }
 }
+
+/* ---------- bin chicken hint ---------- */
+#ibisHint {
+  position: absolute;
+  top: calc(64px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--paper);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 4;
+}
+#ibisHint b {
+  color: var(--paper);
+}
