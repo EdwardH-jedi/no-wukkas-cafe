@@ -78,7 +78,7 @@ cuts, each with the same event-hash check:
   - Tara is **not deterministic**:
     - two forced renders changed 8 to 12 of Priya's 36 clips, by up to 3.8 s;
     - a 16-way parallel stress test produced empty, garbled and hung `say` processes;
-    - one committed-era render was 0.27 s for a 4-word line.
+    - one forced re-render in this worktree produced a 0.27 s file for a 4-word line.
   - The pipeline now:
     - probes each voice and treats Tara as unstable;
     - renders unstable voices one clip at a time, with **3 takes, keeping the median-length**
@@ -218,7 +218,7 @@ Measured in the e2e run:
 ## 6. Commits (on `feat/audio-qa-hardening`, base `1e659f9`)
 
 ```
-(this)  docs: audio QA report
+67f6990 docs: audio QA report
 e788346 test(audio): voice-on browser smoke tests with playback, sync and interruption evidence
 707ae84 feat(voice): reproducible, validated, development-only placeholder voice pipeline
 0e5e166 refactor(rush): move speech and listening helpers out of core/rush.ts (no behaviour change)
@@ -229,6 +229,12 @@ e788346 test(audio): voice-on browser smoke tests with playback, sync and interr
 
 1. Let Codex finish reviewing `feat/voice-listening` (`1e659f9`) and fix anything it finds there
    first.
+   - The browser at `localhost:5183` is served by the **main** checkout's dev server, which is
+     still on `feat/voice-listening`. None of this branch shows there.
+   - `vite.config.ts` pins port 5183, so `npm run dev` inside this worktree fails while that
+     server is running.
+   - To try this branch before merging, run `npx vite --port 5193` from
+     `../no-wukkas-cafe-audio-qa`, or stop the 5183 server first.
 2. Review this branch: `git log 1e659f9..feat/audio-qa-hardening`.
 3. Integrate:
    - If `feat/voice-listening` hasn't moved:
