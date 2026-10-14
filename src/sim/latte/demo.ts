@@ -5,8 +5,16 @@
 import { STEP } from '../../core/clock';
 import type { MilkQuality } from '../milk';
 import type { PourStep } from './coach';
-import { createPour, type PourState } from './field';
-import { createPitcher, stepPourFrame, type PitcherControls, type PitcherState } from './pitcher';
+import { createPour, ESPRESSO_FILL, MAX_FLOW, type PourState } from './field';
+import {
+  createPitcher,
+  HEIGHT_PRESETS,
+  pitcherFlow,
+  stepPitcher,
+  stepPourFrame,
+  type PitcherControls,
+  type PitcherState,
+} from './pitcher';
 
 export interface TrackKey {
   t: number;
@@ -157,6 +165,53 @@ export function controlsAt(
   c.targetHeight = a.h + (b.h - a.h) * u;
   c.holding = a.hold;
   return c;
+}
+
+let pullStart = -1;
+let pullFill = -1;
+
+/** Where Gaz's pull-through starts in OWNER_DEMO: the first moment the jug rises again after
+ *  it has gone down low, and how full the cup is then. Read from the track (controlsAt and the
+ *  pitcher: the demo never pours outside the rim, so the cup fill is the milk that left the jug). */
+function findPull(): void {
+  if (pullStart >= 0) return;
+  const p = createPitcher();
+  const first = OWNER_DEMO[0];
+  if (first) {
+    p.x = first.x;
+    p.y = first.y;
+    p.height = first.h;
+  }
+  const c: PitcherControls = { targetX: 0, targetY: 0, targetHeight: 7, holding: false };
+  let fill = ESPRESSO_FILL;
+  let lowest = Infinity;
+  for (let i = 0; i < DEMO_STEPS; i++) {
+    const t = i * STEP;
+    controlsAt(OWNER_DEMO, t, c);
+    if (c.targetHeight < HEIGHT_PRESETS[1]) lowest = Math.min(lowest, c.targetHeight);
+    if (c.targetHeight > lowest + 0.05) {
+      pullStart = t;
+      break;
+    }
+    stepPitcher(p, c, STEP);
+    const out = Math.min(pitcherFlow(p) * MAX_FLOW * STEP, p.milk);
+    p.milk -= out;
+    fill += out;
+  }
+  pullFill = Math.min(1, fill);
+}
+
+/** Track time Gaz starts his pull-through. */
+export function demoPullStart(): number {
+  findPull();
+  return pullStart;
+}
+
+/** Cup fill when Gaz starts his pull-through: the lesson says "pull now" from here, so a player
+ *  following it isn't left with a cup that can't be topped up any more. */
+export function demoPullFill(): number {
+  findPull();
+  return pullFill;
 }
 
 /** Run a whole track headless. Used by tests and to sanity-check tuning. */

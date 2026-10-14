@@ -3,7 +3,15 @@ import { STEP } from '../../src/core/clock';
 import { artFaults, scoreAttempt } from '../../src/sim/attempt';
 import { scoreEspresso, createEspresso } from '../../src/sim/espresso';
 import { CELL, createPour, GRID, stepPour, surfacing } from '../../src/sim/latte/field';
-import { controlsAt, OWNER_DEMO, runTrack, type TrackKey } from '../../src/sim/latte/demo';
+import {
+  controlsAt,
+  demoPullFill,
+  demoPullStart,
+  OWNER_DEMO,
+  runTrack,
+  type TrackKey,
+} from '../../src/sim/latte/demo';
+import { createPourLog, readyToPull, trackPour, type PourLog } from '../../src/sim/latte/coach';
 import { heartTemplate, inHeart } from '../../src/sim/latte/heart';
 import {
   createPitcher,
@@ -261,6 +269,58 @@ describe('pull-through: the taught motion is the winning motion', () => {
     const r = pourTrack(late, 8.8);
     expect(r.faults).toContain('blob');
     expect(r.s.heartness).toBeLessThan(0.3);
+  });
+});
+
+describe('when the lesson says "pull now": as full as the cup is when Gaz starts his', () => {
+  it("is read from Gaz's demo, and matches the full pour simulation", () => {
+    const fill = demoPullFill();
+    expect(fill).toBeGreaterThan(0.84);
+    expect(fill).toBeLessThan(0.88);
+    expect(runTrack(OWNER_DEMO, SILKY_MILK, demoPullStart()).pour.fill).toBeCloseTo(fill, 9);
+  });
+
+  it('a wide white is not enough: the cup has to be that full too', () => {
+    const log = { ...createPourLog(), done: [true, true, true, false] as PourLog['done'], step: 3 };
+    expect(readyToPull(log, 0.71)).toBe(false); // Day 1 by the text, 2026-10-15: pulled here
+    expect(readyToPull(log, demoPullFill())).toBe(true);
+    expect(readyToPull({ ...log, pullStarted: true }, 0.9)).toBe(false);
+  });
+
+  it('following the lesson (drop at half full, pull when it says) ends in a heart and a full cup', () => {
+    const [HIGH, LIFT, LOW] = HEIGHT_PRESETS;
+    const pour = createPour();
+    const p = createPitcher();
+    p.y = -0.3;
+    const log = createPourLog();
+    const c = { targetX: 0, targetY: -0.3, targetHeight: HIGH as number, holding: false };
+    // The B1 held sweep, from the moment the hint fires: lift to [2], keep pouring, let go far.
+    const sweep: TrackKey[] = [
+      { t: 0, x: 0, y: -0.3, h: LOW, hold: true },
+      { t: 0.15, x: 0, y: -0.2, h: LIFT, hold: true },
+      { t: 0.6, x: 0, y: 0.85, h: LIFT, hold: false },
+      { t: 1.2, x: 0, y: 0.6, h: HIGH, hold: false },
+    ];
+    let hintAt = -1;
+    let idle = 0;
+    for (let i = 0; i < Math.round(20 / STEP); i++) {
+      const t = i * STEP;
+      if (hintAt >= 0) controlsAt(sweep, t - hintAt, c);
+      else {
+        c.holding = t >= 0.5; // "1 high … hold to pour"
+        if (log.done[0]) c.targetHeight = LOW; // "Half full. Drop right down now [3]."
+      }
+      stepPourFrame(pour, p, c, SILKY_MILK, STEP);
+      trackPour(log, pour, p);
+      if (hintAt < 0 && readyToPull(log, pour.fill) && pitcherFlow(p) > 0) hintAt = t;
+      // The pour ends as the trial's does: full and still for a beat.
+      idle = hintAt >= 0 && pitcherFlow(p) === 0 ? idle + STEP : 0;
+      if (pour.fill >= 0.88 && idle >= 1.1) break;
+    }
+    expect(hintAt).toBeGreaterThan(0);
+    const r = scoreAttempt(scorePattern(pour.foam), pour, scoreMilk(SILKY_MILK), perfectEspresso());
+    expect(r.faults).toEqual([]);
+    expect(r.band).toBe('hired');
   });
 });
 

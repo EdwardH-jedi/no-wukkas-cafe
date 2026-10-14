@@ -44,7 +44,8 @@ export const LESSON_HINT = {
   tooLowEarly: 'Too early to go low: fill from up high first [1].',
   goLow: 'Half full. Drop right down now [3].',
   tooHighToDraw: 'Too high to draw: the foam is sinking. Lower [3].',
-  pullNow: 'Wide enough. Lift [2], keep pouring and sweep forward.',
+  /** {n}: the cup fill (%) when Gaz starts his own pull-through. */
+  pullNow: 'Wide enough, cup ~{n}%. Lift [2], keep pouring and sweep forward.',
   done: 'Done. Hands off and let it settle.',
 } as const;
 

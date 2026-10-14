@@ -5,6 +5,7 @@
 
 import { clamp } from '../math';
 import { CELL, GRID, type PourState } from './field';
+import { demoPullFill } from './demo';
 import { pitcherFlow, type PitcherState } from './pitcher';
 import type { PatternScore } from './score';
 
@@ -142,6 +143,12 @@ export function trackPour(log: PourLog, pour: PourState, pitcher: PitcherState):
   let s = 0;
   while (s < 4 && d[s]) s++;
   log.step = s;
+}
+
+/** Time for step 4 ("pull now"): the white is wide enough, and the cup is as full as it is when
+ *  Gaz starts his own pull-through (pull earlier and the cup can't be topped up after). */
+export function readyToPull(log: PourLog, fill: number): boolean {
+  return log.step === 3 && !log.pullStarted && fill >= demoPullFill();
 }
 
 /** Mean spout height while drawing, cm (or -1 if the player never poured past half full). */
