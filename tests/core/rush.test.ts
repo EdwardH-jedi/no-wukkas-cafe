@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  cancelPress,
   createBarista,
   startDrink,
   stepBarista,
@@ -32,6 +33,7 @@ import { orderTier, type Difficulty } from '../../src/sim/listening';
 import type { Utterance } from '../../src/core/speech';
 import { SHOT_MAX, SHOT_TARGET } from '../../src/sim/espresso';
 import { createPourGate } from '../../src/sim/latte/pitcher';
+import { SCALD_TEMP } from '../../src/sim/steam';
 import type { DrinkType, Order } from '../../src/sim/rush';
 
 interface BotOpts {
@@ -507,9 +509,9 @@ describe('two hands: steaming the milk while the shot runs', () => {
     expect(last).toEqual({ click: false, steam: true });
     expect(step(false)).toEqual({ click: false, steam: false }); // let go of a hold: no click
     expect(step(false, true)).toEqual({ click: true, steam: false }); // a key tap inside one step
-    // A second button pressed while steaming (mouse held, Space tapped) is a click; steam stays on.
+    // A second button pressed while one is held (mouse held, Space pressed) is just more holding.
     for (let n = 0; n < 20; n++) step(true, n === 0);
-    expect(step(true, true)).toEqual({ click: true, steam: true });
+    expect(step(true, true)).toEqual({ click: false, steam: true });
   });
 
   it('the click that started the pump never turns into steam until it is let go', () => {
@@ -554,6 +556,92 @@ describe('two hands: steaming the milk while the shot runs', () => {
     expect(b.milkScore?.faults).toEqual([]);
     hold(b, out, 0.7, {});
     expect(b.phase).toBe('pour');
+  });
+
+  it('while steaming, Enter stops the shot and the milk keeps going', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, { holding: true, jugDepth: 0.2 });
+    stepBarista(b, { ...IN, holding: true, jugDepth: 0.2, next: true }, STEP, 0, out);
+    expect(b.espresso.done).toBe(true);
+    expect(b.steam.valveOpen).toBe(true);
+    hold(b, out, 0.1, { holding: true, jugDepth: 0.2 });
+    expect(b.espressoScore?.faults).toEqual([]);
+  });
+
+  it('while steaming, a quick click is just steam: it never stops the shot', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 1, { holding: true, pressed: true });
+    expect(b.phase).toBe('shotSteam');
+    hold(b, out, 0.2, {}); // let go: the valve pauses
+    hold(b, out, 0.1, { holding: true, pressed: true }); // a 0.1 s click
+    hold(b, out, 0.2, {});
+    expect(b.espresso.extracting).toBe(true);
+    expect(b.steam.valveOpen).toBe(false);
+  });
+
+  it('pausing cancels a press: a release first seen on resume is never a click', () => {
+    // Serial shot: pump on, let go, press again for 0.1 s, Esc, let go while paused, resume.
+    const serial = pumping('flatWhite');
+    hold(serial.b, serial.out, 0.1, {});
+    hold(serial.b, serial.out, 0.1, { holding: true, pressed: true });
+    expect(serial.b.phase).toBe('shot');
+    cancelPress(serial.b);
+    hold(serial.b, serial.out, 0.1, {});
+    expect(serial.b.espresso.extracting).toBe(true);
+    expect(serial.b.espresso.done).toBe(false);
+    // The same while already steaming: the valve closes, the shot runs on.
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 1, { holding: true, pressed: true });
+    hold(b, out, 0.2, {});
+    hold(b, out, 0.1, { holding: true, pressed: true });
+    expect(b.steam.valveOpen).toBe(true);
+    cancelPress(b);
+    hold(b, out, 0.1, {});
+    expect(b.steam.valveOpen).toBe(false);
+    expect(b.espresso.extracting).toBe(true);
+  });
+
+  it('a second device pressed while steaming is just more holding, in either order', () => {
+    // The sim sees holding = mouse || Space, so "mouse, then Space" and "Space, then mouse" both
+    // arrive as: held, a fresh press while still held, one let go (still held), the other let go.
+    for (const order of ['mouse then Space', 'Space then mouse']) {
+      const { b, out } = pumping('flatWhite');
+      hold(b, out, 0.1, {});
+      hold(b, out, 1, { holding: true, pressed: true, jugDepth: 0.2 }); // first device
+      expect(b.phase, order).toBe('shotSteam');
+      hold(b, out, 0.5, { holding: true, pressed: true, jugDepth: 0.2 }); // second device
+      expect(b.espresso.extracting, order).toBe(true);
+      expect(b.steam.valveOpen, order).toBe(true);
+      hold(b, out, 0.5, { holding: true, jugDepth: 0.2 }); // first let go, second still down
+      expect(b.espresso.extracting, order).toBe(true);
+      expect(b.steam.valveOpen, order).toBe(true);
+      hold(b, out, 0.1, {}); // second let go
+      expect(b.espresso.extracting, order).toBe(true);
+      expect(b.steam.valveOpen, order).toBe(false);
+    }
+  });
+
+  it('when the shot stops and the milk finishes in the same step, the shot is done first', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, { holding: true, jugDepth: 2.5 });
+    b.steam.temp = SCALD_TEMP - 0.01; // the milk finishes (scalds) on this step
+    out.length = 0;
+    stepBarista(b, { ...IN, holding: true, jugDepth: 2.5, next: true }, STEP, 0, out);
+    const kinds = out.map((e) => e.type);
+    expect(b.espresso.done).toBe(true);
+    expect(b.steam.done).toBe(true);
+    expect(kinds).toContain('shotDone');
+    expect(kinds).toContain('milkDone');
+    expect(kinds.indexOf('shotDone')).toBeLessThan(kinds.indexOf('milkDone'));
+    // The lines follow the same order: the shot's verdict, then the milk's.
+    const lines = said(out);
+    expect(lines.indexOf('shot.short')).toBeLessThan(lines.indexOf('steam.scalded'));
   });
 
   it('warm milk left alone once the shot is off counts as finished, after a short grace', () => {

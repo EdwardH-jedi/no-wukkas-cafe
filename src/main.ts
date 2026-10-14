@@ -14,6 +14,7 @@ import { moodFor } from './audio/musicPatterns';
 import { createSfx } from './audio/sfx';
 import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
+import { cancelPress } from './core/barista';
 import {
   atCounter,
   atRegister,
@@ -173,6 +174,8 @@ async function boot(): Promise<void> {
     if (p) {
       held = false;
       spaceHeld = false;
+      // A button let go while paused must not read as a click on resume (it would stop the shot).
+      if (rush) cancelPress(rush.barista);
     }
   };
 
@@ -454,7 +457,9 @@ async function boot(): Promise<void> {
       // Enter rings up even with a register option focused (it would just re-press it).
       if (t.tagName === 'BUTTON' && !(t.closest('#pos') && atCounter(r))) return;
       e.preventDefault();
-      if (b.phase === 'grind' || b.phase === 'pour') rushAct({ type: 'next' });
+      // While steaming during the shot, Enter stops the shot (a click would just grab the jug).
+      const stopShot = b.phase === 'shotSteam' && b.espresso.extracting;
+      if (b.phase === 'grind' || b.phase === 'pour' || stopShot) rushAct({ type: 'next' });
       else if (atCounter(r)) rushHud.ringUp();
       else if (atRegister(r)) rushAct({ type: 'takeOrder' });
       else input.skip = true;

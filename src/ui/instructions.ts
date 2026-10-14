@@ -21,19 +21,26 @@ export interface InstructionView {
   pitcher: PitcherState;
 }
 
-/** Day 2, a flat white's shot running: both hands. */
-const twoHands = (touch: boolean): Instruction => ({
+/** Day 2, a flat white's shot running: both hands. Once steaming, a click would just grab the jug,
+ *  so the shot stops on Enter (or its card). */
+const twoHands = (touch: boolean, steaming: boolean): Instruction => ({
   title: 'Shot + milk',
-  html: touch
-    ? "Shot's running — hold to steam the milk now, tap to stop the shot at <b>25–31 s</b>."
-    : "Shot's running — hold (<kbd>Space</kbd>) to steam the milk now, click (tap <kbd>Space</kbd>) to stop the shot at <b>25–31 s</b>.",
+  html: steaming
+    ? touch
+      ? 'Hold to steam. Tap <b>Stop</b> on the shot timer at <b>25–31 s</b>.'
+      : 'Hold to steam. <kbd>Enter</kbd> stops the shot at <b>25–31 s</b>.'
+    : touch
+      ? "Shot's running — hold to steam the milk now, tap to stop the shot at <b>25–31 s</b>."
+      : "Shot's running — hold (<kbd>Space</kbd>) to steam the milk now, click (tap <kbd>Space</kbd>) to stop the shot at <b>25–31 s</b>.",
 });
 
 export function instruction(t: InstructionView, touch: boolean): Instruction | null {
   const hold = touch ? 'Press and hold' : 'Hold the mouse button (or <kbd>Space</kbd>)';
   const e = t.espresso;
   if (t.phase === 'shotSteam' || (t.phase === 'shot' && t.drink === 'flatWhite' && e.extracting))
-    return e.done ? instruction({ ...t, phase: 'steam' }, touch) : twoHands(touch);
+    return e.done
+      ? instruction({ ...t, phase: 'steam' }, touch)
+      : twoHands(touch, t.phase === 'shotSteam');
   switch (t.phase) {
     case 'grind':
       if (e.dose < 0.5) return { title: 'Grind', html: `${hold} to grind into the basket.` };

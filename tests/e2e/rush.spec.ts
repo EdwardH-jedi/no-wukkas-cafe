@@ -182,8 +182,9 @@ async function steamAndPour(page: Page, extraHot: boolean, shotName: string): Pr
   await pour(page, shotName);
 }
 
-/** Two hands: start the pump, hold to steam while the shot runs (both gauges up), let go and
- *  click the shot off in the window ("Stopped · 26 s"), grab the jug again to finish, pour. */
+/** Two hands: start the pump, hold to steam while the shot runs (both gauges up), press Space too
+ *  (a second device is just more holding), stop the shot with Enter in the window ("Stopped ·
+ *  26 s") without letting go of the jug, finish the milk, pour. */
 async function twoHands(page: Page, extraHot: boolean): Promise<void> {
   await until(page, (s) => s.station === 'shot');
   const h = page.viewportSize()?.height ?? 640;
@@ -199,21 +200,28 @@ async function twoHands(page: Page, extraHot: boolean): Promise<void> {
   await expect(cards.nth(1)).toContainText('Milk');
   const [a, b] = [await cards.nth(0).boundingBox(), await cards.nth(1).boundingBox()];
   expect((b?.y ?? 0) > (a?.y ?? 0) + (a?.height ?? 0) - 1).toBe(true);
-  await expect(page.locator('#rinstr')).toContainText("Shot's running");
+  await expect(page.locator('#rinstr')).toContainText('Enter stops the shot');
+  await expect(page.locator('#rgauges .gstop')).toBeVisible();
   await snap(page, 'two-hands-gauges');
+  // Space pressed and let go while the mouse steams: just more holding, the shot runs on.
+  const t0 = (await rush(page)).shotTime;
+  await page.keyboard.down(' ');
+  const both = await until(page, (s) => s.shotTime >= t0 + 1.5);
+  await page.keyboard.up(' ');
+  expect(both.extracting).toBe(true);
+  expect(both.station).toBe('shotSteam');
   await until(page, (s) => s.aeration >= 0.4 || s.shotTime >= 22);
   await page.mouse.move(640, steamY(2.2, h), { steps: 4 });
   await until(page, (s) => s.shotTime >= 24.5);
-  await timeScale(page, 0.15); // a precise click, and time to read the label
+  await timeScale(page, 0.15); // a precise stop, and time to read the label
   await until(page, (s) => s.shotTime >= 26.05);
-  await page.mouse.up();
-  await page.mouse.click(640, steamY(2.2, h)); // the shot stops; the milk only pauses
+  await page.keyboard.press('Enter'); // the shot stops; the jug stays in hand
   const stopped = await until(page, (s) => s.shotDone);
   expect(stopped.steamDone).toBe(false);
   await expect(page.locator('#rgauges')).toContainText('Stopped · 26 s');
+  await expect(page.locator('#rgauges .gstop')).toBeHidden();
   await snap(page, 'shot-stopped');
   await timeScale(page, 1);
-  await page.mouse.down(); // grab the jug again
   await until(page, (s) => s.temp >= (extraHot ? 70 : 60));
   await page.mouse.up();
   await until(page, (s) => s.steamDone);
