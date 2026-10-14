@@ -1,7 +1,7 @@
 // Day 2 HUD: ticket rail, register prompt, station actions, the pass, subtitles with speaker names,
 // gauges, instructions, pause and the end-of-shift receipt. Touches the DOM only on change.
 
-import type { StationPhase } from '../core/barista';
+import type { Barista } from '../core/barista';
 import {
   atCounter,
   atRegister,
@@ -255,8 +255,12 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     subs.classList.remove('gone');
   };
 
-  const stationPhaseMode = (p: StationPhase): GaugeMode =>
-    p === 'grind' || p === 'shot' || p === 'steam' || p === 'pour' || p === 'water' ? p : '';
+  /** A flat white's shot shows the milk gauge under the timer: the milk can go on now. */
+  const stationMode = (b: Barista): GaugeMode => {
+    const p = b.phase;
+    if (p === 'shotSteam' || (p === 'shot' && b.drink === 'flatWhite')) return 'shotSteam';
+    return p === 'grind' || p === 'shot' || p === 'steam' || p === 'pour' || p === 'water' ? p : '';
+  };
 
   return {
     show(on) {
@@ -405,7 +409,11 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       setActions(key, parts.join(''));
       // While pouring, the buttons sit off to the side, clear of the cup the pointer steers over
       // (as on Day 1): a button under the pointer swallows its moves, and a stray click ends it.
-      actions.classList.toggle('side', r.phase === 'service' && b.phase === 'pour');
+      // Same with a drink on the pass: "Bin it" would sit right over the cup.
+      actions.classList.toggle(
+        'side',
+        r.phase === 'service' && (b.phase === 'pour' || b.ready !== null),
+      );
 
       // Instruction.
       let ins: { title: string; html: string } | null = null;
@@ -449,7 +457,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           (instr.querySelector('.b') as HTMLElement).innerHTML = ins.html;
         }
       }
-      gauges.update(r.phase === 'service' ? stationPhaseMode(b.phase) : '', b);
+      gauges.update(r.phase === 'service' ? stationMode(b) : '', b);
       touchPad.classList.toggle('hide', !(touch && b.phase === 'pour'));
     },
   };

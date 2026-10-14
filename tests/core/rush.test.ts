@@ -1,4 +1,15 @@
 import { describe, expect, it } from 'vitest';
+import {
+  createBarista,
+  startDrink,
+  stepBarista,
+  CARRIED_GRACE,
+  stepPress,
+  TAP_MAX,
+  type Barista,
+  type BaristaEvent,
+  type BaristaInput,
+} from '../../src/core/barista';
 import { STEP } from '../../src/core/clock';
 import {
   atCounter,
@@ -19,7 +30,9 @@ import { awaitingRender } from '../../src/data/voice/script';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
 import { orderTier, type Difficulty } from '../../src/sim/listening';
 import type { Utterance } from '../../src/core/speech';
-import type { Order } from '../../src/sim/rush';
+import { SHOT_MAX, SHOT_TARGET } from '../../src/sim/espresso';
+import { createPourGate } from '../../src/sim/latte/pitcher';
+import type { DrinkType, Order } from '../../src/sim/rush';
 
 interface BotOpts {
   /** Seconds to dawdle before starting each drink (a slower human). */
@@ -440,5 +453,184 @@ describe('Day 2 rush, played headless', () => {
     expect(r.records).toHaveLength(0);
     const intro = r.events.filter((e) => e.type === 'say').length;
     expect(intro).toBe(1); // the intro starts once, not twice
+  });
+});
+
+describe('two hands: steaming the milk while the shot runs', () => {
+  const IN: BaristaInput = {
+    holding: false,
+    pressed: false,
+    cupX: 0,
+    cupY: 0,
+    hasCup: false,
+    jugDepth: 0.2,
+    heightDelta: 0,
+    heightPreset: null,
+    next: false,
+  };
+  /** Step the station for `seconds` with this input (pressed only on the first step). */
+  const hold = (b: Barista, out: BaristaEvent[], seconds: number, i: Partial<BaristaInput>) => {
+    for (let n = 0; n < Math.round(seconds / STEP); n++)
+      stepBarista(b, { ...IN, ...i, pressed: n === 0 && i.pressed === true }, STEP, 0, out);
+  };
+  const click = (b: Barista, out: BaristaEvent[]) =>
+    stepBarista(b, { ...IN, pressed: true }, STEP, 0, out);
+  const said = (out: BaristaEvent[]): string[] =>
+    out.flatMap((e) => (e.type === 'line' ? [e.key] : []));
+
+  /** A drink ground, locked in and its pump just started (with a key tap). */
+  function pumping(drink: DrinkType): { b: Barista; out: BaristaEvent[] } {
+    const b = createBarista();
+    const out: BaristaEvent[] = [];
+    startDrink(b, drink, out);
+    while (b.espresso.dose < 19) hold(b, out, STEP, { holding: true });
+    stepBarista(b, { ...IN, next: true }, STEP, 0, out);
+    hold(b, out, 1.6, {});
+    if (drink === 'longBlack') {
+      hold(b, out, 5.4, { holding: true });
+      hold(b, out, STEP, {});
+    }
+    expect(b.phase).toBe('shot');
+    click(b, out);
+    expect(b.espresso.extracting).toBe(true);
+    return { b, out };
+  }
+
+  it('a click is a press let go within 0.25 s; a longer hold steams', () => {
+    const p = { gate: createPourGate(), held: 0 };
+    p.gate.armed = true;
+    const step = (holding: boolean, pressed = false) => stepPress(p, { holding, pressed }, STEP);
+    for (let n = 0; n < 6; n++) expect(step(true, n === 0)).toEqual({ click: false, steam: false });
+    expect(step(false)).toEqual({ click: true, steam: false }); // 0.1 s: a click
+    let last = { click: false, steam: false };
+    for (let n = 0; n < Math.ceil(TAP_MAX / STEP) + 1; n++) last = step(true, n === 0);
+    expect(last).toEqual({ click: false, steam: true });
+    expect(step(false)).toEqual({ click: false, steam: false }); // let go of a hold: no click
+    expect(step(false, true)).toEqual({ click: true, steam: false }); // a key tap inside one step
+    // A second button pressed while steaming (mouse held, Space tapped) is a click; steam stays on.
+    for (let n = 0; n < 20; n++) step(true, n === 0);
+    expect(step(true, true)).toEqual({ click: true, steam: true });
+  });
+
+  it('the click that started the pump never turns into steam until it is let go', () => {
+    const p = { gate: createPourGate(), held: 0 };
+    for (let n = 0; n < 60; n++)
+      expect(stepPress(p, { holding: true, pressed: n === 0 }, STEP).steam).toBe(false);
+    stepPress(p, { holding: false, pressed: false }, STEP);
+    let s = false;
+    for (let n = 0; n < 20; n++) s = stepPress(p, { holding: true, pressed: n === 0 }, STEP).steam;
+    expect(s).toBe(true);
+  });
+
+  it('flat white: hold during the shot steams fresh milk, a click stops the shot, the milk carries on', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {}); // let go of the click that started the pump
+    hold(b, out, 0.2, { holding: true, pressed: true });
+    expect(b.phase).toBe('shot'); // not yet a hold
+    expect(b.steam.valveOpen).toBe(false);
+    hold(b, out, 0.1, { holding: true });
+    expect(b.phase).toBe('shotSteam');
+    expect(said(out)).toContain('shot.overlap');
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, { holding: true, jugDepth: 0.2 });
+    expect(b.steam.temp).toBeGreaterThan(40);
+    expect(b.steam.aeration).toBeGreaterThan(0.2);
+    click(b, out); // let go and click: the shot stops, the milk only pauses
+    expect(b.espresso.done).toBe(true);
+    expect(b.steam.done).toBe(false);
+    expect(said(out)).not.toContain('steam.tooEarly');
+    hold(b, out, 0.01, {});
+    // Same scoring as one step at a time: stopped in the window, no faults.
+    expect(b.espressoScore?.faults).toEqual([]);
+    expect(b.espresso.shotTime).toBeGreaterThanOrEqual(SHOT_TARGET[0]);
+    expect(b.espresso.shotTime).toBeLessThanOrEqual(SHOT_TARGET[1]);
+    const warm = b.steam.temp;
+    hold(b, out, 0.4, { holding: true, pressed: true, jugDepth: 2.5 });
+    hold(b, out, 0.4, { holding: true, jugDepth: 2.5 });
+    expect(b.phase).toBe('steam');
+    expect(b.steam.temp).toBeGreaterThan(warm); // the same jug, not a fresh one
+    while (b.steam.temp < 60) hold(b, out, STEP, { holding: true, jugDepth: 2.5 });
+    hold(b, out, STEP, {});
+    expect(b.steam.done).toBe(true);
+    expect(b.milkScore?.faults).toEqual([]);
+    hold(b, out, 0.7, {});
+    expect(b.phase).toBe('pour');
+  });
+
+  it('warm milk left alone once the shot is off counts as finished, after a short grace', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    while (b.steam.temp < 58) hold(b, out, STEP, { holding: true, jugDepth: 0.2 });
+    hold(b, out, 0.2, {}); // done steaming; the shot is still running
+    expect(b.steam.done).toBe(false);
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, {});
+    click(b, out);
+    hold(b, out, 0.7, {}); // the shot settles: same jug, steam step
+    expect(b.phase).toBe('steam');
+    expect(b.steam.done).toBe(false); // still time to grab it again
+    hold(b, out, CARRIED_GRACE, {});
+    expect(b.steam.done).toBe(true);
+    expect(said(out)).not.toContain('steam.tooEarly');
+    hold(b, out, 0.7, {});
+    expect(b.phase).toBe('pour');
+  });
+
+  it('let go to click the shot off, then grab the jug again: the milk keeps heating', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, { holding: true, jugDepth: 0.2 });
+    click(b, out);
+    hold(b, out, 0.5, {}); // a slow hand: release, click, a moment's thought
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    hold(b, out, 0.6, { holding: true, jugDepth: 2.5 });
+    expect(b.phase).toBe('steam');
+    expect(b.steam.done).toBe(false);
+    expect(b.steam.valveOpen).toBe(true);
+  });
+
+  it('Gaz praises the two hands once a shift, not every drink', () => {
+    const lines: string[] = [];
+    for (let k = 0; k < 2; k++) {
+      const { b, out } = pumping('flatWhite');
+      if (k === 1) b.overlaps = 1; // a second drink in the same shift
+      hold(b, out, 0.1, {});
+      hold(b, out, 0.5, { holding: true, pressed: true });
+      expect(b.phase).toBe('shotSteam');
+      lines.push(...said(out));
+    }
+    expect(lines.filter((k) => k === 'shot.overlap')).toHaveLength(1);
+  });
+
+  it('a shot left running to the limit while steaming goes in the bin, and Gaz says why', () => {
+    const { b, out } = pumping('flatWhite');
+    hold(b, out, 0.1, {});
+    hold(b, out, 0.3, { holding: true, pressed: true });
+    while (b.phase === 'shotSteam') hold(b, out, STEP, { holding: true, jugDepth: 2.5 });
+    expect(b.espresso.shotTime).toBeGreaterThanOrEqual(SHOT_MAX);
+    expect(b.phase).toBe('idle');
+    expect(b.binned).toBe(1);
+    expect(said(out)).toContain('shot.over');
+  });
+
+  it('long black: no milk, so nothing changes: a press stops the shot at once, never steams', () => {
+    const { b, out } = pumping('longBlack');
+    hold(b, out, 0.1, {});
+    while (b.espresso.shotTime < 26) hold(b, out, STEP, {});
+    const at = b.espresso.shotTime;
+    hold(b, out, 0.5, { holding: true, pressed: true });
+    expect(b.espresso.done).toBe(true);
+    expect(b.espresso.shotTime).toBeCloseTo(at, 5); // stopped on the press, not the release
+    expect(out.some((e) => e.type === 'phase' && e.phase === 'shotSteam')).toBe(false);
+    expect(b.steam.valveOpen).toBe(false);
+  });
+
+  it('every flat white starts with a cold jug (the milk gauge shows during its shot)', () => {
+    const b = createBarista();
+    b.steam.temp = 60;
+    b.steam.done = true;
+    startDrink(b, 'flatWhite', []);
+    expect(b.steam.temp).toBe(5);
+    expect(b.steam.done).toBe(false);
   });
 });

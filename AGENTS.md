@@ -48,7 +48,7 @@ npm run voices:check   # voice manifest + files: missing audio, duration drift, 
 npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
 ```
 
-Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line. `npm test` checks the manifest only (it passes on a clean clone with no audio files); `npm run voices:check` checks the files themselves and fails on missing audio. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.
+Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line; a line written but not yet rendered goes in `AWAITING_RENDER` (`src/data/voice/script.ts`), the only lines the coverage tests let go without a clip (empty it after rendering). `npm test` checks the manifest only (it passes on a clean clone with no audio files); `npm run voices:check` checks the files themselves and fails on missing audio. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.
 
 **Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder voice clips are removed. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
 

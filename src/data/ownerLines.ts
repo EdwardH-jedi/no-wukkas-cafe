@@ -167,6 +167,11 @@ export const OWNER_LINES: LineBook = {
     mood: 'annoyed',
     gesture: 'facepalm',
   },
+  /** Day 2: the first time the milk is steamed while the shot is still running. */
+  'shot.overlap': {
+    tiers: [[{ text: "Two hands. Now you're a barista." }]],
+    mood: 'impressed',
+  },
   'shot.handoff': {
     tiers: [[{ text: "I'll pull the next shots myself. You're slower than a wet week." }]],
     mood: 'smug',

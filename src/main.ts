@@ -815,7 +815,7 @@ async function boot(): Promise<void> {
     speech: { current: null as unknown },
     owner: { frustration: 0 },
   };
-  const WORKING = new Set(['grind', 'lock', 'shot', 'water', 'steam', 'pour']);
+  const WORKING = new Set(['grind', 'lock', 'shot', 'shotSteam', 'water', 'steam', 'pour']);
 
   function rushFrame(r: Rush, dt: number): void {
     for (const ev of r.events) {
@@ -854,7 +854,10 @@ async function boot(): Promise<void> {
     r.events.length = 0;
 
     const b = r.barista;
-    sv.phase = r.phase === 'service' ? b.phase : 'idle';
+    // Two hands (shot running + steaming) looks like steaming to the world and the camera: the
+    // jug is what the player is working. TODO: show the shot's stream too.
+    const shown = b.phase === 'shotSteam' ? 'steam' : b.phase;
+    sv.phase = r.phase === 'service' ? shown : 'idle';
     sv.phaseTime = b.phaseTime;
     sv.espresso = b.espresso;
     sv.steam = b.steam;
@@ -905,7 +908,7 @@ async function boot(): Promise<void> {
         ? 'intro'
         : r.phase === 'service'
           ? working
-            ? b.phase
+            ? shown
             : 'service'
           : 'summary';
     const px = pointer.has ? (pointer.x / window.innerWidth) * 2 - 1 : 0;
@@ -915,9 +918,9 @@ async function boot(): Promise<void> {
 
     sfx.update({
       grind: b.phase === 'grind' && b.espresso.grinding ? 1 : 0,
-      pump: b.phase === 'shot' && b.espresso.extracting ? 1 : 0,
-      steam: b.phase === 'steam' && b.steam.valveOpen ? 1 : 0,
-      steamZone: b.phase === 'steam' ? b.steam.zone : 'off',
+      pump: (b.phase === 'shot' || b.phase === 'shotSteam') && b.espresso.extracting ? 1 : 0,
+      steam: shown === 'steam' && b.steam.valveOpen ? 1 : 0,
+      steamZone: shown === 'steam' ? b.steam.zone : 'off',
       pour:
         b.phase === 'pour' ? pitcherFlow(b.pitcher) : b.phase === 'water' && b.dispensing ? 0.7 : 0,
       pourHigh: b.phase === 'water' ? 0.8 : 1 - surfacing(b.pitcher.height),

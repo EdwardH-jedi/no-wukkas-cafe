@@ -13,15 +13,27 @@ export interface Instruction {
 /** What the instruction panel needs (Day 1's Trial and Day 2's station both provide it). */
 export interface InstructionView {
   phase: string;
+  /** Day 2: the drink being made (a flat white's milk can be steamed during its shot). */
+  drink?: string | null;
   espresso: EspressoState;
   steam: SteamState;
   pour: PourState;
   pitcher: PitcherState;
 }
 
+/** Day 2, a flat white's shot running: both hands. */
+const twoHands = (touch: boolean): Instruction => ({
+  title: 'Shot + milk',
+  html: touch
+    ? "Shot's running — hold to steam the milk now, tap to stop the shot at <b>25–31 s</b>."
+    : "Shot's running — hold (<kbd>Space</kbd>) to steam the milk now, click (tap <kbd>Space</kbd>) to stop the shot at <b>25–31 s</b>.",
+});
+
 export function instruction(t: InstructionView, touch: boolean): Instruction | null {
   const hold = touch ? 'Press and hold' : 'Hold the mouse button (or <kbd>Space</kbd>)';
   const e = t.espresso;
+  if (t.phase === 'shotSteam' || (t.phase === 'shot' && t.drink === 'flatWhite' && e.extracting))
+    return e.done ? instruction({ ...t, phase: 'steam' }, touch) : twoHands(touch);
   switch (t.phase) {
     case 'grind':
       if (e.dose < 0.5) return { title: 'Grind', html: `${hold} to grind into the basket.` };

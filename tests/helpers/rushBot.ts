@@ -18,6 +18,7 @@ import {
 } from '../../src/core/rush';
 import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
+import { pitcherFlow } from '../../src/sim/latte/pitcher';
 import type { Difficulty } from '../../src/sim/listening';
 import type { Order } from '../../src/sim/rush';
 
@@ -32,9 +33,12 @@ export interface BotLatency {
   station: number;
 }
 
-/** A perfect player: no reaction time at all (the bot as it always was). */
-export const BOT_IDEAL: Pick<ListenBot, 'latency'> = {
+/** A perfect player: no reaction time, the milk steamed while the shot runs, and the drink
+ *  handed over ("Hand it over", Enter) the moment the pour's stream stops. */
+export const BOT_IDEAL: Pick<ListenBot, 'latency' | 'overlap' | 'handOver'> = {
   latency: { decide: 0, perAid: 0, station: 0 },
+  overlap: true,
+  handOver: true,
 };
 
 /** Someone on their first shift, measured against a real first play-through (2026-10-14): slow
@@ -59,6 +63,10 @@ export interface ListenBot {
   lines?: LineOverrides;
   /** Human reaction times (default: none). */
   latency?: BotLatency;
+  /** Steam a flat white's milk while its shot runs (two hands), stopping the shot at 25.5 s. */
+  overlap?: boolean;
+  /** Hand the drink over as soon as the pour is done, instead of waiting for it to settle. */
+  handOver?: boolean;
   seed?: number;
   maxSeconds?: number;
   /** Called after every step (assertions, tracing). */
@@ -148,10 +156,20 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
       i.holding = stepReady(r, o, m, 'water') && b.water < 0.65;
       return null;
     case 'shot':
-      if (!b.espresso.extracting && !b.espresso.done)
-        i.pressed = stepReady(r, o, m, 'pump') && m.step % 10 === 0;
-      if (b.espresso.extracting && b.espresso.shotTime >= 27) i.pressed = true;
+    case 'shotSteam': {
+      const e = b.espresso;
+      if (!e.extracting && !e.done) i.pressed = stepReady(r, o, m, 'pump') && m.step % 10 === 0;
+      if (o.overlap && b.drink === 'flatWhite' && (e.extracting || b.phase === 'shotSteam')) {
+        // Hold to steam; let go for one step and click when the shot is in the window.
+        const hot = m.target?.heard?.extraHot ? 71 : 60;
+        const stop = e.extracting && e.shotTime >= 25.5;
+        // (The click that started the pump is let go first, as a hand would.)
+        i.holding = b.press.gate.armed && !stop && !b.steam.done && b.steam.temp < hot;
+        i.pressed = stop;
+        i.jugDepth = b.steam.aeration < 0.4 ? 0.2 : 2.5;
+      } else if (e.extracting && e.shotTime >= 27) i.pressed = true;
       return null;
+    }
     case 'steam': {
       const hot = m.target?.heard?.extraHot ? 71 : 60;
       i.holding = stepReady(r, o, m, 'steam') && !b.steam.done && b.steam.temp < hot;
@@ -167,7 +185,9 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
       i.cupY = k.targetY;
       i.holding = k.holding;
       i.heightDelta = k.targetHeight - b.controls.targetHeight;
-      return null;
+      // The demo's last move is at 7.6 s; after that, once the stream has stopped, it's done.
+      const done = b.phaseTime - lag > 7.6 && pitcherFlow(b.pitcher) === 0 && b.pour.fill >= 0.88;
+      return o.handOver && done ? { type: 'next' } : null;
     }
     case 'ready': {
       if (!stepReady(r, o, m, 'serve')) return null;
