@@ -16,10 +16,35 @@ import {
   type RushEvent,
   type RushInput,
 } from '../../src/core/rush';
-import type { CustomerId } from '../../src/data/customers';
+import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
 import type { Difficulty } from '../../src/sim/listening';
 import type { Order } from '../../src/sim/rush';
+
+/** How long a human takes to act, in game seconds. Zero everywhere is the old instant bot. */
+export interface BotLatency {
+  /** After the customer has finished talking, before ringing the order up. */
+  decide: number;
+  /** After the customer has finished talking, before each listening aid. */
+  perAid: number;
+  /** Before each station step: making, starting the grind, locking in, the pump, steaming, the
+   *  pour, serving. */
+  station: number;
+}
+
+/** A perfect player: no reaction time at all (the bot as it always was). */
+export const BOT_IDEAL: Pick<ListenBot, 'latency'> = {
+  latency: { decide: 0, perAid: 0, station: 0 },
+};
+
+/** Someone on their first shift, measured against a real first play-through (2026-10-14): slow
+ *  to ring up, a beat between station steps, and one "Sorry, what was the drink?" for each of the
+ *  first two customers. */
+export const BOT_FIRST_TIMER: Pick<ListenBot, 'latency' | 'aids'> = {
+  latency: { decide: 6, perAid: 5, station: 1.5 },
+  aids: (c) =>
+    CUSTOMERS.indexOf(c.def) < 2 ? [{ type: 'clarify', field: 'drink' } as RushAction] : [],
+};
 
 export interface ListenBot {
   /** What to ring up for this customer (default: exactly what they said). */
@@ -32,6 +57,8 @@ export interface ListenBot {
   idle?: boolean;
   difficulty?: Difficulty;
   lines?: LineOverrides;
+  /** Human reaction times (default: none). */
+  latency?: BotLatency;
   seed?: number;
   maxSeconds?: number;
   /** Called after every step (assertions, tracing). */
@@ -50,7 +77,14 @@ interface Mem {
   target: RushCustomer | null;
   step: number;
   aidsLeft: Map<string, RushAction[]>;
+  /** When the customer at the counter last finished talking (null while they talk). */
+  quietSince: number | null;
+  /** The station step being waited on, and since when (for `latency.station`). */
+  stepKey: string;
+  stepSince: number;
 }
+
+const NO_LATENCY: BotLatency = { decide: 0, perAid: 0, station: 0 };
 
 /** Register work: take the order, use aids, ring up. Null when there's nothing to do. */
 function registerAction(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction | null {
@@ -59,6 +93,7 @@ function registerAction(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction
   if (!c) return null;
   if (c.state === 'ordering') {
     if (o.hurry) i.skip = true; // click the subtitle: they've said enough
+    m.quietSince = null;
     return null;
   }
   let left = m.aidsLeft.get(c.def.id);
@@ -66,39 +101,67 @@ function registerAction(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction
     left = [...(o.aids?.(c) ?? [])];
     m.aidsLeft.set(c.def.id, left);
   }
-  return left.shift() ?? { type: 'ringUp', order: o.heard ? o.heard(c) : c.order };
+  // A human waits for them to finish (an answer included), then takes a moment.
+  const lat = o.latency ?? NO_LATENCY;
+  const talking =
+    r.speech.current?.speaker === c.def.id ||
+    r.speech.queue.some((q) => q.listen === true && q.speaker === c.def.id);
+  if (talking) m.quietSince = null;
+  else m.quietSince ??= r.time;
+  const after = (wait: number): boolean =>
+    wait <= 0 || (m.quietSince !== null && r.time - m.quietSince >= wait);
+  if (left.length > 0) {
+    if (!after(lat.perAid)) return null;
+    m.quietSince = null;
+    return left.shift() ?? null;
+  }
+  if (!after(lat.decide)) return null;
+  return { type: 'ringUp', order: o.heard ? o.heard(c) : c.order };
+}
+
+/** Wait `latency.station` before acting on a new step; `key` names the step. */
+function stepReady(r: Rush, o: ListenBot, m: Mem, key: string): boolean {
+  if (m.stepKey !== key) {
+    m.stepKey = key;
+    m.stepSince = r.time;
+  }
+  return r.time - m.stepSince >= (o.latency ?? NO_LATENCY).station;
 }
 
 /** Station work, like a player's hands: holding/aiming plus at most one action. */
-function stationInput(r: Rush, m: Mem, i: RushInput): RushAction | null {
+function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction | null {
   const b = r.barista;
+  const lag = (o.latency ?? NO_LATENCY).station;
   switch (b.phase) {
     case 'idle': {
       const queue = waitingCustomers(r).sort((a, z) => (a.ticket ?? 0) - (z.ticket ?? 0));
       const next = queue[0];
-      if (!next?.heard) return null;
+      if (!next?.heard || !stepReady(r, o, m, `make:${next.def.id}`)) return null;
       m.target = next;
       return { type: 'make', drink: next.heard.type, milk: next.heard.milk ?? 'full' };
     }
     case 'grind':
-      if (b.espresso.dose < 19) i.holding = true;
-      else return { type: 'next' };
+      if (b.espresso.dose < 19) i.holding = stepReady(r, o, m, 'grind');
+      else if (stepReady(r, o, m, 'lock')) return { type: 'next' };
       return null;
     case 'water':
-      i.holding = b.water < 0.65;
+      i.holding = stepReady(r, o, m, 'water') && b.water < 0.65;
       return null;
     case 'shot':
-      if (!b.espresso.extracting && !b.espresso.done) i.pressed = m.step % 10 === 0;
+      if (!b.espresso.extracting && !b.espresso.done)
+        i.pressed = stepReady(r, o, m, 'pump') && m.step % 10 === 0;
       if (b.espresso.extracting && b.espresso.shotTime >= 27) i.pressed = true;
       return null;
     case 'steam': {
       const hot = m.target?.heard?.extraHot ? 71 : 60;
-      i.holding = !b.steam.done && b.steam.temp < hot;
+      i.holding = stepReady(r, o, m, 'steam') && !b.steam.done && b.steam.temp < hot;
       i.jugDepth = b.steam.aeration < 0.4 ? 0.2 : 2.5;
       return null;
     }
     case 'pour': {
-      const k = controlsAt(OWNER_DEMO, b.phaseTime);
+      // The owner's demo pour, started `lag` late.
+      if (b.phaseTime < lag) return null;
+      const k = controlsAt(OWNER_DEMO, b.phaseTime - lag);
       i.hasCup = true;
       i.cupX = k.targetX;
       i.cupY = k.targetY;
@@ -107,6 +170,7 @@ function stationInput(r: Rush, m: Mem, i: RushInput): RushAction | null {
       return null;
     }
     case 'ready': {
+      if (!stepReady(r, o, m, 'serve')) return null;
       const t = m.target;
       const d = b.ready;
       // Whoever it was for has gone, or the drink no longer matches their (corrected) ticket.
@@ -134,7 +198,7 @@ function botInput(r: Rush, o: ListenBot, m: Mem): RushInput {
   if (r.phase !== 'service' || o.idle) return i;
   // Hands keep working (holding the steam, pouring) while the register is served; only one
   // button press per step, and the register goes first except mid-pour/steam.
-  const station = stationInput(r, m, i);
+  const station = stationInput(r, o, m, i);
   const busyHands = r.barista.phase === 'steam' || r.barista.phase === 'pour';
   const reg = busyHands && station ? null : registerAction(r, o, m, i);
   i.action = reg ?? station;
@@ -143,7 +207,14 @@ function botInput(r: Rush, o: ListenBot, m: Mem): RushInput {
 
 export function playRush(o: ListenBot = {}): Played {
   const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {});
-  const m: Mem = { target: null, step: 0, aidsLeft: new Map() };
+  const m: Mem = {
+    target: null,
+    step: 0,
+    aidsLeft: new Map(),
+    quietSince: null,
+    stepKey: '',
+    stepSince: 0,
+  };
   const events: Played['events'] = [];
   const said: string[] = [];
   const patienceLog: Played['patienceLog'] = [];

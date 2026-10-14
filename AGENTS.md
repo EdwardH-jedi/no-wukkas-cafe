@@ -42,6 +42,7 @@ npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
 npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, audio specs (~9 min); E2E_PORT=… to run beside another checkout
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
+npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-timer} bot × {easy, normal} (-- --detail per seed)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)
 npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
@@ -72,6 +73,7 @@ src/
                      synthesised SFX, browser-speech fallback (voice.ts)
   ui/                DOM HUD, docket, bar, modals, shop, cheat sheet
 scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
+scripts/day2-pace.ts Day 2 pacing table from the headless rush bot (tests/helpers/rushBot.ts profiles)
 scripts/voices.ts    renders every spoken line to MP3 (macOS `say` + ffmpeg) and writes the manifest
 tests/               vitest unit tests (mirror src/ paths) + e2e/ for playwright
 public/assets/       audio clips, fonts, textures (bundled, never hot-linked)
