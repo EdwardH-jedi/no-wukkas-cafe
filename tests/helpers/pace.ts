@@ -17,13 +17,18 @@ export interface PaceRun {
   make: Record<DrinkType, number[]>;
   /** Patience (seconds) left when each customer was served. */
   left: Partial<Record<CustomerId, number>>;
+  /** Most people ever in line at once (queueing or at the register, order not yet rung up). */
+  maxLine: number;
 }
+
+const IN_LINE = new Set(['queue', 'register', 'ordering', 'deciding']);
 
 export function paceRun(bot: ListenBot, seed: number, difficulty: Difficulty): PaceRun {
   const make: PaceRun['make'] = { flatWhite: [], longBlack: [] };
   const left: PaceRun['left'] = {};
   let started: { at: number; drink: DrinkType } | null = null;
   let phase = 'idle';
+  let maxLine = 0;
   const { r } = playRush({
     ...bot,
     seed,
@@ -37,8 +42,12 @@ export function paceRun(bot: ListenBot, seed: number, difficulty: Difficulty): P
         if (b.phase === 'ready' || b.phase === 'idle') started = null;
         phase = b.phase;
       }
-      for (const c of s.customers)
+      let line = 0;
+      for (const c of s.customers) {
         if (c.outcome === 'served' && left[c.def.id] === undefined) left[c.def.id] = c.patience;
+        if (IN_LINE.has(c.state)) line++;
+      }
+      maxLine = Math.max(maxLine, line);
     },
   });
   return {
@@ -48,6 +57,7 @@ export function paceRun(bot: ListenBot, seed: number, difficulty: Difficulty): P
     meanServe: r.summary?.avgServeSeconds ?? 0,
     make,
     left,
+    maxLine,
   };
 }
 

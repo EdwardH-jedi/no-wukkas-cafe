@@ -49,7 +49,11 @@ describe('order bank', () => {
   });
 
   it('never fakes an accent with spelling: orders are standard English words', () => {
-    for (const { o } of all) expect(o.text, o.id).not.toMatch(/\b(ze|zis|velly|rike|sank you)\b/i);
+    for (const { o } of all) {
+      expect(o.text, o.id).not.toMatch(/\b(ze|zis|velly|rike|sank you)\b/i);
+      // Dropped g's ("Mornin'") too: the accent is in the recording.
+      expect(o.text, o.id).not.toMatch(/\w+in'(?!\w)/i);
+    }
   });
 
   it('every accent group has at least six orders, spanning every difficulty tier', () => {

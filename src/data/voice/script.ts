@@ -20,6 +20,21 @@ export interface ScriptLine {
 /** "Could you repeat that?": the same words, noticeably slower. */
 export const SLOW_RATE = 0.8;
 
+/**
+ * Script keys whose words are new or changed and haven't been recorded yet. The next
+ * `npm run voices` (macOS) renders them; until then the game falls back to browser speech for
+ * these lines only, and the coverage tests allow exactly these to be missing (plus the old clips
+ * they replace, including a line split into per-drink keys). Empty this once they're rendered.
+ */
+export const AWAITING_RENDER: ReadonlySet<string> = new Set(['dazza.3', 'dazza.3.slow']);
+
+/** Is this line (by script key, or the manifest key of a clip it replaces) awaiting a render? */
+export function awaitingRender(key: string): boolean {
+  if (AWAITING_RENDER.has(key)) return true;
+  for (const k of AWAITING_RENDER) if (k.startsWith(`${key}.`)) return true;
+  return false;
+}
+
 const fillAll = (text: string): string[] => {
   if (!/\{\w+\}/.test(text)) return [text];
   const names = CUSTOMERS.map((c) => c.callName);

@@ -15,6 +15,7 @@ import {
 import type { CustomerId } from '../../src/data/customers';
 import { OWNER_LINES } from '../../src/data/ownerLines';
 import { clipFor } from '../../src/data/voice';
+import { awaitingRender } from '../../src/data/voice/script';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
 import { orderTier, type Difficulty } from '../../src/sim/listening';
 import type { Utterance } from '../../src/core/speech';
@@ -130,8 +131,13 @@ function botInput(r: Rush, o: BotOpts, m: BotMemory): RushInput {
       }
       const target = m.target;
       if (!target || target.state !== 'waiting') {
-        // Whoever it was for has gone: hand it to anyone who ordered this drink, or bin it.
-        const other = waitingCustomers(r).find((c) => c.heard?.type === b.ready?.type);
+        // Whoever it was for has gone: hand it to anyone who ordered this drink (with this
+        // milk: the wrong milk is handed straight back), or bin it.
+        const d = b.ready;
+        const other = waitingCustomers(r).find(
+          (c) =>
+            c.heard?.type === d?.type && (d?.type !== 'flatWhite' || c.heard?.milk === d.milkType),
+        );
         i.action = other ? { type: 'serve', customer: other.def.id } : { type: 'bin' };
         break;
       }
@@ -240,7 +246,8 @@ describe('Day 2 rush, played headless', () => {
   });
 
   it('a wrong drink is handed back, stays on the pass, and Gaz calls it out', () => {
-    const { r, said, events } = play({ wrongFirst: true });
+    // A dawdling barista, so a second ticket is on the rail when the first drink is ready.
+    const { r, said, events } = play({ wrongFirst: true, delay: 30 });
     expect(events.some((e) => e.type === 'rejected')).toBe(true);
     expect(said).toContain('rush.wrongDrink');
     expect(said.some((k) => k.endsWith('.rejected'))).toBe(true);
@@ -300,7 +307,9 @@ describe('Day 2 rush, played headless', () => {
       for (const e of play(o).events)
         if (e.type === 'say') {
           const clip = clipFor(e.line.speaker, e.line.text, e.line.delivery);
-          if (!clip) missing.add(`${e.line.speaker}: ${e.line.text}`);
+          if (!clip) {
+            if (!awaitingRender(e.line.key)) missing.add(`${e.line.speaker}: ${e.line.text}`);
+          }
           // Subtitle timing follows the recording: the line holds the floor for the whole clip.
           else expect(e.line.duration).toBeGreaterThan(clip.duration);
         }
@@ -388,9 +397,14 @@ describe('Day 2 rush, played headless', () => {
   });
 
   it('difficulty picks the order tiers, and the same seed gives the same orders', () => {
+    // First-shift lines (Dazza's long black) are said on every difficulty; the rest follow it.
     const tiers = (d: Difficulty, seed: number): number[] =>
-      createRush(seed, d).customers.map((c) => orderTier(c.line));
+      createRush(seed, d)
+        .customers.filter((c) => !c.line.firstShift)
+        .map((c) => orderTier(c.line));
     for (let seed = 1; seed < 8; seed++) {
+      for (const d of ['easy', 'normal', 'hard'] as const)
+        expect(createRush(seed, d).customers[0]?.line.id).toBe('dazza.3');
       expect(tiers('easy', seed).every((t) => t === 1)).toBe(true);
       expect(tiers('normal', seed).every((t) => t <= 2)).toBe(true);
       expect(tiers('hard', seed).every((t) => t >= 2)).toBe(true);

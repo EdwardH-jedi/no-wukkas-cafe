@@ -42,9 +42,11 @@ export const ORDER_LINES: Record<string, readonly OrderLine[]> = {
       cues: { drink: 'Flattie' },
     },
     {
+      // His first-shift order: a long black keeps the very first drink short (Roadmap, Day 2).
       id: 'dazza.3',
-      text: "Mornin'. Long black, cheers, mate. Big day on the tools.",
+      text: 'Morning. Long black, cheers, mate. Big day on the tools.',
       order: LB,
+      firstShift: true,
       pace: 'normal',
       connected: 1,
       slang: 1,

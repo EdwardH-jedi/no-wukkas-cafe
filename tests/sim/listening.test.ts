@@ -96,6 +96,34 @@ describe('difficulty', () => {
     expect(pickOrder(onlyHard, 'easy', createRng(1)).id).toBe('c');
   });
 
+  it('on the first shift, first-shift lines are the only candidates, on every difficulty', () => {
+    const lines = [
+      line({ id: 'a', order: FW(), cues: { drink: 'flat white' } }), // tier 1
+      line({ id: 'b', order: LB, cues: { drink: 'long black' }, firstShift: true, slang: 2 }), // tier 2
+      line({ id: 'c', pace: 'fast', slang: 2, chatter: 2 }), // tier 3
+    ];
+    for (let s = 0; s < 20; s++) {
+      for (const d of ['easy', 'normal', 'hard'] as const)
+        expect(pickOrder(lines, d, createRng(s), true).id).toBe('b');
+      // Any other shift: the difficulty decides as before (Easy is tier 1 only).
+      expect(pickOrder(lines, 'easy', createRng(s)).id).toBe('a');
+    }
+    // Customers without a first-shift line pick as usual.
+    const plain = lines.filter((l) => !l.firstShift);
+    expect(pickOrder(plain, 'normal', createRng(4), true).id).toBe(
+      pickOrder(plain, 'normal', createRng(4)).id,
+    );
+  });
+
+  it('one rng draw per pick, whatever the pool, so other customers keep their orders', () => {
+    const lines = [line({ id: 'b', order: LB, firstShift: true }), line({ id: 'x' })];
+    const a = createRng(9);
+    const b = createRng(9);
+    pickOrder(lines, 'normal', a, true);
+    pickOrder(lines, 'normal', b, false);
+    expect(a.state()).toBe(b.state());
+  });
+
   it('harder settings are noisier and show fewer subtitles', () => {
     expect(DIFFICULTY.easy.noise).toBeLessThan(DIFFICULTY.normal.noise);
     expect(DIFFICULTY.normal.noise).toBeLessThan(DIFFICULTY.hard.noise);

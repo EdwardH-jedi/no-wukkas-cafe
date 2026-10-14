@@ -9,7 +9,7 @@ import {
 } from '../../src/data/voice';
 import { dialogueId, fnv1a } from '../../src/data/voice/ids';
 import { VOICE_PROFILES } from '../../src/data/voice/profiles';
-import { voiceScript } from '../../src/data/voice/script';
+import { AWAITING_RENDER, awaitingRender, voiceScript } from '../../src/data/voice/script';
 
 describe('voice ids', () => {
   it('are stable across runs and platforms', () => {
@@ -37,9 +37,16 @@ describe('voice script and manifest', () => {
     for (const c of CUSTOMERS) expect(VOICE_PROFILES[c.id], c.id).toBeDefined();
   });
 
-  it('every line in the script has a recording in the manifest', () => {
-    const missing = script.filter((l) => !clipFor(l.speaker, l.text, l.delivery));
+  it('every line in the script has a recording in the manifest (or is awaiting its render)', () => {
+    const missing = script.filter(
+      (l) => !clipFor(l.speaker, l.text, l.delivery) && !awaitingRender(l.key),
+    );
     expect(missing.map((l) => `${l.speaker}: ${l.text}`)).toEqual([]);
+  });
+
+  it('lines awaiting a render are real script keys (no typos hiding a missing clip)', () => {
+    const keys = new Set(script.map((l) => l.key));
+    for (const k of AWAITING_RENDER) expect(keys.has(k), k).toBe(true);
   });
 
   it('manifest entries carry the required fields and look like speech', () => {

@@ -28,6 +28,9 @@ export interface OrderLine {
   /** The words that carry each part of the order, exactly as in `text` (highlighted in learning
    *  mode). Every field that isn't the default must have one: that's what makes it fair. */
   cues: Partial<Record<OrderField, string>>;
+  /** Said on the player's first shift. A customer with any such line orders only from those on
+   *  that shift, whatever the difficulty (the nearest tier stands in when none is in range). */
+  firstShift?: boolean;
 }
 
 /** Short answers to "What milk was that?" and friends, in the customer's own words. */
@@ -102,8 +105,16 @@ export const DIFFICULTY: Record<Difficulty, DifficultyRules> = {
   hard: { tiers: [2, 3], noise: 1.7, subtitles: 'off' },
 };
 
-/** A customer's order for today: one of their lines in the difficulty's tiers (seeded). */
-export function pickOrder(lines: readonly OrderLine[], d: Difficulty, rng: Rng): OrderLine {
+/** A customer's order for today: one of their lines in the difficulty's tiers (seeded). On the
+ *  first shift, their `firstShift` lines are the only candidates if they have any. Always one
+ *  `rng.pick`, so the other customers' orders don't shift with this one's pool size. */
+export function pickOrder(
+  all: readonly OrderLine[],
+  d: Difficulty,
+  rng: Rng,
+  firstShift = false,
+): OrderLine {
+  const lines = firstShift && all.some((l) => l.firstShift) ? all.filter((l) => l.firstShift) : all;
   const want = DIFFICULTY[d].tiers;
   let pool = lines.filter((l) => want.includes(orderTier(l)));
   if (pool.length === 0) {

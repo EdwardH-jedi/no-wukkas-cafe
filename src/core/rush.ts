@@ -215,7 +215,8 @@ export function createRush(
     speech: createChannel(),
     barista: createBarista(),
     customers: CUSTOMERS.map((def) => {
-      const picked = pickOrder(def.orders, difficulty, rng);
+      // Day 2 is the player's first shift.
+      const picked = pickOrder(def.orders, difficulty, rng, true);
       const forced = lines[def.id];
       const line = forced ? def.orders.find((o) => o.id === forced) : picked;
       if (!line) throw new Error(`${def.id} has no order line ${forced}`);
@@ -337,7 +338,7 @@ function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
         break;
       }
       case 'register':
-        c.patience -= drainRate(true) * dt;
+        c.patience -= drainRate(true, r.barista.phase) * dt;
         if (c.stateTime > 7 + c.nags.register * 9 && c.nags.register < 2) {
           if (gaz(r, 'rush.registerNag', 'live', varsFor(c))) c.nags.register++;
         }

@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 import type { EspressoScore } from '../../src/sim/espresso';
 import type { PatternScore } from '../../src/sim/latte/score';
 import {
+  drainRate,
   evaluateServe,
   formatCents,
+  REGISTER_DRAIN,
+  REGISTER_DRAIN_BUSY,
   gradeShift,
   orderLabel,
   summariseShift,
@@ -114,6 +117,18 @@ describe('evaluateServe', () => {
     expect(evaluateServe(FW, flatWhite(), ctx({ tolerance: 0.88 })).satisfaction).toBeLessThan(
       evaluateServe(FW, flatWhite(), ctx()).satisfaction,
     );
+  });
+});
+
+describe('patience drain', () => {
+  it('drains faster at the register, less so while the barista is busy on another drink', () => {
+    expect(drainRate(false, 'idle')).toBe(1);
+    expect(drainRate(false, 'steam')).toBe(1);
+    expect(drainRate(true, 'idle')).toBe(REGISTER_DRAIN);
+    expect(drainRate(true, 'ready')).toBe(REGISTER_DRAIN);
+    for (const p of ['grind', 'lock', 'water', 'shot', 'steam', 'pour'])
+      expect(drainRate(true, p), p).toBe(REGISTER_DRAIN_BUSY);
+    expect(REGISTER_DRAIN_BUSY).toBeLessThanOrEqual(1.2);
   });
 });
 
