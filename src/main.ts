@@ -51,7 +51,7 @@ import { buildCafe } from './world/cafe';
 import { createCameraRig } from './world/camera';
 import { createCrowd } from './world/crowd';
 import { buildOwner } from './world/owner';
-import { buildStation, RIM, type StationView } from './world/station';
+import { buildStation, GROUP_SPOUT, RIM, type StationView } from './world/station';
 
 const params = new URLSearchParams(location.search);
 const seed = parseSeed(params.get('seed'));
@@ -603,6 +603,16 @@ async function boot(): Promise<void> {
         y: ((1 - projV.y) / 2) * window.innerHeight,
       };
     },
+    /** Screen position (CSS px, plus whether it's inside the view) of the group head's spout or
+     *  the milk jug's spout tip. */
+    projectAnchor(which: 'groupHead' | 'jug'): { x: number; y: number; inView: boolean } {
+      projV.copy(which === 'groupHead' ? GROUP_SPOUT : station.jugTip).project(camera);
+      return {
+        x: ((projV.x + 1) / 2) * window.innerWidth,
+        y: ((1 - projV.y) / 2) * window.innerHeight,
+        inView: Math.abs(projV.x) <= 1 && Math.abs(projV.y) <= 1 && projV.z < 1,
+      };
+    },
     get mode() {
       return mode;
     },
@@ -859,9 +869,8 @@ async function boot(): Promise<void> {
     r.events.length = 0;
 
     const b = r.barista;
-    // Two hands (shot running + steaming) looks like steaming to the world and the camera: the
-    // jug is what the player is working. TODO: show the shot's stream too.
-    const shown = b.phase === 'shotSteam' ? 'steam' : b.phase;
+    // Two hands (shot running + steaming) has its own view: the shot and the jug side by side.
+    const shown = b.phase;
     sv.phase = r.phase === 'service' ? shown : 'idle';
     sv.phaseTime = b.phaseTime;
     sv.espresso = b.espresso;
@@ -924,8 +933,8 @@ async function boot(): Promise<void> {
     sfx.update({
       grind: b.phase === 'grind' && b.espresso.grinding ? 1 : 0,
       pump: (b.phase === 'shot' || b.phase === 'shotSteam') && b.espresso.extracting ? 1 : 0,
-      steam: shown === 'steam' && b.steam.valveOpen ? 1 : 0,
-      steamZone: shown === 'steam' ? b.steam.zone : 'off',
+      steam: (shown === 'steam' || shown === 'shotSteam') && b.steam.valveOpen ? 1 : 0,
+      steamZone: shown === 'steam' || shown === 'shotSteam' ? b.steam.zone : 'off',
       pour:
         b.phase === 'pour' ? pitcherFlow(b.pitcher) : b.phase === 'water' && b.dispensing ? 0.7 : 0,
       pourHigh: b.phase === 'water' ? 0.8 : 1 - surfacing(b.pitcher.height),

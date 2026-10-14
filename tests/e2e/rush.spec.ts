@@ -78,6 +78,7 @@ type Debug = {
   rush: RushState | null;
   timeScale: number;
   project(x: number, y: number): { x: number; y: number };
+  projectAnchor(which: 'groupHead' | 'jug'): { x: number; y: number; inView: boolean };
 };
 
 const rush = async (page: Page): Promise<RushState> =>
@@ -210,6 +211,15 @@ async function twoHands(page: Page, extraHot: boolean): Promise<void> {
   await page.keyboard.up(' ');
   expect(both.extracting).toBe(true);
   expect(both.station).toBe('shotSteam');
+  // The shot stays in view while steaming: group head and jug both on screen, espresso running.
+  await until(page, (s) => s.stationTime > 1.3 && s.shotTime > 6);
+  const [group, jug] = await page.evaluate(() => {
+    const d = (window as unknown as { __trial: Debug }).__trial;
+    return [d.projectAnchor('groupHead'), d.projectAnchor('jug')];
+  });
+  expect(group?.inView, 'group head on screen').toBe(true);
+  expect(jug?.inView, 'jug on screen').toBe(true);
+  await snap(page, 'two-hands-view');
   await until(page, (s) => s.aeration >= 0.4 || s.shotTime >= 22);
   await page.mouse.move(640, steamY(2.2, h), { steps: 4 });
   await until(page, (s) => s.shotTime >= 24.5);

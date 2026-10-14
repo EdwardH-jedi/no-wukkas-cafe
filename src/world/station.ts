@@ -26,7 +26,9 @@ const JUG_SCALE = 0.8; // a small latte-art jug
 const GHOST_SPOUT = 0.01; // m around the spout tip that stays solid
 const GHOST_BODY = 0.035; // m from the tip where the body reaches full fade
 const ARM_GHOST = 0.92;
-const WAND_TIP = new THREE.Vector3(LAYOUT.wand.x, CT + 0.17, LAYOUT.wand.z);
+export const WAND_TIP = new THREE.Vector3(LAYOUT.wand.x, CT + 0.17, LAYOUT.wand.z);
+/** Where the espresso leaves the portafilter (locked in the left group head). */
+export const GROUP_SPOUT = new THREE.Vector3(LAYOUT.group.x, CT + 0.103, LAYOUT.machine.z + 0.27);
 const JUG_REST = new THREE.Vector3(-0.38, CT, -1.0);
 /** Day 2 long black: the cup sits under the hot-water tap first. */
 const WATER_CUP = new THREE.Vector3(-1.45, CT + 0.035, -0.7);
@@ -37,7 +39,8 @@ export const INSPECT_CUP = new THREE.Vector3(0.27, 1.3, 0.08);
 const INSPECT_TOWARD = new THREE.Vector3(-1, 0, 1).normalize();
 
 /** What the station needs to know each frame. Day 1's Trial satisfies it as is; Day 2 builds one
- *  from its barista state (phases 'idle', 'water' and 'ready' are Day 2 only). */
+ *  from its barista state (phases 'idle', 'water', 'shotSteam' and 'ready' are Day 2 only;
+ *  'shotSteam' is the shot and the steam at once: cup under the group, jug at the wand). */
 export interface StationView {
   phase: string;
   phaseTime: number;
@@ -63,6 +66,8 @@ export interface Station {
   readonly cupRim: THREE.Vector3;
   /** World height of the coffee surface (pointer plane while pouring). */
   readonly surfaceY: number;
+  /** World position of the milk jug's spout tip (tests: is the jug on screen?). */
+  readonly jugTip: THREE.Vector3;
   update(t: StationView, dt: number, now: number): void;
   dispose(): void;
 }
@@ -546,6 +551,8 @@ transformed.xz += bend * sFall * sFall;`,
     if (phase !== lastPhase || t.attempt !== lastAttempt) {
       if (phase === 'steam' && t.attempt === 0) cupSlide = 0;
       if (phase === 'steam' && t.attempt > 0) cupSlide = 1;
+      // Milk finished during the shot: the cup goes from the group straight to the pour.
+      if (phase === 'pour' && lastPhase === 'shotSteam') cupSlide = 0;
       lastPhase = phase;
       lastAttempt = t.attempt;
     }
@@ -578,7 +585,8 @@ transformed.xz += bend * sFall * sFall;`,
     if (phase === 'lock' && t.phaseTime > 0.5) mound.scale.y = Math.min(mound.scale.y, 0.12);
 
     // --- shot light + espresso streams
-    const extracting = phase === 'shot' && e.extracting;
+    const atShot = phase === 'shot' || phase === 'shotSteam';
+    const extracting = atShot && e.extracting;
     shotLightM.emissiveIntensity = extracting ? 2.5 : 0.1;
     const dripping = extracting && e.shotTime > 4;
     const lvl = extractionLevel(e);
@@ -589,7 +597,7 @@ transformed.xz += bend * sFall * sFall;`,
     if (phase === 'steam' || phase === 'demo' || phase === 'pour')
       cupSlide = Math.min(1, cupSlide + dt / 0.7);
     const longBlack = t.drink === 'longBlack';
-    const atMachine = early || phase === 'lock' || phase === 'shot';
+    const atMachine = early || phase === 'lock' || atShot;
     const held = phase === 'inspect' || phase === 'feedback';
     // Day 2: no cup out while idle; long blacks start under the hot-water tap.
     cup.visible = phase !== 'idle';
@@ -610,7 +618,8 @@ transformed.xz += bend * sFall * sFall;`,
       else cupPos.copy(LAYOUT.group);
       cup.rotation.set(0, 0, 0);
     } else {
-      const k = phase === 'steam' && t.attempt === 0 ? smoothstep(0, 1, cupSlide) : 1;
+      const k =
+        (phase === 'steam' && t.attempt === 0) || phase === 'pour' ? smoothstep(0, 1, cupSlide) : 1;
       cupPos.lerpVectors(LAYOUT.group, LAYOUT.cup, k);
       cupPos.y = lerp(LAYOUT.group.y, LAYOUT.cup.y, k) + Math.sin(k * Math.PI) * 0.03;
       cup.rotation.set(0, 0, 0);
@@ -640,7 +649,7 @@ transformed.xz += bend * sFall * sFall;`,
     } else if (early || phase === 'lock') {
       fill = 0;
       coffee.clear();
-    } else if (phase === 'shot') {
+    } else if (atShot) {
       fill = clamp(e.yield / 38) * ESPRESSO_FILL;
       coffee.clear();
     } else if (pourView) {
@@ -680,7 +689,8 @@ transformed.xz += bend * sFall * sFall;`,
 
     // --- milk jug
     const pouring = phase === 'pour' || (phase === 'demo' && t.demoActive);
-    const steaming = phase === 'steam' && !t.steam.done;
+    const atWand = phase === 'steam' || phase === 'shotSteam';
+    const steaming = atWand && !t.steam.done;
     jugBlend = pouring ? Math.min(1, jugBlend + dt / 0.35) : Math.max(0, jugBlend - dt / 0.5);
     arm.visible = pouring || steaming;
     sleeveM.color.copy(phase === 'demo' ? GAZ_SLEEVE : PLAYER_SLEEVE);
@@ -715,7 +725,7 @@ transformed.xz += bend * sFall * sFall;`,
         jug.rotation.set(0, lerp(STEAM_YAW, POUR_YAW, k), -tiltAngle * k, 'YZX');
       }
       milkY = 0.02 + 0.075 * milkFrac;
-    } else if (phase === 'steam') {
+    } else if (atWand) {
       const s = t.steam;
       milkY = 0.06 * milkVolume(s);
       const depth = s.done ? -0.5 : tipDepth(s);
@@ -863,6 +873,9 @@ transformed.xz += bend * sFall * sFall;`,
   return {
     root,
     cupRim,
+    get jugTip() {
+      return jug.position;
+    },
     get surfaceY() {
       return surfaceYNow;
     },
