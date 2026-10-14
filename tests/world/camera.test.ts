@@ -138,26 +138,31 @@ describe('camera: pour framing', () => {
     });
   }
 
-  it('two hands (shot + steam): the group head and the jug at the wand are both in frame', () => {
-    const { run, camera } = rigAt(1280, 800);
-    run('shotSteam', 3);
-    camera.updateMatrixWorld();
-    const jugRim = WAND_TIP.clone().add(new THREE.Vector3(0.012, 0.065, 0.01));
-    const cupUnderGroup = new THREE.Vector3(
-      LAYOUT.group.x,
-      LAYOUT.group.y + CUP.height,
-      LAYOUT.group.z,
-    );
-    for (const [name, p] of [
-      ['portafilter spout', GROUP_SPOUT],
-      ['cup under the group', cupUnderGroup],
-      ['jug rim at the wand', jugRim],
-      ['wand tip', WAND_TIP],
+  it('two hands (shot + steam): the group head and the jug at the wand are both in view', () => {
+    // At 16:10 the gauge cards cover the right ~22% of the screen and the instruction strip the
+    // bottom quarter: the shot and the jug have to sit in the open part of the frame.
+    for (const [w, h] of [
+      [1280, 800],
+      [1024, 640],
     ] as const) {
-      const s = p.clone().project(camera);
-      expect(Math.abs(s.x), `${name} x`).toBeLessThan(0.85);
-      expect(Math.abs(s.y), `${name} y`).toBeLessThan(0.85);
-      expect(s.z, `${name} in front`).toBeLessThan(1);
+      const { run, camera } = rigAt(w, h);
+      run('shotSteam', 3);
+      camera.updateMatrixWorld();
+      const jugRim = WAND_TIP.clone().add(new THREE.Vector3(0.012, 0.065, 0.01));
+      const cupUnderGroup = new THREE.Vector3(LAYOUT.group.x, LAYOUT.group.y, LAYOUT.group.z);
+      for (const [name, p] of [
+        ['portafilter spout', GROUP_SPOUT],
+        ['cup under the group', cupUnderGroup],
+        ['jug rim at the wand', jugRim],
+        ['wand tip', WAND_TIP],
+      ] as const) {
+        const s = p.clone().project(camera);
+        expect(s.x, `${name} x (${w}x${h})`).toBeGreaterThan(-0.85);
+        expect(s.x, `${name} x, left of the gauges (${w}x${h})`).toBeLessThan(0.5);
+        expect(s.y, `${name} y, above the instruction strip (${w}x${h})`).toBeGreaterThan(-0.3);
+        expect(s.y, `${name} y (${w}x${h})`).toBeLessThan(0.75);
+        expect(s.z, `${name} in front`).toBeLessThan(1);
+      }
     }
   });
 

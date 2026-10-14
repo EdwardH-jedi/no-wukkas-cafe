@@ -125,9 +125,10 @@ export function createCameraRig(): CameraRig {
         wantFov = 44;
         break;
       case 'shotSteam':
-        // Two hands: the shot running in the group head and the jug on the wand, side by side.
-        wantPos.set(-0.9, 1.43, -0.02);
-        wantTarget.set((LAYOUT.group.x + LAYOUT.wand.x) / 2, CT + 0.13, LAYOUT.group.z);
+        // Two hands: the shot running in the group head and the jug on the wand, side by side,
+        // stood back enough that the jug stays clear of the gauge cards on the right.
+        wantPos.set(-0.9, 1.42, 0.1);
+        wantTarget.set(-0.8, CT + 0.1, LAYOUT.group.z);
         wantFov = 50;
         break;
       case 'steam':
