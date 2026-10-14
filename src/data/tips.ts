@@ -13,11 +13,11 @@ export const FAULT_TEXT: Record<Fault, { label: string; tip: string }> = {
   },
   blob: {
     label: 'Blob, no heart',
-    tip: 'Finish with the pull-through: lift a touch, ease off, and push forward across the cup.',
+    tip: 'Finish with the pull-through: lift a touch (2), keep pouring, and sweep forward through the white. Let go at the far edge.',
   },
   split: {
     label: 'Cut in half',
-    tip: 'Ease off before you pull through. A heavy stream slices the heart apart.',
+    tip: 'Lift (2) before you sweep: up there the stream thins. Low and heavy, it slices the heart apart.',
   },
   noTip: {
     label: 'No point',

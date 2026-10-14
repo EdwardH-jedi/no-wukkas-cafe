@@ -78,7 +78,7 @@ export function instruction(t: InstructionView, touch: boolean): Instruction | n
     case 'demo':
       return {
         title: 'Watch Gaz',
-        html: 'High to fill → drop <b>low</b> to bloom → lift, ease off and <b>pull through</b> away from you.',
+        html: 'High to fill → drop <b>low</b> to bloom → lift, keep pouring and <b>sweep through</b> away from you; let go at the far edge.',
       };
     case 'pour': {
       const p = t.pour;
@@ -103,7 +103,7 @@ export function instruction(t: InstructionView, touch: boolean): Instruction | n
       if (p.fill < 0.97)
         return {
           title: 'Bloom, then pull through',
-          html: `Let the white bloom… then lift a touch${touch ? '' : ' (<kbd>2</kbd>)'}, let go and push <b>forward</b> through it.`,
+          html: `Let the white bloom… then lift a touch${touch ? '' : ' (<kbd>2</kbd>)'}, keep pouring, and sweep <b>forward</b> through the white. Let go at the far edge.`,
         };
       return { title: 'Stop!', html: 'Cup is full. Let go.' };
     }

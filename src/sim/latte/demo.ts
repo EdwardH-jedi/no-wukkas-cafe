@@ -18,7 +18,7 @@ export interface TrackKey {
   hold: boolean;
 }
 
-/** High to fill, drop low to bloom, then lift, ease forward and pull through. */
+/** High to fill, drop low to bloom, then lift, keep pouring and sweep through. */
 export const OWNER_DEMO: readonly TrackKey[] = [
   { t: 0.0, x: 0, y: -0.3, h: 7, hold: false },
   { t: 0.5, x: 0, y: -0.3, h: 7, hold: true },
@@ -26,10 +26,10 @@ export const OWNER_DEMO: readonly TrackKey[] = [
   // Drop right down onto the surface and let the white bloom.
   { t: 4.0, x: 0, y: -0.35, h: 0.7, hold: true },
   { t: 6.4, x: 0, y: -0.35, h: 0.7, hold: true },
-  // Lift a touch, ease off, and pull through to the far side.
-  { t: 6.5, x: 0, y: -0.4, h: 2.6, hold: true },
-  { t: 6.7, x: 0, y: 0.1, h: 3.0, hold: false },
-  { t: 7.0, x: 0, y: 0.85, h: 3.6, hold: false },
+  // Lift a touch (the stream thins) and keep pouring as the sweep starts…
+  { t: 6.55, x: 0, y: -0.2, h: 3.0, hold: true },
+  // …through the white to the far edge, and let go there.
+  { t: 7.0, x: 0, y: 0.85, h: 3.0, hold: false },
   { t: 7.6, x: 0, y: 0.6, h: 8, hold: false },
 ];
 

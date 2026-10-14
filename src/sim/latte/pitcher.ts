@@ -20,6 +20,11 @@ export const TILT_UP = 1.0;
 export const TILT_DOWN = 2.4;
 /** Milk only reaches the spout past this tilt. */
 export const LIP = 0.12;
+/** The pull-through: once the jug has been down low, lifting it back to the LIFT preset while
+ *  still holding thins the stream to this tilt (flow ≈ 0.34), so "lift, keep pouring and sweep"
+ *  draws the point without a mouse button having to "ease off". */
+export const PULL_TILT_CAP = 0.42;
+const LIFT = HEIGHT_PRESETS[1];
 /** How far from the cup centre the spout can be aimed, in rim radii: past the rim (a careless pour
  *  still lands on the bench) but never off the mat or out of the close-up. */
 export const AIM_LIMIT = 1.6;
@@ -43,10 +48,13 @@ export interface PitcherState {
   tilt: number;
   /** Milk left, in cup volumes. */
   milk: number;
+  /** The jug has been below the lift height this pour (drawing), so lifting it back up is the
+   *  pull-through, not the fill. */
+  lowered: boolean;
 }
 
 export function createPitcher(): PitcherState {
-  return { x: 0, y: -0.2, height: HEIGHT_START, tilt: 0, milk: PITCHER_MILK };
+  return { x: 0, y: -0.2, height: HEIGHT_START, tilt: 0, milk: PITCHER_MILK, lowered: false };
 }
 
 /** What one step of player input says about the jug (Day 1's TrialInput and Day 2's RushInput
@@ -115,8 +123,17 @@ export function stepPitcher(p: PitcherState, c: PitcherControls, dt: number): vo
   const th = clamp(c.targetHeight, HEIGHT_MIN, HEIGHT_MAX);
   const dh = th - p.height;
   const maxStep = HEIGHT_SPEED * dt;
-  p.height += Math.abs(dh) <= maxStep ? dh : Math.sign(dh) * maxStep;
-  p.tilt = clamp(p.tilt + (c.holding ? TILT_UP : -TILT_DOWN) * dt);
+  // Lands exactly on the target, so a jug sent to the LIFT preset is at it, not a rounding error
+  // under it.
+  p.height = Math.abs(dh) <= maxStep ? th : p.height + Math.sign(dh) * maxStep;
+  const lifted = p.height >= LIFT;
+  if (!lifted) p.lowered = true;
+  if (c.holding && p.lowered && lifted)
+    p.tilt =
+      p.tilt > PULL_TILT_CAP
+        ? Math.max(PULL_TILT_CAP, p.tilt - TILT_DOWN * dt)
+        : Math.min(PULL_TILT_CAP, p.tilt + TILT_UP * dt);
+  else p.tilt = clamp(p.tilt + (c.holding ? TILT_UP : -TILT_DOWN) * dt);
 }
 
 /** Stream flow 0–1 from the pitcher's tilt. */
