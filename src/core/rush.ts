@@ -19,6 +19,7 @@ import { addFrustration, createOwner, type Mood, type OwnerState } from '../sim/
 import {
   drainRate,
   evaluateServe,
+  reactionFor,
   REJECT_PENALTY,
   summariseShift,
   type DrinkType,
@@ -449,8 +450,10 @@ function serve(r: Rush, id: CustomerId): void {
   const grumble = result.complaints.map((k) => lines.complaint[k]).find((t) => t !== undefined);
   const good = result.satisfaction >= 75 && result.correct;
   c.reaction = good ? 'pleased' : result.satisfaction < 45 ? 'annoyed' : 'neutral';
-  if (good) customerSay(r, c, `${c.def.id}.happy`, lines.happy, 'pleased', 'order');
-  else if (grumble) customerSay(r, c, `${c.def.id}.complaint`, grumble, 'annoyed', 'order');
+  if (good) {
+    const k = reactionFor(drink, c.order);
+    customerSay(r, c, `${c.def.id}.happy.${k}`, lines.happy[k], 'pleased', 'order');
+  } else if (grumble) customerSay(r, c, `${c.def.id}.complaint`, grumble, 'annoyed', 'order');
   else customerSay(r, c, `${c.def.id}.okay`, lines.okay, 'neutral', 'order');
 
   // Gaz: the specific miss first, then quality, then the occasional compliment.

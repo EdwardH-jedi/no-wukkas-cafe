@@ -5,6 +5,7 @@ import {
   drainRate,
   evaluateServe,
   formatCents,
+  reactionFor,
   REGISTER_DRAIN,
   REGISTER_DRAIN_BUSY,
   gradeShift,
@@ -117,6 +118,17 @@ describe('evaluateServe', () => {
     expect(evaluateServe(FW, flatWhite(), ctx({ tolerance: 0.88 })).satisfaction).toBeLessThan(
       evaluateServe(FW, flatWhite(), ctx()).satisfaction,
     );
+  });
+});
+
+describe('reactions', () => {
+  it('a long black, a flat white, or the heart they asked for', () => {
+    expect(reactionFor(longBlack(), { ...FW, type: 'longBlack', milk: null })).toBe('longBlack');
+    expect(reactionFor(flatWhite(), FW)).toBe('flatWhite');
+    expect(reactionFor(flatWhite(), { ...FW, heart: true })).toBe('heart');
+    // A heart nobody asked for is just a flat white to them.
+    expect(reactionFor(flatWhite({ pattern: heart }), { ...FW, heart: false })).toBe('flatWhite');
+    expect(reactionFor(flatWhite({ pattern: null }), { ...FW, heart: true })).toBe('flatWhite');
   });
 });
 

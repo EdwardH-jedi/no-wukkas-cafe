@@ -192,6 +192,15 @@ export function evaluateServe(order: Order, drink: MadeDrink, ctx: ServeContext)
   return { accepted: true, correct, quality, satisfaction, tipCents, complaints };
 }
 
+/** Which of a customer's delighted lines fits the drink they were handed. */
+export type Reaction = 'heart' | 'flatWhite' | 'longBlack';
+
+/** A long black, a flat white, or a flat white with the heart they asked for. */
+export function reactionFor(drink: MadeDrink, order: Order): Reaction {
+  if (drink.type === 'longBlack') return 'longBlack';
+  return drink.pattern !== null && order.heart ? 'heart' : 'flatWhite';
+}
+
 /** Patience drain multiplier for where the customer is. `station` is the espresso station's
  *  phase: anything but idle or a drink waiting on the pass means a drink is being made. */
 export function drainRate(atRegisterUntaken: boolean, station = 'idle'): number {

@@ -153,8 +153,8 @@ describe('A10: replays never pile up, and nobody talks after they have gone', ()
     const other = r.customers.find((x) => x !== c) as RushCustomer;
     r.speech.current = {
       speaker: other.def.id,
-      key: `${other.def.id}.happy`,
-      text: other.def.lines.happy,
+      key: `${other.def.id}.happy.heart`,
+      text: other.def.lines.happy.heart,
       mood: 'pleased',
       gesture: 'none',
       duration: 5,
@@ -177,8 +177,8 @@ describe('A10: replays never pile up, and nobody talks after they have gone', ()
     const other = r.customers.find((x) => x !== c) as RushCustomer;
     r.speech.current = {
       speaker: other.def.id,
-      key: `${other.def.id}.happy`,
-      text: other.def.lines.happy,
+      key: `${other.def.id}.happy.heart`,
+      text: other.def.lines.happy.heart,
       mood: 'pleased',
       gesture: 'none',
       duration: 4,

@@ -81,6 +81,22 @@ describe('order bank', () => {
         ).toBe(true);
   });
 
+  it('delighted lines fit the drink: only the heart line mentions a heart, none mentions milk', () => {
+    for (const c of CUSTOMERS) {
+      const h = c.lines.happy;
+      expect(h.flatWhite, c.id).not.toMatch(/\bheart\b/i);
+      expect(h.longBlack, c.id).not.toMatch(/\b(heart|milk|froth|foam)\b/i);
+      expect(h.heart, c.id).not.toMatch(/\b(milk|long black)\b/i);
+    }
+  });
+
+  it('Korean is Korean: "와", not the Singlish "wah"', () => {
+    for (const c of CUSTOMERS)
+      for (const t of [...Object.values(c.lines.happy), c.lines.okay])
+        expect(t, c.id).not.toMatch(/\bwah\b/i);
+    expect(CUSTOMERS.find((c) => c.id === 'jiwoo')?.lines.happy.heart).toMatch(/^와, /);
+  });
+
   it('clarifying answers name what they answer', () => {
     for (const c of CUSTOMERS) {
       const a = CLARIFY_ANSWERS[c.id]!;

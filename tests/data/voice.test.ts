@@ -45,8 +45,11 @@ describe('voice script and manifest', () => {
   });
 
   it('lines awaiting a render are real script keys (no typos hiding a missing clip)', () => {
-    const keys = new Set(script.map((l) => l.key));
-    for (const k of AWAITING_RENDER) expect(keys.has(k), k).toBe(true);
+    for (const k of AWAITING_RENDER)
+      expect(
+        script.some((l) => l.key === k || l.key.startsWith(`${k}.`)),
+        k,
+      ).toBe(true);
   });
 
   it('manifest entries carry the required fields and look like speech', () => {
