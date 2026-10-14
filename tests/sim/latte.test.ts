@@ -2,16 +2,30 @@ import { describe, expect, it } from 'vitest';
 import { STEP } from '../../src/core/clock';
 import { artFaults, scoreAttempt } from '../../src/sim/attempt';
 import { scoreEspresso, createEspresso } from '../../src/sim/espresso';
-import { CELL, createPour, GRID, stepPour, surfacing } from '../../src/sim/latte/field';
+import {
+  CELL,
+  createPour,
+  GRID,
+  stepPour,
+  surfacing,
+  type PourState,
+} from '../../src/sim/latte/field';
 import {
   controlsAt,
+  DEMO_DURATION,
   demoPullFill,
   demoPullStart,
   OWNER_DEMO,
   runTrack,
   type TrackKey,
 } from '../../src/sim/latte/demo';
-import { createPourLog, readyToPull, trackPour, type PourLog } from '../../src/sim/latte/coach';
+import {
+  createPourLog,
+  LAY_DONE,
+  readyToPull,
+  trackPour,
+  type PourLog,
+} from '../../src/sim/latte/coach';
 import { heartTemplate, inHeart } from '../../src/sim/latte/heart';
 import {
   createPitcher,
@@ -21,6 +35,8 @@ import {
   PULL_TILT_CAP,
   stepPitcher,
   stepPourFrame,
+  whiteLaid,
+  type PitcherControls,
 } from '../../src/sim/latte/pitcher';
 import { scorePattern } from '../../src/sim/latte/score';
 import { SILKY_MILK } from '../../src/sim/milk';
@@ -269,6 +285,74 @@ describe('pull-through: the taught motion is the winning motion', () => {
     const r = pourTrack(late, 8.8);
     expect(r.faults).toContain('blob');
     expect(r.s.heartness).toBeLessThan(0.3);
+  });
+});
+
+describe('pull-through cap: only once the white is laid', () => {
+  const [HIGH, LIFT, LOW] = HEIGHT_PRESETS;
+  type Controller = (t: number, c: PitcherControls, pour: PourState) => void;
+  /** Pour with the log attached; counts capped steps and steps where the pitcher's lay gate and
+   *  the coach's step 2 disagree. */
+  function pourWith(ctl: Controller, seconds: number) {
+    const pour = createPour();
+    const p = createPitcher();
+    p.y = -0.3;
+    const log = createPourLog();
+    const c: PitcherControls = { targetX: 0, targetY: -0.3, targetHeight: HIGH, holding: false };
+    let maxWhite = 0;
+    let capped = 0;
+    let disagree = 0;
+    for (let i = 0; i < Math.round(seconds / STEP); i++) {
+      ctl(i * STEP, c, pour);
+      if (c.holding && p.lowered && p.height >= LIFT) capped++;
+      stepPourFrame(pour, p, c, SILKY_MILK, STEP);
+      trackPour(log, pour, p);
+      maxWhite = Math.max(maxWhite, log.white);
+      if (whiteLaid(p, pour) !== log.step >= 2) disagree++;
+    }
+    const r = scoreAttempt(scorePattern(pour.foam), pour, scoreMilk(SILKY_MILK), perfectEspresso());
+    return { pour, p, log, maxWhite, capped, disagree, r };
+  }
+  /** Fill from 7 cm; at about 30% full dip to 2 cm for 0.5 s, come back up and keep filling for as
+   *  long as an undisturbed 7 cm fill takes to reach 95% (6.65 s of holding). */
+  function dipThenFill() {
+    let dipAt = -1;
+    return pourWith((t, c, pour) => {
+      c.holding = t >= 0.5 && t < 7.15;
+      if (dipAt < 0 && pour.fill >= 0.3) dipAt = t;
+      c.targetHeight = dipAt >= 0 && t < dipAt + 0.5 ? 2 : HIGH;
+    }, 9.15);
+  }
+
+  it('a dip during the fill leaves a fleck of white, but the rest of the fill is not thinned', () => {
+    const d = dipThenFill();
+    expect(d.maxWhite).toBeGreaterThanOrEqual(LAY_DONE); // the dip did lay white…
+    expect(d.log.step).toBeGreaterThanOrEqual(2); // …and the cup went past half full
+    expect(d.capped).toBe(0);
+    expect(d.p.lowered).toBe(false);
+    expect(d.pour.fill).toBeGreaterThan(0.95);
+    expect(d.r.faults).not.toContain('underfilled');
+  });
+
+  it('dropping low a little early (40% full) and staying down still arms the pull-through', () => {
+    let lift = -1;
+    const d = pourWith((t, c, pour) => {
+      c.holding = t >= 0.5 && (lift < 0 || t < lift + 0.6);
+      if (pour.fill >= 0.4) c.targetHeight = LOW;
+      if (lift < 0 && pour.fill >= 0.75) lift = t;
+      if (lift >= 0) c.targetHeight = LIFT;
+    }, 9);
+    expect(d.capped).toBeGreaterThan(0);
+    expect(d.p.lowered).toBe(true);
+  });
+
+  it("the pitcher's lay gate is the coach's step 2, step for step", () => {
+    expect(dipThenFill().disagree).toBe(0);
+    const demoRun = pourWith((t, c) => {
+      controlsAt(OWNER_DEMO, t, c);
+    }, DEMO_DURATION);
+    expect(demoRun.disagree).toBe(0);
+    expect(demoRun.capped).toBeGreaterThan(0); // Gaz's held sweep is thinned
   });
 });
 

@@ -4,18 +4,17 @@
 // them, from the field first and from the pour's own history second.
 
 import { clamp } from '../math';
-import { CELL, GRID, type PourState } from './field';
+import type { PourState } from './field';
 import { demoPullFill } from './demo';
+import { FILL_DONE, LAY_DONE, whiteCoverage } from './lay';
 import { pitcherFlow, type PitcherState } from './pitcher';
 import type { PatternScore } from './score';
 
 export type PourStep = 'fill' | 'lay' | 'lobes' | 'pull';
 export const POUR_STEPS: readonly PourStep[] = ['fill', 'lay', 'lobes', 'pull'];
 
-/** Step 1 is done once the cup is this full. */
-export const FILL_DONE = 0.5;
-/** Step 2: this much of the surface is white (foam has been laid down). */
-export const LAY_DONE = 0.02;
+// Steps 1–2 (half full, white laid) live in lay.ts: the pitcher reads them too.
+export { FILL_DONE, LAY_DONE, whiteCoverage };
 /** Step 3: the white is wide enough for two full lobes. */
 export const LOBES_DONE = 0.2;
 /** Step 4: the spout travelled this far forward (rim radii) from where it laid the white. */
@@ -82,28 +81,6 @@ export function createPourLog(): PourLog {
     travelDry: 0,
     lastY: 0,
   };
-}
-
-let discCells: Int32Array | null = null;
-/** Grid cells inside the unit disc (the coffee surface). */
-function disc(): Int32Array {
-  if (discCells) return discCells;
-  const cells: number[] = [];
-  for (let k = 0; k < GRID * GRID; k++) {
-    const x = -1 + ((k % GRID) + 0.5) * CELL;
-    const y = -1 + (Math.floor(k / GRID) + 0.5) * CELL;
-    if (x * x + y * y <= 1) cells.push(k);
-  }
-  discCells = Int32Array.from(cells);
-  return discCells;
-}
-
-/** Share of the surface that is crisp white foam (same threshold the scorer uses). */
-export function whiteCoverage(foam: Float32Array): number {
-  const d = disc();
-  let n = 0;
-  for (let i = 0; i < d.length; i++) if ((foam[d[i] as number] as number) > 0.5) n++;
-  return n / d.length;
 }
 
 /** Update the log after one pour step. No allocation. */
