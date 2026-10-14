@@ -1,9 +1,44 @@
 // The bigger panels: title, the result card between attempts, and the final verdict.
 
 import { attemptsLeft, canFinish, type Trial, type TrialAction } from '../core/trial';
+import { FINDING_TEXT } from '../data/coaching';
 import { BAND_TEXT, FAULT_TEXT, INVALID_TEXT } from '../data/tips';
-import { ATTEMPTS, POINTS, type AttemptResult } from '../sim/attempt';
+import { ATTEMPTS, POINTS, type AttemptResult, type Fault } from '../sim/attempt';
+import type { Finding, FindingId } from '../sim/latte/coach';
+import { keysHtml } from './lesson';
 import { drawPattern } from './pattern';
+
+/** The diagnosis findings that can explain each art fault (both come from the same pattern score;
+ *  the diagnosis also knows how the pour was done). */
+const ART_FINDINGS: Partial<Record<Fault, readonly FindingId[]>> = {
+  noArt: ['noWhite'],
+  muddy: ['muddy'],
+  split: ['split'],
+  blob: ['streamDied', 'noPull', 'sweptLong', 'shortPull', 'noCleft'],
+  noTip: ['streamDied', 'shortPull'],
+  noCleft: ['sweptLong', 'noCleft'],
+  lopsided: ['lopsided'],
+  offCentre: ['offCentre'],
+  tooSmall: ['tooSmall'],
+  tooBig: ['tooBig'],
+};
+
+/** The result card's lines: an art fault shows its diagnosis (its own label and fix, e.g. "you let
+ *  go before the sweep"), never the generic tip; other faults keep their tips. */
+export function cardFaults(
+  faults: readonly Fault[],
+  findings: readonly Finding[],
+): { label: string; tip: string }[] {
+  const used = new Set<Finding>();
+  return faults.map((f) => {
+    const ids = ART_FINDINGS[f];
+    const found = ids && findings.find((x) => !used.has(x) && ids.includes(x.id));
+    if (!found) return FAULT_TEXT[f];
+    used.add(found);
+    const t = FINDING_TEXT[found.id];
+    return { label: t.label, tip: t.fix };
+  });
+}
 
 export const esc = (s: string): string =>
   s.replace(
@@ -50,9 +85,12 @@ export function renderCard(el: HTMLElement, t: Trial, onAction: (a: TrialAction)
   const p = r.pattern;
   const left = attemptsLeft(t);
   const finish = canFinish(t);
-  const faults = r.faults
-    .filter((f) => i === 0 || !['shotShort', 'shotLong', 'doseLight', 'doseHeavy'].includes(f))
-    .slice(0, 3);
+  const faults = cardFaults(
+    r.faults
+      .filter((f) => i === 0 || !['shotShort', 'shotLong', 'doseLight', 'doseHeavy'].includes(f))
+      .slice(0, 3),
+    t.findings[i] ?? [],
+  );
   const tag = r.valid
     ? `<span class="bandTag ${r.band}">${BAND_TEXT[r.band].title}</span>`
     : `<span class="bandTag invalid">Doesn't count</span>`;
@@ -78,7 +116,7 @@ export function renderCard(el: HTMLElement, t: Trial, onAction: (a: TrialAction)
     </div>
     ${
       faults.length
-        ? `<div class="faults">${faults.map((f) => `<div class="f"><b>✗ ${esc(FAULT_TEXT[f].label)}</b><span>${esc(FAULT_TEXT[f].tip)}</span></div>`).join('')}</div>`
+        ? `<div class="faults">${faults.map((f) => `<div class="f"><b>✗ ${esc(f.label)}</b><span>${keysHtml(f.tip)}</span></div>`).join('')}</div>`
         : `<div class="faults"><div class="f"><b>✓ Nothing to fix</b><span>Gaz is lost for words. Briefly.</span></div></div>`
     }
     <div class="cardBtns">

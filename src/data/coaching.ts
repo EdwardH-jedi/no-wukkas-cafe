@@ -69,6 +69,11 @@ export const FINDING_TEXT: Record<FindingId, { label: string; why: string; fix: 
     why: 'Nothing was dragged through the white, so there’s no dip and no point.',
     fix: 'Lift a touch [2], keep pouring, and sweep forward through the white. Let go at the far edge.',
   },
+  streamDied: {
+    label: 'Stream died',
+    why: 'The jug moved {n}% of the radius forward after the milk had stopped, so nothing was dragged through the white.',
+    fix: 'You let go before the sweep. Keep pouring through it, let go at the far edge.',
+  },
   shortPull: {
     label: 'No point',
     why: 'Near the tip it’s still {n}% as wide as the heart: the pull stopped too soon.',
@@ -78,6 +83,11 @@ export const FINDING_TEXT: Record<FindingId, { label: string; why: string; fix: 
     label: 'No dip at the top',
     why: 'The dip between the lobes is only {n}% as deep as it should be.',
     fix: 'Start the pull-through from the near edge of the white, not the middle.',
+  },
+  sweptLong: {
+    label: 'Too much in the sweep',
+    why: 'The sweep poured heavy past the middle, or ran on past the far rim, and washed the dip out.',
+    fix: 'Too much milk in the sweep. Lift, thin the stream, one pass.',
   },
   lopsided: {
     label: 'Lopsided',

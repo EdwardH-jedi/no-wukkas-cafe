@@ -21,6 +21,12 @@ export const LOBES_DONE = 0.2;
 export const PULL_REACH = 0.5;
 /** Forward travel that counts as the pull-through having started. */
 const PULL_START = 0.2;
+/** Spout height (cm) that counts as having lifted for the pull-through. */
+export const LIFTED_HEIGHT = 2.5;
+/** Forward travel with no milk coming out, after lifting, that means the stream died (rim radii). */
+export const DRY_TRAVEL = 0.25;
+/** Flow past the middle of the cup that is too heavy for a pull-through. */
+export const HEAVY_SWEEP = 0.6;
 
 export interface PourLog {
   /** White (floating foam) share of the coffee surface. */
@@ -44,7 +50,15 @@ export interface PourLog {
   pullReach: number;
   /** Heaviest flow while pulling through. */
   pullFlow: number;
+  /** Heaviest flow while pulling through with the spout past the middle of the cup. */
+  farFlow: number;
   pullStarted: boolean;
+  /** Pour time the spout first rose to LIFTED_HEIGHT after the white appeared, or -1. */
+  liftedAt: number;
+  /** Forward travel (rim radii) with no milk coming out, after lifting. */
+  travelDry: number;
+  /** Spout y at the last step. */
+  lastY: number;
 }
 
 export function createPourLog(): PourLog {
@@ -61,7 +75,11 @@ export function createPourLog(): PourLog {
     weight: 0,
     pullReach: 0,
     pullFlow: 0,
+    farFlow: 0,
     pullStarted: false,
+    liftedAt: -1,
+    travelDry: 0,
+    lastY: 0,
   };
 }
 
@@ -108,8 +126,13 @@ export function trackPour(log: PourLog, pour: PourState, pitcher: PitcherState):
     if (flow > 0 && reach > log.pullReach) log.pullReach = reach;
     if (!log.pullStarted && flow > 0 && reach > PULL_START) log.pullStarted = true;
     if (log.pullStarted && flow > log.pullFlow) log.pullFlow = flow;
+    if (log.pullStarted && pitcher.y > 0 && flow > log.farFlow) log.farFlow = flow;
     if (log.pullStarted && flow === 0 && log.pullReach >= PULL_REACH) d[3] = true;
+    if (log.liftedAt < 0 && pitcher.height >= LIFTED_HEIGHT) log.liftedAt = pour.time;
+    const dy = pitcher.y - log.lastY;
+    if (log.liftedAt >= 0 && flow === 0 && dy > 0) log.travelDry += dy;
   }
+  log.lastY = pitcher.y;
   // Drawing: from the first white (or, if it never came, from three-quarters full) until the pull.
   if (flow > 0 && !log.pullStarted && (d[1] || pour.fill >= 0.75)) {
     log.sumH += pitcher.height * flow;
@@ -133,8 +156,12 @@ export type FindingId =
   | 'muddy'
   | 'split'
   | 'noPull'
+  /** Lifted for the pull-through, but the stream had stopped before the sweep. */
+  | 'streamDied'
   | 'shortPull'
   | 'noCleft'
+  /** Too much milk in the sweep: heavy past the middle, or on past the far rim. */
+  | 'sweptLong'
   | 'lopsided'
   | 'offCentre'
   | 'tooSmall'
@@ -215,6 +242,14 @@ export function diagnose(p: PatternScore, cup: CupTotals, log: PourLog | null): 
   };
   const h = log ? drawHeight(log) : -1;
   const highCause = h > 1.6 ? 'pouredHigh' : null;
+  // The pull-through, from the pour's own history: lifted but swept dry, or swept too much milk.
+  const died = log !== null && log.liftedAt >= 0 && log.travelDry >= DRY_TRAVEL;
+  const swept =
+    log !== null && log.pullStarted && (log.layY + log.pullReach > 1 || log.farFlow > HEAVY_SWEEP);
+  const noCleft = (severity: number): void =>
+    swept
+      ? add('sweptLong', severity, pct(log?.farFlow ?? 0))
+      : add('noCleft', severity, pct(p.notchRatio));
 
   if (p.coverage < 0.04) {
     add('noWhite', 1, pct(p.coverage), '', highCause, cm(h));
@@ -225,23 +260,27 @@ export function diagnose(p: PatternScore, cup: CupTotals, log: PourLog | null): 
       const heavy = log !== null && log.pullFlow > 0.7;
       add('split', 0.8, pct(p.notchRatio), '', heavy ? 'heavyPull' : null, pct(log?.pullFlow ?? 0));
     } else if (p.heartness < 0.3 && !muddy) {
-      if (log && !log.pullStarted) add('noPull', 0.9, 0, '', 'stayedLow');
+      if (died && (!log.pullStarted || p.tip < 0.45)) add('streamDied', 0.9, pct(log.travelDry));
+      else if (log && !log.pullStarted)
+        add('noPull', 0.9, 0, '', log.liftedAt < 0 ? 'stayedLow' : null);
       else if (p.tip < 0.45)
         add('shortPull', 0.85, pct(p.tipRatio), '', 'stoppedShort', pct(log?.pullReach ?? 0));
-      else add('noCleft', 0.8, pct(p.notchRatio));
+      else noCleft(0.8);
     } else {
       if (p.tip < 0.45 && p.notch >= 0.5) {
         const short = log !== null && log.pullReach < PULL_REACH + 0.25;
-        add(
-          'shortPull',
-          0.7 * (1 - p.tip),
-          pct(p.tipRatio),
-          '',
-          short ? 'stoppedShort' : null,
-          pct(log?.pullReach ?? 0),
-        );
+        if (died) add('streamDied', 0.7 * (1 - p.tip), pct(log.travelDry));
+        else
+          add(
+            'shortPull',
+            0.7 * (1 - p.tip),
+            pct(p.tipRatio),
+            '',
+            short ? 'stoppedShort' : null,
+            pct(log?.pullReach ?? 0),
+          );
       }
-      if (p.notch < 0.45 && p.tip >= 0.5) add('noCleft', 0.7 * (1 - p.notch), pct(p.notchRatio));
+      if (p.notch < 0.45 && p.tip >= 0.5) noCleft(0.7 * (1 - p.notch));
     }
     if (p.symmetry < 0.55 && p.heartness >= 0.3) {
       const drift = log && log.weight > 0 ? log.sumX / log.weight - log.layX : 0;
