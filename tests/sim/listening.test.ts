@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../src/core/rng';
 import {
+  answerAsText,
   answerFor,
   cueSpans,
   DIFFICULTY,
   difficultyScore,
+  isAnswerKey,
   normaliseOrder,
   orderTier,
   pickOrder,
+  REPEATS_FOR_SUBTITLES,
   summariseListening,
   transcriptVisible,
   wrongFields,
@@ -154,10 +157,13 @@ describe('transcript visibility', () => {
     for (const stage of ['speaking', 'deciding', 'rungUp'] as const)
       expect(transcriptVisible('always', false, stage, 0)).toBe(true);
   });
-  it('afterRepeat: hidden until they repeat it', () => {
+  it('afterRepeat: hidden until they have repeated it twice (one repeat is too cheap)', () => {
+    expect(REPEATS_FOR_SUBTITLES).toBe(2);
     expect(transcriptVisible('afterRepeat', false, 'speaking', 0)).toBe(false);
     expect(transcriptVisible('afterRepeat', false, 'deciding', 0)).toBe(false);
-    expect(transcriptVisible('afterRepeat', false, 'deciding', 1)).toBe(true);
+    expect(transcriptVisible('afterRepeat', false, 'deciding', 1)).toBe(false);
+    expect(transcriptVisible('afterRepeat', false, 'speaking', 1)).toBe(false);
+    expect(transcriptVisible('afterRepeat', false, 'deciding', 2)).toBe(true);
   });
   it('off: never shown while ordering, even after a repeat', () => {
     expect(transcriptVisible('off', false, 'speaking', 0)).toBe(false);
@@ -168,6 +174,22 @@ describe('transcript visibility', () => {
     expect(transcriptVisible('off', true, 'speaking', 0)).toBe(false);
     expect(transcriptVisible('off', true, 'deciding', 0)).toBe(false);
     expect(transcriptVisible('off', true, 'rungUp', 0)).toBe(true);
+  });
+});
+
+describe('no audio', () => {
+  it('an answer nobody can hear is shown as text; an answer they can hear is not', () => {
+    expect(answerAsText(true, false)).toBe(true);
+    expect(answerAsText(true, true)).toBe(false);
+  });
+  it('the order itself is never shown for being inaudible', () => {
+    expect(answerAsText(false, false)).toBe(false);
+    expect(answerAsText(false, true)).toBe(false);
+  });
+  it('tells answers from orders by their key', () => {
+    expect(isAnswerKey('dazza.answer.drink')).toBe(true);
+    expect(isAnswerKey('dazza.3')).toBe(false);
+    expect(isAnswerKey('dazza.3.slow')).toBe(false);
   });
 });
 

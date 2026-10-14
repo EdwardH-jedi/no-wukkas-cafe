@@ -62,11 +62,7 @@ export function createAudioPanel(
       <option value="easy">Easy: clear orders, quiet café</option>
       <option value="normal">Normal</option>
       <option value="hard">Hard: fast, slangy, noisy</option></select></label>
-    <label class="sel"><span>Order subtitles</span><select data-l="subtitles">
-      <option value="auto">Auto (by difficulty)</option>
-      <option value="always">Always</option>
-      <option value="afterRepeat">Only after “repeat that?”</option>
-      <option value="off">Off</option></select></label>
+    <label class="chk"><input type="checkbox" data-l="subtitles"> Subtitles: always (accessibility)</label>
     <label class="chk"><input type="checkbox" data-l="learning"> Learning mode: show what they said once you ring it up</label>
     <p class="fine">Difficulty changes start with the next shift.</p>
     <div class="titleBtns">
@@ -87,21 +83,24 @@ export function createAudioPanel(
   const voiceOn = panel.querySelector('[data-voice-on]') as HTMLInputElement;
   const sliders = panel.querySelectorAll<HTMLInputElement>('input[data-bus]');
   const diffSel = panel.querySelector('[data-l="difficulty"]') as HTMLSelectElement;
-  const subSel = panel.querySelector('[data-l="subtitles"]') as HTMLSelectElement;
+  const subChk = panel.querySelector('[data-l="subtitles"]') as HTMLInputElement;
   const learnChk = panel.querySelector('[data-l="learning"]') as HTMLInputElement;
   const syncListen = (): void => {
     const l = cb.listen.get();
     diffSel.value = l.difficulty;
-    subSel.value = l.subtitles;
+    subChk.checked = l.subtitles === 'always';
     learnChk.checked = l.learning;
   };
-  const setListen = (): void =>
+  const setListen = (): void => {
+    const was = cb.listen.get().subtitles;
     cb.listen.set({
       difficulty: diffSel.value as Difficulty,
-      subtitles: subSel.value as ListenSettings['subtitles'],
+      // Unticked: back to following the difficulty (an older saved choice is kept).
+      subtitles: subChk.checked ? 'always' : was === 'always' ? 'auto' : was,
       learning: learnChk.checked,
     });
-  diffSel.onchange = subSel.onchange = learnChk.onchange = setListen;
+  };
+  diffSel.onchange = subChk.onchange = learnChk.onchange = setListen;
 
   let toastTimer = 0;
   let lastToast = '';

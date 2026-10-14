@@ -5,16 +5,18 @@ import { DIFFICULTY, type Difficulty, type SubtitleMode } from '../sim/listening
 
 export interface ListenSettings {
   difficulty: Difficulty;
-  /** 'auto' follows the difficulty (Easy: always, Normal: after a repeat, Hard: off). */
+  /** 'auto' follows the difficulty (Easy: always, Normal: after two repeats, Hard: off);
+   *  'always' is the accessibility setting. */
   subtitles: 'auto' | SubtitleMode;
-  /** Show the transcript with the key words marked once an order is rung up. */
+  /** Show the transcript with the key words marked once an order is rung up. Off by default:
+   *  the shift report's "Listen again" list is the learning loop. */
   learning: boolean;
 }
 
 const KEY = 'nwc.listen.v1';
 
 export function loadListenSettings(): ListenSettings {
-  const d: ListenSettings = { difficulty: 'normal', subtitles: 'auto', learning: true };
+  const d: ListenSettings = { difficulty: 'normal', subtitles: 'auto', learning: false };
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return d;

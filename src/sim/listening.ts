@@ -144,10 +144,14 @@ export function answerFor(a: ClarifyAnswers, truth: Order, field: OrderField): s
 
 export type ListenStage = 'speaking' | 'deciding' | 'rungUp';
 
+/** "Could you repeat that?" this many times before 'afterRepeat' shows the words: one repeat
+ *  is a few seconds of patience, too cheap a way around listening. */
+export const REPEATS_FOR_SUBTITLES = 2;
+
 /**
  * May the order's transcript be on screen? 'always' shows it; 'afterRepeat' only once they've
- * been asked to repeat it; 'off' never. Learning mode adds the transcript (with the key words
- * marked) once the ticket is rung up, so the player can see what they missed.
+ * been asked to repeat it twice; 'off' never. Learning mode adds the transcript (with the key
+ * words marked) once the ticket is rung up, so the player can see what they missed.
  */
 export function transcriptVisible(
   mode: SubtitleMode,
@@ -157,7 +161,16 @@ export function transcriptVisible(
 ): boolean {
   if (mode === 'always') return true;
   if (learning && stage === 'rungUp') return true;
-  return mode === 'afterRepeat' && repeats > 0;
+  return mode === 'afterRepeat' && repeats >= REPEATS_FOR_SUBTITLES;
+}
+
+/** Is this listening line a customer's answer to a clarifying question (not the order)? */
+export const isAnswerKey = (key: string): boolean => key.includes('.answer.');
+
+/** An answer the player can't hear at all (voices off, or neither a recording nor a browser
+ *  voice) is shown as text, or asking would be useless. Only answers: never the order itself. */
+export function answerAsText(isAnswer: boolean, audible: boolean): boolean {
+  return isAnswer && !audible;
 }
 
 /** Where each cue sits in the transcript, for highlighting. Cues that aren't found are skipped. */

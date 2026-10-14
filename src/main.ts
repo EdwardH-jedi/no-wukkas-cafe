@@ -32,7 +32,7 @@ import {
 } from './core/practice';
 import { canFinish, createTrial, emptyInput, stepTrial, type TrialAction } from './core/trial';
 import { GREETING, GREETING_OPENERS } from './data/ownerLines';
-import { spokenDuration, VOICE_MANIFEST } from './data/voice';
+import { clipFor, spokenDuration, VOICE_MANIFEST } from './data/voice';
 import { createEspresso } from './sim/espresso';
 import { DIFFICULTY } from './sim/listening';
 import { surfacing } from './sim/latte/field';
@@ -307,6 +307,10 @@ async function boot(): Promise<void> {
     audioButtonsHtml: audioPanel.buttonsHtml,
     bindAudio: (el) => audioPanel.bind(el),
     settings: () => listen,
+    // Heard if voices are on and there's a recording, or a browser voice to stand in.
+    audible: (u) =>
+      audio.voiceEnabled &&
+      (clipFor(u.speaker, u.text, u.delivery) !== null || typeof speechSynthesis !== 'undefined'),
   });
 
   const practiceHud = createPracticeHud(hud3Root, {

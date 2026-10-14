@@ -13,7 +13,9 @@ import {
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
 import {
+  answerAsText,
   cueSpans,
+  isAnswerKey,
   summariseListening,
   transcriptVisible,
   wrongFields,
@@ -43,6 +45,8 @@ export interface RushHudCallbacks {
   audioButtonsHtml: string;
   bindAudio(el: HTMLElement): void;
   settings(): ListenSettings;
+  /** Can the player hear this line at all (voices on, and a recording or a browser voice)? */
+  audible(line: Utterance): boolean;
 }
 
 export interface RushHud {
@@ -316,7 +320,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         const c = r.customers.find((x) => x.def.id === listenLine?.speaker);
         const s = cb.settings();
         const vis = c
-          ? transcriptVisible(subtitleMode(s), s.learning, stageOf(c), c.listen.repeats)
+          ? transcriptVisible(subtitleMode(s), s.learning, stageOf(c), c.listen.repeats) ||
+            answerAsText(isAnswerKey(listenLine.key), cb.audible(listenLine))
           : true;
         if (vis !== listenShown) {
           listenShown = vis;
