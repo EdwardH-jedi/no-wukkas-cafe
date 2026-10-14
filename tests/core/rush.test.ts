@@ -33,7 +33,12 @@ import { orderTier, type Difficulty } from '../../src/sim/listening';
 import type { Utterance } from '../../src/core/speech';
 import { SHOT_MAX, SHOT_TARGET } from '../../src/sim/espresso';
 import { createPourGate } from '../../src/sim/latte/pitcher';
-import { SCALD_TEMP } from '../../src/sim/steam';
+import { SCALD_TEMP, scoreMilk } from '../../src/sim/steam';
+import { createEspresso, scoreEspresso } from '../../src/sim/espresso';
+import { scorePattern } from '../../src/sim/latte/score';
+import { runTrack } from '../../src/sim/latte/demo';
+import { SILKY_MILK } from '../../src/sim/milk';
+import { REJECT_PENALTY } from '../../src/sim/rush';
 import type { DrinkType, Order } from '../../src/sim/rush';
 
 interface BotOpts {
@@ -268,6 +273,71 @@ describe('Day 2 rush, played headless', () => {
     expect(said.some((k) => k.endsWith('.rejected'))).toBe(true);
     // Recovered: the same drink then went to the right person.
     expect(r.summary!.ordersCompleted).toBeGreaterThanOrEqual(4);
+  });
+
+  describe('handing back the wrong milk', () => {
+    /** A flat-white customer waiting on the rail, and their drink made with the wrong milk. */
+    function wrongMilkAtThePass(patience: number) {
+      const r = createRush(3);
+      while (r.phase !== 'service') stepRush(r, emptyRushInput(), STEP);
+      const c = r.customers.find((x) => x.order.type === 'flatWhite') as RushCustomer;
+      c.state = 'waiting';
+      c.heard = { ...c.order };
+      c.ticket = 1;
+      c.registerAt = r.time;
+      c.patience = patience;
+      const b = r.barista;
+      b.ready = {
+        type: 'flatWhite',
+        milkType: c.order.milk === 'oat' ? 'soy' : 'oat',
+        espresso: scoreEspresso({ ...createEspresso(), dose: 19, shotTime: 28, done: true }),
+        milk: scoreMilk(SILKY_MILK),
+        pattern: scorePattern(runTrack(OWNER_DEMO, SILKY_MILK).pour.foam),
+        fill: 0.95,
+        spill: 0,
+        water: 0,
+        temp: 62,
+        madeAt: r.time,
+      };
+      b.drink = 'flatWhite';
+      b.phase = 'ready';
+      const serve = (): RushEvent[] => {
+        const i = emptyRushInput();
+        i.action = { type: 'serve', customer: c.def.id };
+        stepRush(r, i, STEP);
+        const ev = [...r.events];
+        r.events.length = 0;
+        return ev;
+      };
+      return { r, c, serve };
+    }
+
+    it('each hand-back costs patience; never tops it back up', () => {
+      const { c, serve } = wrongMilkAtThePass(60);
+      const before = c.patience;
+      serve();
+      expect(c.rejected).toBe(1);
+      expect(c.patience).toBeLessThan(before - c.def.patience * REJECT_PENALTY + 0.01);
+    });
+
+    it('three wrong-milk hand-backs use up the last of their patience: they walk out', () => {
+      // REJECT_PENALTY of their patience per hand-back; start with a bit under three of those.
+      const { c, serve } = wrongMilkAtThePass(0);
+      c.patience = c.def.patience * REJECT_PENALTY * 2.9;
+      const events = [...serve(), ...serve()];
+      expect(c.state).toBe('waiting');
+      events.push(...serve());
+      expect(c.rejected).toBe(3);
+      expect(c.outcome).toBe('walkout');
+      expect(c.reaction).toBe('furious');
+      expect(events.some((e) => e.type === 'walkout' && e.customer === c.def.id)).toBe(true);
+    });
+
+    it('spamming Serve on a nearly-gone customer does not hold them at the counter', () => {
+      const { c, serve } = wrongMilkAtThePass(1);
+      serve();
+      expect(c.outcome).toBe('walkout');
+    });
   });
 
   it('binning a drink counts as waste and gets a comment', () => {

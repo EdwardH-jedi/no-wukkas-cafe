@@ -4,6 +4,8 @@
 import { DIFFICULTY, type Difficulty, type SubtitleMode } from '../sim/listening';
 
 export interface ListenSettings {
+  /** 2: learning mode off by default (Session A). Older saves predate it and are dropped. */
+  version: 2;
   difficulty: Difficulty;
   /** 'auto' follows the difficulty (Easy: always, Normal: after two repeats, Hard: off);
    *  'always' is the accessibility setting. */
@@ -16,12 +18,20 @@ export interface ListenSettings {
 const KEY = 'nwc.listen.v1';
 
 export function loadListenSettings(): ListenSettings {
-  const d: ListenSettings = { difficulty: 'normal', subtitles: 'auto', learning: false };
+  const d: ListenSettings = {
+    version: 2,
+    difficulty: 'normal',
+    subtitles: 'auto',
+    learning: false,
+  };
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return d;
     const s = JSON.parse(raw) as Partial<ListenSettings>;
+    // Saved before learning mode went off by default: start again from the defaults.
+    if (s.version !== 2) return d;
     return {
+      version: 2,
       difficulty: s.difficulty && s.difficulty in DIFFICULTY ? s.difficulty : d.difficulty,
       subtitles:
         s.subtitles === 'always' ||
