@@ -152,14 +152,22 @@
 #rsummary {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
+  /* A long receipt (misheard list, event rows) scrolls as a whole: the card is centred with
+     margin: auto, so it starts at the top instead of clipping its head and buttons. */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
   background: radial-gradient(ellipse at 50% 50%, rgba(22, 16, 12, 0.2), rgba(22, 16, 12, 0.8));
   pointer-events: auto;
 }
 .verdictCard {
+  box-sizing: border-box;
   width: min(440px, 100%);
+  margin: auto;
+  flex: none;
 }
 .verdictCard .stamp {
   font-family: var(--display);
@@ -214,9 +222,11 @@
 
 @media (min-width: 900px) {
   #verdict {
-    justify-items: end;
     padding-right: 40px;
     background: linear-gradient(90deg, rgba(22, 16, 12, 0) 30%, rgba(22, 16, 12, 0.75));
+  }
+  #verdict .verdictCard {
+    margin-right: 0;
   }
 }
 

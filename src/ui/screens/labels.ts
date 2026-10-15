@@ -1,12 +1,18 @@
 // What the shell screens say, worked out from the save: pure functions with no DOM, so the unit
 // tests can check every label without a browser. The screens next to this file draw them.
 
-import { endlessUnlocked, shiftDef, shiftRows, type ShiftStatus } from '../../core/week/progress';
+import {
+  endlessUnlocked,
+  passFail,
+  shiftDef,
+  shiftRows,
+  type ShiftStatus,
+} from '../../core/week/progress';
 import { canPlay } from '../../core/week/session';
 import { UPGRADES } from '../../data/upgrades';
 import type { SaveV2 } from '../../sim/contracts/save';
 import { DRINKS } from '../../sim/contracts/ticket';
-import { formatCents, type ShiftGrade } from '../../sim/rush';
+import { formatCents, type ShiftGrade, type ShiftSummary } from '../../sim/rush';
 import type { BuyResult } from '../../sim/shop';
 
 /** Why Endless Rush is still locked (one line for the title and shift select), or null once it's
@@ -113,4 +119,48 @@ export function buyMessage(result: BuyResult, id: string, before: SaveV2): strin
   if (!u || result.reason === 'unknown') return "That upgrade isn't for sale.";
   if (result.reason === 'owned') return `${u.name} is already yours.`;
   return `Not enough in the till: ${u.name} costs ${formatCents(u.costCents)}, you have ${formatCents(before.cents)}.`;
+}
+
+// ---------------------------------------------------------------- the shift report
+
+/** Which run a report is for: Day 2 has no week; Endless Rush is flagged on its week. */
+export type ReportRun = { endless?: boolean } | null | undefined;
+
+export interface ReportButton {
+  /** again: run Day 2 or Endless again · next: the week's current shift (the next one after a
+   *  pass, the same one after a disaster, since the save only moves on after a pass). */
+  act: 'again' | 'next';
+  label: string;
+}
+
+/** The report's main button: "Next shift" after a passed week shift, "Try again" otherwise. */
+export function reportButton(run: ReportRun, s: ShiftSummary): ReportButton {
+  if (!run || run.endless) return { act: 'again', label: 'Try again' };
+  return passFail(s) === 'pass'
+    ? { act: 'next', label: 'Next shift' }
+    : { act: 'next', label: 'Try again' };
+}
+
+const GRADE_TEXT: Record<ShiftGrade, string> = {
+  excellent: 'Cracker of a shift',
+  good: 'Solid first shift',
+  okay: 'Survived it',
+  poor: 'Rough morning',
+  disaster: 'Total disaster',
+};
+
+const GRADE_BAND: Record<ShiftGrade, 'hired' | 'almost' | 'failed' | 'disaster'> = {
+  excellent: 'hired',
+  good: 'hired',
+  okay: 'almost',
+  poor: 'failed',
+  disaster: 'disaster',
+};
+
+/** The big stamp on the report: the grade, or for Endless Rush (which always ends at the third
+ *  walk-out) how many were served. `band` is its colour. */
+export function reportStamp(run: ReportRun, s: ShiftSummary): { text: string; band: string } {
+  return run?.endless
+    ? { text: `Served ${s.ordersCompleted}`, band: 'hired' }
+    : { text: GRADE_TEXT[s.grade], band: GRADE_BAND[s.grade] };
 }

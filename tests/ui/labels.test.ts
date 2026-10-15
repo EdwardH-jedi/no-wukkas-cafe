@@ -6,6 +6,8 @@ import { buyUpgrade } from '../../src/sim/shop';
 import {
   buyMessage,
   endlessReason,
+  reportButton,
+  reportStamp,
   shiftCells,
   shiftLabel,
   shopEntryLine,
@@ -130,5 +132,44 @@ describe('the shop', () => {
     expect(buyMessage(buyUpgrade(before, 'espressoCart'), 'espressoCart', before)).toBe(
       "That upgrade isn't for sale.",
     );
+  });
+});
+
+describe('the shift report', () => {
+  const summary = (grade: ShiftSummary['grade'], served = 6): ShiftSummary => ({
+    ...report(0, grade).summary,
+    ordersCompleted: served,
+  });
+
+  it('a passed week shift offers the next shift', () => {
+    for (const g of ['excellent', 'good', 'okay', 'poor'] as const)
+      expect(reportButton({ endless: false }, summary(g))).toEqual({
+        act: 'next',
+        label: 'Next shift',
+      });
+  });
+
+  it('a failed week shift, Day 2 and Endless Rush offer another go', () => {
+    expect(reportButton({}, summary('disaster'))).toEqual({ act: 'next', label: 'Try again' });
+    expect(reportButton(null, summary('excellent'))).toEqual({ act: 'again', label: 'Try again' });
+    expect(reportButton({ endless: true }, summary('good'))).toEqual({
+      act: 'again',
+      label: 'Try again',
+    });
+  });
+
+  it('Endless Rush is stamped with how many were served; the rest with the grade', () => {
+    expect(reportStamp({ endless: true }, summary('disaster', 23))).toEqual({
+      text: 'Served 23',
+      band: 'hired',
+    });
+    expect(reportStamp(null, summary('good'))).toEqual({
+      text: 'Solid first shift',
+      band: 'hired',
+    });
+    expect(reportStamp({}, summary('disaster'))).toEqual({
+      text: 'Total disaster',
+      band: 'disaster',
+    });
   });
 });

@@ -3,12 +3,14 @@
 // week shift, Gaz's last word, and what to do next.
 
 import type { Rush } from '../../core/rush';
-import { passFail, shiftDef } from '../../core/week/progress';
+import { shiftDef } from '../../core/week/progress';
 import { cueSpans, summariseListening, wrongFields } from '../../sim/listening';
 import { accuracyByField } from '../../sim/listening/stats';
 import { formatCents, orderLabel, type ShiftSummary } from '../../sim/rush';
 import { marked } from '../pos';
 import { esc } from '../screens';
+import { menuKeys } from './keys';
+import { reportButton, reportStamp } from './labels';
 
 export interface ShiftReportCallbacks {
   /** Day 2 and Endless: run it again. */
@@ -69,14 +71,6 @@ function misheardList(r: Rush): string {
     : '';
 }
 
-const GRADE_TEXT: Record<ShiftSummary['grade'], string> = {
-  excellent: 'Cracker of a shift',
-  good: 'Solid first shift',
-  okay: 'Survived it',
-  poor: 'Rough morning',
-  disaster: 'Total disaster',
-};
-
 /** Draw the report for shift `r` (its summary `s`) into `el`; `quote` is Gaz's closing line. */
 export function renderShiftReport(
   el: HTMLElement,
@@ -91,34 +85,17 @@ export function renderShiftReport(
     : w.endless
       ? 'ENDLESS RUSH · REPORT'
       : `WEEK ${w.week ?? 1} · ${shiftDef(w.shiftIndex).day.toUpperCase()} · SHIFT REPORT`;
-  const band =
-    s.grade === 'excellent' || s.grade === 'good'
-      ? 'hired'
-      : s.grade === 'okay'
-        ? 'almost'
-        : s.grade === 'poor'
-          ? 'failed'
-          : 'disaster';
-  // Endless always ends at the third walk-out, so its stamp is the count, not a grade.
-  const stamp = w?.endless
-    ? `<div class="stamp hired">Served ${s.ordersCompleted}</div>`
-    : `<div class="stamp ${band}">${esc(GRADE_TEXT[s.grade])}</div>`;
-  // A week shift moves on after a pass and is played again after a disaster; a passed
-  // shift isn't replayed (Edward, 2026-10-15).
-  const [act, label] = !w
-    ? ['again', 'Run the rush again']
-    : w.endless
-      ? ['again', 'Go again']
-      : passFail(s) === 'pass'
-        ? ['next', 'Next shift']
-        : ['next', 'Try this shift again'];
+  const stamp = reportStamp(w, s);
+  // A week shift moves on after a pass and is played again after a disaster; a passed shift
+  // isn't replayed (Edward, 2026-10-15). Day 2 and Endless Rush just run again.
+  const main = reportButton(w, s);
   const note =
     w && !w.endless && cb.memoryOnly()
       ? `<p class="saveNote">Progress won't be saved in this browser.</p>`
       : '';
   el.innerHTML = `<div class="verdictCard"><div class="paper">
     <div class="hd"><b>NO WUKKAS</b><span>${esc(head)}</span></div>
-    ${stamp}
+    <div class="stamp ${stamp.band}">${esc(stamp.text)}</div>
     <div class="rows">
       <div class="kv"><span>Orders completed</span><b>${s.ordersCompleted}/${s.customers}</b></div>
       <div class="kv"><span>Correct orders</span><b>${s.correctOrders}/${s.customers}</b></div>
@@ -133,11 +110,14 @@ export function renderShiftReport(
     ${misheardList(r)}
     ${quote ? `<div class="quote">“${esc(quote)}”<br><small>— Gaz, owner</small></div>` : ''}
     ${note}
-    <div class="cardBtns"><button class="btn" data-s="${act}">${label}</button><button class="btn ghost" data-s="title">Title screen</button></div>
+    <div class="cardBtns"><button class="btn" data-s="${main.act}">${esc(main.label)}</button><button class="btn ghost" data-s="title">Title screen</button></div>
   </div></div>`;
   el.querySelectorAll<HTMLButtonElement>('button[data-s]').forEach((b) => {
     const s = b.dataset.s;
     b.onclick = () => (s === 'again' ? cb.again() : s === 'next' ? cb.next() : cb.title());
   });
+  // Space and Enter press the focused button (the rush's own keys would swallow Space).
+  menuKeys(el);
+  el.scrollTop = 0;
   (el.querySelector('button') as HTMLButtonElement).focus({ preventScroll: true });
 }

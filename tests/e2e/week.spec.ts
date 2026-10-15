@@ -77,7 +77,7 @@ test.describe('the week', () => {
     expect(save.reports).toEqual([expect.objectContaining({ shift: 0 })]);
     expect(save.shift).toBe(0);
     expect(save.memoryOnly).toBe(false);
-    const again = page.getByRole('button', { name: 'Try this shift again' });
+    const again = page.getByRole('button', { name: 'Try again', exact: true });
     await expect(again).toBeVisible();
     await again.click();
     await expect.poll(async () => (await dbg(page)).rush?.phase).toBe('intro');
