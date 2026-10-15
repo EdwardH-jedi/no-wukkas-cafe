@@ -55,7 +55,11 @@ const snap = (page: Page, name: string): Promise<Buffer> =>
 const timeScale = (page: Page, v: number): Promise<number> =>
   page.evaluate((v) => ((window as unknown as { __trial: Debug }).__trial.timeScale = v), v);
 
-/** Pour along a control track with the mouse: move = aim, button = pour, wheel = height. */
+/** Pour along a control track with the mouse: move = aim, button = pour, wheel = height. The
+ *  wheel is closed-loop on the game's target height and lands 0.01 cm past the track's height in
+ *  the direction of travel (as tests/e2e/latteRegression.spec.ts does): the pull-through thinning
+ *  starts at exactly 3 cm, and an open-loop sum of wheel deltas that came to 2.9999 cm poured a
+ *  full-flow sweep (art ≈ 0.74, a flake). */
 async function pourTrack(page: Page, track: readonly TrackKey[]): Promise<void> {
   const DT = 0.04;
   const samples = Array.from({ length: Math.ceil(8.4 / DT) + 1 }, (_, i) =>
@@ -71,7 +75,10 @@ async function pourTrack(page: Page, track: readonly TrackKey[]): Promise<void> 
   await timeScale(page, 0.3);
   const start = (await state(page))?.phaseTime ?? 0;
   let held = false;
-  let sent = (await state(page))?.controls.targetHeight ?? 7;
+  // The target height a wheel event was sent from: wait until the game has applied it before
+  // sending another, so one correction is never sent twice.
+  let sentFrom: number | null = null;
+  let waited = 0;
   for (let i = 0; i < 6000; i++) {
     const s = await state(page);
     if (!s || s.phase !== 'pour') break;
@@ -79,10 +86,14 @@ async function pourTrack(page: Page, track: readonly TrackKey[]): Promise<void> 
     const k = samples[idx]!;
     const p = screen[idx]!;
     await page.mouse.move(p.x, p.y);
-    const dh = k.targetHeight - sent;
-    if (Math.abs(dh) > 0.2) {
-      await page.mouse.wheel(0, -dh / 0.012);
-      sent = k.targetHeight;
+    const target = s.controls.targetHeight;
+    if (target !== sentFrom) sentFrom = null; // applied
+    const pending = sentFrom !== null && ++waited < 20;
+    const dh = k.targetHeight - target;
+    if (!pending && Math.abs(dh) > 0.05) {
+      await page.mouse.wheel(0, -(dh + Math.sign(dh) * 0.01) / 0.012);
+      sentFrom = target;
+      waited = 0;
     }
     if (k.holding !== held) {
       if (k.holding) await page.mouse.down();
