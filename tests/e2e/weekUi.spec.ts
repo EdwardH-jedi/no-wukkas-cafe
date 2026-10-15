@@ -6,7 +6,8 @@
 //  3. A save on Tuesday where a shift event comes up as the first customer steps up: the event card,
 //     answered with the number key 1.
 // The bot (helpers/weekBot.ts) reads the debug handle to decide, and acts only through keys, clicks
-// and the held mouse. Screenshots for review go to docs/verification/2026-10-16-week-ui/.
+// and the held mouse. Screenshots go to test-results/evidence-week-ui/; to refresh the committed
+// review set, run with WEEK_UI_SHOTS=docs/verification/2026-10-16-week-ui.
 //
 // Seeds: 20 for the fresh save (Monday's generated orders are five long blacks and one flat white,
 // a shift a quick player passes with room to spare; the headless bot still passes it with 6 s/3 s
@@ -23,7 +24,7 @@ import {
   type RushState,
 } from './helpers/weekBot';
 
-const DIR = 'docs/verification/2026-10-16-week-ui';
+const DIR = process.env.WEEK_UI_SHOTS ?? 'test-results/evidence-week-ui';
 const snap = async (page: Page, name: string): Promise<void> => {
   await page.screenshot({ path: `${DIR}/${name}.png` });
 };
