@@ -4,7 +4,7 @@
 // In learning mode, the transcript with the key words marked appears once the ticket prints.
 
 import { atCounter, type Rush, type RushAction, type RushCustomer } from '../core/rush';
-import { cueSpans, MAX_REPEATS, wrongFields, type OrderField } from '../sim/listening';
+import { cueSpans, LISTEN_COST, MAX_REPEATS, wrongFields, type OrderField } from '../sim/listening';
 import { MILK_NAME, orderLabel, type DrinkType, type Milk, type Order } from '../sim/rush';
 import { esc } from './screens';
 
@@ -23,6 +23,21 @@ interface Sel {
   milk: Milk;
   temp: 'normal' | 'extraHot';
   heart: 'no' | 'yes';
+}
+
+/** A patience cost as the HUD shows it: "−3 s" (nothing when it's free). */
+export const costLabel = (seconds: number): string => (seconds > 0 ? `−${seconds} s` : '');
+
+/** The cost pill for a button, read from the sim's tables (LISTEN_COST, event choices). */
+export const costPill = (seconds: number): string =>
+  seconds > 0
+    ? ` <small class="cost" title="Costs them ${seconds} s of patience">${costLabel(seconds)}</small>`
+    : '';
+
+/** "−6 s · 1 left": what one more "could you repeat that?" costs, and how many they'll put up with. */
+export function repeatCost(repeats: number): string {
+  const left = Math.max(0, MAX_REPEATS - repeats);
+  return left > 0 ? `${costLabel(LISTEN_COST.repeat)} · ${left} left` : 'no more';
 }
 
 const FIELD_NAME: Record<OrderField, string> = {
@@ -76,8 +91,8 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
     <div class="row" data-row="milk"><span class="k">Milk</span>${opt('milk', 'full', 'Full cream')}${opt('milk', 'oat', 'Oat')}${opt('milk', 'soy', 'Soy')}${opt('milk', 'almond', 'Almond')}</div>
     <div class="row" data-row="temp"><span class="k">Temp</span>${opt('temp', 'normal', 'Normal')}${opt('temp', 'extraHot', 'Extra hot')}</div>
     <div class="row" data-row="heart"><span class="k">Art</span>${opt('heart', 'no', 'No heart')}${opt('heart', 'yes', 'Heart')}</div>
-    <div class="row ask"><button class="opt" data-a="replay" title="Hear it again (R)">↻ Replay</button><button class="opt" data-a="repeat">“Sorry, could you repeat that?”</button></div>
-    <div class="row ask"><span class="k">Ask</span><button class="opt" data-q="drink">Drink?</button><button class="opt" data-q="milk">Milk?</button><button class="opt" data-q="temp">Hot?</button><button class="opt" data-q="heart">Heart?</button></div>
+    <div class="row ask"><button class="opt" data-a="replay" title="Hear it again${touch ? '' : ' (R)'}">↻ Replay${costPill(LISTEN_COST.replay)}</button><button class="opt" data-a="repeat">“Sorry, could you repeat that?” <small class="cost" title="Costs them ${LISTEN_COST.repeat} s of patience"></small></button></div>
+    <div class="row ask"><span class="k">Ask</span><button class="opt" data-q="drink">Drink?</button><button class="opt" data-q="milk">Milk?</button><button class="opt" data-q="temp">Hot?</button><button class="opt" data-q="heart">Heart?</button><small class="cost" title="Each question costs them ${LISTEN_COST.clarify} s of patience">${costLabel(LISTEN_COST.clarify)} each</small></div>
     <div class="asked" aria-live="polite"></div>
     <button class="btn small ring" data-a="ring" disabled>Ring it up${touch ? '' : ' <kbd>Enter</kbd>'}</button>`;
   const fb = document.createElement('div');
@@ -91,6 +106,7 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
   const asked = el.querySelector('.asked') as HTMLElement;
   const ring = el.querySelector('[data-a="ring"]') as HTMLButtonElement;
   const repeatBtn = el.querySelector('[data-a="repeat"]') as HTMLButtonElement;
+  const repeatCostEl = repeatBtn.querySelector('.cost') as HTMLElement;
   const rows = {
     milk: el.querySelector('[data-row="milk"]') as HTMLElement,
     temp: el.querySelector('[data-row="temp"]') as HTMLElement,
@@ -168,6 +184,7 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
           stateKey = k;
           st.textContent = deciding ? 'what did they order?' : 'listening…';
           repeatBtn.disabled = c.listen.repeats >= MAX_REPEATS;
+          repeatCostEl.textContent = repeatCost(c.listen.repeats);
           paint();
         }
         el.classList.remove('hide');
