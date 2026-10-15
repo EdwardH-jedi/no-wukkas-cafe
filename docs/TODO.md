@@ -65,34 +65,81 @@ Goal: one branch, one build, no large files that every task must touch.
     verified licence` — stale gitignored mp3s in `public/assets/voice/`; left for Edward, not deleted.)
     `E2E_PORT=5179 npm run test:e2e`: `22 passed (17.6m)`, exit 0. main pushed (see git log).
 
-## Phase 1 — Playable week (UI pass)  `[ ]`
+## Phase 1 — Playable week (UI pass)  `[!]` all agent work done; HUMAN-gated: 1C feel-test approval, Mon–Wed playtest
 Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split below.
 
 **1A Shell screens** — owns `src/ui/screens*`, `src/ui/styles/{base,title,screens,shop}.css`, `src/app/title.ts`, `src/app/weekWiring.ts`, `src/ui/settings.ts`, `src/ui/audioPanel.ts`
-- [ ] Title: one layout for Trial / The week / Practice / Endless / Settings; keyboard + trackpad; no scroll trap at 1024×640 or phone width.
-- [ ] Shift select: Mon–Fri grid with locked/open/done + best grade; shop entry; "progress won't be saved" note.
-- [ ] Shop: list, cents, buy/refuse, owned state, one-line effect; back.
-- [ ] Shift report: one component for Day 2 / week / Endless; "Next shift" / "Try again" / "Served N"; keep listening and event rows.
-- [ ] Settings: 4 volume buses, subtitles, learning mode, `settings.pourSensitivity` slider (default 1.0; shared key with 1C).
+- [x] Title: one layout for Trial / The week / Practice / Endless / Settings; keyboard + trackpad; no scroll trap at 1024×640 or phone width.
+- [x] Shift select: Mon–Fri grid with locked/open/done + best grade; shop entry; "progress won't be saved" note.
+- [x] Shop: list, cents, buy/refuse, owned state, one-line effect; back.
+- [x] Shift report: one component for Day 2 / week / Endless; "Next shift" / "Try again" / "Served N"; keep listening and event rows.
+- [x] Settings: 4 volume buses, subtitles, learning mode, `settings.pourSensitivity` slider (default 1.0; shared key with 1C).
 
 **1B In-service HUD** — owns `src/ui/rushHud.ts`, `src/ui/pos.ts`, `src/ui/gauges.ts`, `src/ui/hud.ts`, `src/ui/styles/{hud,rush}.css`, `src/app/rushWiring.ts`
-- [ ] Docket rail: arrival order, patience bar per ticket, misheard fields marked after hand-back, returning regulars by name only.
-- [ ] Register panel: replay / repeat / clarify with costs shown (from data tables, not hard-coded).
-- [ ] Event card: prompt + choices with cost; never covers the cup; keys 1–3.
-- [ ] Gauges: shot timer, steam temperature, two-hands state; milk label as text + icon.
-- [ ] Top chip: week/day or Endless, served, walk-outs.
-- [ ] HUD-only: no timing, cost or sim change.
+- [x] Docket rail: arrival order, patience bar per ticket, misheard fields marked after hand-back, returning regulars by name only.
+- [x] Register panel: replay / repeat / clarify with costs shown (from data tables, not hard-coded).
+- [x] Event card: prompt + choices with cost; never covers the cup; keys 1–3.
+- [x] Gauges: shot timer, steam temperature, two-hands state; milk label as text + icon.
+- [x] Top chip: week/day or Endless, served, walk-outs.
+- [x] HUD-only: no timing, cost or sim change.
 
 **1C Latte feel** — owns `src/world/{camera,station,coffeeSurface}.ts`, `src/ui/{lesson,practiceHud,pattern}.ts`, `src/ui/styles/latte.css`, `src/sim/latte/feedback.ts` (new)
 - [ ] **HUMAN** feel-test loop: each change ships with a dev URL and one line "feel-test this"; commit only after approval.
-- [ ] Input: `settings.pourSensitivity` curve; Space ramps flow over ~300 ms; pinch/scroll never zooms the page.
-- [ ] `src/sim/latte/feedback.ts`: score breakdown → one actionable tip; pure; unit-tested; shown on inspect.
-- [ ] Regression: Playwright replays a recorded perfect pour and asserts the score band is unchanged.
-- [ ] Do not change foam physics or the judge.
+- [!] (awaiting HUMAN feel-test; built on `feat/latte-feel`, not on main) Input: `settings.pourSensitivity` curve; Space ramps flow over ~300 ms; pinch/scroll never zooms the page.
+- [!] (awaiting HUMAN feel-test; built on `feat/latte-feel`, not on main) `src/sim/latte/feedback.ts`: score breakdown → one actionable tip; pure; unit-tested; shown on inspect.
+- [x] Regression: Playwright replays a recorded perfect pour and asserts the score band is unchanged.
+- [x] Do not change foam physics or the judge.
 
-- [ ] 1.E E2E: title → week → shop → Monday → report → next shift; Day 2 bot shift; event via keyboard; screenshots to `docs/verification/<date>-week-ui/`.
+- [x] 1.E E2E: title → week → shop → Monday → report → next shift; Day 2 bot shift; event via keyboard; screenshots to `docs/verification/<date>-week-ui/`.
 - Exit: **HUMAN** plays Mon–Wed in one sitting without asking "what do I press"; e2e green; main pushed.
 - Evidence:
+  - Setup (85b5ff3, 13f11a3): title wiring → `src/ui/screens/title.ts`, shift report → `src/ui/screens/shiftReport.ts`
+    (pure moves so 1A and 1B never shared a file); `ListenSettings.pourSensitivity` (default 1, 0.5–2) + tests.
+    Lanes ran in worktrees: 1A `feat/shell-screens`, 1B `feat/service-hud`, 1C `feat/latte-feel`, 1.E `test/week-ui-e2e`.
+  - 1A (merged 71df0e5; 6 commits): title lists Day 1 / Day 2 / The week / Endless (locked with a reason until Monday
+    is passed) / Practice / Settings; `menuKeys` makes Space/Enter press the focused button, Esc + Tab loop in modal
+    screens, 3 px focus ring; 1024×640 no scroll, 390×844 `#title` the only scroller. Shift select: Mon–Fri grid
+    (Play now / Play again / Done / Locked, best grade), café upgrades door with the till, memory-only note. Shop
+    screen: price via formatCents, one-line effect, Buy/Owned, refused buy says why ("Not enough in the till: Docket
+    rail costs $150.00, you have $0.00."). Report: one `renderShiftReport` for Day 2 / week / Endless, "Next shift" /
+    "Try again" / "Served N", listening + event rows kept; long receipts scroll. Settings: Sound (4 buses + voices),
+    Listening, Latte art (pour sensitivity slider 0.5–2 step 0.1). Lane checks: `Tests  511 passed (511)`.
+  - 1B (merged 58d729c; 7 commits): rail in ticket order with a `role=meter` patience bar, misheard hand-backs marked
+    (`<mark>` + "↩ Misheard: ~~soy~~ → oat"), "+N more behind the rail"; regulars (back again this shift, or in the
+    save's `regulars`) show the name without the tag. Register costs from `LISTEN_COST`/`MAX_REPEATS` ("−1 s",
+    "−6 s · N left", "−3 s each"). Event card: choices with key hints and `costSeconds`, keys 1–3, placed clear of
+    the cup (measured at 1024×640, 390×844, 1280×800, 1024×768 × six station phases). Gauges: two-hands strip, milk as
+    text + icon. Top chips: shift, served, walk-outs (clock now rolls 7:59 → 8:00). `git diff --stat
+    chore/p1-ownership..feat/service-hud -- src/sim src/core src/data` → empty. Lane checks: `Tests  520 passed (520)`;
+    `E2E_PORT=5202 npx playwright test tests/e2e/rush.spec.ts tests/e2e/ibis.spec.ts` → `3 passed (9.4m)`.
+    Integration fix 3f96d4f: during the pour 1–3 stay the jug heights (3 = low would have picked CALL_MANAGER's
+    "refuse"); regression test in `tests/ui/eventCard.test.ts`.
+  - 1C (`feat/latte-feel` @ 57f3304, 8 commits, NOT merged — feel-test gate). On main: only the test commits
+    85a7551 (recorded perfect pour replay, band art 0.86–0.93, findings `["textbook"]`) and addb0c4 (practice spec
+    closed-loop wheel: the open-loop wheel stopped at 2.9999 cm and failed 1 run in 2). Baseline 3 runs: art
+    0.8906 / 0.8952 / 0.8898. On the branch: e4eeb49 `pourTip` (pure, 18 tests), ee4797c tip on the practice review
+    + lesson strip, cef4185 pinch never zooms the page, e88ea87 sensitivity gain (bit-identical at 1.0), edfaa37
+    Space ramps over 300 ms. `git diff --stat chore/p1-ownership..feat/latte-feel -- src/sim/latte src/core` →
+    feedback.ts (new) + pitcher.ts (input gain only); main: `git diff --stat e8ee6f6..HEAD -- src/sim src/core
+    src/data` → empty. Feel-test: `cd ../nwc-p1c && npx vite --port 5195 --strictPort` → http://localhost:5195/
+    (practice; `?pour=0.5` / `?pour=2`; Space vs mouse). At merge: 2-line Day 2 hook in `src/app/rushWiring.ts`
+    (`pourGain`), Day 1 inspect card hook in `src/ui/screens.ts` (`pourTip`), move 3 tip strings to
+    `src/data/coaching.ts`. Until then the Settings slider is saved but has no effect on main.
+  - 1.E (24e6a89, 29ad2b8): `tests/e2e/weekUi.spec.ts` + `helpers/weekBot.ts` (bot reads `__trial`, acts only by
+    keys/clicks/held mouse): fresh save → shop refused buy → Monday passed (seed 20: 6/6, "Cracker of a shift") →
+    "Next shift" → Tuesday; Day 2 bot shift to its report (seed 7); Tuesday save (seed 1) THE_NAME answered with key
+    1. Lane runs: `3 passed (8.4m)`, `3 passed (8.1m)`. Screenshots: `docs/verification/2026-10-16-week-ui/` (01–09).
+  - Exit on addb0c4: `npm run typecheck && npm run lint && npm test` exit 0: `Test Files  61 passed (61)` ·
+    `Tests  537 passed (537)`. `E2E_PORT=5179 npm run test:e2e`: `28 passed (24.2m)`, exit 0. main pushed. HUMAN Mon–Wed
+    playtest not done (Edward).
+  - Follow-ups found, not done: (1) Day 2 HUD on a phone (390×844): `#rinstr` sits on the rail, the gauge column
+    clips the cup during a flat white's shot, `#ractions` hides behind the gauges (pre-existing). (2) "Bin it" sits
+    under the register's "Ring it up" when a drink is on the pass and a customer is ordering. (3) Every week shift
+    replays `RUSH_INTRO` ("your first paid shift") — `src/data/ownerLines.ts:38`. (4) `rush.end.excellent` says
+    "Five for five" after 6/6 — `src/data/ownerLines.ts:824` (both voice lines: re-render needed). (5) Saved
+    regulars never fire: nothing writes `regulars` except THE_USUAL, which needs affinity ≥ 2 (ROADMAP 3.1). (6) The
+    pull-through only thins at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`, Edward's
+    call). (7) `src/app/input.ts` Space handler `preventDefault`s on focused buttons (worked around by `menuKeys`).
 
 ## Phase 2 — Balance  `[ ]`
 Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,upgrades,events}.ts` (numbers only), `scripts/balance.ts`, `tests/helpers/{rushBot,pace}.ts`, `reports/` (gitignored).
