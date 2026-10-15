@@ -92,8 +92,10 @@ export function createAudioPanel(
     learnChk.checked = l.learning;
   };
   const setListen = (): void => {
-    const was = cb.listen.get().subtitles;
+    const prev = cb.listen.get();
+    const was = prev.subtitles;
     cb.listen.set({
+      ...prev, // keeps settings this panel doesn't show (e.g. pour sensitivity)
       version: 2,
       difficulty: diffSel.value as Difficulty,
       // Unticked: back to following the difficulty (an older saved choice is kept).
