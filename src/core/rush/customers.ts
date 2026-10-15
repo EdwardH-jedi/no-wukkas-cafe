@@ -4,6 +4,7 @@
 import { addFrustration } from '../../sim/owner';
 import { drainRate } from '../../sim/rush';
 import { channelBusy, pending } from '../speech';
+import { eventsAtRegister } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
 import {
   ENTER_TIME,
@@ -47,6 +48,7 @@ export function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
             r.flags.firstCustomer = true;
             gaz(r, 'rush.firstCustomer', 'react', varsFor(c));
           }
+          eventsAtRegister(r, c);
         }
         break;
       }

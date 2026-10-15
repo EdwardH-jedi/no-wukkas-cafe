@@ -22,10 +22,10 @@ export function atCounter(r: Rush): RushCustomer | null {
   return r.customers.find((c) => c.state === 'ordering' || c.state === 'deciding') ?? null;
 }
 
-/** "Take order": the customer at the register says it. */
+/** "Take order": the customer at the register says it (once any event of theirs is answered). */
 export function takeOrder(r: Rush): void {
   const c = atRegister(r);
-  if (c) {
+  if (c && r.shiftEvents.current?.customer !== c) {
     setState(c, 'ordering');
     c.orderLine = customerListen(r, c, c.line.id, c.line.text);
   }

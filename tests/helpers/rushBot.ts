@@ -37,6 +37,8 @@ export interface ListenBot {
   week?: RushWeek;
   seed?: number;
   maxSeconds?: number;
+  /** Answer to a shift event on screen (week mode); default its first choice. */
+  eventChoice?: (r: Rush) => string;
   /** Called after every step (assertions, tracing). */
   each?: (r: Rush) => void;
 }
@@ -55,8 +57,11 @@ interface Mem {
   aidsLeft: Map<string, RushAction[]>;
 }
 
-/** Register work: take the order, use aids, ring up. Null when there's nothing to do. */
+/** Register work: answer a shift event, take the order, use aids, ring up. Null when there's
+ *  nothing to do. */
 function registerAction(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction | null {
+  const ev = r.shiftEvents.current;
+  if (ev) return { type: 'eventChoice', choice: o.eventChoice?.(r) ?? ev.def.choices[0]?.id ?? '' };
   if (atRegister(r)) return { type: 'takeOrder' };
   const c = atCounter(r);
   if (!c) return null;

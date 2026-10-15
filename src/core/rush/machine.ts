@@ -23,6 +23,7 @@ import {
 import { createRng } from '../rng';
 import { channelBusy, createChannel, updateChannel } from '../speech';
 import { stepCustomers } from './customers';
+import { chooseEvent, createShiftEvents, endShiftEvents, stepShiftEvents } from './events';
 import { listenAction, ringUp, takeOrder } from './register';
 import { serve } from './serve';
 import { gaz, gazDef, startSay } from './speech';
@@ -83,6 +84,7 @@ export function createRush(
         said: { impatient: false, angry: false },
         nags: { register: 0, slow: 0, pos: 0 },
         orderLine: null,
+        eventSatisfaction: 0,
       };
     }),
     records: [],
@@ -92,6 +94,7 @@ export function createRush(
     streak: { good: 0, bad: 0 },
     praised: 0,
     flags: {},
+    shiftEvents: createShiftEvents(seed, week),
     lastGazText: '',
     events: [],
   };
@@ -180,17 +183,21 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
       else if (a?.type === 'serve') serve(r, a.customer);
       else if (a?.type === 'bin') {
         if (binDrink(r.barista, baristaOut)) gaz(r, 'rush.binned', 'react');
-      }
+      } else if (a?.type === 'eventChoice') chooseEvent(r, a.choice);
       // The station.
       Object.assign(baristaIn, input);
       baristaIn.next = a?.type === 'next';
       stepBarista(r.barista, baristaIn, dt, r.time, baristaOut);
       handleBarista(r, baristaOut);
       stepCustomers(r, dt, input.voiceHold === true);
+      stepShiftEvents(r);
       if (r.customers.every((c) => c.state === 'gone')) {
+        endShiftEvents(r);
         setPhase(r, 'wrapup');
         const wasted = r.barista.binned + (r.barista.ready || r.barista.phase !== 'idle' ? 1 : 0);
-        r.summary = summariseShift(r.records, r.customers.length, wasted);
+        // Anyone an event showed the door doesn't count against the shift.
+        const counted = r.customers.length - r.shiftEvents.refused;
+        r.summary = summariseShift(r.records, counted, wasted);
         gaz(r, `rush.end.${r.summary.grade}`, 'react');
         if (r.barista.ready) gaz(r, 'rush.wasteLeft', 'react');
       }

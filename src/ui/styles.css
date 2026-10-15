@@ -997,6 +997,29 @@ kbd {
 }
 
 /* ---------- register (POS) + listening feedback ---------- */
+#revent {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(300px, calc(100vw - 32px));
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--paper);
+  border-radius: 14px;
+  padding: 10px 12px 12px;
+  pointer-events: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+#revent .h {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+#revent .b {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 #pos {
   position: absolute;
   right: 16px;

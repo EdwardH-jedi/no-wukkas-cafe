@@ -32,6 +32,7 @@ import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
 import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
 import { stepRushIbis } from './core/rushIbis';
+import { ibisForShift } from './sim/events/rareBird';
 import { createIbis, ibisPresent, type Ibis } from './sim/ibis';
 import { createIbisView } from './world/ibis';
 import { createRushHud, nextTicket, railOrder } from './ui/rushHud';
@@ -117,10 +118,13 @@ async function boot(): Promise<void> {
   let mode: 'trial' | 'rush' = 'trial';
   let rush: Rush | null = null;
   const rushIn = emptyRushInput();
-  // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare.
+  // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare. On a
+  // week shift the event scheduler books it (RARE_BIRD), unless ?ibis= says otherwise.
   const makeIbis = (): Ibis => {
-    const b = createIbis(seed, params.get('ibis') === '1');
-    if (params.get('ibis') === '0') b.scheduledAt = null;
+    const force = params.get('ibis');
+    if (rush?.week && force === null) return ibisForShift(seed, rush.shiftEvents.bird);
+    const b = createIbis(seed, force === '1');
+    if (force === '0') b.scheduledAt = null;
     return b;
   };
   let ibis = makeIbis();
@@ -592,6 +596,15 @@ async function boot(): Promise<void> {
           listen: { ...c.listen, clarified: [...c.listen.clarified] },
         })),
         difficulty: r.difficulty,
+        week: r.week ? { shiftIndex: r.week.shiftIndex } : null,
+        event: r.shiftEvents.current
+          ? {
+              id: r.shiftEvents.current.def.id,
+              customer: r.shiftEvents.current.customer?.def.id ?? null,
+              choices: r.shiftEvents.current.def.choices.map((c) => c.id),
+            }
+          : null,
+        eventsFired: r.shiftEvents.log.fired.map((f) => f.id),
         listening: r.listening.map((x) => ({ ...x, wrong: [...x.wrong] })),
         records: r.records.map((x) => ({ ...x })),
         summary: r.summary,
@@ -714,7 +727,7 @@ async function boot(): Promise<void> {
           ev.result.satisfaction >= 75 ? 'cheer' : ev.result.satisfaction >= 45 ? 'nod' : 'huff',
         );
       else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
-      else if (ev.type === 'walkout') crowd.react(ev.customer, 'huff');
+      else if (ev.type === 'walkout' || ev.type === 'refused') crowd.react(ev.customer, 'huff');
     }
     r.events.length = 0;
 

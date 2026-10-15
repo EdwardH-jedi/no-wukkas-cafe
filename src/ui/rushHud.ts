@@ -12,6 +12,7 @@ import {
 } from '../core/rush';
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
+import { EVENT_PROMPTS } from '../data/events';
 import {
   cueSpans,
   summariseListening,
@@ -83,6 +84,22 @@ function listenRows(r: Rush): string {
     <div class="kv"><span>Replays · repeats · questions</span><b>${l.replays} · ${l.repeats} · ${l.questions}</b></div>`;
 }
 
+/** Receipt rows for what came up during a week shift (none on Day 2). */
+function eventRows(r: Rush): string {
+  const s = r.shiftEvents;
+  if (!r.week || s.log.fired.length === 0) return '';
+  const kv = (k: string, v: string): string => `<div class="kv"><span>${k}</span><b>${v}</b></div>`;
+  return [
+    kv('Things that came up', String(s.log.fired.length)),
+    s.difficultHandled > 0 ? kv('Tricky customers handled', String(s.difficultHandled)) : '',
+    s.refused > 0 ? kv('Shown the door', String(s.refused)) : '',
+    s.wasteCents > 0 ? kv('Wasted on fixes', formatCents(s.wasteCents)) : '',
+    s.reputation !== 0
+      ? kv('Reputation', s.reputation > 0 ? `+${s.reputation}` : String(s.reputation))
+      : '',
+  ].join('');
+}
+
 /** What was actually said, for every ticket rung up wrong, with the missed words marked. */
 function misheardList(r: Rush): string {
   const items = r.listening
@@ -132,6 +149,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     <div id="rail" aria-label="Order tickets"></div>
     <div id="pass" class="hide"></div>
     <div id="rinstr" class="hide"><div class="h"></div><div class="b"></div></div>
+    <div id="revent" class="hide" role="group" aria-label="Something's come up"><div class="h"></div><div class="b"></div></div>
     <div id="rgauges" class="hide"></div>
     <div id="ractions"></div>
     <div id="rtouchHeight" class="hide"><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
@@ -155,6 +173,32 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const pauseEl = $('#rpause');
   const gauges = createGauges($('#rgauges'), touch);
   const pos = createPos(root, touch, cb.action);
+  const eventEl = $('#revent');
+  let eventKey = '';
+  /** The shift event waiting for an answer (week mode): what happened and the choices. */
+  const renderEvent = (r: Rush): void => {
+    const cur = r.phase === 'service' ? r.shiftEvents.current : null;
+    const k = cur ? `${cur.def.id}|${r.customers.indexOf(cur.customer as RushCustomer)}` : '';
+    if (k === eventKey) return;
+    eventKey = k;
+    eventEl.classList.toggle('hide', !cur);
+    if (!cur) return;
+    const name = cur.customer?.def.callName ?? 'Someone';
+    (eventEl.querySelector('.h') as HTMLElement).textContent = EVENT_PROMPTS[cur.def.id].replace(
+      '{name}',
+      name,
+    );
+    const box = eventEl.querySelector('.b') as HTMLElement;
+    box.innerHTML = cur.def.choices
+      .map(
+        (c) =>
+          `<button class="btn small" data-choice="${esc(c.id)}">${esc(c.label)}${c.costSeconds > 0 ? ` <small>−${c.costSeconds} s</small>` : ''}</button>`,
+      )
+      .join('');
+    box.querySelectorAll<HTMLButtonElement>('button[data-choice]').forEach((b) => {
+      b.onclick = () => cb.action({ type: 'eventChoice', choice: b.dataset.choice ?? '' });
+    });
+  };
 
   $('#rpauseBtn').onclick = () => cb.pause(true);
   cb.bindAudio(topbar);
@@ -305,6 +349,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
             <div class="kv"><span>Tips</span><b>${formatCents(s.tipsCents)}</b></div>
             <div class="kv"><span>Drinks wasted</span><b>${s.wasted}</b></div>
             ${listenRows(r)}
+            ${eventRows(r)}
           </div>
           ${misheardList(r)}
           ${quote ? `<div class="quote">“${esc(quote)}”<br><small>— Gaz, owner</small></div>` : ''}
@@ -352,6 +397,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         actionKey = '';
         instr.classList.add('hide');
         pass.classList.add('hide');
+        renderEvent(r);
         gauges.update('', r.barista);
         return;
       }
@@ -370,6 +416,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       lastRush = r;
       renderRail(r);
       pos.update(r);
+      renderEvent(r);
       const b = r.barista;
       const reg = r.phase === 'service' ? atRegister(r) : null;
       const counter = r.phase === 'service' ? atCounter(r) : null;
@@ -387,9 +434,12 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
 
       // Actions.
       const parts: string[] = [];
-      let key = `${r.phase}|${b.phase}|${reg?.def.id ?? ''}|${b.ready ? 1 : 0}|${b.espresso.dose >= 8 && !b.espresso.grinding}|${b.pour.poured > 0}|${next?.def.id ?? ''}`;
+      // Their own shift event comes first: the order waits for the answer.
+      const held = reg !== null && r.shiftEvents.current?.customer === reg;
+      let key = `${r.phase}|${b.phase}|${reg?.def.id ?? ''}|${held ? 1 : 0}|${b.ready ? 1 : 0}|${b.espresso.dose >= 8 && !b.espresso.grinding}|${b.pour.poured > 0}|${next?.def.id ?? ''}`;
       if (r.phase === 'service') {
-        if (reg) parts.push(btn('takeOrder', `Take ${reg.def.name.split(' ')[0]}'s order`, 'T'));
+        if (reg && !held)
+          parts.push(btn('takeOrder', `Take ${reg.def.name.split(' ')[0]}'s order`, 'T'));
         if (b.phase === 'idle' && !b.ready) {
           if (next?.heard)
             parts.push(

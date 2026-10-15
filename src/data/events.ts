@@ -90,6 +90,19 @@ export const EVENT_DATA: Record<ShiftEventId, EventData> = {
   },
 };
 
+/** What the player sees when an event starts (`{name}`: the customer's call name). RARE_BIRD has
+ *  no card: the bin chicken has its own hint and is shooed by clicking it. */
+export const EVENT_PROMPTS: Record<ShiftEventId, string> = {
+  JUST_COFFEE: '{name} just wants “a coffee”.',
+  THE_USUAL: '{name} asks for “the usual”.',
+  CHANGE_MIND: '{name} wants to change their order.',
+  QUEUE_JUMP: 'Someone has pushed in ahead of the queue.',
+  WRONG_MILK: '{name} says that’s the wrong milk.',
+  CALL_MANAGER: '{name} wants to speak to the manager.',
+  THE_NAME: '{name} wants their name on the cup. You didn’t quite catch it.',
+  RARE_BIRD: 'A bin chicken has wandered in.',
+};
+
 /** Difficult behaviour belongs to a personality, never to a background (AGENTS.md §6): only these
  *  customers can call for the manager or claim a wrong milk that was right. */
 export const DIFFICULT_PERSONALITIES: readonly CustomerId[] = ['karen'];

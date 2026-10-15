@@ -3,7 +3,9 @@
 
 import type { CustomerDef, CustomerId } from '../../data/customers';
 import type { Delivery } from '../../data/voice/ids';
+import type { ShiftEventDef, ShiftEventId } from '../../sim/contracts/events';
 import type { DrinkId } from '../../sim/contracts/ticket';
+import type { EventLog } from '../../sim/events/scheduler';
 import type { Difficulty, ListenRecord, OrderField, OrderLine } from '../../sim/listening';
 import type { Mood, OwnerState } from '../../sim/owner';
 import type {
@@ -58,7 +60,8 @@ export interface RushCustomer {
   /** Ticket number once the order is taken (1, 2, ...). */
   ticket: number | null;
   rejected: number;
-  outcome: 'served' | 'walkout' | null;
+  /** 'refused': an event ended their service (not a walk-out, not a drink). */
+  outcome: 'served' | 'walkout' | 'refused' | null;
   result: ServeResult | null;
   /** Mood shown on their face after a serve or a walkout. */
   reaction: Mood | null;
@@ -66,6 +69,8 @@ export interface RushCustomer {
   /** Times Gaz has nagged about this customer (capped so it never becomes a loop). */
   nags: { register: number; slow: number; pos: number };
   orderLine: Utterance | null;
+  /** Satisfaction from shift events, added to their serve (week mode; 0 on Day 2). */
+  eventSatisfaction: number;
 }
 
 export type RushAction =
@@ -82,7 +87,9 @@ export type RushAction =
   | { type: 'serve'; customer: CustomerId }
   | { type: 'bin' }
   | { type: 'next' }
-  | { type: 'restart' };
+  | { type: 'restart' }
+  /** The player's answer to the shift event on screen (an EventChoice id). */
+  | { type: 'eventChoice'; choice: string };
 
 export interface RushInput extends Omit<BaristaInput, 'next'> {
   skip: boolean;
@@ -120,7 +127,12 @@ export type RushEvent =
   | { type: 'served'; customer: CustomerId; result: ServeResult }
   | { type: 'rejected'; customer: CustomerId }
   | { type: 'walkout'; customer: CustomerId }
-  | { type: 'summary'; summary: ShiftSummary };
+  | { type: 'summary'; summary: ShiftSummary }
+  /** Week mode only (never on Day 2): a shift event wants the player's choice, it was answered
+   *  (or dropped, choice null, when its customer left), and an event ended someone's service. */
+  | { type: 'shiftEvent'; event: ShiftEventId; customer: CustomerId | null }
+  | { type: 'shiftEventEnd'; event: ShiftEventId; choice: string | null }
+  | { type: 'refused'; customer: CustomerId };
 
 /** Week mode: which shift of the week this is and what's on the menu. Orders come from the
  *  generator (sim/listening/generate.ts) instead of each customer's curated lines. */
@@ -128,6 +140,30 @@ export interface RushWeek {
   /** 0-based across the week. */
   shiftIndex: number;
   unlockedDrinks: readonly DrinkId[];
+  /** Shift each event last fired in, from earlier shifts (cooldowns). */
+  eventCooldowns?: Partial<Record<ShiftEventId, number>>;
+  /** How well each regular knows the player (SaveV2.regulars). */
+  affinity?: Partial<Record<CustomerId, number>>;
+}
+
+/** Shift events through one shift (core/rush/events.ts). Inert on Day 2. */
+export interface ShiftEvents {
+  /** Cooldown memory across shifts and this shift's picks. */
+  log: EventLog;
+  /** Its own RNG: drawing from Rush.rng would move every later Day 2 pick. */
+  rng: Rng;
+  /** The event waiting for the player's choice, and whose it is. */
+  current: { def: ShiftEventDef; customer: RushCustomer | null; playerMistake: boolean } | null;
+  /** Service time of the next "someone pushes in" check. */
+  nextPoll: number;
+  /** RARE_BIRD was booked for this shift: the bin chicken comes (core/rushIbis.ts runs it). */
+  bird: boolean;
+  /** Tallies from the outcomes, for the report and the save. */
+  difficultHandled: number;
+  wasteCents: number;
+  reputation: number;
+  affinity: Partial<Record<CustomerId, number>>;
+  refused: number;
 }
 
 export interface Rush {
@@ -155,6 +191,7 @@ export interface Rush {
   /** Excellent serves so far (Gaz only praises every other one). */
   praised: number;
   flags: Record<string, boolean>;
+  shiftEvents: ShiftEvents;
   /** Gaz's last sentence: he never says the same thing twice running. */
   lastGazText: string;
   events: RushEvent[];

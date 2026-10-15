@@ -2,13 +2,17 @@
 // never twice running), customers' fixed lines, and the lines the player must listen to
 // (orders, slow repeats, answers), which may interrupt Gaz or the same customer only.
 
+import { GAZ_EVENT_LINES } from '../../data/dialogue/gazEvents';
 import { OWNER_LINES } from '../../data/ownerLines';
 import { spokenDuration } from '../../data/voice';
 import type { Delivery } from '../../data/voice/ids';
-import { pickLine, type LineDef, type Mood } from '../../sim/owner';
+import { pickLine, type LineBook, type LineDef, type Mood } from '../../sim/owner';
 import { DRINK_NAME, type DrinkType } from '../../sim/rush';
 import type { Rush, RushCustomer } from './state';
 import { canOffer, dropQueued, interrupt, offer, type Priority, type Utterance } from '../speech';
+
+/** Everything Gaz can say on shift: his Day 2 lines and his shift-event lines (keys `event.*`). */
+const GAZ_LINES: LineBook = { ...OWNER_LINES, ...GAZ_EVENT_LINES };
 
 const fill = (text: string, vars: Record<string, string>): string =>
   text.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? `{${k}}`);
@@ -25,7 +29,7 @@ export function gaz(
   vars: Record<string, string> = {},
 ): boolean {
   if (!canOffer(r.speech, priority, r.time)) return false;
-  const picked = pickLine(r.owner, OWNER_LINES, key, r.rng, r.time, priority === 'live');
+  const picked = pickLine(r.owner, GAZ_LINES, key, r.rng, r.time, priority === 'live');
   if (!picked) return false;
   const text = fill(picked.text, vars);
   if (text === r.lastGazText) return false;

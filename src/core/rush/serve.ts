@@ -7,6 +7,7 @@ import { answerFor, wrongFields } from '../../sim/listening';
 import { addFrustration } from '../../sim/owner';
 import { evaluateServe, REJECT_PENALTY, type MadeDrink } from '../../sim/rush';
 import { returnReady, takeReady } from '../barista';
+import { eventHandedBack } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
 import { setState, type Rush, type RushCustomer } from './state';
 
@@ -43,12 +44,22 @@ export function serve(r: Rush, id: CustomerId): void {
   if (!b.ready || !c || c.state !== 'waiting') return;
   const drink = takeReady(b, []);
   if (!drink) return;
-  const result = evaluateServe(c.order, drink, {
+  const judged = evaluateServe(c.order, drink, {
     waited: r.time - (c.registerAt ?? r.time),
     patience: c.def.patience,
     tolerance: c.def.tolerance,
     tipCents: c.def.tipCents,
   });
+  // Shift events (week mode) leave them a little happier or crosser with the same drink.
+  const result =
+    judged.accepted && c.eventSatisfaction !== 0
+      ? {
+          ...judged,
+          satisfaction: Math.round(
+            Math.min(100, Math.max(0, judged.satisfaction + c.eventSatisfaction)),
+          ),
+        }
+      : judged;
   if (!result.accepted) {
     // They hand it back: it stays on the pass, still cooling, and their patience takes a hit.
     returnReady(b, drink);
@@ -67,6 +78,7 @@ export function serve(r: Rush, id: CustomerId): void {
     // A listening mistake, the wrong milk (drink made for someone else), or the wrong drink.
     if (!fixMisheardTicket(r, c, drink, wrongMilk))
       gaz(r, wrongMilk ? 'rush.wrongMilk' : 'rush.wrongDrink', 'react', varsFor(c, drink.type));
+    if (wrongMilk) eventHandedBack(r, c);
     addFrustration(r.owner, 0.8);
     r.streak.good = 0;
     r.streak.bad++;
