@@ -426,6 +426,12 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
       ignoreCase: true,
     },
   );
+  // …with the misheard drink marked, and what was rung up struck out.
+  await expect(ticket(page, 'priya').locator('.to mark')).toHaveCount(1);
+  await expect(ticket(page, 'priya').locator('.tm')).toContainText('Misheard');
+  await expect(ticket(page, 'priya').locator('.tm s')).toContainText(
+    wrong.type === 'flatWhite' ? 'flat white' : 'long black',
+  );
   await snap(page, 'priya-ticket-corrected');
   await page.keyboard.press('b'); // bin the wrong drink
 

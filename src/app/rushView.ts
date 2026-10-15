@@ -62,6 +62,9 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
         sfx.play('tick');
         const c = customerByKey(r, ev.customer);
         if (c) rushHud.onTicket(c);
+      } else if (ev.type === 'ticketFixed') {
+        const c = customerByKey(r, ev.customer);
+        if (c) rushHud.onTicketFixed(c);
       } else if (ev.type === 'ask') rushHud.onAsk(ev.text);
       else if (ev.type === 'served')
         crowd.react(
