@@ -17,10 +17,14 @@ export const shownEvent = (r: Rush): ShiftEventDef | null =>
   r.phase === 'service' ? (r.shiftEvents.current?.def ?? null) : null;
 
 /** Is `key` the card's? A digit 1–3 while it's up, even past its last choice (a stray 3 on a
- *  two-choice card mustn't serve a ticket or move the jug instead). */
+ *  two-choice card mustn't serve a ticket or move the jug instead). Not during the pour: there
+ *  1–3 are the jug heights (3 lays the white low), so a card that pops up mid-pour waits for a
+ *  click or the end of the pour rather than taking an answer the player never meant. */
 export function eventOwnsKey(r: Rush, key: string): boolean {
   const n = Number(key);
-  return shownEvent(r) !== null && /^[1-9]$/.test(key) && n <= EVENT_KEYS;
+  return (
+    shownEvent(r) !== null && r.barista.phase !== 'pour' && /^[1-9]$/.test(key) && n <= EVENT_KEYS
+  );
 }
 
 /** The choice id a number key picks on the card, or null (no card, or no such choice). */
@@ -51,8 +55,15 @@ export function createEventCard(
   const box = el.querySelector('.b') as HTMLElement;
   let key = '';
   let aside = false;
+  let pouring = false;
   return {
     update(r) {
+      // During the pour 1–3 are the jug heights, so the card's key hints step back.
+      const p = r.barista.phase === 'pour';
+      if (p !== pouring) {
+        pouring = p;
+        el.classList.toggle('pouring', p);
+      }
       // Two hands swings the camera to the group head, and the cup with it: the card moves aside.
       const a = r.barista.phase === 'shotSteam';
       if (a !== aside) {

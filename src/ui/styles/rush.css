@@ -172,6 +172,10 @@
 #revent .btn {
   text-align: left;
 }
+/* During the pour 1–3 set the jug height, not the answer: hide the key hints until it's done. */
+#revent.pouring kbd {
+  display: none;
+}
 /* A choice's patience cost (EventChoice.costSeconds). */
 #revent .cost {
   margin-left: 4px;

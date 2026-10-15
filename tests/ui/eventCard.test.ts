@@ -50,6 +50,18 @@ describe('the event card', () => {
     }
   });
 
+  it('leaves 1–3 to the jug heights during the pour (3 = low must never refuse a customer)', () => {
+    const r = withEvent('CALL_MANAGER');
+    r.barista.phase = 'pour';
+    for (const k of ['1', '2', '3']) {
+      expect(eventOwnsKey(r, k)).toBe(false);
+      expect(eventChoiceForKey(r, k)).toBeNull();
+    }
+    expect(shownEvent(r)?.id).toBe('CALL_MANAGER'); // still on screen, and clickable
+    r.barista.phase = 'idle';
+    expect(eventChoiceForKey(r, '3')).toBe('refuse');
+  });
+
   it('no event has more choices than there are keys for it', () => {
     for (const d of Object.values(EVENT_DATA))
       expect(d.choices.length).toBeLessThanOrEqual(EVENT_KEYS);
