@@ -185,7 +185,7 @@ export function createAudioPanel(
   };
   // A dialog: Esc closes it, Tab stays inside, and keys pressed in it never reach the game.
   menuKeys(panel, { modal: true, escape: () => p.close() });
-  /** What had focus when the panel opened (the title's Settings, a HUD's Sound button). */
+  /** What had focus when the panel opened (the title's Settings, or a HUD's Sound button). */
   let opener: Element | null = null;
 
   const p: AudioPanel = {
@@ -220,8 +220,19 @@ export function createAudioPanel(
     close() {
       if (panel.classList.contains('hide')) return;
       panel.classList.add('hide');
-      // Back to the button that opened it, if it's still on screen.
-      if (opener instanceof HTMLElement && opener.getClientRects().length) focusQuietly(opener);
+      // Back to the title's Settings button. In a shift, focus is let go instead: a focused Sound
+      // button would turn the player's next Enter into "open settings" rather than the game's.
+      if (
+        opener instanceof HTMLElement &&
+        opener.closest('#title') &&
+        opener.getClientRects().length
+      )
+        focusQuietly(opener);
+      else if (
+        document.activeElement instanceof HTMLElement &&
+        panel.contains(document.activeElement)
+      )
+        document.activeElement.blur();
       opener = null;
     },
   };
