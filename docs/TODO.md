@@ -20,16 +20,16 @@ Global rules for every task:
 
 ---
 
-## Phase 0 — Consolidate (sequential, do first)  `[~]`
+## Phase 0 — Consolidate (sequential, do first)  `[x]`
 Goal: one branch, one build, no large files that every task must touch.
 
 - [x] 0.1 Merge `origin/chore/merge-day1-pull-through` into `main` (no-ff), run unit + e2e, push.
-- [ ] 0.2 Split `src/main.ts` (≈1,180 lines) into `src/app/{boot,title,trialWiring,rushWiring,weekWiring}.ts`,
+- [x] 0.2 Split `src/main.ts` (≈1,180 lines) into `src/app/{boot,title,trialWiring,rushWiring,weekWiring}.ts`,
       each ≤ 300 lines; `src/main.ts` ≤ 60 lines. Pure refactor, exported names unchanged.
-- [ ] 0.3 Split `src/ui/styles.css` (≈1,600 lines) into `src/ui/styles/{base,title,hud,rush,latte,shop,screens}.css`
+- [x] 0.3 Split `src/ui/styles.css` (≈1,600 lines) into `src/ui/styles/{base,title,hud,rush,latte,shop,screens}.css`
       with one index import. Pure refactor; screenshot diff before/after at 1024×640.
 - [x] 0.4 `vitest` `testTimeout` is 20 s (done in run #2) — confirm it is in the config, not per-test.
-- [ ] 0.5 Delete nothing, but list stale branches in the report (feat/voice-listening, old fix/*).
+- [x] 0.5 Delete nothing, but list stale branches in the report (feat/voice-listening, old fix/*).
 - Exit: `npm run build` ok, e2e green, main pushed.
 - Evidence:
   - 0.1 (2026-10-16): `git merge --no-ff origin/chore/merge-day1-pull-through` → 6b05ba7, no conflicts.
@@ -38,6 +38,32 @@ Goal: one branch, one build, no large files that every task must touch.
   - 0.4: `vite.config.ts` → `test: { …, testTimeout: 20_000 }` (config-wide). Per-test values that remain are
     only longer runs that need more than 20 s: `tests/core/rushPace.test.ts` 120_000 ×3, `tests/core/rush.test.ts:330`
     60_000, `tests/core/rushEvents.test.ts:88` 30000, `tests/scripts/voices.test.ts:32` 60_000. None sets 20 s per test.
+  - 0.2 (f4c185e, merged 8faedbc): `src/main.ts` 11 lines (fonts + `./ui/styles/index.css` + `void boot()`).
+    `src/app/`: boot 288 · rushWiring 299 · debug 255 · practiceWiring 165 · input 152 · context 124 ·
+    trialWiring 111 · weekWiring 73 · shared 39 · title 38 (all ≤ 300). Five named files plus context.ts (shared
+    `App` state + late-bound `nav`), debug.ts (`window.__trial`, 240 lines alone), input.ts, practiceWiring.ts,
+    shared.ts — the caps could not hold with five. Week autosave moved out of rushFrame into
+    `weekWiring.onShiftSummary`. All 14 `__trial` keys kept with lazy getters; browser smoke 21/21 (title, week,
+    Day 2, pause, practice, Endless, Enter at title). Unit: `Test Files  55 passed (55)` · `Tests  493 passed (493)`.
+  - 0.3 (f4b3bae, merged 3e6bc85): `src/ui/styles/` base 121 · title 67 · hud 357 · screens 449 · shop 21 ·
+    rush 338 · latte 281 · index 10 (imports base, title, hud, screens, shop, rush, latte). Concat diff vs the old
+    file = moved blocks only (pause, Day 2 rush block, `.titleBtns`, `.paper kbd`, one `@media (max-width:720px)`
+    wrapper split in two). Built CSS: same 270-rule multiset; not byte-identical (+26 bytes, the second @media
+    wrapper); every reordered same-specificity pair checked: never on one element. Screenshots 1024×640 with `#gl`
+    hidden, before/after byte-identical 4/4 (title, shift-select, rush-hud, practice):
+    `docs/verification/2026-10-16-css-split/`. Built CSS `index-DWo1Jx3E.css` 26.66 kB.
+  - 0.5 Stale branches (nothing deleted). Merged into main, safe to prune when Edward wants: local
+    claude/recursing-perlman-d9d838, chore/merge-day1-pull-through, feat/{audio-qa-hardening, bin-chicken, cafe-bgm,
+    day1-barista-trial, day2-morning-rush, latte-art-polish, voice-audition-v2, voice-casting, voice-listening},
+    fix/{audio-integration, day1-pull-through, day2-first-shift}, integrate/week1, and the same names on origin.
+    NOT merged (local only, all at 4666ce9, +15 over main): overnight/2026-10-15, feat/day1-replay, feat/day2-orders,
+    feat/voice-release, fix/review03, qa/cross-browser (Chapter 1 card, playtest copy, Azure voice prep, review-03
+    fixes; 350b027 duplicates a commit already on main). origin/gh-pages +1 is the deploy branch.
+  - Exit: on fc47916 `npm run typecheck && npm run lint && npm test` exit 0 (`Tests  493 passed (493)`).
+    `npm run build` from a clean `git checkout-index` copy: exit 0, `✓ built`, `[audio-gate] ok: 0 licensed audio
+    file(s) in the build`. (In this checkout the build stops at the audio gate: `7 audio file(s) in the build have no
+    verified licence` — stale gitignored mp3s in `public/assets/voice/`; left for Edward, not deleted.)
+    `E2E_PORT=5179 npm run test:e2e`: `22 passed (17.6m)`, exit 0. main pushed (see git log).
 
 ## Phase 1 — Playable week (UI pass)  `[ ]`
 Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split below.
