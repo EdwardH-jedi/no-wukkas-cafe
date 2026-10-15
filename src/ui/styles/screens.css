@@ -1,4 +1,5 @@
-/* Shell screens: result card, verdict + shift report, sound panel + audio status, shift select. */
+/* Shell screens: result card, verdict + shift report, sound panel + audio status. Shift select and
+   the shop are in shop.css. */
 
 /* ---------- result card ---------- */
 :is(#card, #pcard) {
@@ -151,14 +152,22 @@
 #rsummary {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
+  /* A long receipt (misheard list, event rows) scrolls as a whole: the card is centred with
+     margin: auto, so it starts at the top instead of clipping its head and buttons. */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
   background: radial-gradient(ellipse at 50% 50%, rgba(22, 16, 12, 0.2), rgba(22, 16, 12, 0.8));
   pointer-events: auto;
 }
 .verdictCard {
+  box-sizing: border-box;
   width: min(440px, 100%);
+  margin: auto;
+  flex: none;
 }
 .verdictCard .stamp {
   font-family: var(--display);
@@ -213,9 +222,11 @@
 
 @media (min-width: 900px) {
   #verdict {
-    justify-items: end;
     padding-right: 40px;
     background: linear-gradient(90deg, rgba(22, 16, 12, 0) 30%, rgba(22, 16, 12, 0.75));
+  }
+  #verdict .verdictCard {
+    margin-right: 0;
   }
 }
 
@@ -259,14 +270,22 @@
 #audioPanel {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  /* The panel itself scrolls (not a box inside it), so a wheel or swipe anywhere reaches the
+     bottom on a short screen; margin: auto centres the box when it fits. */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   background: rgba(22, 16, 12, 0.6);
   pointer-events: auto;
   z-index: 30;
-  padding: 16px;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
 }
 #audioPanel .box {
+  box-sizing: border-box;
+  flex: none;
+  margin: auto;
   width: min(420px, 100%);
   background: var(--glass2);
   border: 1px solid var(--line);
@@ -348,6 +367,9 @@
   color: var(--crema);
   margin: 16px 0 6px;
 }
+#audioPanel h3 + h4 {
+  margin-top: 4px;
+}
 #audioPanel .sel {
   display: grid;
   grid-template-columns: 1fr 1.6fr;
@@ -366,81 +388,12 @@
   border: 1px solid var(--line);
   min-width: 0;
 }
-#audioPanel .box {
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-}
 
 #rsummary .saveNote {
   margin: 8px 0 0;
   font-size: 12px;
   color: var(--txt-dim);
   text-align: center;
-}
-/* ---------- shift select (title → "The week") ---------- */
-.shift-select {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* Taller than a phone screen with the shop: keep the top reachable when it scrolls. */
-  justify-content: safe center;
-  gap: 10px;
-  padding: 16px;
-  background: rgba(20, 14, 10, 0.96);
-  pointer-events: auto;
-  z-index: 30;
-  overflow-y: auto;
-}
-.shift-select h2 {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-}
-.shift-select ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: min(460px, 100%);
-}
-.shift-select button {
-  width: 100%;
-  min-height: 40px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--glass2);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.shift-select button:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-.shift-select button[data-status='done'] {
-  border-left: 4px solid var(--harbour);
-}
-.shift-select button:not(:disabled)[data-status='open'] {
-  border-left: 4px solid var(--paper);
-  font-weight: 800;
-}
-.shift-select .shift-select-endless,
-.shift-select .shift-select-back {
-  width: min(460px, 100%);
-  text-align: center;
-}
-.shift-select-note {
-  margin: 0;
-  font-size: 12px;
-  color: var(--txt-dim);
 }
 .paper kbd {
   background: rgba(34, 26, 20, 0.08);

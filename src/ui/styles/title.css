@@ -1,51 +1,109 @@
-/* Title screen. */
+/* Title screen: the café's name, a short story, and one menu with every way into the game. */
 
 /* ---------- title ---------- */
 #title {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  /* Short screens (e.g. 640 px tall): scroll instead of cutting off the buttons. */
-  place-items: safe center;
+  /* The one scroller on this screen: on a short screen the whole title scrolls (the card is
+     centred with margin: auto, so it never clips at the top the way centring an overflow would). */
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
-  background: radial-gradient(ellipse at 50% 40%, rgba(22, 16, 12, 0.35), rgba(22, 16, 12, 0.85));
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  background: radial-gradient(ellipse at 50% 40%, rgba(22, 16, 12, 0.45), rgba(22, 16, 12, 0.88));
   pointer-events: auto;
-  padding: 16px;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
 }
 .titleCard {
-  max-width: 560px;
+  margin: auto;
+  width: min(560px, 100%);
+  display: grid;
+  gap: 18px;
   text-align: center;
 }
-.titleCard .kicker {
+.titleHead .kicker {
   font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--crema);
 }
-.titleCard h1 {
+.titleHead h1 {
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(42px, 9vw, 84px);
+  font-size: clamp(42px, 9vw, 72px);
   line-height: 0.95;
-  margin: 10px 0 6px;
+  margin: 10px 0 10px;
   color: var(--paper);
   text-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
 }
-.titleCard h2 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(18px, 3.4vw, 26px);
-  margin: 0 0 16px;
-  color: var(--gold);
-}
-.titleCard p {
+.titleHead p {
   color: var(--txt-dim);
   line-height: 1.5;
   font-size: 15px;
-  margin: 0 auto 18px;
+  margin: 0 auto;
   max-width: 460px;
 }
+
+/* ---------- the menu ---------- */
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#ui .mode {
+  box-sizing: border-box;
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  min-height: 48px;
+  padding: 9px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--glass2);
+  color: var(--txt);
+  text-align: left;
+  transition:
+    border-color 0.12s,
+    transform 0.08s;
+}
+.mode b {
+  font-size: 15px;
+  font-weight: 800;
+}
+.mode small {
+  font-size: 12.5px;
+  color: var(--txt-dim);
+  line-height: 1.3;
+}
+#ui .mode:hover:not(:disabled) {
+  border-color: rgba(246, 237, 225, 0.45);
+}
+#ui .mode:active:not(:disabled) {
+  transform: translateY(2px);
+}
+#ui .mode.primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  box-shadow: 0 5px 0 #b8892a;
+}
+.mode.primary small {
+  color: rgba(22, 16, 12, 0.72);
+}
+#ui .mode:disabled {
+  cursor: default;
+  border-style: dashed;
+  background: rgba(22, 16, 12, 0.55);
+}
+.mode:disabled b {
+  color: var(--txt-dim);
+}
+.mode:disabled small {
+  color: var(--crema);
+}
+
+/* ---------- controls ---------- */
 .controls {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -53,8 +111,9 @@
   text-align: left;
   font-size: 13px;
   color: var(--txt-dim);
-  max-width: 400px;
-  margin: 0 auto 22px;
+  box-sizing: border-box;
+  width: min(400px, 100%);
+  margin: 0 auto;
   background: var(--glass);
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -64,4 +123,37 @@
   color: var(--txt);
   font-weight: 700;
   white-space: nowrap;
+}
+
+/* Wide screens: the story and controls on the left, the menu on the right, all in one view
+   (1024 × 640 fits without scrolling). */
+@media (min-width: 760px) {
+  .titleCard {
+    width: min(960px, 100%);
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+    grid-template-areas:
+      'head modes'
+      'controls modes';
+    gap: 18px 40px;
+    align-items: center;
+    text-align: left;
+  }
+  .titleHead {
+    grid-area: head;
+    align-self: end;
+  }
+  .titleHead h1 {
+    font-size: clamp(42px, 6.4vw, 72px);
+  }
+  .titleHead p {
+    margin: 0;
+  }
+  .modes {
+    grid-area: modes;
+  }
+  .controls {
+    grid-area: controls;
+    align-self: start;
+    margin: 0;
+  }
 }

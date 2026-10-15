@@ -1,4 +1,5 @@
-// The bigger panels: title, the result card between attempts, and the final verdict.
+// The bigger panels: the result card between attempts and the final verdict (the title screen is
+// screens/title.ts).
 
 import { attemptsLeft, canFinish, type Trial, type TrialAction } from '../core/trial';
 import { FINDING_TEXT } from '../data/coaching';
@@ -45,33 +46,6 @@ export const esc = (s: string): string =>
     /[&<>"']/g,
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
   );
-
-export function titleHtml(touch: boolean): string {
-  const controls = touch
-    ? `<b>Drag</b><span>move the jug / wand depth</span>
-       <b>Press &amp; hold</b><span>grind, steam, pour</span>
-       <b>▲ ▼</b><span>jug height while pouring</span>`
-    : `<b>Mouse</b><span>move the jug · set steam depth</span>
-       <b>Hold click / Space</b><span>grind · steam · pour (trackpad: use Space)</span>
-       <b>1 · 2 · 3</b><span>jug high · lift · low (trackpad-friendly)</span>
-       <b>Scroll · W / S</b><span>fine jug height while pouring</span>
-       <b>Enter</b><span>confirm · next</span>
-       <b>Esc</b><span>pause</span>`;
-  return `<div class="titleCard">
-    <div class="kicker">Crown St, Surry Hills · 6:40 am</div>
-    <h1>No Wukkas Café</h1>
-    <h2>Day 1: The Trial Shift</h2>
-    <p>You want the barista job. Gaz, the owner, wants a flat white with a heart on top, and he's watching every move. Three goes. Don't stuff it up.</p>
-    <div class="controls">${controls}</div>
-    <div class="titleBtns">
-      <button class="btn" data-act="start">Day 1: Start the trial</button>
-      <button class="btn ghost" data-act="day2">Day 2: The morning rush</button>
-      <button class="btn ghost" data-act="shifts">The week: shifts</button>
-      <button class="btn ghost" data-act="practice">Latte art practice</button>
-      <button class="btn ghost" data-act="sound">Sound settings</button>
-    </div>
-  </div>`;
-}
 
 const pct = (v: number): number => Math.round(Math.max(0, Math.min(1, v)) * 100);
 

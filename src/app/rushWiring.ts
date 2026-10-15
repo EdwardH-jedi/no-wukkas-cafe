@@ -23,7 +23,7 @@ import { createRushHud, nextTicket, railOrder, type RushHud } from '../ui/rushHu
 import type { StationView } from '../world/station';
 import type { App } from './context';
 import { makeIbis, prefetchDay } from './shared';
-import { onShiftSummary } from './weekWiring';
+import { onShiftSummary, reportCallbacks } from './weekWiring';
 
 export function rushAct(app: App, a: RushAction): void {
   app.sfx.unlock();
@@ -57,20 +57,20 @@ export const startDay2 = (app: App): void => startRush(app, null, app.seed);
 
 export function createRushView(app: App): RushHud {
   const { audio, input } = app;
+  const restart = (): void => {
+    app.setPaused(false);
+    app.crowd.clear();
+    // A restart picks up a difficulty changed mid-shift.
+    if (app.rush) app.rush.difficulty = app.listen.difficulty;
+    app.sfx.setNoise(DIFFICULTY[app.listen.difficulty].noise);
+    rushAct(app, { type: 'restart' });
+  };
   return createRushHud(app.hud2Root, {
     action: (a) => rushAct(app, a),
     pause: (p) => app.setPaused(p),
-    restart: () => {
-      app.setPaused(false);
-      app.crowd.clear();
-      // A restart picks up a difficulty changed mid-shift.
-      if (app.rush) app.rush.difficulty = app.listen.difficulty;
-      app.sfx.setNoise(DIFFICULTY[app.listen.difficulty].noise);
-      rushAct(app, { type: 'restart' });
-    },
+    restart,
     title: () => app.nav.toTitle(),
-    nextShift: () => app.nav.startShift(),
-    memoryOnly: () => app.store.memoryOnly,
+    report: reportCallbacks(app, restart),
     height: (d) => (app.touchHeight = d),
     skip: () => (input.skip = true),
     audioButtonsHtml: app.audioPanel.buttonsHtml,

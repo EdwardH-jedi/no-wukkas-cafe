@@ -1,5 +1,6 @@
-// Listening settings: difficulty, subtitle rule and learning mode. Per-viewer conveniences kept in
-// localStorage (wrapped: private mode or blocked storage just means defaults).
+// Player settings: difficulty, subtitle rule, learning mode and the latte-art pour sensitivity.
+// Per-viewer conveniences kept in localStorage (wrapped: private mode or blocked storage just means
+// defaults).
 
 import { DIFFICULTY, type Difficulty, type SubtitleMode } from '../sim/listening';
 
@@ -13,7 +14,30 @@ export interface ListenSettings {
   /** Show the transcript with the key words marked once an order is rung up. Off by default:
    *  the shift report's "Listen again" list is the learning loop. */
   learning: boolean;
+  /** Latte-art pour sensitivity: how strongly the pour input drives the flow (1 = as tuned).
+   *  The settings slider writes it; the pour input reads it. A v2 blob saved before it existed
+   *  just gets the default. */
+  pourSensitivity: number;
 }
+
+/** The pour-sensitivity slider's range. */
+export const POUR_SENSITIVITY = { min: 0.5, max: 2, step: 0.1, default: 1 } as const;
+
+/** A slider value as a setting: inside the range and on its 0.1 steps (a range input can report
+ *  0.7999…, and junk falls back to the default). */
+export function roundPourSensitivity(v: number): number {
+  if (!Number.isFinite(v)) return POUR_SENSITIVITY.default;
+  const c = Math.min(POUR_SENSITIVITY.max, Math.max(POUR_SENSITIVITY.min, v));
+  return Math.round(c / POUR_SENSITIVITY.step) / Math.round(1 / POUR_SENSITIVITY.step);
+}
+
+/** The slider's readout, e.g. "1.0×" (1 is the pour as tuned). */
+export const pourSensitivityLabel = (v: number): string => `${roundPourSensitivity(v).toFixed(1)}×`;
+
+const pourSensitivityOf = (v: unknown): number =>
+  typeof v === 'number' && Number.isFinite(v)
+    ? Math.min(POUR_SENSITIVITY.max, Math.max(POUR_SENSITIVITY.min, v))
+    : POUR_SENSITIVITY.default;
 
 const KEY = 'nwc.listen.v1';
 
@@ -23,6 +47,7 @@ export function loadListenSettings(): ListenSettings {
     difficulty: 'normal',
     subtitles: 'auto',
     learning: false,
+    pourSensitivity: POUR_SENSITIVITY.default,
   };
   try {
     const raw = localStorage.getItem(KEY);
@@ -41,6 +66,7 @@ export function loadListenSettings(): ListenSettings {
           ? s.subtitles
           : d.subtitles,
       learning: typeof s.learning === 'boolean' ? s.learning : d.learning,
+      pourSensitivity: pourSensitivityOf(s.pourSensitivity),
     };
   } catch {
     return d;
