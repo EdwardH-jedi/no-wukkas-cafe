@@ -137,7 +137,7 @@ describe('week mode: the week table sets the shift', () => {
     expect(enteredAt).toBeGreaterThan(back.arriveAt + 5);
     expect(r.phase).toBe('summary');
     expect(r.summary?.customers).toBe(10);
-  }, 20000);
+  });
 
   it("a full Friday (ten customers) runs to the report, serving by each visit's key", () => {
     const { r } = playRush({ seed: 2, week: at(4) });
@@ -145,7 +145,7 @@ describe('week mode: the week table sets the shift', () => {
     expect(r.summary?.customers).toBe(10);
     expect(r.customers.every((c) => c.outcome !== null)).toBe(true);
     expect(r.records.length).toBeGreaterThan(6); // returning regulars were served too
-  }, 20000);
+  });
 });
 
 describe('Endless Rush', () => {
@@ -170,5 +170,5 @@ describe('Endless Rush', () => {
     expect(r.summary?.customers).toBe(3);
     expect(r.customers.filter((c) => c.state !== 'outside').length).toBeLessThan(ENDLESS_BATCH);
     expect(events.some((e) => e.type === 'shiftEvent')).toBe(false);
-  }, 20000);
+  });
 });

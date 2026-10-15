@@ -14,5 +14,8 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
+    // Headless whole-shift tests take a few seconds alone and more beside each other; vitest's
+    // 5 s default timed them out on slower machines. Longer runs keep their own timeout.
+    testTimeout: 20_000,
   },
 });

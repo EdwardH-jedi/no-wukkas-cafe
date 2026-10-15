@@ -57,14 +57,14 @@ describe('shift events in the service loop', () => {
       expect(r.shiftEvents.log.fired).toEqual([]);
       expect(r.shiftEvents.bird).toBe(false);
     }
-  }, 20000);
+  });
 
   it('the first shift of the week has none (cap 0)', () => {
     for (const seed of [1, 2]) {
       const { r } = playRush({ seed, week: week(0) });
       expect(r.shiftEvents.log.fired).toEqual([]);
     }
-  }, 20000);
+  });
 
   it('later shifts fire some, never past the cap, the same for the same seed', () => {
     let total = 0;
@@ -156,7 +156,7 @@ describe('shift events in the service loop', () => {
     expect(r.summary?.customers).toBe(r.customers.length - 1);
     expect(r.shiftEvents.refused).toBe(1);
     expect(r.shiftEvents.difficultHandled).toBe(1);
-  }, 20000);
+  });
 
   it("an event's satisfaction lands on their serve", () => {
     const base = playRush({ seed: 3, week: week(0) }).r;
@@ -176,7 +176,7 @@ describe('shift events in the service loop', () => {
       r.records.find((x) => x.customer === 'dazza')?.satisfaction;
     expect(sat(base)).toBeDefined();
     expect(sat(moved)).toBe(Math.max(0, (sat(base) ?? 0) - 10));
-  }, 20000);
+  });
 
   it('the bin chicken is booked at the start, and cooldowns from earlier shifts hold', () => {
     const booked = Array.from({ length: 40 }, (_, i) => createShiftEvents(i + 1, week(1)).bird);
