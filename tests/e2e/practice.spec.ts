@@ -128,6 +128,21 @@ test('latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz', a
   await expect(page.locator('#plesson .last')).toBeHidden(); // no pour yet, no tip
   await snap(page, '01-start');
 
+  // --- pinch never zooms the page: ctrl+wheel over the UI (not just the canvas) and Safari's
+  // gesture events are cancelled; a plain wheel over the UI isn't (cards must still scroll)
+  const cancelled = await page.evaluate(() => {
+    const strip = document.querySelector('#plesson') as HTMLElement;
+    const wheel = (ctrlKey: boolean): boolean => {
+      const e = new WheelEvent('wheel', { deltaY: -40, ctrlKey, bubbles: true, cancelable: true });
+      strip.dispatchEvent(e);
+      return e.defaultPrevented;
+    };
+    const gesture = new Event('gesturestart', { bubbles: true, cancelable: true });
+    strip.dispatchEvent(gesture);
+    return { pinch: wheel(true), scroll: wheel(false), gesture: gesture.defaultPrevented };
+  });
+  expect(cancelled).toEqual({ pinch: true, scroll: false, gesture: true });
+
   // --- pour a heart with the mouse; the review is scored from the foam field
   await pourTrack(page, OWNER_DEMO);
   s = await until(page, (x) => x.phase === 'review');

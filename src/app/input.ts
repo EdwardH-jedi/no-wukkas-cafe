@@ -68,6 +68,20 @@ export function installInput(app: App): () => void {
     },
     { passive: false },
   );
+  // Pinch never zooms the page, wherever the pointer is: over a card, the lesson strip or a button
+  // a trackpad pinch is a ctrl+wheel that the canvas never sees, and Safari (macOS and iOS) sends
+  // gesture events. Plain wheel stays free, so the review card still scrolls. Double-tap zoom is
+  // off through `touch-action: none` on the body (ui/styles/base.css).
+  window.addEventListener(
+    'wheel',
+    (e) => {
+      if (e.ctrlKey) e.preventDefault();
+    },
+    { passive: false },
+  );
+  const noZoom = (e: Event): void => e.preventDefault();
+  for (const type of ['gesturestart', 'gesturechange', 'gestureend'])
+    document.addEventListener(type, noZoom, { passive: false });
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key.toLowerCase();
