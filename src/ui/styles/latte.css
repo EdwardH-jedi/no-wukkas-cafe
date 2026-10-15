@@ -236,8 +236,8 @@
   border-top-style: solid;
   border-color: #e0513f;
 }
-/* The one thing to do next pour. */
-#pcard .tip {
+/* The one thing to do next pour (practice review; any paper card). */
+.paper .tip {
   margin: 2px 0 10px;
   padding: 8px 10px;
   border: 1.5px solid #d9a520;
@@ -245,7 +245,7 @@
   background: rgba(243, 196, 80, 0.16);
   font-family: var(--body);
 }
-#pcard .tip b {
+.paper .tip b {
   display: block;
   font-family: var(--mono);
   font-size: 10.5px;
@@ -253,13 +253,13 @@
   text-transform: uppercase;
   color: #8a6510;
 }
-#pcard .tip span {
+.paper .tip span {
   display: block;
   font-weight: 700;
   font-size: 13.5px;
   line-height: 1.35;
 }
-#pcard .tip small {
+.paper .tip small {
   display: block;
   margin-top: 3px;
   font-size: 12px;

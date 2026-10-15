@@ -56,6 +56,24 @@ export function keysHtml(s: string): string {
   return escHtml(s).replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>');
 }
 
+/** The tip is the first listed reason's own fix (that reason's why and cause are shown with it). */
+export const tipIsFirstReason = (tip: PourTip | null, findings: readonly Finding[]): boolean =>
+  tip !== null &&
+  tip.id !== 'textbook' &&
+  tip.finding !== null &&
+  tip.finding === findings[0] &&
+  tip.id === tip.finding.id;
+
+/** The "Next pour" box for a paper card (practice review; Day 1's result card can use it too):
+ *  the one thing to do next pour. A textbook heart gets none (its ✓ line says it), and the detail
+ *  is left out when the first reason listed (`findings[0]`) already says it; pass [] to always
+ *  show it. */
+export function pourTipHtml(tip: PourTip, findings: readonly Finding[]): string {
+  if (tip.id === 'textbook') return '';
+  const detail = tipIsFirstReason(tip, findings) ? '' : `<small>${keysHtml(tip.detail)}</small>`;
+  return `<div class="tip" role="note"><b>Next pour</b><span>${keysHtml(tip.text)}</span>${detail}</div>`;
+}
+
 export function createLesson(parent: HTMLElement, touch: boolean, id: string): Lesson {
   const el = document.createElement('div');
   el.id = id;

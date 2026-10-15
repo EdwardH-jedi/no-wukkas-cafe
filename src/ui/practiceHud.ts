@@ -18,7 +18,7 @@ import { band } from '../sim/math';
 import type { SpokenLine } from '../sim/owner';
 import { createSteam } from '../sim/steam';
 import { createGauges, type GaugeView } from './gauges';
-import { createLesson, keysHtml } from './lesson';
+import { createLesson, keysHtml, pourTipHtml, tipIsFirstReason } from './lesson';
 import { drawPattern } from './pattern';
 
 export interface PracticeHudCallbacks {
@@ -64,22 +64,6 @@ function findingHtml(f: Finding, tipped: boolean): string {
     ${tipped ? '' : `<span class="fix">→ ${keysHtml(t.fix)}</span>`}</div>`;
 }
 
-/** The tip is the first reason's own fix (its why and cause are listed below it). */
-const tipListed = (tip: PourTip | null, findings: readonly Finding[]): boolean =>
-  tip !== null &&
-  tip.id !== 'textbook' &&
-  tip.finding !== null &&
-  tip.finding === findings[0] &&
-  tip.id === tip.finding.id;
-
-/** The one thing to do next pour, above the reasons. A textbook heart has nothing to add (its
- *  finding says so), and the detail is left out when the first reason below already says it. */
-function tipHtml(tip: PourTip, findings: readonly Finding[]): string {
-  if (tip.id === 'textbook') return '';
-  const detail = tipListed(tip, findings) ? '' : `<small>${keysHtml(tip.detail)}</small>`;
-  return `<div class="tip" role="note"><b>Next pour</b><span>${keysHtml(tip.text)}</span>${detail}</div>`;
-}
-
 function row(label: string, v: number, prev: number | null, value: string): string {
   let delta = '';
   if (prev !== null) {
@@ -109,7 +93,7 @@ function renderReview(
     ps && prev
       ? `<div class="vs">${d === 0 ? 'Same as' : d > 0 ? `<em class="up">▲${d}</em> on` : `<em class="down">▼${-d}</em> on`} pour #${prev.n}</div>`
       : '';
-  const tipped = tipListed(tip, a.findings);
+  const tipped = tipIsFirstReason(tip, a.findings);
   const findings = a.findings
     .slice(0, 3)
     .map((f, i) => findingHtml(f, tipped && i === 0))
@@ -132,7 +116,7 @@ function renderReview(
       </div>
     </div>
     <div class="legend"><span class="lg guide">guide</span><span class="lg fit">closest heart</span><span class="lg ctr">centre → yours</span></div>
-    ${tip ? tipHtml(tip, a.findings) : ''}
+    ${tip ? pourTipHtml(tip, a.findings) : ''}
     <div class="rows">
       ${row('Heart', s.shape, ps?.shape ?? null, `${pct(s.shape)}%`)}
       ${row('Symmetry', s.symmetry, ps?.symmetry ?? null, `${pct(s.symmetry)}%`)}
