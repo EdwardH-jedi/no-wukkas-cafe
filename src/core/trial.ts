@@ -17,19 +17,19 @@ import {
   stopShot,
 } from '../sim/espresso';
 import type { EspressoScore, EspressoState } from '../sim/espresso';
+import { createPourLog, trackPour, type PourLog } from '../sim/latte/coach';
 import { createPour, type PourState } from '../sim/latte/field';
-import { controlsAt, DEMO_CUES, DEMO_DURATION, OWNER_DEMO } from '../sim/latte/demo';
+import { createDemoPlayer, startDemo, stepDemoPlayer, type DemoPlayer } from '../sim/latte/demo';
 import {
+  applyPourInput,
   createPitcher,
-  HEIGHT_MAX,
-  HEIGHT_MIN,
+  createPourGate,
   HEIGHT_START,
   pitcherFlow,
   stepPourFrame,
 } from '../sim/latte/pitcher';
-import type { PitcherControls, PitcherState } from '../sim/latte/pitcher';
+import type { PitcherControls, PitcherState, PourGate } from '../sim/latte/pitcher';
 import { scorePattern } from '../sim/latte/score';
-import { clamp } from '../sim/math';
 import { SILKY_MILK, type MilkQuality } from '../sim/milk';
 import {
   addFrustration,
@@ -138,10 +138,14 @@ export interface Trial {
   pour: PourState;
   pitcher: PitcherState;
   controls: PitcherControls;
+  /** A button held from before the pour began doesn't pour until let go (no accidental pours). */
+  gate: PourGate;
+  /** The four steps of the heart, live, and how this pour went (for coaching). */
+  log: PourLog;
   /** True while the owner's hands are on the jug. */
   demoActive: boolean;
-  demoTime: number;
-  demoCue: number;
+  /** Gaz's demonstration, played at a teaching pace. */
+  demo: DemoPlayer;
   demoSeen: boolean;
   demoEndedAt: number;
   demoReturn: 'pour' | 'feedback';
@@ -177,9 +181,10 @@ export function createTrial(seed: number): Trial {
     pour: createPour(),
     pitcher: createPitcher(),
     controls: { targetX: 0, targetY: -0.2, targetHeight: HEIGHT_START, holding: false },
+    gate: createPourGate(),
+    log: createPourLog(),
     demoActive: false,
-    demoTime: 0,
-    demoCue: 0,
+    demo: createDemoPlayer(),
     demoSeen: false,
     demoEndedAt: -1,
     demoReturn: 'pour',
@@ -324,8 +329,7 @@ function enter(t: Trial, phase: Phase): void {
       break;
     case 'demo':
       t.demoActive = false;
-      t.demoTime = 0;
-      t.demoCue = 0;
+      t.demo = createDemoPlayer();
       t.demoEndedAt = -1;
       sayNow(t, t.demoSeen ? 'demo.again' : 'demo.intro');
       break;
@@ -365,6 +369,8 @@ function resetPour(t: Trial): void {
     targetHeight: HEIGHT_START,
     holding: false,
   };
+  t.gate = createPourGate();
+  t.log = createPourLog();
   t.watch = freshWatch();
 }
 
@@ -439,9 +445,14 @@ export function attemptsLeft(t: Trial): number {
 export function stepTrial(t: Trial, input: TrialInput, dt: number): void {
   t.time += dt;
   t.phaseTime += dt;
-  // Clicks only skip subtitles in phases where the click isn't a gameplay input.
+  // Clicks only skip subtitles in phases where the click isn't a gameplay input. (In the demo, a
+  // click hurries Gaz along: the pour speeds back up as soon as he stops talking.)
   const passive =
-    t.phase === 'intro' || t.phase === 'inspect' || t.phase === 'verdict' || t.phase === 'lock';
+    t.phase === 'intro' ||
+    t.phase === 'inspect' ||
+    t.phase === 'verdict' ||
+    t.phase === 'lock' ||
+    t.phase === 'demo';
   updateSpeech(t, input.skip || (passive && input.pressed), input.voiceHold ? dt : 0);
 
   // Restart is available from anywhere once the trial has begun (pause menu, verdict).
@@ -588,21 +599,19 @@ function finishSteam(t: Trial): void {
   addFrustration(t.owner, f.length ? f.length * 0.3 : -0.2);
 }
 
-const demoControls: PitcherControls = { targetX: 0, targetY: 0, targetHeight: 7, holding: false };
+/** Seconds Gaz's current line still has to run (0 if he's quiet). */
+function narrationLeft(t: Trial): number {
+  const cur = t.speech.current;
+  return cur ? Math.max(0, cur.duration - (t.time - t.speech.started)) : 0;
+}
 
 function stepDemoPhase(t: Trial, input: TrialInput, dt: number): void {
   if (!t.demoActive) {
     if (t.demoEndedAt < 0 && t.phaseTime > 0.6 && !speaking(t)) {
       t.demoActive = true;
-      t.demoTime = 0;
-      t.demoCue = 0;
+      t.demo = createDemoPlayer();
       resetPour(t);
-      const k = OWNER_DEMO[0];
-      if (k) {
-        t.pitcher.x = k.x;
-        t.pitcher.y = k.y;
-        t.pitcher.height = k.h;
-      }
+      startDemo(t.pitcher);
     } else if (t.demoEndedAt >= 0) {
       if (t.phaseTime - t.demoEndedAt > 1.6 && !t.flags.demoAfter) {
         t.flags.demoAfter = true;
@@ -617,36 +626,31 @@ function stepDemoPhase(t: Trial, input: TrialInput, dt: number): void {
     return;
   }
   // Same physics as the player: the track only drives the controls.
-  controlsAt(OWNER_DEMO, t.demoTime, demoControls);
-  t.controls.targetX = demoControls.targetX;
-  t.controls.targetY = demoControls.targetY;
-  t.controls.targetHeight = demoControls.targetHeight;
-  t.controls.holding = demoControls.holding;
-  stepPourFrame(t.pour, t.pitcher, t.controls, SILKY_MILK, dt);
-  const cue = DEMO_CUES[t.demoCue];
-  if (cue && t.demoTime >= cue.t) {
-    t.demoCue++;
-    sayNow(t, cue.key);
-  }
-  t.demoTime += dt;
+  const cue = stepDemoPlayer(
+    t.demo,
+    t.pour,
+    t.pitcher,
+    t.controls,
+    SILKY_MILK,
+    narrationLeft(t),
+    dt,
+  );
+  trackPour(t.log, t.pour, t.pitcher);
+  if (cue) sayNow(t, cue);
   const skipReplay = input.action === 'next' && t.demoSeen;
-  if (t.demoTime >= DEMO_DURATION || skipReplay) {
+  if (t.demo.done || skipReplay) {
     t.demoActive = false;
+    t.controls.holding = false;
     t.demoEndedAt = t.phaseTime;
   }
 }
 
 function stepPourPhase(t: Trial, input: TrialInput, dt: number): void {
   const c = t.controls;
-  if (input.hasCup) {
-    c.targetX = input.cupX;
-    c.targetY = input.cupY;
-  }
-  if (input.heightPreset !== null) c.targetHeight = input.heightPreset;
-  c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
-  c.holding = input.holding;
+  applyPourInput(c, t.gate, input);
   const milk = t.milk ?? SILKY_MILK;
   stepPourFrame(t.pour, t.pitcher, c, milk, dt);
+  trackPour(t.log, t.pour, t.pitcher);
 
   const p = t.pour;
   const w = t.watch;

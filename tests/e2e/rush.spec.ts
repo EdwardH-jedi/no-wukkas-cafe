@@ -1,10 +1,15 @@
 // Plays Day 2 (the morning rush) in a real browser with real input. Listening: take Dazza's order,
-// check the transcript stays hidden until "could you repeat that?" (Normal difficulty), ask a
-// clarifying question, replay, ring up what he said on the register and make his ticket. Then ring
-// the second customer up WRONG on purpose: learning-mode feedback shows, the drink made from the
-// wrong ticket is handed back, Gaz calls out the mishearing and the ticket is corrected. Everyone
-// else times out; the shift report (incl. listening) must match the state; restart; title.
-// Screenshots land in test-results/evidence-rush/.
+// check the transcript stays hidden until "could you repeat that?" twice (Normal difficulty), ask
+// a clarifying question (no audio here, so the answer shows as text), replay, ring up what he said
+// on the register and make his ticket ("Bin it" stays clear of the cup on the pass). Then ring the
+// second customer up WRONG on purpose (learning mode is off by default: no instant verdict): the
+// drink made from the wrong ticket is handed back, Gaz calls out the mishearing, the ticket is
+// corrected, and her flat white is remade with two hands (milk steamed while the shot runs).
+// Everyone else times out; the shift report (incl. listening) must match the state; restart;
+// title. Screenshots land in test-results/evidence-rush/.
+
+/** Make time of a flat white one step at a time with perfect play (`npm run pace` BEFORE). */
+const SERIAL_FLAT_WHITE = 31.5;
 
 import { expect, test, type Page } from '@playwright/test';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
@@ -161,6 +166,9 @@ async function ringUp(page: Page, o: Order): Promise<void> {
   await page.keyboard.press('Enter');
 }
 
+const timeScale = (page: Page, k: number): Promise<number> =>
+  page.evaluate((x) => ((window as unknown as { __trial: Debug }).__trial.timeScale = x), k);
+
 async function steamAndPour(page: Page, extraHot: boolean, shotName: string): Promise<void> {
   await until(page, (s) => s.station === 'steam');
   await takeOrders(page);
@@ -171,7 +179,48 @@ async function steamAndPour(page: Page, extraHot: boolean, shotName: string): Pr
   await page.mouse.move(640, steamY(2.2, h), { steps: 4 });
   await until(page, (s) => s.temp >= (extraHot ? 70 : 60));
   await page.mouse.up();
+  await pour(page, shotName);
+}
 
+/** Two hands: start the pump, hold to steam while the shot runs (both gauges up), let go and
+ *  click the shot off in the window ("Stopped · 26 s"), grab the jug again to finish, pour. */
+async function twoHands(page: Page, extraHot: boolean): Promise<void> {
+  await until(page, (s) => s.station === 'shot');
+  const h = page.viewportSize()?.height ?? 640;
+  await page.mouse.move(640, steamY(0.25, h));
+  await page.mouse.click(640, steamY(0.25, h)); // pump on
+  await until(page, (s) => s.extracting);
+  await page.mouse.down(); // …and hold: the milk goes on while the shot runs
+  await until(page, (s) => s.station === 'shotSteam' && s.temp > 8);
+  // Both cards at once, shot timer above the milk.
+  const cards = page.locator('#rgauges .gauge');
+  await expect(cards).toHaveCount(2);
+  await expect(cards.nth(0)).toContainText('Shot timer');
+  await expect(cards.nth(1)).toContainText('Milk');
+  const [a, b] = [await cards.nth(0).boundingBox(), await cards.nth(1).boundingBox()];
+  expect((b?.y ?? 0) > (a?.y ?? 0) + (a?.height ?? 0) - 1).toBe(true);
+  await expect(page.locator('#rinstr')).toContainText("Shot's running");
+  await snap(page, 'two-hands-gauges');
+  await until(page, (s) => s.aeration >= 0.4 || s.shotTime >= 22);
+  await page.mouse.move(640, steamY(2.2, h), { steps: 4 });
+  await until(page, (s) => s.shotTime >= 24.5);
+  await timeScale(page, 0.15); // a precise click, and time to read the label
+  await until(page, (s) => s.shotTime >= 26.05);
+  await page.mouse.up();
+  await page.mouse.click(640, steamY(2.2, h)); // the shot stops; the milk only pauses
+  const stopped = await until(page, (s) => s.shotDone);
+  expect(stopped.steamDone).toBe(false);
+  await expect(page.locator('#rgauges')).toContainText('Stopped · 26 s');
+  await snap(page, 'shot-stopped');
+  await timeScale(page, 1);
+  await page.mouse.down(); // grab the jug again
+  await until(page, (s) => s.temp >= (extraHot ? 70 : 60));
+  await page.mouse.up();
+  await until(page, (s) => s.steamDone);
+  await pour(page, 'pour-two-hands');
+}
+
+async function pour(page: Page, shotName: string): Promise<void> {
   // Pour the heart with the mouse (game time slowed for the pour only, as in the Day 1 e2e).
   await until(page, (s) => s.station === 'pour');
   await until(page, (s) => s.stationTime > 1.1);
@@ -211,6 +260,12 @@ async function steamAndPour(page: Page, extraHot: boolean, shotName: string): Pr
     if (!pourShot && t > 5.6) {
       pourShot = true;
       await snap(page, shotName);
+      // The pour buttons sit off to the side, clear of the cup the pointer steers across.
+      const box = await page.getByRole('button', { name: /Hand it over/ }).boundingBox();
+      const rim = await page.evaluate(() =>
+        (window as unknown as { __trial: Debug }).__trial.project(1.25, 0),
+      );
+      expect(box?.x ?? 0).toBeGreaterThan(rim.x);
     }
   }
   if (held) await page.mouse.up();
@@ -265,17 +320,25 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await snap(page, 'register-listening');
   await until(page, (s) => cust(s, 'dazza').state === 'deciding');
 
-  // Replay, a clarifying question, then "could you repeat that?" (which shows the transcript).
+  // Replay, a clarifying question, then "could you repeat that?" twice (Normal shows the
+  // transcript only after the second).
   const pos = page.locator('#pos');
   await pos.getByRole('button', { name: /Replay/ }).click();
   await until(page, (s) => cust(s, 'dazza').listen.replays === 1);
   await pos.getByRole('button', { name: 'Milk?' }).click();
   await expect(pos.locator('.asked')).toContainText('Which milk');
   const asked = await until(page, (s) => s.line?.key === 'dazza.answer.milk');
-  await expect(page.locator('#rsubs .text')).toContainText('Listen'); // answers follow the rule too
+  // No audio here (?voice=0): an answer nobody can hear is shown as text (the order never is).
+  await expect(page.locator('#rsubs .text')).toContainText(asked.line!.text.slice(0, 10));
   expect(cust(asked, 'dazza').listen.clarified).toEqual(['milk']);
   await pos.getByRole('button', { name: /could you repeat that/ }).click();
-  const slow = await until(page, (s) => s.line?.speaker === 'dazza' && s.line.delivery === 'slow');
+  await until(page, (s) => s.line?.speaker === 'dazza' && s.line.delivery === 'slow');
+  await expect(page.locator('#rsubs .text')).toContainText('Listen'); // one repeat isn't enough
+  await pos.getByRole('button', { name: /could you repeat that/ }).click();
+  const slow = await until(
+    page,
+    (s) => cust(s, 'dazza').listen.repeats === 2 && s.line?.delivery === 'slow',
+  );
   await expect(page.locator('#rsubs .text')).not.toContainText('Listen');
   await expect(page.locator('#rsubs .text')).toContainText(slow.line!.text.slice(0, 12));
   await snap(page, 'register-after-repeat');
@@ -284,7 +347,7 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   const dz = cust(slow, 'dazza').order;
   await ringUp(page, dz);
   await until(page, (s) => cust(s, 'dazza').state === 'waiting');
-  await expect(page.locator('#posFeedback')).toContainText('Spot on');
+  await expect(page.locator('#posFeedback')).toBeHidden(); // learning mode is off by default
   await expect(ticket(page, 'dazza')).toContainText(
     dz.type === 'flatWhite' ? 'flat white' : 'long black',
     {
@@ -295,7 +358,19 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
 
   // --- Make his ticket and serve it.
   await makeTicket(page, 'dazza', dz);
-  await snap(page, 'dazza-drink-on-the-pass');
+  // A drink on the pass: "Bin it" sits off to the side (as Day 1's "Hand it over"), never on the
+  // cup. (Measured once the camera has pulled back from the close-up.)
+  await page.waitForTimeout(1500);
+  await snap(page, 'bin-it-position');
+  const bin = await page.getByRole('button', { name: /Bin it/ }).boundingBox();
+  const rim = await page.evaluate(() =>
+    (window as unknown as { __trial: Debug }).__trial.project(1.25, 0),
+  );
+  test.info().annotations.push({
+    type: 'bin it vs cup',
+    description: JSON.stringify({ bin, rim }),
+  });
+  expect(bin?.x ?? 0).toBeGreaterThan(rim.x);
   await ticket(page, 'dazza').getByRole('button', { name: /Serve/ }).click();
   const served = await until(page, (s) => cust(s, 'dazza').outcome === 'served');
   const dazza = served.records.find((r) => r.customer === 'dazza')!;
@@ -306,6 +381,8 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await snap(page, 'dazza-served');
 
   // --- Priya: ring her up wrong on purpose (the other drink).
+  // Customers now arrive 35 s apart: wait for her to reach the register, then take it.
+  await until(page, (s) => ['register', 'ordering', 'deciding'].includes(cust(s, 'priya').state));
   await takeOrders(page);
   await until(page, (s) => cust(s, 'priya').state === 'deciding', 60_000);
   const pr = cust(await rush(page), 'priya').order;
@@ -315,9 +392,8 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
       : { type: 'flatWhite', milk: 'full', extraHot: false, heart: false };
   await ringUp(page, wrong);
   await until(page, (s) => cust(s, 'priya').state === 'waiting');
-  await expect(page.locator('#posFeedback')).toContainText('Not quite');
-  await expect(page.locator('#posFeedback mark').first()).toBeVisible();
-  await snap(page, 'priya-misheard-feedback');
+  await expect(page.locator('#posFeedback')).toBeHidden(); // no instant verdict: you find out at the pass
+  await snap(page, 'priya-rung-up-wrong');
 
   // The ticket is what gets made: the wrong drink. She hands it back; Gaz calls it out.
   await makeTicket(page, 'priya', wrong);
@@ -335,6 +411,23 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await snap(page, 'priya-ticket-corrected');
   await page.keyboard.press('b'); // bin the wrong drink
 
+  // --- Remake hers, right this time, with two hands: the milk steamed while the shot runs.
+  await until(page, (s) => s.station === 'idle' && !s.ready);
+  const fixed = cust(await rush(page), 'priya').heard!;
+  expect(fixed.type).toBe('flatWhite');
+  const t0 = (await rush(page)).serviceTime;
+  await ticket(page, 'priya').getByRole('button', { name: 'Make' }).click();
+  await grindAndLock(page);
+  await twoHands(page, fixed.extraHot);
+  const made = await until(page, (s) => s.station === 'ready' && s.ready?.type === 'flatWhite');
+  const makeTime = made.serviceTime - t0;
+  test
+    .info()
+    .annotations.push({ type: 'two-hands make time', description: `${makeTime.toFixed(1)} s` });
+  expect(makeTime).toBeLessThan(SERIAL_FLAT_WHITE);
+  await ticket(page, 'priya').getByRole('button', { name: /Serve/ }).click();
+  await until(page, (s) => cust(s, 'priya').outcome === 'served');
+
   // --- Stop working: everyone else times out. Speed up the wait (no input needs precision).
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 4));
   await until(page, (s) => s.customers.some((c) => c.outcome === 'walkout'), 120_000);
@@ -350,10 +443,10 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   // The report matches the state, listening included.
   const s = end.summary!;
   test.info().annotations.push({ type: 'summary', description: JSON.stringify(s) });
-  expect(s.ordersCompleted).toBe(1);
-  expect(s.walkouts).toBe(5);
+  expect(s.ordersCompleted).toBe(2);
+  expect(s.walkouts).toBe(4);
   expect(s.tipsCents).toBe(end.records.reduce((t, r) => t + r.tipCents, 0));
-  await expect(page.locator('#rsummary')).toContainText('1/6');
+  await expect(page.locator('#rsummary')).toContainText('2/6');
   await expect(page.locator('#rsummary')).toContainText(`$${(s.tipsCents / 100).toFixed(2)}`);
   expect(end.listening.map((l) => [l.customer, l.wrong.length > 0])).toEqual([
     ['dazza', false],

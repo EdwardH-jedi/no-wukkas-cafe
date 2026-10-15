@@ -4,7 +4,7 @@
 // to a background, and pace, politeness and fluency vary by person, not by accent.
 
 import type { ClarifyAnswers, OrderLine } from '../sim/listening';
-import type { Complaint, DrinkType } from '../sim/rush';
+import type { Complaint, DrinkType, Reaction } from '../sim/rush';
 import { CLARIFY_ANSWERS, ORDER_LINES } from './orders';
 
 export type CustomerId = 'dazza' | 'priya' | 'beryl' | 'mei' | 'jiwoo' | 'karen';
@@ -28,7 +28,9 @@ export interface CustomerLook {
 export interface CustomerLines {
   impatient: string;
   angry: string;
-  happy: string;
+  /** Delighted, by what they were handed (a heart is only mentioned when they asked for one). */
+  happy: Record<Reaction, string>;
+  /** Drink-neutral: "fine, thanks". */
   okay: string;
   /** Handed the wrong drink, by what they actually ordered. */
   rejected: Record<DrinkType, string>;
@@ -61,6 +63,13 @@ export interface CustomerDef {
   lines: CustomerLines;
 }
 
+/** The same delighted words whatever the drink. */
+const anyDrink = (text: string): Record<Reaction, string> => ({
+  heart: text,
+  flatWhite: text,
+  longBlack: text,
+});
+
 export const CUSTOMERS: readonly CustomerDef[] = [
   {
     id: 'dazza',
@@ -80,13 +89,13 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.dazza as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.dazza as ClarifyAnswers,
     arriveAt: 1,
-    patience: 75,
+    patience: 120,
     tipCents: 300,
     tolerance: 1,
     lines: {
       impatient: "Mate, I've got a crane waiting on me.",
       angry: 'Strewth. Any day now, champ.',
-      happy: 'Legend. Cheers, mate.',
+      happy: anyDrink('Legend. Cheers, mate.'),
       okay: "Yeah, she'll do. Ta.",
       rejected: {
         flatWhite: "Nah mate, that's not mine. Flat white, remember?",
@@ -117,14 +126,14 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
     orders: ORDER_LINES.priya as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.priya as ClarifyAnswers,
-    arriveAt: 16,
-    patience: 95,
+    arriveAt: 36,
+    patience: 115,
     tipCents: 200,
     tolerance: 1.05,
     lines: {
       impatient: 'Sorry… is mine nearly ready? I might fall asleep standing up.',
       angry: "Please. I'm about to fall asleep on your counter.",
-      happy: "Oh, that's perfect. You're a lifesaver.",
+      happy: anyDrink("Oh, that's perfect. You're a lifesaver."),
       okay: "Thanks. That'll keep me upright.",
       rejected: {
         flatWhite: "Sorry, I think that's someone else's. Mine's a flat white.",
@@ -156,14 +165,18 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
     orders: ORDER_LINES.beryl as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.beryl as ClarifyAnswers,
-    arriveAt: 42,
+    arriveAt: 71,
     patience: 130,
     tipCents: 100,
     tolerance: 1.12,
     lines: {
       impatient: 'No rush, love. Well… a little rush.',
       angry: "I'm not getting any younger, darl.",
-      happy: "Oh, look at that! A proper heart. You're a treasure.",
+      happy: {
+        heart: "Oh, look at that! A proper heart. You're a treasure.",
+        flatWhite: "Oh, lovely. Just how I like it, darl. You're a treasure.",
+        longBlack: "Oh, that's a good strong one, love. My Les would've approved.",
+      },
       okay: 'Thank you, love. Lovely and warm.',
       rejected: {
         flatWhite: "Oh, I don't think that's mine, darl. Mine's a flat white.",
@@ -194,14 +207,14 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
     orders: ORDER_LINES.mei as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.mei as ClarifyAnswers,
-    arriveAt: 66,
-    patience: 95,
+    arriveAt: 106,
+    patience: 115,
     tipCents: 250,
     tolerance: 1,
     lines: {
       impatient: "Sorry, how long will it be? I've got a meeting in five.",
       angry: "I really can't wait much longer.",
-      happy: 'Perfect, thank you. Lifesaver.',
+      happy: anyDrink('Perfect, thank you. Lifesaver.'),
       okay: 'Thanks.',
       rejected: {
         flatWhite: "Sorry, that's not mine. I ordered a flat white.",
@@ -234,14 +247,14 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
     orders: ORDER_LINES.jiwoo as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.jiwoo as ClarifyAnswers,
-    arriveAt: 90,
-    patience: 110,
+    arriveAt: 141,
+    patience: 120,
     tipCents: 100,
     tolerance: 1,
     lines: {
       impatient: 'Um, sorry, is my coffee coming soon? My shift starts at eight.',
       angry: 'Sorry, I really have to go soon…',
-      happy: 'Wah, perfect! 감사합니다! Thank you!',
+      happy: anyDrink('와, perfect! 감사합니다, thank you!'),
       okay: 'Thank you!',
       rejected: {
         flatWhite: 'Oh, sorry, I ordered a flat white.',
@@ -272,14 +285,14 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     },
     orders: ORDER_LINES.karen as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.karen as ClarifyAnswers,
-    arriveAt: 114,
-    patience: 105,
+    arriveAt: 176,
+    patience: 110,
     tipCents: 50,
     tolerance: 0.88,
     lines: {
       impatient: "I'm timing this, you know.",
       angry: 'This is ridiculous. Is there a manager?',
-      happy: 'Hm. Acceptable.',
+      happy: anyDrink('Hm. Acceptable.'),
       okay: 'Fine.',
       rejected: {
         flatWhite: 'That is not what I ordered. I said a flat white.',

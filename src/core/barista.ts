@@ -2,7 +2,10 @@
 // Reuses the Day 1 sim modules as they are (grind, shot, steam, the pour simulation and the
 // pattern scorer); only the order of steps and what happens to the finished drink differ.
 //   flat white: grind → lock → shot → steam → pour → ready
+//               grind → lock → shot → shotSteam → (steam) → pour → ready   (two hands)
 //   long black: grind → lock → water → shot → ready   (water first keeps the crema)
+// Two hands: while a flat white's shot runs, holding the button steams the milk (shotSteam); a
+// click still stops the shot. That overlap is where a busy shift's speed comes from.
 
 import {
   createEspresso,
@@ -15,18 +18,18 @@ import {
   stopShot,
 } from '../sim/espresso';
 import type { EspressoScore, EspressoState } from '../sim/espresso';
+import { createPourLog, trackPour, type PourLog } from '../sim/latte/coach';
 import { createPour, ESPRESSO_FILL, type PourState } from '../sim/latte/field';
 import {
+  applyPourInput,
   createPitcher,
-  HEIGHT_MAX,
-  HEIGHT_MIN,
+  createPourGate,
   HEIGHT_START,
   pitcherFlow,
   stepPourFrame,
 } from '../sim/latte/pitcher';
-import type { PitcherControls, PitcherState } from '../sim/latte/pitcher';
+import type { PitcherControls, PitcherState, PourGate } from '../sim/latte/pitcher';
 import { scorePattern } from '../sim/latte/score';
-import { clamp } from '../sim/math';
 import type { MilkQuality } from '../sim/milk';
 import { COOL_RATE, type DrinkType, type MadeDrink, type Milk } from '../sim/rush';
 import {
@@ -41,13 +44,28 @@ import {
 import type { SfxId } from './trial';
 
 export type StationPhase =
-  'idle' | 'grind' | 'lock' | 'water' | 'shot' | 'steam' | 'pour' | 'ready';
+  | 'idle'
+  | 'grind'
+  | 'lock'
+  | 'water'
+  | 'shot'
+  /** A flat white's shot still running (or settling) while the milk is being steamed. */
+  | 'shotSteam'
+  | 'steam'
+  | 'pour'
+  | 'ready';
 
 /** Hot water, cup volumes per second while the tap is held. */
 export const WATER_RATE = 0.12;
 /** Gaz only warns about hot milk past this in a shift: extra-hot orders want 68–74 °C. */
 export const SHIFT_HOT_WARNING = 75;
 const LONG_BLACK_TEMP = 70;
+/** During a flat white's shot, a press let go within this is a click (stops the shot); held
+ *  longer, it steams the milk. */
+export const TAP_MAX = 0.25;
+/** After two hands, seconds into the steam step a warm jug can be left before it counts as
+ *  finished (on top of the 0.6 s the shot takes to settle). */
+export const CARRIED_GRACE = 0.6;
 
 export interface BaristaInput {
   holding: boolean;
@@ -67,6 +85,38 @@ export type BaristaEvent =
   | { type: 'sfx'; id: SfxId }
   | { type: 'phase'; phase: StationPhase }
   | { type: 'ready' };
+
+/** The station button while a flat white's shot runs: click or hold. */
+export interface Press {
+  /** The press that started the pump must be let go before a hold can steam (the pour's
+   *  arm-on-release gate, reused). */
+  gate: PourGate;
+  /** Seconds the current press has been held (0 while the button is up). */
+  held: number;
+}
+
+const createPress = (): Press => ({ gate: createPourGate(), held: 0 });
+
+/** One step of the button during the shot. A press let go within TAP_MAX is a click; a press and
+ *  release inside one step (keyboard, the headless bots) is a click; a second press while already
+ *  steaming (mouse held, Space tapped) is a click too. Held past TAP_MAX, it steams. */
+export function stepPress(
+  p: Press,
+  input: Pick<BaristaInput, 'holding' | 'pressed'>,
+  dt: number,
+): { click: boolean; steam: boolean } {
+  if (!input.holding) {
+    const armed = p.gate.armed;
+    p.gate.armed = true;
+    const click = armed && ((p.held > 0 && p.held < TAP_MAX) || input.pressed);
+    p.held = 0;
+    return { click, steam: false };
+  }
+  if (!p.gate.armed) return { click: false, steam: false };
+  if (input.pressed && p.held >= TAP_MAX) return { click: true, steam: true };
+  p.held += dt;
+  return { click: false, steam: p.held >= TAP_MAX };
+}
 
 interface PourWatch {
   idle: number;
@@ -89,6 +139,10 @@ export interface Barista {
   pour: PourState;
   pitcher: PitcherState;
   controls: PitcherControls;
+  /** A button held from before the pour began doesn't pour until let go. */
+  gate: PourGate;
+  /** The four steps of the heart, live (lesson strip). */
+  log: PourLog;
   /** Long black: hot water in the cup, cup volumes. */
   water: number;
   dispensing: boolean;
@@ -96,6 +150,10 @@ export interface Barista {
   ready: MadeDrink | null;
   /** Drinks binned this shift. */
   binned: number;
+  /** Click or hold, while a flat white's shot runs. */
+  press: Press;
+  /** Flat whites whose milk was steamed during the shot (Gaz notices the first). */
+  overlaps: number;
   watch: PourWatch;
   flags: Record<string, boolean>;
   mark: number;
@@ -121,23 +179,33 @@ export function createBarista(): Barista {
       targetHeight: HEIGHT_START,
       holding: false,
     },
+    gate: createPourGate(),
+    log: createPourLog(),
     water: 0,
     dispensing: false,
     ready: null,
     binned: 0,
+    press: createPress(),
+    overlaps: 0,
     watch: { idle: 0, lowEarly: 0, tooHighSaid: false, drySaid: false },
     flags: {},
     mark: -1,
   };
 }
 
-function go(b: Barista, phase: StationPhase, out: BaristaEvent[]): void {
+/** `keepMilk`: from shotSteam to steam, the milk in the jug carries on. */
+function go(b: Barista, phase: StationPhase, out: BaristaEvent[], keepMilk = false): void {
   b.phase = phase;
   b.phaseTime = 0;
   b.mark = -1;
   out.push({ type: 'phase', phase });
   if (phase === 'lock') out.push({ type: 'sfx', id: 'tamp' });
-  if (phase === 'steam') {
+  if (phase === 'shotSteam') {
+    // Fresh milk; the shot (and whether Gaz already called it long) carries on.
+    b.steam = createSteam();
+    b.flags = { shotLong: b.flags.shotLong === true };
+  }
+  if (phase === 'steam' && !keepMilk) {
     b.steam = createSteam();
     b.flags = {};
   }
@@ -150,6 +218,8 @@ function go(b: Barista, phase: StationPhase, out: BaristaEvent[]): void {
       targetHeight: HEIGHT_START,
       holding: false,
     };
+    b.gate = createPourGate();
+    b.log = createPourLog();
     b.watch = { idle: 0, lowEarly: 0, tooHighSaid: false, drySaid: false };
   }
 }
@@ -166,6 +236,7 @@ export function startDrink(
   b.milkType = type === 'flatWhite' ? milk : null;
   b.espresso = createEspresso();
   b.espressoScore = null;
+  b.steam = createSteam(); // a cold jug: the milk gauge shows during a flat white's shot
   b.milk = null;
   b.milkScore = null;
   b.water = 0;
@@ -239,6 +310,59 @@ function finishDrink(b: Barista, now: number, out: BaristaEvent[]): void {
   go(b, 'ready', out);
 }
 
+type Say = (key: string) => void;
+
+/** The milk is done: score it and let Gaz judge it. */
+function finishMilk(b: Barista, react: Say): void {
+  const s = b.steam;
+  s.done = true;
+  s.valveOpen = false;
+  s.zone = 'off';
+  const milk = milkQuality(s);
+  b.milk = milk;
+  b.milkScore = scoreMilk(milk);
+  const f = b.milkScore.faults;
+  if (f.includes('scalded')) react('steam.scalded');
+  else if (f.includes('flatMilk')) react('steam.flat');
+  else if (f.includes('stiffMilk')) react('steam.stiff');
+}
+
+/** One step of steaming. Letting go past 45 °C finishes the milk, earlier is "too early";
+ *  but while the shot is still running, letting go only pauses the valve (the player is
+ *  clicking the shot off, or just waiting for it). */
+function steamMilk(
+  b: Barista,
+  open: boolean,
+  depth: number,
+  dt: number,
+  live: Say,
+  react: Say,
+  pauseOnly: boolean,
+): void {
+  const s = b.steam;
+  if (s.done) return;
+  const wasOpen = s.valveOpen;
+  stepSteam(s, open, depth, dt);
+  if (s.valveOpen) {
+    if (s.zone === 'screech') live('steam.screech');
+    if (s.temp > 42 && s.aeration < 0.12 && !b.flags.noAir) {
+      b.flags.noAir = true;
+      live('steam.noAir');
+    }
+    if (s.aeration > 0.78 && !b.flags.tooMuch) {
+      b.flags.tooMuch = true;
+      live('steam.tooMuchAir');
+    }
+    if (s.temp >= SHIFT_HOT_WARNING && !b.flags.hot) {
+      b.flags.hot = true;
+      live('steam.hot');
+    }
+  }
+  const released = wasOpen && !s.valveOpen;
+  if (s.temp >= SCALD_TEMP || (released && s.temp >= 45 && !pauseOnly)) finishMilk(b, react);
+  else if (released && !pauseOnly) live('steam.tooEarly');
+}
+
 export function stepBarista(
   b: Barista,
   input: BaristaInput,
@@ -290,16 +414,37 @@ export function stepBarista(
       break;
     }
     case 'shot':
-      if (!e.done && input.pressed) {
-        if (!e.extracting) startShot(e);
-        else stopShot(e);
-      }
+    case 'shotSteam': {
+      const twoHands = b.drink === 'flatWhite';
+      if (!e.extracting && !e.done) {
+        if (input.pressed) {
+          startShot(e);
+          b.press = createPress(); // the click that started the pump has to be let go first
+        }
+      } else if (twoHands) {
+        // Was the shot running as this step began? (Letting go to click it off only pauses.)
+        const running = e.extracting;
+        const p = stepPress(b.press, input, dt);
+        if (p.click && running) stopShot(e);
+        if (p.steam && running && b.phase === 'shot') {
+          go(b, 'shotSteam', out);
+          if (b.overlaps++ === 0) live('shot.overlap');
+        }
+        if (b.phase === 'shotSteam')
+          steamMilk(b, p.steam, input.jugDepth, dt, live, react, running);
+      } else if (e.extracting && input.pressed) stopShot(e);
       stepShot(e, dt);
       if (e.extracting && e.shotTime > SHOT_TARGET[1] + 2 && !b.flags.shotLong) {
         b.flags.shotLong = true;
         live('shot.long');
       }
       if (e.done && b.mark < 0) {
+        if (b.phase === 'shotSteam' && e.shotTime >= SHOT_MAX) {
+          // Left running to the machine's limit while steaming: that shot's for the bin.
+          react('shot.over');
+          binDrink(b, out);
+          break;
+        }
         b.mark = b.phaseTime;
         const s = scoreEspresso(e);
         b.espressoScore = s;
@@ -308,58 +453,33 @@ export function stepBarista(
       }
       if (b.mark >= 0 && b.phaseTime - b.mark > 0.6) {
         if (b.drink === 'longBlack') finishDrink(b, now, out);
-        else go(b, 'steam', out);
+        else if (b.phase === 'shotSteam') {
+          // The same jug carries on (or straight to the pour if it's finished).
+          go(b, b.steam.done ? 'pour' : 'steam', out, true);
+          b.flags.carried = true;
+        } else go(b, 'steam', out);
       }
       break;
+    }
     case 'steam': {
       const s = b.steam;
       if (s.done) {
         if (b.phaseTime - b.mark > 0.6) go(b, 'pour', out);
         break;
       }
-      const wasOpen = s.valveOpen;
-      stepSteam(s, input.holding, input.jugDepth, dt);
-      if (s.valveOpen) {
-        if (s.zone === 'screech') live('steam.screech');
-        if (s.temp > 42 && s.aeration < 0.12 && !b.flags.noAir) {
-          b.flags.noAir = true;
-          live('steam.noAir');
-        }
-        if (s.aeration > 0.78 && !b.flags.tooMuch) {
-          b.flags.tooMuch = true;
-          live('steam.tooMuchAir');
-        }
-        if (s.temp >= SHIFT_HOT_WARNING && !b.flags.hot) {
-          b.flags.hot = true;
-          live('steam.hot');
-        }
-      }
-      const released = wasOpen && !s.valveOpen;
-      if (s.temp >= SCALD_TEMP || (released && s.temp >= 45)) {
-        s.done = true;
-        s.valveOpen = false;
-        s.zone = 'off';
-        b.mark = b.phaseTime;
-        const milk = milkQuality(s);
-        b.milk = milk;
-        b.milkScore = scoreMilk(milk);
-        const f = b.milkScore.faults;
-        if (f.includes('scalded')) react('steam.scalded');
-        else if (f.includes('flatMilk')) react('steam.flat');
-        else if (f.includes('stiffMilk')) react('steam.stiff');
-      } else if (released) live('steam.tooEarly');
+      if (input.holding) b.flags.carried = false;
+      // Milk steamed during the shot, then left alone once the shot was off: the player let go
+      // of it deliberately, so (warm enough) it's finished. Grabbing it again carries on.
+      if (b.flags.carried && b.phaseTime >= CARRIED_GRACE && s.temp >= 45) finishMilk(b, react);
+      else steamMilk(b, input.holding, input.jugDepth, dt, live, react, false);
+      if (s.done) b.mark = b.phaseTime;
       break;
     }
     case 'pour': {
       const c = b.controls;
-      if (input.hasCup) {
-        c.targetX = input.cupX;
-        c.targetY = input.cupY;
-      }
-      if (input.heightPreset !== null) c.targetHeight = input.heightPreset;
-      c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
-      c.holding = input.holding;
+      applyPourInput(c, b.gate, input);
       stepPourFrame(b.pour, b.pitcher, c, b.milk ?? milkQuality(b.steam), dt);
+      trackPour(b.log, b.pour, b.pitcher);
       const p = b.pour;
       const w = b.watch;
       const flowing = pitcherFlow(b.pitcher) > 0;

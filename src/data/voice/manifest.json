@@ -60,7 +60,7 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "beryl.happy",
+      "key": "beryl.happy.heart",
       "delivery": "normal",
       "transcript": "Oh, look at that! A proper heart. You're a treasure.",
       "file": "assets/voice/beryl/2a5cf9c0.mp3",
@@ -280,6 +280,31 @@
       }
     },
     {
+      "dialogueId": "beryl:6b93255a",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.happy.longBlack",
+      "delivery": "normal",
+      "transcript": "Oh, that's a good strong one, love. My Les would've approved.",
+      "file": "assets/voice/beryl/6b93255a.mp3",
+      "duration": 4.237,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "beryl:770fb69e",
       "characterId": "beryl",
       "voiceId": "macos:Karen",
@@ -465,6 +490,31 @@
       "transcript": "Extra hot, please, darl. I'm a slow drinker.",
       "file": "assets/voice/beryl/a2cbb977.mp3",
       "duration": 3.789,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 150,
+        "pitch": 1,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "beryl:aa29fb14",
+      "characterId": "beryl",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "beryl.happy.flatWhite",
+      "delivery": "normal",
+      "transcript": "Oh, lovely. Just how I like it, darl. You're a treasure.",
+      "file": "assets/voice/beryl/aa29fb14.mp3",
+      "duration": 4.736,
       "meanDb": -16.8,
       "playback": {
         "gain": 1,
@@ -805,56 +855,6 @@
       }
     },
     {
-      "dialogueId": "dazza:11f02e32",
-      "characterId": "dazza",
-      "voiceId": "macos:Karen",
-      "accent": "australian",
-      "locale": "en-AU",
-      "key": "dazza.3",
-      "delivery": "normal",
-      "transcript": "Mornin'. Long black, cheers, mate. Big day on the tools.",
-      "file": "assets/voice/dazza/11f02e32.mp3",
-      "duration": 3.86,
-      "meanDb": -16.5,
-      "playback": {
-        "gain": 1,
-        "rate": 1
-      },
-      "source": {
-        "engine": "macos-say",
-        "voice": "Karen",
-        "rate": 205,
-        "pitch": 0.9,
-        "placeholder": true,
-        "deterministic": true
-      }
-    },
-    {
-      "dialogueId": "dazza:16a2b4cf",
-      "characterId": "dazza",
-      "voiceId": "macos:Karen",
-      "accent": "australian",
-      "locale": "en-AU",
-      "key": "dazza.3.slow",
-      "delivery": "slow",
-      "transcript": "Mornin'. Long black, cheers, mate. Big day on the tools.",
-      "file": "assets/voice/dazza/16a2b4cf-slow.mp3",
-      "duration": 4.347,
-      "meanDb": -16.5,
-      "playback": {
-        "gain": 1,
-        "rate": 1
-      },
-      "source": {
-        "engine": "macos-say",
-        "voice": "Karen",
-        "rate": 164,
-        "pitch": 0.9,
-        "placeholder": true,
-        "deterministic": true
-      }
-    },
-    {
       "dialogueId": "dazza:33fc1ad4",
       "characterId": "dazza",
       "voiceId": "macos:Karen",
@@ -985,7 +985,7 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "dazza.happy",
+      "key": "dazza.happy.heart",
       "delivery": "normal",
       "transcript": "Legend. Cheers, mate.",
       "file": "assets/voice/dazza/4d4ca5d5.mp3",
@@ -1074,6 +1074,31 @@
         "engine": "macos-say",
         "voice": "Karen",
         "rate": 164,
+        "pitch": 0.9,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "dazza:6ba230f2",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.3",
+      "delivery": "normal",
+      "transcript": "Morning. Long black, cheers, mate. Big day on the tools.",
+      "file": "assets/voice/dazza/6ba230f2.mp3",
+      "duration": 3.823,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 205,
         "pitch": 0.9,
         "placeholder": true,
         "deterministic": true
@@ -1199,6 +1224,31 @@
         "engine": "macos-say",
         "voice": "Karen",
         "rate": 205,
+        "pitch": 0.9,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "dazza:a192498f",
+      "characterId": "dazza",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "dazza.3.slow",
+      "delivery": "slow",
+      "transcript": "Morning. Long black, cheers, mate. Big day on the tools.",
+      "file": "assets/voice/dazza/a192498f-slow.mp3",
+      "duration": 4.278,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 164,
         "pitch": 0.9,
         "placeholder": true,
         "deterministic": true
@@ -9155,26 +9205,26 @@
       }
     },
     {
-      "dialogueId": "jiwoo:019f300b",
-      "characterId": "jiwoo",
-      "voiceId": "macos:Yuna",
-      "accent": "korean",
-      "locale": "ko-KR",
-      "key": "jiwoo.happy",
+      "dialogueId": "gaz:ff265f19",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "shot.overlap",
       "delivery": "normal",
-      "transcript": "Wah, perfect! 감사합니다! Thank you!",
-      "file": "assets/voice/jiwoo/019f300b.mp3",
-      "duration": 3.213,
-      "meanDb": -16.5,
+      "transcript": "Two hands. Now you're a barista.",
+      "file": "assets/voice/gaz/ff265f19.mp3",
+      "duration": 2.061,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
       },
       "source": {
         "engine": "macos-say",
-        "voice": "Yuna",
-        "rate": 172,
-        "pitch": 1,
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
         "placeholder": true,
         "deterministic": true
       }
@@ -9799,6 +9849,31 @@
         "engine": "macos-say",
         "voice": "Yuna",
         "rate": 154,
+        "pitch": 1,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "jiwoo:d8ebe256",
+      "characterId": "jiwoo",
+      "voiceId": "macos:Yuna",
+      "accent": "korean",
+      "locale": "ko-KR",
+      "key": "jiwoo.happy.heart",
+      "delivery": "normal",
+      "transcript": "와, perfect! 감사합니다, thank you!",
+      "file": "assets/voice/jiwoo/d8ebe256.mp3",
+      "duration": 3.027,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Yuna",
+        "rate": 172,
         "pitch": 1,
         "placeholder": true,
         "deterministic": true
@@ -10610,7 +10685,7 @@
       "voiceId": "macos:Karen",
       "accent": "australian",
       "locale": "en-AU",
-      "key": "karen.happy",
+      "key": "karen.happy.heart",
       "delivery": "normal",
       "transcript": "Hm. Acceptable.",
       "file": "assets/voice/karen/cea649da.mp3",
@@ -11660,7 +11735,7 @@
       "voiceId": "macos:Tingting",
       "accent": "chinese",
       "locale": "zh-CN",
-      "key": "mei.happy",
+      "key": "mei.happy.heart",
       "delivery": "normal",
       "transcript": "Perfect, thank you. Lifesaver.",
       "file": "assets/voice/mei/ec312f5c.mp3",
@@ -11789,8 +11864,8 @@
       "delivery": "normal",
       "transcript": "Sorry, I think that's someone else's. Mine's a flat white.",
       "file": "assets/voice/priya/08110a53.mp3",
-      "duration": 3.582,
-      "meanDb": -17.1,
+      "duration": 3.58,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -12315,7 +12390,7 @@
       "transcript": "It's a bit cold, but honestly, I'll take it.",
       "file": "assets/voice/priya/bee75bcd.mp3",
       "duration": 2.371,
-      "meanDb": -17.6,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -12410,7 +12485,7 @@
       "voiceId": "macos:Tara",
       "accent": "indian",
       "locale": "en-IN",
-      "key": "priya.happy",
+      "key": "priya.happy.heart",
       "delivery": "normal",
       "transcript": "Oh, that's perfect. You're a lifesaver.",
       "file": "assets/voice/priya/e4b97143.mp3",
@@ -12564,8 +12639,8 @@
       "delivery": "normal",
       "transcript": "Almond milk, please.",
       "file": "assets/voice/priya/f150a94b.mp3",
-      "duration": 1.285,
-      "meanDb": -16.7,
+      "duration": 1.283,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1

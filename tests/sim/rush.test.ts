@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest';
 import type { EspressoScore } from '../../src/sim/espresso';
 import type { PatternScore } from '../../src/sim/latte/score';
 import {
+  drainRate,
   evaluateServe,
   formatCents,
+  reactionFor,
+  REGISTER_DRAIN,
+  REGISTER_DRAIN_BUSY,
   gradeShift,
   orderLabel,
   summariseShift,
@@ -114,6 +118,29 @@ describe('evaluateServe', () => {
     expect(evaluateServe(FW, flatWhite(), ctx({ tolerance: 0.88 })).satisfaction).toBeLessThan(
       evaluateServe(FW, flatWhite(), ctx()).satisfaction,
     );
+  });
+});
+
+describe('reactions', () => {
+  it('a long black, a flat white, or the heart they asked for', () => {
+    expect(reactionFor(longBlack(), { ...FW, type: 'longBlack', milk: null })).toBe('longBlack');
+    expect(reactionFor(flatWhite(), FW)).toBe('flatWhite');
+    expect(reactionFor(flatWhite(), { ...FW, heart: true })).toBe('heart');
+    // A heart nobody asked for is just a flat white to them.
+    expect(reactionFor(flatWhite({ pattern: heart }), { ...FW, heart: false })).toBe('flatWhite');
+    expect(reactionFor(flatWhite({ pattern: null }), { ...FW, heart: true })).toBe('flatWhite');
+  });
+});
+
+describe('patience drain', () => {
+  it('drains faster at the register, less so while the barista is busy on another drink', () => {
+    expect(drainRate(false, 'idle')).toBe(1);
+    expect(drainRate(false, 'steam')).toBe(1);
+    expect(drainRate(true, 'idle')).toBe(REGISTER_DRAIN);
+    expect(drainRate(true, 'ready')).toBe(REGISTER_DRAIN);
+    for (const p of ['grind', 'lock', 'water', 'shot', 'steam', 'pour'])
+      expect(drainRate(true, p), p).toBe(REGISTER_DRAIN_BUSY);
+    expect(REGISTER_DRAIN_BUSY).toBeLessThanOrEqual(1.2);
   });
 });
 

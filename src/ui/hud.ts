@@ -5,6 +5,7 @@ import type { Phase, Trial, TrialAction } from '../core/trial';
 import type { SpokenLine } from '../sim/owner';
 import { createGauges } from './gauges';
 import { instruction } from './instructions';
+import { createLesson } from './lesson';
 import { esc, renderCard, renderVerdict, titleHtml } from './screens';
 
 export interface HudCallbacks {
@@ -13,6 +14,8 @@ export interface HudCallbacks {
   day2(): void;
   /** Open shift select (the week's shifts and Endless Rush). */
   shifts(): void;
+  /** Latte-art practice (title screen). */
+  practice(): void;
   /** Open the sound settings. */
   sound(): void;
   /** Replay + Sound buttons for the top bar, and how to wire them. */
@@ -31,7 +34,8 @@ export interface Hud {
   onReplay(text: string, seconds: number): void;
   onPhase(phase: Phase, t: Trial): void;
   setPaused(p: boolean): void;
-  update(t: Trial, dt: number): void;
+  /** `held`: the player's pour button is down (explains a press the pour gate ignores). */
+  update(t: Trial, dt: number, held?: boolean): void;
 }
 
 export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
@@ -71,6 +75,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     b.onclick = () => {
       if (b.dataset.act === 'day2') cb.day2();
       else if (b.dataset.act === 'shifts') cb.shifts();
+      else if (b.dataset.act === 'practice') cb.practice();
       else if (b.dataset.act === 'sound') cb.sound();
       else cb.action('start');
     };
@@ -96,8 +101,9 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   let replayHold = 0;
   let lastQuote = '';
 
-  // ---------------------------------------------------------------- gauges
+  // ---------------------------------------------------------------- gauges + lesson strip
   const gaugePanel = createGauges(gauges, touch);
+  const lesson = createLesson(root, touch, 'lesson');
 
   // ---------------------------------------------------------------- action buttons
   let actionKey = '';
@@ -154,7 +160,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     setPaused(p) {
       pauseEl.classList.toggle('hide', !p);
     },
-    update(t, dt) {
+    update(t, dt, held = false) {
       // Subtitles: quick typewriter reveal, fade when he stops talking.
       if (replayHold > 0) replayHold -= dt;
       if (t.speech.current || replayHold > 0) {
@@ -208,8 +214,17 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
         bv.textContent = best >= 0 ? String(best) : '–';
       }
 
+      // Lesson strip (Gaz's demo and your pour) in place of the instruction panel.
+      const demoShown = ph === 'demo' && (t.demoActive || t.demoEndedAt >= 0);
+      const lessonMode = ph === 'pour' ? 'pour' : demoShown ? 'demo' : null;
+      lesson.update(lessonMode, lessonMode ? t : null, dt, {
+        held,
+        rate: t.demo.rate,
+        chapter: lessonMode === 'demo' ? t.demo.chapter - 1 : undefined,
+      });
+
       // Instruction panel.
-      const ins = instruction(t, touch);
+      const ins = lessonMode ? null : instruction(t, touch);
       const ik = ins ? ins.title + ins.html : '';
       if (ik !== instrKey) {
         instrKey = ik;
@@ -240,10 +255,16 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
         setActions(`grind|${ok}`, [{ label: 'Tamp & lock in', act: 'next', disabled: !ok }]);
       } else if (ph === 'pour') {
         const ok = t.pour.poured > 0;
-        setActions(`pour|${ok}`, ok ? [{ label: 'Hand it over', act: 'next' }] : []);
+        setActions(
+          `pour|${ok}`,
+          ok ? [{ label: touch ? 'Hand it over' : 'Hand it over (Enter)', act: 'next' }] : [],
+        );
       } else if (ph === 'demo' && t.demoSeen && t.demoActive)
         setActions('demo', [{ label: 'Skip', act: 'next' }]);
       else setActions('', []);
+      // While pouring, buttons sit off to the side: the pointer steers over the middle of the
+      // screen, and a button there would swallow it (and a stray click would end the pour).
+      actionBar.classList.toggle('side', ph === 'pour' || ph === 'demo');
       touchHeight.classList.toggle('hide', !(touch && ph === 'pour'));
     },
   };

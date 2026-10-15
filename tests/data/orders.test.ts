@@ -49,7 +49,11 @@ describe('order bank', () => {
   });
 
   it('never fakes an accent with spelling: orders are standard English words', () => {
-    for (const { o } of all) expect(o.text, o.id).not.toMatch(/\b(ze|zis|velly|rike|sank you)\b/i);
+    for (const { o } of all) {
+      expect(o.text, o.id).not.toMatch(/\b(ze|zis|velly|rike|sank you)\b/i);
+      // Dropped g's ("Mornin'") too: the accent is in the recording.
+      expect(o.text, o.id).not.toMatch(/\w+in'(?!\w)/i);
+    }
   });
 
   it('every accent group has at least six orders, spanning every difficulty tier', () => {
@@ -75,6 +79,22 @@ describe('order bank', () => {
           c.orders.some((o) => rules.tiers.includes(orderTier(o))),
           `${c.id} @ ${d}`,
         ).toBe(true);
+  });
+
+  it('delighted lines fit the drink: only the heart line mentions a heart, none mentions milk', () => {
+    for (const c of CUSTOMERS) {
+      const h = c.lines.happy;
+      expect(h.flatWhite, c.id).not.toMatch(/\bheart\b/i);
+      expect(h.longBlack, c.id).not.toMatch(/\b(heart|milk|froth|foam)\b/i);
+      expect(h.heart, c.id).not.toMatch(/\b(milk|long black)\b/i);
+    }
+  });
+
+  it('Korean is Korean: "와", not the Singlish "wah"', () => {
+    for (const c of CUSTOMERS)
+      for (const t of [...Object.values(c.lines.happy), c.lines.okay])
+        expect(t, c.id).not.toMatch(/\bwah\b/i);
+    expect(CUSTOMERS.find((c) => c.id === 'jiwoo')?.lines.happy.heart).toMatch(/^와, /);
   });
 
   it('clarifying answers name what they answer', () => {

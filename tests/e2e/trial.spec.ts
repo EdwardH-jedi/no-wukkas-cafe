@@ -24,6 +24,7 @@ interface DebugState {
   poured: number;
   controls: { targetHeight: number };
   phaseTime: number;
+  demoActive: boolean;
   results: Array<{ total: number; valid: boolean; band: string; faults: string[]; art: number }>;
   outcome: { band: string; score: number; bestIndex: number } | null;
   line: string | null;
@@ -96,6 +97,7 @@ async function startPour(page: Page): Promise<() => Promise<{ phase: string; t: 
   const START = 1.2;
   await until(page, (s) => s.phase === 'pour', 60_000);
   await until(page, (s) => s.phaseTime > START - 0.1);
+  await expect(page.locator('#lesson .who')).toHaveText('Your pour');
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 0.3));
   return async () => {
     const tick = await page.evaluate(() => (window as unknown as { __trial: Debug }).__trial.tick);
@@ -147,6 +149,12 @@ async function pourWithMouse(page: Page): Promise<void> {
     if (!snapped && t > 5.6) {
       snapped = true;
       await snap(page, 'pour-mouse');
+      // "Hand it over" sits off to the side, never over the cup the pointer is steering across.
+      const box = await page.getByRole('button', { name: /Hand it over/ }).boundingBox();
+      const rim = await page.evaluate(() =>
+        (window as unknown as { __trial: Debug }).__trial.project(1.25, 0),
+      );
+      expect(box?.x ?? 0).toBeGreaterThan(rim.x);
     }
   }
   if (held) await page.mouse.up();
@@ -288,8 +296,11 @@ test('Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart
   expect(milk.temp).toBeGreaterThanOrEqual(55);
   expect(milk.temp).toBeLessThanOrEqual(65);
 
-  // --- Gaz demonstrates
+  // --- Gaz demonstrates, with the lesson strip showing his hands on the controls
   await until(page, (s) => s.phase === 'demo', 20_000);
+  await until(page, (s) => s.demoActive, 20_000);
+  await expect(page.locator('#lesson .who')).toHaveText('Gaz’s hands');
+  await expect(page.locator('#lesson li.cur b')).toHaveText('Pour high to fill');
   await until(page, (s) => s.phase !== 'demo' || s.fill > 0.75, 30_000);
   await snap(page, 'demo');
 

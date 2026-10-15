@@ -4,7 +4,7 @@
 
 import { answerFor, wrongFields } from '../../sim/listening';
 import { addFrustration } from '../../sim/owner';
-import { evaluateServe, REJECT_PENALTY, type MadeDrink } from '../../sim/rush';
+import { evaluateServe, reactionFor, REJECT_PENALTY, type MadeDrink } from '../../sim/rush';
 import { returnReady, takeReady } from '../barista';
 import { eventHandedBack } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
@@ -106,8 +106,10 @@ export function serve(r: Rush, key: string): void {
   const grumble = result.complaints.map((k) => lines.complaint[k]).find((t) => t !== undefined);
   const good = result.satisfaction >= 75 && result.correct;
   c.reaction = good ? 'pleased' : result.satisfaction < 45 ? 'annoyed' : 'neutral';
-  if (good) customerSay(r, c, `${c.def.id}.happy`, lines.happy, 'pleased', 'order');
-  else if (grumble) customerSay(r, c, `${c.def.id}.complaint`, grumble, 'annoyed', 'order');
+  if (good) {
+    const k = reactionFor(drink, c.order);
+    customerSay(r, c, `${c.def.id}.happy.${k}`, lines.happy[k], 'pleased', 'order');
+  } else if (grumble) customerSay(r, c, `${c.def.id}.complaint`, grumble, 'annoyed', 'order');
   else customerSay(r, c, `${c.def.id}.okay`, lines.okay, 'neutral', 'order');
 
   // Gaz: the specific miss first, then quality, then the occasional compliment.

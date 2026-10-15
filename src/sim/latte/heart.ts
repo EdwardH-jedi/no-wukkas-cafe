@@ -3,6 +3,9 @@
 // toward +y (the far side of the cup, the way a barista pulls through).
 
 const RES = 256;
+/** Template scale of a well-sized heart on the coffee (about 38% of the surface): the scorer's
+ *  reference and the guide drawn for practice. */
+export const GUIDE_SCALE = 1.1;
 const EXTENT = 1.25; // template lookup covers [-EXTENT, EXTENT]²
 
 function outline(samples: number): Array<[number, number]> {

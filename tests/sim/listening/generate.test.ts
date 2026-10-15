@@ -141,8 +141,10 @@ describe('generateOrders', () => {
     for (const [speaker, lines] of Object.entries(ORDER_LINES))
       for (const line of lines) {
         const spec = curatedSpec(speaker as CustomerId, line);
-        const { id, text, order, pace, connected, slang, chatter, cues } = spec;
-        expect({ id, text, order, pace, connected, slang, chatter, cues }).toEqual(line);
+        const { id, text, order, pace, connected, slang, chatter, cues, firstShift } = spec;
+        expect({ id, text, order, pace, connected, slang, chatter, cues, firstShift }).toEqual(
+          line,
+        );
         expect(order).not.toBe(line.order);
         expect(spec.speaker).toBe(speaker);
         expect(spec.source).toBe('curated');

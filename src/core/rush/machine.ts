@@ -96,7 +96,8 @@ function day2Visits(difficulty: Difficulty, lines: LineOverrides, rng: Rng): Vis
   return CUSTOMERS.map((def) => ({
     key: def.id,
     def,
-    line: chosen(def, pickOrder(def.orders, difficulty, rng), lines),
+    // Day 2 is the player's first shift.
+    line: chosen(def, pickOrder(def.orders, difficulty, rng, true), lines),
     arriveAt: def.arriveAt,
     maxPatience: def.patience,
   }));

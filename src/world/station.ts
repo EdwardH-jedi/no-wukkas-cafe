@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import { extractionLevel, type EspressoState } from '../sim/espresso';
-import { ESPRESSO_FILL, surfaceRadius, type PourState } from '../sim/latte/field';
+import { ESPRESSO_FILL, surfaceRadius, surfacing, type PourState } from '../sim/latte/field';
 import { pitcherFlow, PITCHER_MILK, type PitcherState } from '../sim/latte/pitcher';
 import { clamp, lerp, smoothstep } from '../sim/math';
 import { milkVolume, tipDepth, type SteamState } from '../sim/steam';
@@ -21,9 +21,11 @@ const POUR_YAW = Math.atan2(0.35, -1);
 const STEAM_YAW = Math.PI / 2;
 const JUG_TIP = new THREE.Vector3(0.052, 0.118, 0); // spout tip relative to the jug base (unscaled)
 const JUG_SCALE = 0.8; // a small latte-art jug
-/** Jug + arm opacity while pouring: they sit between the camera and the art, so they go ghostly
- *  and the pattern forming under them stays visible. */
-const JUG_GHOST = 0.3;
+/** While pouring, the jug and arm sit between the camera and the art. The spout stays solid (you
+ *  aim with it); the body fades with distance from the spout tip, the arm almost completely. */
+const GHOST_SPOUT = 0.01; // m around the spout tip that stays solid
+const GHOST_BODY = 0.035; // m from the tip where the body reaches full fade
+const ARM_GHOST = 0.92;
 const WAND_TIP = new THREE.Vector3(LAYOUT.wand.x, CT + 0.17, LAYOUT.wand.z);
 const JUG_REST = new THREE.Vector3(-0.38, CT, -1.0);
 /** Day 2 long black: the cup sits under the hot-water tap first. */
@@ -51,6 +53,8 @@ export interface StationView {
   /** Day 2 long black: hot water in the cup (cup volumes) and whether the tap is running. */
   water?: number;
   dispensing?: boolean;
+  /** Practice: heart guide on the coffee (0 = hidden, 1 = shown). */
+  guide?: number;
 }
 
 export interface Station {
@@ -324,9 +328,32 @@ export function buildStation(scene: THREE.Scene): Station {
   const arm = new THREE.Group();
   arm.position.set(-0.078, 0.06, 0);
   jugBody.add(arm);
-  const ghostMats = [jugM, milkM, skinM, sleeveM];
-  for (const m of ghostMats) m.transparent = true;
-  let jugOpacity = 1;
+  const ghostU = { spout: { value: new THREE.Vector3() }, ghost: { value: 0 } };
+  for (const m of [jugM, milkM]) {
+    m.transparent = true;
+    m.onBeforeCompile = (shader) => {
+      shader.uniforms.spout = ghostU.spout;
+      shader.uniforms.ghost = ghostU.ghost;
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vGhostPos;')
+        .replace(
+          '#include <project_vertex>',
+          '#include <project_vertex>\nvGhostPos = (modelMatrix * vec4(transformed, 1.0)).xyz;',
+        );
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nvarying vec3 vGhostPos;\nuniform vec3 spout;\nuniform float ghost;',
+        )
+        .replace(
+          '#include <alphamap_fragment>',
+          `#include <alphamap_fragment>
+diffuseColor.a *= 1.0 - ghost * mix(0.12, 0.97, smoothstep(${GHOST_SPOUT}, ${GHOST_BODY}, distance(vGhostPos, spout)));`,
+        );
+    };
+  }
+  for (const m of [skinM, sleeveM]) m.transparent = true;
+  let ghost = 0;
   const hand = new THREE.Mesh(new THREE.SphereGeometry(0.021, 12, 10), skinM);
   hand.scale.set(1, 1.35, 0.8);
   arm.add(hand);
@@ -342,11 +369,37 @@ export function buildStation(scene: THREE.Scene): Station {
   // ------------------------------------------------------------ streams
   const streamGeo = new THREE.CylinderGeometry(1, 1, 1, 10, 1, true);
   streamGeo.translate(0, -0.5, 0);
-  const milkStream = new THREE.Mesh(
-    streamGeo,
-    std({ color: '#fbf3e6', roughness: 0.25, emissive: '#3a3226' }),
-  );
+  // The milk stream tapers as it falls and trails behind a moving jug (the milk at the bottom left
+  // the spout a moment ago), with a little wobble: it reads as liquid, and shows the jug's motion.
+  const milkGeo = new THREE.CylinderGeometry(1, 1, 1, 12, 10, true);
+  milkGeo.translate(0, -0.5, 0);
+  const streamU = {
+    taper: { value: 0.55 },
+    bend: { value: new THREE.Vector2() },
+    time: { value: 0 },
+    wob: { value: 0.06 },
+  };
+  const milkStreamM = std({ color: '#fbf3e6', roughness: 0.25, emissive: '#3a3226' });
+  milkStreamM.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, streamU);
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        '#include <common>\nuniform float taper, time, wob;\nuniform vec2 bend;',
+      )
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+float sFall = clamp(-transformed.y, 0.0, 1.0);
+transformed.xz *= mix(1.0, taper, sqrt(sFall)) * (1.0 + wob * sin(sFall * 23.0 - time * 31.0));
+transformed.xz += bend * sFall * sFall;`,
+      );
+  };
+  const milkStream = new THREE.Mesh(milkGeo, milkStreamM);
   root.add(milkStream);
+  const streamVel = new THREE.Vector3();
+  const lastTip = new THREE.Vector3();
+  let hasLastTip = false;
   const espStreamM = std({ color: '#3b1d0c', roughness: 0.2 });
   const espStreams = [-1, 1].map((s) => {
     const m = new THREE.Mesh(streamGeo, espStreamM);
@@ -383,6 +436,20 @@ export function buildStation(scene: THREE.Scene): Station {
   aim.rotation.x = -Math.PI / 2;
   aim.visible = false;
   root.add(aim);
+  // A faint plumb line from the spout to the aim ring while the stream is off: shows how high the
+  // jug is, which the top-down view otherwise hides.
+  const plumbM = new THREE.MeshBasicMaterial({
+    color: '#f3c450',
+    transparent: true,
+    opacity: 0.45,
+    depthWrite: false,
+  });
+  const plumb = new THREE.Mesh(streamGeo, plumbM);
+  plumb.visible = false;
+  root.add(plumb);
+  let guideAlpha = 0;
+  let impactFlow = 0;
+  let impactSink = 0;
 
   // ------------------------------------------------------------ puddle on the counter
   const puddle = new THREE.Mesh(
@@ -553,6 +620,7 @@ export function buildStation(scene: THREE.Scene): Station {
     // --- coffee level + art
     const pourView =
       phase === 'pour' ||
+      phase === 'review' ||
       (phase === 'ready' && !longBlack) ||
       (phase === 'demo' && (t.demoActive || t.demoEndedAt >= 0)) ||
       held ||
@@ -618,12 +686,14 @@ export function buildStation(scene: THREE.Scene): Station {
     sleeveM.color.copy(phase === 'demo' ? GAZ_SLEEVE : PLAYER_SLEEVE);
     skinM.color.copy(phase === 'demo' ? GAZ_SKIN : PLAYER_SKIN);
     // Ghost the jug and arm once they're over the cup, so the art is never hidden.
-    const wantOpacity = pouring && jugBlend > 0.85 ? JUG_GHOST : 1;
-    jugOpacity += (wantOpacity - jugOpacity) * Math.min(1, dt * 8);
-    if (Math.abs(jugOpacity - wantOpacity) < 0.005) jugOpacity = wantOpacity;
-    for (const m of ghostMats) {
-      m.opacity = jugOpacity;
-      m.depthWrite = jugOpacity > 0.99;
+    const wantGhost = pouring && jugBlend > 0.85 ? 1 : 0;
+    ghost += (wantGhost - ghost) * Math.min(1, dt * 8);
+    if (Math.abs(ghost - wantGhost) < 0.005) ghost = wantGhost;
+    ghostU.ghost.value = ghost;
+    jugM.depthWrite = milkM.depthWrite = ghost < 0.01;
+    for (const m of [skinM, sleeveM]) {
+      m.opacity = 1 - ghost * ARM_GHOST;
+      m.depthWrite = ghost < 0.01;
     }
     let milkFrac = 1;
     let milkY = 0.075;
@@ -657,6 +727,7 @@ export function buildStation(scene: THREE.Scene): Station {
     } else {
       setJugPose(JUG_REST, STEAM_YAW, 0);
     }
+    ghostU.spout.value.copy(jug.position);
     milkTop.visible = milkFrac > 0.02;
     milkTop.position.y = milkY;
     milkTop.scale.setScalar(
@@ -665,6 +736,13 @@ export function buildStation(scene: THREE.Scene): Station {
 
     // --- milk stream
     const flow = pouring ? pitcherFlow(t.pitcher) : 0;
+    // Spout velocity (smoothed), for the trailing stream.
+    if (pouring && hasLastTip && dt > 0) {
+      v1.subVectors(tipWorld, lastTip).divideScalar(dt);
+      streamVel.lerp(v1, 1 - Math.exp(-dt / 0.08));
+    } else streamVel.set(0, 0, 0);
+    lastTip.copy(tipWorld);
+    hasLastTip = pouring;
     milkStream.visible = flow > 0.01;
     if (milkStream.visible) {
       const p = t.pitcher;
@@ -673,12 +751,39 @@ export function buildStation(scene: THREE.Scene): Station {
       const len = Math.max(0.005, tipWorld.y - bottom);
       const w = 0.0016 + 0.0034 * Math.sqrt(flow);
       milkStream.position.copy(tipWorld);
-      milkStream.scale.set(w * (1 + 0.08 * Math.sin(now * 37)), len, w);
+      milkStream.scale.set(w, len, w);
+      // The bottom of the stream left the spout one fall-time ago.
+      const lag = Math.sqrt((2 * len) / 9.81) * 0.6;
+      let bx = -streamVel.x * lag;
+      let bz = -streamVel.z * lag;
+      const bl = Math.hypot(bx, bz);
+      const cap = len * 0.5;
+      if (bl > cap) {
+        bx *= cap / bl;
+        bz *= cap / bl;
+      }
+      streamU.bend.value.set(bx / w, bz / w);
+      streamU.time.value = now;
+      streamU.taper.value = 0.42 + 0.25 * flow;
       if (miss) {
         missX = p.x;
         missZ = p.y;
       }
     }
+    // The surface answers the stream: a dimple and rings where it lands (fading after it stops).
+    const onCup = milkStream.visible && Math.hypot(t.pitcher.x, t.pitcher.y) < 0.98;
+    const wantFlow = onCup ? flow : 0;
+    impactFlow += (wantFlow - impactFlow) * Math.min(1, dt * (wantFlow > impactFlow ? 12 : 2.5));
+    if (onCup) {
+      const rsF = surfaceRadius(t.pour.fill);
+      impactSink = 1 - surfacing(t.pitcher.height);
+      coffee.setImpact(t.pitcher.x / rsF, t.pitcher.y / rsF, impactFlow, impactSink);
+    } else coffee.setImpact(0, 0, impactFlow, impactSink);
+    coffee.setTime(now);
+    const wantGuide = pourView && !held ? (t.guide ?? 0) : 0;
+    guideAlpha += (wantGuide - guideAlpha) * Math.min(1, dt * 6);
+    if (Math.abs(guideAlpha - wantGuide) < 0.01) guideAlpha = wantGuide;
+    coffee.setGuide(guideAlpha);
 
     // --- aim ring (player's pour only): fades out while the stream is running
     aim.visible = phase === 'pour';
@@ -686,9 +791,17 @@ export function buildStation(scene: THREE.Scene): Station {
       const p = t.pitcher;
       const miss = Math.hypot(p.x, p.y) > 1.02;
       aim.position.set(cupPos.x + p.x * RIM, (miss ? CT : surfaceY) + 0.0008, cupPos.z - p.y * RIM);
-      aim.scale.setScalar(0.0045 + 0.0005 * Math.sin(now * 5));
+      // Like the jug's shadow: wide when it's high, tight when it's right down on the coffee.
+      aim.scale.setScalar(0.0033 + 0.00055 * p.height + 0.0003 * Math.sin(now * 5));
       aimM.opacity = flow > 0.01 ? 0.15 : 0.75;
       aimM.color.copy(miss ? AIM_MISS : p.height <= 1.1 ? AIM_LOW : AIM_HIGH);
+    }
+    plumb.visible = aim.visible && flow <= 0.01 && t.pitcher.height > 0.6;
+    if (plumb.visible) {
+      const len = Math.max(0.001, tipWorld.y - aim.position.y);
+      plumb.position.copy(tipWorld);
+      plumb.scale.set(0.00028, len, 0.00028);
+      plumbM.color.copy(aimM.color);
     }
 
     // --- puddle from spills

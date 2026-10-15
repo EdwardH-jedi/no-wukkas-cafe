@@ -29,10 +29,10 @@ export const AUDITIONS: Record<string, readonly string[]> = {
     owner('art.great', 0, 0),
     owner('pour.intro'),
   ],
-  dazza: [order('dazza.2'), CLARIFY_ANSWERS.dazza!.milk.oat, customer('dazza').happy],
-  beryl: [order('beryl.1'), CLARIFY_ANSWERS.beryl!.milk.soy, customer('beryl').happy],
+  dazza: [order('dazza.2'), CLARIFY_ANSWERS.dazza!.milk.oat, customer('dazza').happy.heart],
+  beryl: [order('beryl.1'), CLARIFY_ANSWERS.beryl!.milk.soy, customer('beryl').happy.heart],
   karen: [order('karen.3'), customer('karen').rejectedMilk],
   priya: [order('priya.4'), CLARIFY_ANSWERS.priya!.milk.oat],
-  jiwoo: [order('jiwoo.1'), customer('jiwoo').happy],
+  jiwoo: [order('jiwoo.1'), customer('jiwoo').happy.heart],
   mei: [order('mei.4'), customer('mei').rejectedMilk],
 };

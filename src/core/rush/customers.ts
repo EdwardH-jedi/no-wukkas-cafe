@@ -61,7 +61,7 @@ export function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
         break;
       }
       case 'register':
-        c.patience -= drainRate(true) * dt;
+        c.patience -= drainRate(true, r.barista.phase) * dt;
         if (c.stateTime > 7 + c.nags.register * 9 && c.nags.register < 2) {
           if (gaz(r, 'rush.registerNag', 'live', varsFor(c))) c.nags.register++;
         }

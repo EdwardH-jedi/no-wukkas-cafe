@@ -69,6 +69,25 @@ describe('every curated order, end to end', () => {
   }
 });
 
+describe('reactions follow the drink', () => {
+  it('Beryl handed a good long black talks about the coffee, not a heart', () => {
+    const { r, events } = playRush({ lines: { beryl: 'beryl.3' } });
+    const beryl = r.customers.find((c) => c.def.id === 'beryl') as RushCustomer;
+    expect(beryl.order.type).toBe('longBlack');
+    expect(beryl.outcome).toBe('served');
+    const line = says(events).find((e) => e.line.key.startsWith('beryl.happy'))?.line;
+    expect(line?.key).toBe('beryl.happy.longBlack');
+    expect(line?.text).not.toMatch(/heart/i);
+  });
+
+  it('a heart they asked for gets the heart line', () => {
+    const { events } = playRush({ lines: { beryl: 'beryl.1' } });
+    const line = says(events).find((e) => e.line.key.startsWith('beryl.happy'))?.line;
+    expect(line?.key).toBe('beryl.happy.heart');
+    expect(line?.text).toMatch(/heart/i);
+  });
+});
+
 describe('answer keys', () => {
   it('each single-field mishearing of each order is caught as exactly that field', () => {
     for (const c of CUSTOMERS)

@@ -181,7 +181,7 @@ kbd {
 }
 
 /* ---------- top bar ---------- */
-:is(#topbar, #rtopbar) {
+:is(#topbar, #rtopbar, #ptopbar) {
   position: absolute;
   left: 16px;
   right: 16px;
@@ -250,7 +250,7 @@ kbd {
   background: var(--flag);
   border-color: var(--flag);
 }
-:is(#topbar, #rtopbar) .spacer {
+:is(#topbar, #rtopbar, #ptopbar) .spacer {
   flex: 1;
 }
 .iconbtn {
@@ -268,7 +268,7 @@ kbd {
 }
 
 /* ---------- subtitles ---------- */
-:is(#subs, #rsubs) {
+:is(#subs, #rsubs, #psubs) {
   position: absolute;
   left: 50%;
   bottom: calc(26px + env(safe-area-inset-bottom, 0px));
@@ -285,18 +285,18 @@ kbd {
   pointer-events: auto;
   cursor: pointer;
 }
-:is(#subs, #rsubs).gone {
+:is(#subs, #rsubs, #psubs).gone {
   opacity: 0;
   transform: translateX(-50%) translateY(8px);
   pointer-events: none;
 }
-:is(#subs, #rsubs) .who {
+:is(#subs, #rsubs, #psubs) .who {
   font-family: var(--display);
   font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--crema);
 }
-:is(#subs, #rsubs) .who small {
+:is(#subs, #rsubs, #psubs) .who small {
   font-family: var(--body);
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -305,7 +305,7 @@ kbd {
   font-size: 10px;
   margin-left: 6px;
 }
-:is(#subs, #rsubs) .text {
+:is(#subs, #rsubs, #psubs) .text {
   font-size: clamp(16px, 2.1vw, 20px);
   line-height: 1.4;
   margin-top: 4px;
@@ -333,7 +333,7 @@ kbd {
   color: var(--gold);
   margin-bottom: 3px;
 }
-:is(#gauges, #rgauges) {
+:is(#gauges, #rgauges, #pgauges) {
   position: absolute;
   right: 16px;
   top: 64px;
@@ -458,7 +458,7 @@ kbd {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-:is(#actionBar, #ractions) {
+:is(#actionBar, #ractions, #pactions) {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -466,7 +466,7 @@ kbd {
   display: flex;
   gap: 10px;
 }
-:is(#touchHeight, #rtouchHeight) {
+:is(#touchHeight, #rtouchHeight, #ptouchHeight) {
   position: absolute;
   right: 16px;
   bottom: calc(150px + env(safe-area-inset-bottom, 0px));
@@ -474,7 +474,7 @@ kbd {
   flex-direction: column;
   gap: 8px;
 }
-:is(#touchHeight, #rtouchHeight) button {
+:is(#touchHeight, #rtouchHeight, #ptouchHeight) button {
   width: 54px;
   height: 54px;
   border-radius: 14px;
@@ -484,7 +484,7 @@ kbd {
 }
 
 /* ---------- result card ---------- */
-#card {
+:is(#card, #pcard) {
   position: absolute;
   right: 16px;
   top: 60px;
@@ -695,7 +695,7 @@ kbd {
 }
 
 /* ---------- pause ---------- */
-:is(#pause, #rpause) {
+:is(#pause, #rpause, #ppause) {
   position: absolute;
   inset: 0;
   display: grid;
@@ -703,10 +703,10 @@ kbd {
   background: rgba(22, 16, 12, 0.7);
   pointer-events: auto;
 }
-:is(#pause, #rpause) .box {
+:is(#pause, #rpause, #ppause) .box {
   text-align: center;
 }
-:is(#pause, #rpause) h3 {
+:is(#pause, #rpause, #ppause) h3 {
   font-family: var(--display);
   font-weight: 400;
   font-size: 40px;
@@ -722,7 +722,7 @@ kbd {
 }
 
 @media (max-width: 720px) {
-  :is(#gauges, #rgauges) {
+  :is(#gauges, #rgauges, #pgauges) {
     top: auto;
     bottom: calc(150px + env(safe-area-inset-bottom, 0px));
     right: 16px;
@@ -732,7 +732,7 @@ kbd {
     bottom: auto;
     top: 60px;
   }
-  #card {
+  :is(#card, #pcard) {
     top: auto;
     bottom: 16px;
     transform: none;
@@ -1289,4 +1289,289 @@ kbd {
 }
 #ibisHint b {
   color: var(--paper);
+}
+
+/* ---------- latte art: lesson strip (Day 1 demo + pour, practice) ---------- */
+.lesson {
+  position: absolute;
+  left: 16px;
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  width: min(330px, calc(100vw - 32px));
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.lesson.demo {
+  border-left-color: var(--crema);
+}
+.lesson .lh {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.lesson.demo .lh {
+  color: var(--crema);
+}
+.lesson .lh .rate {
+  color: var(--txt-dim);
+  letter-spacing: 0.08em;
+}
+.lesson ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lesson li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--txt-dim);
+}
+.lesson li > i {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+}
+.lesson li span {
+  display: none;
+}
+.lesson li.cur {
+  color: var(--txt);
+}
+.lesson li.cur > i {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.lesson li.cur span {
+  display: block;
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+.lesson li.done {
+  color: var(--gum);
+}
+.lesson li.done > i {
+  background: rgba(116, 169, 140, 0.25);
+  border-color: var(--gum);
+  font-size: 0;
+}
+.lesson li.done > i::after {
+  content: '✓';
+  font-size: 11px;
+}
+.lesson .hands {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 11px;
+  color: var(--txt-dim);
+  flex-wrap: wrap;
+}
+.lesson .hk {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.5;
+}
+.lesson .hk.on {
+  opacity: 1;
+  color: var(--gold);
+}
+.lesson .hk.on kbd {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.lesson .hk.warn {
+  opacity: 1;
+  color: var(--flag);
+}
+.lesson .hk.warn kbd {
+  border-color: var(--flag);
+}
+.lesson .hcm {
+  font-family: var(--mono);
+  color: var(--txt);
+  min-width: 48px;
+}
+.lesson .hmove {
+  min-width: 64px;
+}
+.lesson .hflow {
+  flex: 1;
+  min-width: 40px;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.lesson .hflow i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--crema);
+}
+.lesson .hcup {
+  font-family: var(--mono);
+  color: var(--txt);
+}
+.lesson .hint {
+  margin-top: 8px;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+/* Buttons while pouring sit at the side, away from where the pointer steers. */
+:is(#actionBar, #ractions, #pactions).side {
+  left: auto;
+  right: 16px;
+  transform: none;
+  flex-direction: column;
+  align-items: flex-end;
+}
+#pactions.side {
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+}
+:is(#actionBar, #ractions, #pactions).side .btn.ghost {
+  background: var(--glass2);
+}
+
+/* ---------- latte art: practice review ---------- */
+#pcard .vs {
+  margin-top: 6px;
+  font-size: 12px;
+}
+#pcard em {
+  font-style: normal;
+  font-weight: 800;
+  margin-left: 4px;
+}
+#pcard em.up {
+  color: #2f7d55;
+}
+#pcard em.down {
+  color: #b33a2e;
+}
+#pcard .legend {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  font-size: 10.5px;
+  color: #5a4d40;
+  margin: 4px 0 8px;
+}
+#pcard .lg::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  border-top: 2px dashed currentColor;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+#pcard .lg.guide::before {
+  border-color: #9a8d7e;
+}
+#pcard .lg.fit::before {
+  border-color: #d9a520;
+}
+#pcard .lg.ctr::before {
+  border-top-style: solid;
+  border-color: #e0513f;
+}
+#pcard .faults .f span {
+  display: block;
+}
+#pcard .faults .f .cause {
+  font-style: italic;
+}
+#pcard .faults .f .fix {
+  color: var(--paper-ink);
+  font-weight: 600;
+}
+#pcard .faults .f.ok b {
+  color: #2f7d55;
+}
+#pcard .attempts {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 4px;
+  border-top: 1px dashed var(--paper-dim);
+  padding-top: 10px;
+}
+#pcard .attempts div {
+  text-align: center;
+  font-size: 10.5px;
+}
+#pcard .attempts canvas {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 3px;
+}
+#pcard .attempts .best canvas {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+@media (max-width: 720px) {
+  /* Below the top bar, which wraps to two rows on a phone. */
+  .lesson {
+    bottom: auto;
+    top: 100px;
+  }
+  .lesson li:not(.cur) {
+    display: none;
+  }
+  /* The strip mirrors height, flow and cup, so practice drops the gauge panel on a phone. */
+  #pgauges {
+    display: none;
+  }
+  :is(#actionBar, #ractions, #pactions).side {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100vw - 32px);
+  }
+  #actionBar.side {
+    right: auto;
+    left: 16px;
+  }
+}
+.paper kbd {
+  background: rgba(34, 26, 20, 0.08);
+  border-color: rgba(34, 26, 20, 0.3);
+  color: var(--paper-ink);
 }

@@ -17,6 +17,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "balance": "node scripts/balance.ts",
+    "pace": "node scripts/day2-pace.ts",
     "voices": "node scripts/voices.ts",
     "voices:check": "node scripts/voices-check.ts",
     "release:check": "node scripts/voices-check.ts --release && npm run build",

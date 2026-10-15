@@ -20,6 +20,30 @@ export interface ScriptLine {
 /** "Could you repeat that?": the same words, noticeably slower. */
 export const SLOW_RATE = 0.8;
 
+/**
+ * Script keys whose words are new or changed and haven't been recorded yet. The next
+ * `npm run voices` (macOS) renders them; until then the game falls back to browser speech for
+ * these lines only, and the coverage tests allow exactly these to be missing (plus the old clips
+ * they replace, including a line split into per-drink keys). Empty this once they're rendered.
+ */
+export const AWAITING_RENDER: ReadonlySet<string> = new Set([
+  'dazza.3', // "Morning." (was "Mornin'."), normal and slow
+  'beryl.happy.flatWhite',
+  'beryl.happy.longBlack',
+  'jiwoo.happy', // "와, perfect!" (was "Wah, perfect!"), the same for every drink
+  'shot.overlap', // Gaz: "Two hands. Now you're a barista."
+]);
+
+/** Is this line (a script or runtime key, or the manifest key of a clip it replaces) awaiting a
+ *  render? An entry covers its own key and the keys under it ('dazza.3' covers 'dazza.3.slow',
+ *  'jiwoo.happy' each drink's variant), and the clip of a line that was split into per-drink
+ *  keys ('beryl.happy'). */
+export function awaitingRender(key: string): boolean {
+  for (const k of AWAITING_RENDER)
+    if (key === k || key.startsWith(`${k}.`) || k.startsWith(`${key}.`)) return true;
+  return false;
+}
+
 const fillAll = (text: string): string[] => {
   if (!/\{\w+\}/.test(text)) return [text];
   const names = CUSTOMERS.map((c) => c.callName);
@@ -70,8 +94,9 @@ export function voiceScript(): ScriptLine[] {
     }))
       for (const [k, text] of Object.entries(group))
         add(c.id, `${c.id}.answer.${field}.${k}`, text);
-    const { complaint, rejected, ...rest } = c.lines;
+    const { complaint, rejected, happy, ...rest } = c.lines;
     for (const [k, text] of Object.entries(rest)) add(c.id, `${c.id}.${k}`, text);
+    for (const [k, text] of Object.entries(happy)) add(c.id, `${c.id}.happy.${k}`, text);
     for (const [k, text] of Object.entries(rejected)) add(c.id, `${c.id}.rejected.${k}`, text);
     for (const [k, text] of Object.entries(complaint))
       if (text) add(c.id, `${c.id}.complaint.${k}`, text);

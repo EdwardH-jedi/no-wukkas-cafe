@@ -83,8 +83,10 @@ export const EXTRA_HOT: readonly [number, number] = [68, 74];
 export const LUKEWARM = 52;
 /** How fast drinks cool on the pass, °C per second. */
 export const COOL_RATE = 0.35;
-/** Patience drains this much faster while someone stands at the register un-served. */
+/** Patience drains this much faster while someone stands at the register un-served… */
 export const REGISTER_DRAIN = 1.5;
+/** …but less while they can see the barista busy on someone else's drink. */
+export const REGISTER_DRAIN_BUSY = 1.2;
 /** Patience lost (fraction of max) when a customer is handed the wrong drink. */
 export const REJECT_PENALTY = 0.15;
 
@@ -190,9 +192,20 @@ export function evaluateServe(order: Order, drink: MadeDrink, ctx: ServeContext)
   return { accepted: true, correct, quality, satisfaction, tipCents, complaints };
 }
 
-/** Patience drain multiplier for where the customer is. */
-export function drainRate(atRegisterUntaken: boolean): number {
-  return atRegisterUntaken ? REGISTER_DRAIN : 1;
+/** Which of a customer's delighted lines fits the drink they were handed. */
+export type Reaction = 'heart' | 'flatWhite' | 'longBlack';
+
+/** A long black, a flat white, or a flat white with the heart they asked for. */
+export function reactionFor(drink: MadeDrink, order: Order): Reaction {
+  if (drink.type === 'longBlack') return 'longBlack';
+  return drink.pattern !== null && order.heart ? 'heart' : 'flatWhite';
+}
+
+/** Patience drain multiplier for where the customer is. `station` is the espresso station's
+ *  phase: anything but idle or a drink waiting on the pass means a drink is being made. */
+export function drainRate(atRegisterUntaken: boolean, station = 'idle'): number {
+  if (!atRegisterUntaken) return 1;
+  return station === 'idle' || station === 'ready' ? REGISTER_DRAIN : REGISTER_DRAIN_BUSY;
 }
 
 // ------------------------------------------------------------------ shift summary

@@ -9,7 +9,7 @@
 
 import { band, clamp } from '../math';
 import { CELL, GRID } from './field';
-import { heartTemplate, inHeart, type HeartTemplate } from './heart';
+import { GUIDE_SCALE, heartTemplate, inHeart, type HeartTemplate } from './heart';
 
 export const FOAM_THRESHOLD = 0.5;
 const MAX_ANGLE = (20 * Math.PI) / 180;
@@ -37,6 +37,12 @@ export interface PatternScore {
   symmetry: number;
   /** Centroid distance from the cup centre, in surface radii. */
   offCentre: number;
+  /** Centroid of the white, field coordinates (+x = the barista's right, +y = far side). */
+  cx: number;
+  cy: number;
+  /** Of the white with no mirror image across the heart's axis, (right − left) / all of it:
+   *  + = the right side is the heavier one. */
+  balance: number;
   position: number;
   crispRatio: number;
   definition: number;
@@ -131,7 +137,7 @@ let calib: Calibration | null = null;
 /** Measure the template itself once, so feature scores are relative to a perfect heart. */
 function calibration(t: HeartTemplate): Calibration {
   if (calib) return calib;
-  const scale = 1.1; // ≈ 38% coverage
+  const scale = GUIDE_SCALE; // ≈ 38% coverage
   const cells: number[] = [];
   for (let k = 0; k < GRID * GRID; k++) {
     const x = -1 + ((k % GRID) + 0.5) * CELL;
@@ -196,6 +202,9 @@ export function scorePattern(foam: Float32Array): PatternScore {
       symmetryIoU: 0,
       symmetry: 0,
       offCentre: 1,
+      cx: A > 0 ? sx / A : 0,
+      cy: A > 0 ? sy / A : 0,
+      balance: 0,
       position: 0,
       crispRatio,
       definition: 0,
@@ -264,16 +273,25 @@ export function scorePattern(foam: Float32Array): PatternScore {
   const cos = Math.cos(fit.angle);
   const sin = Math.sin(fit.angle);
   let match = 0;
+  let unmatched = 0;
+  let side = 0;
   for (const k of cells) {
     const dx = -1 + ((k % GRID) + 0.5) * CELL - cx;
     const dy = -1 + (Math.floor(k / GRID) + 0.5) * CELL - cy;
-    const u = -(dx * cos + dy * sin);
+    const lateral = dx * cos + dy * sin;
+    const u = -lateral;
     const v = -dx * sin + dy * cos;
     const mx = cx + u * cos - v * sin;
     const my = cy + u * sin + v * cos;
     const mi = Math.floor((mx + 1) / CELL);
     const mj = Math.floor((my + 1) / CELL);
     if (mi >= 0 && mj >= 0 && mi < GRID && mj < GRID && mask[mj * GRID + mi] === 1) match++;
+    else {
+      // White with nothing opposite it: the side it's on is the heavier one.
+      unmatched++;
+      if (lateral > 0) side++;
+      else side--;
+    }
   }
   const symmetryIoU = match / (2 * A - match);
   const symmetry = clamp((symmetryIoU - 0.55) / (0.9 - 0.55));
@@ -300,6 +318,9 @@ export function scorePattern(foam: Float32Array): PatternScore {
     symmetryIoU,
     symmetry,
     offCentre,
+    cx,
+    cy,
+    balance: unmatched > 0 ? side / unmatched : 0,
     position,
     crispRatio,
     definition,

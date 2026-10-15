@@ -4,6 +4,7 @@
 
 import { STEP } from '../../core/clock';
 import type { MilkQuality } from '../milk';
+import type { PourStep } from './coach';
 import { createPour, type PourState } from './field';
 import { createPitcher, stepPourFrame, type PitcherControls, type PitcherState } from './pitcher';
 
@@ -33,13 +34,103 @@ export const OWNER_DEMO: readonly TrackKey[] = [
 ];
 
 export const DEMO_DURATION = 8.2;
+const DEMO_STEPS = Math.round(DEMO_DURATION / STEP);
 
-/** Narration beats for the demo, as owner line keys. */
-export const DEMO_CUES: ReadonlyArray<{ t: number; key: string }> = [
-  { t: 0.3, key: 'demo.fill' },
-  { t: 3.8, key: 'demo.drop' },
-  { t: 6.35, key: 'demo.pull' },
+export interface DemoChapter {
+  step: PourStep;
+  /** Track time the chapter starts. */
+  t: number;
+  /** Owner line Gaz narrates it with (existing recorded lines only). */
+  cue: string;
+}
+
+/** The demo in the four steps of a heart, each narrated as it starts. */
+export const DEMO_CHAPTERS: readonly DemoChapter[] = [
+  { step: 'fill', t: 0.3, cue: 'demo.fill' },
+  { step: 'lay', t: 3.8, cue: 'demo.drop' },
+  { step: 'lobes', t: 5.4, cue: 'pour.bloom' },
+  { step: 'pull', t: 6.35, cue: 'demo.pull' },
 ];
+
+/** Slowest teaching slow-motion: below this the pour looks frozen. */
+export const MIN_DEMO_RATE = 0.3;
+
+/**
+ * Plays OWNER_DEMO through the real pitcher and pour sim at a teaching pace: while Gaz narrates a
+ * chapter, playback slows so the chapter lasts as long as his line (never below MIN_DEMO_RATE),
+ * and it waits at a chapter boundary until he has finished. The sim always steps in fixed STEPs
+ * of track time, so the pattern is identical however long the lines take (or if they're skipped).
+ */
+export interface DemoPlayer {
+  /** Track steps simulated so far. */
+  steps: number;
+  /** Real seconds owed to the track. */
+  acc: number;
+  /** Chapters started so far. */
+  chapter: number;
+  /** Current playback speed (0 while waiting for Gaz to finish). */
+  rate: number;
+  done: boolean;
+}
+
+export function createDemoPlayer(): DemoPlayer {
+  return { steps: 0, acc: 0, chapter: 0, rate: 1, done: false };
+}
+
+/** Put the jug where the demo starts (call with a fresh pour). */
+export function startDemo(pitcher: PitcherState): void {
+  const k = OWNER_DEMO[0];
+  if (!k) return;
+  pitcher.x = k.x;
+  pitcher.y = k.y;
+  pitcher.height = k.h;
+}
+
+export function demoTime(d: DemoPlayer): number {
+  return d.steps * STEP;
+}
+
+/**
+ * Advance by one game step of `dt` seconds. `narrationLeft` is how long Gaz's current line still
+ * has to run (0 if he's quiet). Returns the owner line key to say when a chapter starts.
+ */
+export function stepDemoPlayer(
+  d: DemoPlayer,
+  pour: PourState,
+  pitcher: PitcherState,
+  controls: PitcherControls,
+  milk: MilkQuality,
+  narrationLeft: number,
+  dt: number,
+): string | null {
+  if (d.done) return null;
+  const next = DEMO_CHAPTERS[d.chapter];
+  if (next && demoTime(d) >= next.t - 1e-9) {
+    if (narrationLeft > 0) {
+      d.rate = 0;
+      return null;
+    }
+    d.chapter++;
+    d.rate = 1;
+    return next.cue;
+  }
+  const end = DEMO_CHAPTERS[d.chapter]?.t ?? DEMO_DURATION;
+  d.rate =
+    narrationLeft > 0
+      ? Math.min(1, Math.max(MIN_DEMO_RATE, (end - demoTime(d)) / narrationLeft))
+      : 1;
+  d.acc += dt * d.rate;
+  while (d.acc >= STEP - 1e-9 && d.steps < DEMO_STEPS) {
+    d.acc -= STEP;
+    controlsAt(OWNER_DEMO, demoTime(d), controls);
+    stepPourFrame(pour, pitcher, controls, milk, STEP);
+    d.steps++;
+    const c = DEMO_CHAPTERS[d.chapter];
+    if (c && demoTime(d) >= c.t - 1e-9) break; // stop at the boundary: Gaz may still be talking
+  }
+  if (d.steps >= DEMO_STEPS) d.done = true;
+  return null;
+}
 
 /** Controls for track time `t` (linear between keys, holds step-wise). */
 export function controlsAt(

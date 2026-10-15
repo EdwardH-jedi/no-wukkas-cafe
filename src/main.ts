@@ -27,14 +27,24 @@ import {
 } from './core/rush';
 import { browserStorage, createSaveStore } from './core/save/storage';
 import { canPlay, endlessFor, finishShift, weekFor, type Cooldowns } from './core/week/session';
+import {
+  createPractice,
+  emptyPracticeInput,
+  stepPractice,
+  type Practice,
+  type PracticeAction,
+} from './core/practice';
 import { canFinish, createTrial, emptyInput, stepTrial, type TrialAction } from './core/trial';
 import { GREETING, GREETING_OPENERS } from './data/ownerLines';
-import { spokenDuration, VOICE_MANIFEST } from './data/voice';
+import { clipFor, spokenDuration, VOICE_MANIFEST } from './data/voice';
+import { createEspresso } from './sim/espresso';
 import { DIFFICULTY } from './sim/listening';
 import { surfacing } from './sim/latte/field';
 import { HEIGHT_PRESETS, pitcherFlow } from './sim/latte/pitcher';
+import { createSteam } from './sim/steam';
 import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
+import { createPracticeHud } from './ui/practiceHud';
 import { stepRushIbis } from './core/rushIbis';
 import { ibisForShift } from './sim/events/rareBird';
 import { createIbis, ibisPresent, type Ibis } from './sim/ibis';
@@ -128,8 +138,11 @@ async function boot(): Promise<void> {
     );
   };
 
-  // Which day is running. Day 1's trial owns the title screen.
-  let mode: 'trial' | 'rush' = 'trial';
+  // Which day is running. Day 1's trial owns the title screen; practice is latte art on its own.
+  let mode: 'trial' | 'rush' | 'practice' = 'trial';
+  let practice: Practice | null = null;
+  const pIn = emptyPracticeInput();
+  let practiceAction: PracticeAction | null = null;
   let rush: Rush | null = null;
   const rushIn = emptyRushInput();
   // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare. On a
@@ -173,6 +186,7 @@ async function boot(): Promise<void> {
     clock.paused = p;
     hud.setPaused(p);
     rushHud.setPaused(p);
+    practiceHud.setPaused(p);
     audio.setPaused(p);
     if (p) {
       held = false;
@@ -188,8 +202,10 @@ async function boot(): Promise<void> {
   ibisHint.innerHTML = '<b>Bin chicken!</b> Shoo it out gently: click it, or press <kbd>I</kbd>.';
   const hud1Root = document.createElement('div');
   const hud2Root = document.createElement('div');
+  const hud3Root = document.createElement('div');
   hud2Root.classList.add('hide');
-  uiRoot.append(hud1Root, hud2Root, ibisHint);
+  hud3Root.classList.add('hide');
+  uiRoot.append(hud1Root, hud2Root, hud3Root, ibisHint);
 
   const rushAct = (a: RushAction): void => {
     sfx.unlock();
@@ -202,6 +218,7 @@ async function boot(): Promise<void> {
     clock.paused = false;
     hud.setPaused(false);
     rushHud.setPaused(false);
+    practiceHud.setPaused(false);
     audio.setPaused(false);
   };
 
@@ -218,7 +235,9 @@ async function boot(): Promise<void> {
     ibis = makeIbis();
     sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
     mode = 'rush';
+    practice = null;
     hud1Root.classList.add('hide');
+    hud3Root.classList.add('hide');
     hud2Root.classList.remove('hide');
     canvas.classList.remove('aim');
     rushHud.onPhase('intro', rush);
@@ -266,16 +285,42 @@ async function boot(): Promise<void> {
       ?.focus({ preventScroll: true });
   };
 
+  /** Latte-art practice (from the title screen): straight to a cup and a jug of silky milk. */
+  const startPractice = (): void => {
+    audio.unlock();
+    sfx.unlock();
+    audio.stopVoice();
+    sfx.play('click');
+    prefetchDay(1); // Gaz's demo lines
+    resumeAll();
+    crowd.clear();
+    rush = null;
+    practice = createPractice(seed);
+    mode = 'practice';
+    hud1Root.classList.add('hide');
+    hud2Root.classList.add('hide');
+    hud3Root.classList.remove('hide');
+    canvas.classList.add('aim');
+    practiceHud.onPhase(practice);
+  };
+  const practiceAct = (a: PracticeAction): void => {
+    audio.unlock();
+    sfx.unlock();
+    practiceAction = a;
+  };
+
   /** Back to the title screen (fresh Day 1 trial). */
   const toTitle = (): void => {
     audio.stopVoice();
     resumeAll();
     crowd.clear();
     rush = null;
+    practice = null;
     mode = 'trial';
     Object.assign(trial, createTrial(seed));
     ibis = makeIbis();
     hud2Root.classList.add('hide');
+    hud3Root.classList.add('hide');
     hud1Root.classList.remove('hide');
     canvas.classList.remove('aim');
     hud.onPhase('title', trial);
@@ -287,6 +332,7 @@ async function boot(): Promise<void> {
     if (!l) return;
     const secs = spokenDuration(l.speaker, l.text, l.delivery);
     if (mode === 'rush') rushHud.onReplay(l.speaker, l.text, secs);
+    else if (mode === 'practice') practiceHud.onReplay(l.text, secs);
     else hud.onReplay(l.text, secs);
   };
   const audioPanel = createAudioPanel(uiRoot, audio, {
@@ -323,12 +369,27 @@ async function boot(): Promise<void> {
     audioButtonsHtml: audioPanel.buttonsHtml,
     bindAudio: (el) => audioPanel.bind(el),
     settings: () => listen,
+    // Heard if voices are on and there's a recording, or a browser voice to stand in.
+    audible: (u) =>
+      audio.voiceEnabled &&
+      (clipFor(u.speaker, u.text, u.delivery) !== null || typeof speechSynthesis !== 'undefined'),
+  });
+
+  const practiceHud = createPracticeHud(hud3Root, {
+    action: practiceAct,
+    title: toTitle,
+    pause: setPaused,
+    height: (d) => (touchHeight = d),
+    skip: () => (input.skip = true),
+    audioButtonsHtml: audioPanel.buttonsHtml,
+    bindAudio: (el) => audioPanel.bind(el),
   });
 
   const hud = createHud(hud1Root, {
     action: act,
     day2: startDay2,
     shifts: openShifts,
+    practice: startPractice,
     sound: () => {
       audio.unlock();
       audioPanel.open();
@@ -406,6 +467,9 @@ async function boot(): Promise<void> {
       sfx.unlock();
       if (!e.repeat) input.pressed = true;
       spaceHeld = true;
+      if (mode === 'practice' && practice?.phase === 'review' && !e.repeat) practiceAct('again');
+    } else if (mode === 'practice' && practice) {
+      practiceKey(practice, k, e);
     } else if (mode === 'rush' && rush) {
       rushKey(rush, k, e);
     } else if (k === 'enter') {
@@ -425,6 +489,25 @@ async function boot(): Promise<void> {
     else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
     else if (k === 'r') replay();
   });
+  /** Practice keys: Enter done / again / skip, R reset, G guide, D watch Gaz, 1–3 jug height. */
+  function practiceKey(p: Practice, k: string, e: KeyboardEvent): void {
+    if (k === 'enter') {
+      if ((e.target as HTMLElement).tagName === 'BUTTON') return;
+      e.preventDefault();
+      if (p.phase === 'pour') practiceAct('done');
+      else if (p.phase === 'review') practiceAct('again');
+      else practiceAct('skip');
+    } else if (k === 'r') practiceAct(p.phase === 'review' ? 'again' : 'reset');
+    else if (k === 'g') practiceAct('guide');
+    else if (k === 'd' && p.phase !== 'demo') practiceAct('demo');
+    else if (k === '1' || k === '2' || k === '3')
+      input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
+    else if (k === 'w' || k === 'arrowup') keyHeight = 1;
+    else if (k === 's' || k === 'arrowdown') keyHeight = -1;
+    else if (k === 'm') sfx.setMuted(!sfx.muted);
+    else if (k === 'v') audio.voiceEnabled = !audio.voiceEnabled;
+  }
+
   /** Day 2 keys: T take order, R replay, Enter ring up / lock in / hand over, F/L make, B bin,
    *  1–6 serve or jug height. */
   function rushKey(r: Rush, k: string, e: KeyboardEvent): void {
@@ -469,7 +552,7 @@ async function boot(): Promise<void> {
     if ((k === 's' || k === 'arrowdown') && keyHeight < 0) keyHeight = 0;
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && (mode === 'rush' || trial.phase !== 'title')) setPaused(true);
+    if (document.hidden && (mode !== 'trial' || trial.phase !== 'title')) setPaused(true);
   });
   window.addEventListener('blur', () => {
     held = false;
@@ -484,7 +567,12 @@ async function boot(): Promise<void> {
     if (!pointer.has) return;
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const pouring = mode === 'rush' ? rush?.barista.phase === 'pour' : trial.phase === 'pour';
+    const pouring =
+      mode === 'rush'
+        ? rush?.barista.phase === 'pour'
+        : mode === 'practice'
+          ? practice?.phase === 'pour'
+          : trial.phase === 'pour';
     if (pouring) {
       ndc.set((pointer.x / w) * 2 - 1, -(pointer.y / h) * 2 + 1);
       ray.setFromCamera(ndc, camera);
@@ -508,6 +596,21 @@ async function boot(): Promise<void> {
     input.heightDelta = 0;
     input.heightPreset = null;
     rushAction = null;
+    practiceAction = null;
+  };
+
+  /** Copy the shared input into practice's input for one step. */
+  const samplePracticeInput = (): void => {
+    pIn.holding = input.holding;
+    pIn.cupX = input.cupX;
+    pIn.cupY = input.cupY;
+    pIn.hasCup = input.hasCup;
+    pIn.heightDelta = input.heightDelta;
+    pIn.heightPreset = input.heightPreset;
+    // As on Day 1, a click (or Space) during Gaz's demo hurries his narration along.
+    pIn.skip = input.skip || (practice?.phase === 'demo' && input.pressed);
+    pIn.voiceHold = input.voiceHold === true;
+    pIn.action = practiceAction;
   };
 
   /** Copy the shared input into the rush's input for one step. */
@@ -692,6 +795,38 @@ async function boot(): Promise<void> {
         paused: clock.paused,
       };
     },
+    /** Practice state for tests (null outside practice). */
+    get practice() {
+      const p = practice;
+      if (!p) return null;
+      return {
+        phase: p.phase,
+        phaseTime: p.phaseTime,
+        count: p.count,
+        best: p.best,
+        guide: p.guide,
+        fill: p.pour.fill,
+        poured: p.pour.poured,
+        spill: p.pour.spill,
+        armed: p.gate.armed,
+        step: p.log.step,
+        controls: { ...p.controls },
+        pitcher: { ...p.pitcher },
+        demoActive: p.demoActive,
+        demoRate: p.demo.rate,
+        line: p.speech.current?.text ?? null,
+        attempts: p.attempts.map((a) => ({
+          n: a.n,
+          art: a.score.art,
+          shape: a.score.shape,
+          symmetry: a.score.symmetry,
+          position: a.score.position,
+          findings: a.findings.map((f) => f.id),
+        })),
+        paused: clock.paused,
+        drawCalls: renderer.info.render.calls,
+      };
+    },
     /** Cheap per-tick read for test drivers. */
     get tick() {
       return {
@@ -764,7 +899,7 @@ async function boot(): Promise<void> {
     speech: { current: null as unknown },
     owner: { frustration: 0 },
   };
-  const WORKING = new Set(['grind', 'lock', 'shot', 'water', 'steam', 'pour']);
+  const WORKING = new Set(['grind', 'lock', 'shot', 'shotSteam', 'water', 'steam', 'pour']);
 
   function rushFrame(r: Rush, dt: number): void {
     for (const ev of r.events) {
@@ -808,7 +943,10 @@ async function boot(): Promise<void> {
     r.events.length = 0;
 
     const b = r.barista;
-    sv.phase = r.phase === 'service' ? b.phase : 'idle';
+    // Two hands (shot running + steaming) looks like steaming to the world and the camera: the
+    // jug is what the player is working. TODO: show the shot's stream too.
+    const shown = b.phase === 'shotSteam' ? 'steam' : b.phase;
+    sv.phase = r.phase === 'service' ? shown : 'idle';
     sv.phaseTime = b.phaseTime;
     sv.espresso = b.espresso;
     sv.steam = b.steam;
@@ -859,7 +997,7 @@ async function boot(): Promise<void> {
         ? 'intro'
         : r.phase === 'service'
           ? working
-            ? b.phase
+            ? shown
             : 'service'
           : 'summary';
     const px = pointer.has ? (pointer.x / window.innerWidth) * 2 - 1 : 0;
@@ -869,12 +1007,67 @@ async function boot(): Promise<void> {
 
     sfx.update({
       grind: b.phase === 'grind' && b.espresso.grinding ? 1 : 0,
-      pump: b.phase === 'shot' && b.espresso.extracting ? 1 : 0,
-      steam: b.phase === 'steam' && b.steam.valveOpen ? 1 : 0,
-      steamZone: b.phase === 'steam' ? b.steam.zone : 'off',
+      pump: (b.phase === 'shot' || b.phase === 'shotSteam') && b.espresso.extracting ? 1 : 0,
+      steam: shown === 'steam' && b.steam.valveOpen ? 1 : 0,
+      steamZone: shown === 'steam' ? b.steam.zone : 'off',
       pour:
         b.phase === 'pour' ? pitcherFlow(b.pitcher) : b.phase === 'water' && b.dispensing ? 0.7 : 0,
       pourHigh: b.phase === 'water' ? 0.8 : 1 - surfacing(b.pitcher.height),
+    });
+  }
+
+  // ---------------------------------------------------------------- practice view
+  const pv: StationView = {
+    phase: 'pour',
+    phaseTime: 0,
+    attempt: 0,
+    espresso: createEspresso(),
+    steam: createSteam(),
+    pour: trial.pour,
+    pitcher: trial.pitcher,
+    demoActive: false,
+    demoEndedAt: -1,
+    guide: 0,
+  };
+
+  function practiceFrame(p: Practice, dt: number): void {
+    for (const ev of p.events) {
+      if (ev.type === 'say') {
+        practiceHud.onSay(ev.line);
+        owner.onSay(ev.line, viewTime);
+        audio.say({ speaker: 'gaz', text: ev.line.text });
+      } else if (ev.type === 'phase') {
+        practiceHud.onPhase(p);
+        canvas.classList.toggle('aim', ev.phase === 'pour');
+      } else if (ev.type === 'sfx') sfx.play(ev.id);
+      else if (ev.type === 'reset') sfx.play('clink');
+    }
+    p.events.length = 0;
+
+    pv.phase = p.phase;
+    pv.phaseTime = p.phaseTime;
+    pv.pour = p.pour;
+    pv.pitcher = p.pitcher;
+    pv.demoActive = p.demoActive;
+    pv.demoEndedAt = p.demoEndedAt;
+    pv.guide = p.guide ? 1 : 0;
+    station.update(pv, dt, viewTime);
+    ibisView.update(ibis, dt, viewTime);
+    ibisHint.classList.add('hide');
+    if (p.phase !== 'review' && !p.speech.current) look.copy(station.cupRim);
+    else look.copy(camera.position);
+    owner.update(p, dt, viewTime, look, audio.clipPlaying ? voiceLevel : -1);
+    rig.update(p.phase, p.phaseTime, dt, viewTime, focus, 0, 0, false);
+    practiceHud.update(p, dt, held || spaceHeld);
+    const flow =
+      p.phase === 'pour' || (p.phase === 'demo' && p.demoActive) ? pitcherFlow(p.pitcher) : 0;
+    sfx.update({
+      grind: 0,
+      pump: 0,
+      steam: 0,
+      steamZone: 'off',
+      pour: flow,
+      pourHigh: 1 - surfacing(p.pitcher.height),
     });
   }
 
@@ -898,6 +1091,9 @@ async function boot(): Promise<void> {
           else if (e.type === 'atBin') sfx.play('binRattle');
           else if (e.type === 'shooed') sfx.play('clap');
         ibisShoo = false;
+      } else if (mode === 'practice' && practice) {
+        samplePracticeInput();
+        stepPractice(practice, pIn, STEP);
       } else stepTrial(trial, input, STEP);
       clearEdges();
       tickStep(clock);
@@ -906,10 +1102,19 @@ async function boot(): Promise<void> {
     viewTime += dt;
     voiceLevel = audio.voiceLevel();
     audio.update();
-    music.setMood(moodFor(mode, mode === 'rush' && rush ? rush.phase : trial.phase));
+    music.setMood(
+      mode === 'practice'
+        ? moodFor('trial', 'pour')
+        : moodFor(mode, mode === 'rush' && rush ? rush.phase : trial.phase),
+    );
     music.update();
     if (mode === 'rush' && rush) {
       rushFrame(rush, dt);
+      renderer.render(scene, camera);
+      return;
+    }
+    if (mode === 'practice' && practice) {
+      practiceFrame(practice, dt);
       renderer.render(scene, camera);
       return;
     }
@@ -943,7 +1148,7 @@ async function boot(): Promise<void> {
     const px = pointer.has ? (pointer.x / window.innerWidth) * 2 - 1 : 0;
     const py = pointer.has ? (pointer.y / window.innerHeight) * 2 - 1 : 0;
     rig.update(trial.phase, trial.phaseTime, dt, viewTime, focus, px, py, pointerLook);
-    hud.update(trial, dt);
+    hud.update(trial, dt, held || spaceHeld);
 
     const pouringNow = trial.phase === 'pour' || (trial.phase === 'demo' && trial.demoActive);
     const flow = pouringNow ? pitcherFlow(trial.pitcher) : 0;
