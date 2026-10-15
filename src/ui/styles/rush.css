@@ -62,6 +62,34 @@
 .ticket .tp i.bad {
   background: var(--flag);
 }
+/* After a misheard hand-back: the corrected fields marked on the ticket, and what was rung up
+   struck out (marks and strike-through, never colour alone). */
+.ticket .to mark {
+  background: #ffe1a1;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ticket .tm {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #a3321f;
+  margin: -2px 0 6px;
+}
+.ticket .tm s {
+  font-weight: 400;
+}
+/* Week mode, before the docket-rail upgrade: tickets waiting behind a full rail. */
+.ticket.more {
+  width: auto;
+  align-self: flex-start;
+  padding: 6px 10px;
+  font-size: 11px;
+  opacity: 0.85;
+  transform: none;
+}
 .ticket .serve {
   width: 100%;
   padding: 6px 8px;
@@ -111,12 +139,17 @@
   }
 }
 
+/* The event card sits left of the cup. Its width keeps it clear of the cup at its widest (the pour
+   close-up: the rim reaches about 26 % of the screen height either side of the middle), so it
+   narrows on squarer screens; on phones and portrait screens it goes to the top instead. */
 #revent {
   position: absolute;
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  width: min(300px, calc(100vw - 32px));
+  width: clamp(220px, calc(50vw - 27vh - 48px), 300px);
+  box-sizing: border-box;
+  z-index: 6;
   background: var(--glass2);
   border: 1px solid var(--line);
   border-top: 4px solid var(--paper);
@@ -125,9 +158,29 @@
   pointer-events: auto;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
+#revent .ek {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  margin-bottom: 2px;
+}
 #revent .h {
   font-weight: 800;
   margin-bottom: 8px;
+}
+#revent .btn {
+  text-align: left;
+}
+/* A choice's patience cost (EventChoice.costSeconds). */
+#revent .cost {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(22, 16, 12, 0.16);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 #revent .b {
   display: flex;
@@ -208,6 +261,22 @@
 }
 #pos .ask .opt {
   font-weight: 500;
+}
+/* What a listening aid costs the customer (LISTEN_COST in sim/listening.ts). */
+#pos .cost {
+  margin-left: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* The clarifying questions' cost, as a caption under them (aligned with the buttons). */
+#pos .ask > .cost {
+  flex-basis: 100%;
+  margin: -2px 0 0;
+  padding-left: 45px;
+  color: var(--txt-dim);
 }
 #pos .asked {
   min-height: 1.2em;
@@ -299,6 +368,24 @@
 }
 #rsubs .listen {
   color: var(--txt-dim);
+}
+/* Two hands: the camera swings left to the group head and the cup goes with it; the card waits at
+   the top, clear of the cup and the gauges. */
+#revent.aside {
+  top: calc(60px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+}
+@media (max-width: 720px), (max-aspect-ratio: 1/1) {
+  #revent,
+  #revent.aside {
+    left: 16px;
+    top: calc(60px + env(safe-area-inset-top, 0px));
+    right: 16px;
+    width: auto;
+    max-width: 480px;
+    transform: none;
+  }
 }
 @media (max-width: 720px) {
   #pos {
