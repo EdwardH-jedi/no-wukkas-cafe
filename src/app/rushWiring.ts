@@ -17,6 +17,7 @@ import { clipFor } from '../data/voice';
 import { ibisPresent } from '../sim/ibis';
 import { HEIGHT_PRESETS } from '../sim/latte/pitcher';
 import { DIFFICULTY } from '../sim/listening';
+import { eventChoiceForKey, eventOwnsKey } from '../ui/eventCard';
 import { createRushHud, nextTicket, railOrder, type RushHud } from '../ui/rushHud';
 import type { App } from './context';
 import { createRushFrame } from './rushView';
@@ -82,7 +83,7 @@ export function createRushView(app: App): RushHud {
 }
 
 /** Day 2 keys: T take order, R replay, Enter ring up / lock in / hand over, F/L make, B bin,
- *  1–6 serve or jug height. */
+ *  1–3 answer the event card while it's up, else 1–6 serve or jug height. */
 export function rushKey(app: App, r: Rush, k: string, e: KeyboardEvent): void {
   const { input } = app;
   const b = r.barista;
@@ -104,7 +105,11 @@ export function rushKey(app: App, r: Rush, k: string, e: KeyboardEvent): void {
     if (c?.heard) rushAct(app, { type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
   } else if (k === 'b') rushAct(app, { type: 'bin' });
   else if (k === 'i' && ibisPresent(app.ibis)) app.ibisShoo = true;
-  else if (/^[1-6]$/.test(k)) {
+  else if (eventOwnsKey(r, k)) {
+    // While an event card is up, 1–3 answer it (before serving a ticket or setting the jug).
+    const choice = eventChoiceForKey(r, k);
+    if (choice) rushAct(app, { type: 'eventChoice', choice });
+  } else if (/^[1-6]$/.test(k)) {
     if (b.phase === 'pour') input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
     else if (b.ready) {
       const c = railOrder(r)[Number(k) - 1];

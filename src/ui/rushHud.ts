@@ -14,10 +14,10 @@ import {
 } from '../core/rush';
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
-import { EVENT_PROMPTS } from '../data/events';
 import { shiftDef } from '../core/week/progress';
 import { answerAsText, isAnswerKey, transcriptVisible, type ListenStage } from '../sim/listening';
 import { DRINK_NAME, formatCents, LUKEWARM, MILK_NAME, orderLabel } from '../sim/rush';
+import { createEventCard, EVENT_KEYS } from './eventCard';
 import { createGauges, type GaugeMode } from './gauges';
 import { instruction } from './instructions';
 import { createPos } from './pos';
@@ -79,7 +79,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     <div id="rail" aria-label="Order tickets"></div>
     <div id="pass" class="hide"></div>
     <div id="rinstr" class="hide"><div class="h"></div><div class="b"></div></div>
-    <div id="revent" class="hide" role="group" aria-label="Something's come up"><div class="h"></div><div class="b"></div></div>
+    <div id="revent" class="hide" role="group" aria-label="Something's come up"><div class="ek">Something's come up</div><div class="h"></div><div class="b"></div></div>
     <div id="rgauges" class="hide"></div>
     <div id="ractions"></div>
     <div id="rtouchHeight" class="hide"><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
@@ -104,32 +104,10 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   // The shot card's Stop button: the same as Enter while steaming during the shot.
   const gauges = createGauges($('#rgauges'), touch, () => cb.action({ type: 'next' }));
   const pos = createPos(root, touch, cb.action);
-  const eventEl = $('#revent');
-  let eventKey = '';
-  /** The shift event waiting for an answer (week mode): what happened and the choices. */
-  const renderEvent = (r: Rush): void => {
-    const cur = r.phase === 'service' ? r.shiftEvents.current : null;
-    const k = cur ? `${cur.def.id}|${r.customers.indexOf(cur.customer as RushCustomer)}` : '';
-    if (k === eventKey) return;
-    eventKey = k;
-    eventEl.classList.toggle('hide', !cur);
-    if (!cur) return;
-    const name = cur.customer?.def.callName ?? 'Someone';
-    (eventEl.querySelector('.h') as HTMLElement).textContent = EVENT_PROMPTS[cur.def.id].replace(
-      '{name}',
-      name,
-    );
-    const box = eventEl.querySelector('.b') as HTMLElement;
-    box.innerHTML = cur.def.choices
-      .map(
-        (c) =>
-          `<button class="btn small" data-choice="${esc(c.id)}">${esc(c.label)}${c.costSeconds > 0 ? ` <small>−${c.costSeconds} s</small>` : ''}</button>`,
-      )
-      .join('');
-    box.querySelectorAll<HTMLButtonElement>('button[data-choice]').forEach((b) => {
-      b.onclick = () => cb.action({ type: 'eventChoice', choice: b.dataset.choice ?? '' });
-    });
-  };
+  // The shift event waiting for an answer (week mode): what happened and the choices.
+  const eventCard = createEventCard($('#revent'), touch, (choice) =>
+    cb.action({ type: 'eventChoice', choice }),
+  );
 
   $('#rpauseBtn').onclick = () => cb.pause(true);
   cb.bindAudio(topbar);
@@ -287,7 +265,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         actionKey = '';
         instr.classList.add('hide');
         pass.classList.add('hide');
-        renderEvent(r);
+        eventCard.update(r);
         gauges.update('', r.barista);
         return;
       }
@@ -307,7 +285,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       lastRush = r;
       railView.update(r);
       pos.update(r);
-      renderEvent(r);
+      eventCard.update(r);
       const b = r.barista;
       const reg = r.phase === 'service' ? atRegister(r) : null;
       const counter = r.phase === 'service' ? atCounter(r) : null;
@@ -366,6 +344,13 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
               counter.state === 'ordering'
                 ? `Listen to ${esc(counter.def.callName)}…`
                 : `Ring up what ${esc(counter.def.callName)} said. Didn't catch it? Replay${touch ? '' : ' (<kbd>R</kbd>)'}, ask them to repeat, or ask about one thing.`,
+          };
+        } else if (held && reg && b.phase === 'idle') {
+          // Their order waits for the event card's answer: T would do nothing yet.
+          const n = r.shiftEvents.current?.def.choices.length ?? 0;
+          ins = {
+            title: 'Answer first',
+            html: `${esc(reg.def.callName)}'s order waits for your answer on the card${touch || n === 0 ? '' : ` (<kbd>1</kbd>–<kbd>${Math.min(n, EVENT_KEYS)}</kbd>)`}.`,
           };
         } else if (b.phase === 'idle') {
           const waiting = railOrder(r).length;

@@ -139,12 +139,17 @@
   }
 }
 
+/* The event card sits left of the cup. Its width keeps it clear of the cup at its widest (the pour
+   close-up: the rim reaches about 26 % of the screen height either side of the middle), so it
+   narrows on squarer screens; on phones and portrait screens it goes to the top instead. */
 #revent {
   position: absolute;
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  width: min(300px, calc(100vw - 32px));
+  width: clamp(220px, calc(50vw - 27vh - 48px), 300px);
+  box-sizing: border-box;
+  z-index: 6;
   background: var(--glass2);
   border: 1px solid var(--line);
   border-top: 4px solid var(--paper);
@@ -153,9 +158,29 @@
   pointer-events: auto;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
+#revent .ek {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  margin-bottom: 2px;
+}
 #revent .h {
   font-weight: 800;
   margin-bottom: 8px;
+}
+#revent .btn {
+  text-align: left;
+}
+/* A choice's patience cost (EventChoice.costSeconds). */
+#revent .cost {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(22, 16, 12, 0.16);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 #revent .b {
   display: flex;
@@ -343,6 +368,15 @@
 }
 #rsubs .listen {
   color: var(--txt-dim);
+}
+@media (max-width: 720px), (max-aspect-ratio: 1/1) {
+  #revent {
+    top: calc(60px + env(safe-area-inset-top, 0px));
+    right: 16px;
+    width: auto;
+    max-width: 480px;
+    transform: none;
+  }
 }
 @media (max-width: 720px) {
   #pos {
