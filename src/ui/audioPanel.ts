@@ -1,10 +1,17 @@
-// Sound settings: per-bus volume, voice on/off, a test line, replay, and a visible status so a
-// silent voice is never a mystery; plus the listening settings (difficulty, order subtitles,
-// learning mode). Also owns the toast that pops up when audio fails.
+// Settings: per-bus volume, voice on/off, a test line, replay, and a visible status so a silent
+// voice is never a mystery; the listening settings (difficulty, order subtitles, learning mode);
+// and the latte-art pour sensitivity. Opened from the title ("Settings") and the in-game Sound
+// buttons. Also owns the toast that pops up when audio fails.
 
 import type { AudioManager, AudioStatus, Bus } from '../audio/manager';
 import type { Difficulty } from '../sim/listening';
-import type { ListenSettings } from './settings';
+import { focusQuietly, menuKeys } from './screens/keys';
+import {
+  POUR_SENSITIVITY,
+  pourSensitivityLabel,
+  roundPourSensitivity,
+  type ListenSettings,
+} from './settings';
 
 export interface AudioPanelCallbacks {
   replay(): void;
@@ -46,9 +53,12 @@ export function createAudioPanel(
   panel.id = 'audioPanel';
   panel.className = 'hide';
   panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'true');
+  // The in-game buttons and the e2e specs know it as "Sound settings".
   panel.setAttribute('aria-label', 'Sound settings');
   panel.innerHTML = `<div class="box">
-    <h3>Sound</h3>
+    <h3>Settings</h3>
+    <h4>Sound</h4>
     <p class="astatus"><i class="dot"></i><span></span></p>
     ${(['voice', 'music', 'ambience', 'sfx'] as const)
       .map(
@@ -57,7 +67,7 @@ export function createAudioPanel(
       )
       .join('')}
     <label class="chk"><input type="checkbox" data-voice-on> Voices on</label>
-    <h4>Listening (Day 2)</h4>
+    <h4>Listening</h4>
     <label class="sel"><span>Difficulty</span><select data-l="difficulty">
       <option value="easy">Easy: clear orders, quiet café</option>
       <option value="normal">Normal</option>
@@ -65,6 +75,9 @@ export function createAudioPanel(
     <label class="chk"><input type="checkbox" data-l="subtitles"> Subtitles: always (accessibility)</label>
     <label class="chk"><input type="checkbox" data-l="learning"> Learning mode: show what they said once you ring it up</label>
     <p class="fine">Difficulty changes start with the next shift.</p>
+    <h4>Latte art</h4>
+    <label class="slider"><span>Pour sensitivity</span><input type="range" min="${POUR_SENSITIVITY.min}" max="${POUR_SENSITIVITY.max}" step="${POUR_SENSITIVITY.step}" data-l="pour" aria-label="Pour sensitivity"><output data-out="pour"></output></label>
+    <p class="fine">How strongly the jug answers your hand: lower for a gentler pour, higher for a quicker one. 1.0× is as tuned.</p>
     <div class="titleBtns">
       <button class="btn small" data-a="test">Test voice</button>
       <button class="btn small ghost" data-a="replay">Replay last line</button>
@@ -85,11 +98,15 @@ export function createAudioPanel(
   const diffSel = panel.querySelector('[data-l="difficulty"]') as HTMLSelectElement;
   const subChk = panel.querySelector('[data-l="subtitles"]') as HTMLInputElement;
   const learnChk = panel.querySelector('[data-l="learning"]') as HTMLInputElement;
+  const pourIn = panel.querySelector('[data-l="pour"]') as HTMLInputElement;
+  const pourOut = panel.querySelector('[data-out="pour"]') as HTMLElement;
   const syncListen = (): void => {
     const l = cb.listen.get();
     diffSel.value = l.difficulty;
     subChk.checked = l.subtitles === 'always';
     learnChk.checked = l.learning;
+    pourIn.value = String(roundPourSensitivity(l.pourSensitivity));
+    pourOut.textContent = pourSensitivityLabel(l.pourSensitivity);
   };
   const setListen = (): void => {
     const prev = cb.listen.get();
@@ -104,6 +121,11 @@ export function createAudioPanel(
     });
   };
   diffSel.onchange = subChk.onchange = learnChk.onchange = setListen;
+  pourIn.oninput = () => {
+    const v = roundPourSensitivity(Number(pourIn.value));
+    pourOut.textContent = pourSensitivityLabel(v);
+    cb.listen.set({ ...cb.listen.get(), pourSensitivity: v });
+  };
 
   let toastTimer = 0;
   let lastToast = '';
@@ -161,6 +183,10 @@ export function createAudioPanel(
   panel.onclick = (e) => {
     if (e.target === panel) p.close();
   };
+  // A dialog: Esc closes it, Tab stays inside, and keys pressed in it never reach the game.
+  menuKeys(panel, { modal: true, escape: () => p.close() });
+  /** What had focus when the panel opened (the title's Settings, a HUD's Sound button). */
+  let opener: Element | null = null;
 
   const p: AudioPanel = {
     buttonsHtml:
@@ -184,11 +210,19 @@ export function createAudioPanel(
     open() {
       sync();
       syncListen();
+      if (panel.classList.contains('hide')) opener = document.activeElement;
       panel.classList.remove('hide');
-      (panel.querySelector('button[data-a="close"]') as HTMLElement).focus();
+      panel.scrollTop = 0;
+      (panel.querySelector('button[data-a="close"]') as HTMLElement).focus({
+        preventScroll: true,
+      });
     },
     close() {
+      if (panel.classList.contains('hide')) return;
       panel.classList.add('hide');
+      // Back to the button that opened it, if it's still on screen.
+      if (opener instanceof HTMLElement && opener.getClientRects().length) focusQuietly(opener);
+      opener = null;
     },
   };
   sync();

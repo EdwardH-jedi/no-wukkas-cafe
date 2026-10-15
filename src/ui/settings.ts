@@ -23,6 +23,17 @@ export interface ListenSettings {
 /** The pour-sensitivity slider's range. */
 export const POUR_SENSITIVITY = { min: 0.5, max: 2, step: 0.1, default: 1 } as const;
 
+/** A slider value as a setting: inside the range and on its 0.1 steps (a range input can report
+ *  0.7999…, and junk falls back to the default). */
+export function roundPourSensitivity(v: number): number {
+  if (!Number.isFinite(v)) return POUR_SENSITIVITY.default;
+  const c = Math.min(POUR_SENSITIVITY.max, Math.max(POUR_SENSITIVITY.min, v));
+  return Math.round(c / POUR_SENSITIVITY.step) / Math.round(1 / POUR_SENSITIVITY.step);
+}
+
+/** The slider's readout, e.g. "1.0×" (1 is the pour as tuned). */
+export const pourSensitivityLabel = (v: number): string => `${roundPourSensitivity(v).toFixed(1)}×`;
+
 const pourSensitivityOf = (v: unknown): number =>
   typeof v === 'number' && Number.isFinite(v)
     ? Math.min(POUR_SENSITIVITY.max, Math.max(POUR_SENSITIVITY.min, v))

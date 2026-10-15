@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { loadListenSettings, POUR_SENSITIVITY, saveListenSettings } from '../../src/ui/settings';
+import {
+  loadListenSettings,
+  POUR_SENSITIVITY,
+  pourSensitivityLabel,
+  roundPourSensitivity,
+  saveListenSettings,
+} from '../../src/ui/settings';
 
 const KEY = 'nwc.listen.v1';
 
@@ -93,5 +99,26 @@ describe('listening settings (localStorage)', () => {
       },
     });
     expect(loadListenSettings().difficulty).toBe('normal');
+  });
+});
+
+describe('pour sensitivity slider', () => {
+  it('snaps slider values to the range and its 0.1 steps', () => {
+    expect(roundPourSensitivity(0.7999999)).toBe(0.8);
+    expect(roundPourSensitivity(1.35)).toBe(1.4);
+    expect(roundPourSensitivity(1)).toBe(1);
+    expect(roundPourSensitivity(0.2)).toBe(POUR_SENSITIVITY.min);
+    expect(roundPourSensitivity(7)).toBe(POUR_SENSITIVITY.max);
+    expect(roundPourSensitivity(Number.NaN)).toBe(POUR_SENSITIVITY.default);
+  });
+
+  it('every step from 0.5 to 2 is a clean one-decimal number', () => {
+    for (let i = 5; i <= 20; i++) expect(roundPourSensitivity(i * 0.1)).toBe(i / 10);
+  });
+
+  it('reads as a multiplier with one decimal', () => {
+    expect(pourSensitivityLabel(1)).toBe('1.0×');
+    expect(pourSensitivityLabel(0.5)).toBe('0.5×');
+    expect(pourSensitivityLabel(1.96)).toBe('2.0×');
   });
 });
