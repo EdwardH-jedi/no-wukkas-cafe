@@ -31,6 +31,7 @@ export function titleHtml(touch: boolean): string {
     <div class="titleBtns">
       <button class="btn" data-act="start">Day 1: Start the trial</button>
       <button class="btn ghost" data-act="day2">Day 2: The morning rush</button>
+      <button class="btn ghost" data-act="shifts">The week: shifts</button>
       <button class="btn ghost" data-act="practice">Latte art practice</button>
       <button class="btn ghost" data-act="sound">Sound settings</button>
     </div>

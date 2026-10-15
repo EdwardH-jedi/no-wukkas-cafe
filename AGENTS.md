@@ -11,7 +11,7 @@ Keep it true. If you change a command, folder or rule, update this file in the s
 
 - **Platform:** web first (desktop + mobile browsers, iOS Safari included). Static build, no backend.
 - **Stack (target):** Vite · TypeScript (strict) · Three.js (npm, latest) · Vitest · Playwright.
-- **Current state:** `src/` holds the Vite + TypeScript game. Playable days: the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner) and **Day 2, the morning rush** (six customers whose spoken orders you ring up by ear, tickets, serving, shift report), plus a no-pressure **latte-art practice** mode from the title screen (pour, review with reasons, reset, Gaz's demo; see `LATTE_V2_REPORT.md`). Dialogue is pre-rendered voice clips played through Web Audio (placeholder macOS voices for now; see `OVERNIGHT_REPORT.md`); see `docs/ROADMAP.md` → "Day 1" / "Day 2". The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
+- **Current state:** `src/` holds the Vite + TypeScript game. Playable days: the **Day 1 barista trial** (grind, shot, steam, pour a heart for Gaz the owner) and **Day 2, the morning rush** (six customers whose spoken orders you ring up by ear, tickets, serving, shift report). **The week** (title → "The week: shifts") runs the same rush as five shifts from `data/week.ts` with generated orders, shift events and an autosaved SaveV2 (only the current shift is playable), plus Endless Rush, and a no-pressure **latte-art practice** mode from the title screen (pour, review with reasons, reset, Gaz's demo; see `LATTE_V2_REPORT.md`). Dialogue is pre-rendered voice clips played through Web Audio (placeholder macOS voices for now; see `OVERNIGHT_REPORT.md`); see `docs/ROADMAP.md` → "Day 1" / "Day 2". The single-file prototype in `prototype/game.html` (Three.js r128 from a CDN, about 1,800 lines of plain JS) is still the **design reference** for the customer/economy loop that Phase 0 will port.
 - **Owner:** Edward. Solo project with AI pair-programming.
 
 ## 2. Roles and working agreement
@@ -40,7 +40,7 @@ npm run preview        # serve dist/ locally → http://localhost:4183
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
-npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, audio specs (~9 min); E2E_PORT=… to run beside another checkout
+npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, the week, audio specs (~13 min); E2E_PORT=… to run beside another checkout
 npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
 npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-timer} bot × {easy, normal} (-- --detail per seed)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
@@ -54,16 +54,16 @@ Voice clips are **placeholders** (Apple system voices, personal-use only): they 
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
-Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
+Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
 
 ## 4. Architecture and hard boundaries
 
 ```
 src/
   main.ts            boot, wires everything, owns the RAF loop
-  core/              state machines (Day 1 trial.ts, Day 2 rush.ts + barista.ts + speech.ts,
-                     latte-art practice.ts),
-                     fixed-step game clock with pause, seeded RNG; later: event bus, save/load
+  core/              state machines (Day 1 trial.ts, Day 2 rush/ + barista.ts + speech.ts),
+                     week progression and shift select glue (week/), the save store (save/),
+                     latte-art practice.ts, fixed-step game clock with pause, seeded RNG; later: event bus
   sim/               PURE game logic: orders, recipe evaluation, pricing, customers, patience,
                      events, economy, stress, rating. No DOM. No three. No Date.now/Math.random.
   data/              content as data: owner lines, customers, curated orders (orders.ts), voice

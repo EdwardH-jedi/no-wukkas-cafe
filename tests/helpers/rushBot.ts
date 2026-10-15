@@ -15,6 +15,7 @@ import {
   type RushCustomer,
   type RushEvent,
   type RushInput,
+  type RushWeek,
 } from '../../src/core/rush';
 import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
@@ -61,6 +62,8 @@ export interface ListenBot {
   idle?: boolean;
   difficulty?: Difficulty;
   lines?: LineOverrides;
+  /** Week mode (generated orders); default Day 2. */
+  week?: RushWeek;
   /** Human reaction times (default: none). */
   latency?: BotLatency;
   /** Steam a flat white's milk while its shot runs (two hands), stopping the shot at 25.5 s. */
@@ -69,6 +72,8 @@ export interface ListenBot {
   handOver?: boolean;
   seed?: number;
   maxSeconds?: number;
+  /** Answer to a shift event on screen (week mode); default its first choice. */
+  eventChoice?: (r: Rush) => string;
   /** Called after every step (assertions, tracing). */
   each?: (r: Rush) => void;
 }
@@ -94,8 +99,11 @@ interface Mem {
 
 const NO_LATENCY: BotLatency = { decide: 0, perAid: 0, station: 0 };
 
-/** Register work: take the order, use aids, ring up. Null when there's nothing to do. */
+/** Register work: answer a shift event, take the order, use aids, ring up. Null when there's
+ *  nothing to do. */
 function registerAction(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction | null {
+  const ev = r.shiftEvents.current;
+  if (ev) return { type: 'eventChoice', choice: o.eventChoice?.(r) ?? ev.def.choices[0]?.id ?? '' };
   if (atRegister(r)) return { type: 'takeOrder' };
   const c = atCounter(r);
   if (!c) return null;
@@ -201,7 +209,7 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
         !d ||
         d.type !== t.heard.type ||
         (d.type === 'flatWhite' && d.milkType !== t.heard.milk);
-      return stale ? { type: 'bin' } : { type: 'serve', customer: t.def.id };
+      return stale ? { type: 'bin' } : { type: 'serve', customer: t.key };
     }
     default:
       return null;
@@ -226,7 +234,7 @@ function botInput(r: Rush, o: ListenBot, m: Mem): RushInput {
 }
 
 export function playRush(o: ListenBot = {}): Played {
-  const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {});
+  const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {}, o.week ?? null);
   const m: Mem = {
     target: null,
     step: 0,

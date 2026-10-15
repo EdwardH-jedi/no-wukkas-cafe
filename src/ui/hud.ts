@@ -12,6 +12,8 @@ export interface HudCallbacks {
   action(a: TrialAction): void;
   /** Start Day 2 (title screen or verdict). */
   day2(): void;
+  /** Open shift select (the week's shifts and Endless Rush). */
+  shifts(): void;
   /** Latte-art practice (title screen). */
   practice(): void;
   /** Open the sound settings. */
@@ -72,6 +74,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   title.querySelectorAll<HTMLButtonElement>('button[data-act]').forEach((b) => {
     b.onclick = () => {
       if (b.dataset.act === 'day2') cb.day2();
+      else if (b.dataset.act === 'shifts') cb.shifts();
       else if (b.dataset.act === 'practice') cb.practice();
       else if (b.dataset.act === 'sound') cb.sound();
       else cb.action('start');

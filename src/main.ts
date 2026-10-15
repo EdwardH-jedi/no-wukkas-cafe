@@ -18,11 +18,15 @@ import {
   atCounter,
   atRegister,
   createRush,
+  customerByKey,
   emptyRushInput,
   stepRush,
   type Rush,
   type RushAction,
+  type RushWeek,
 } from './core/rush';
+import { browserStorage, createSaveStore } from './core/save/storage';
+import { canPlay, endlessFor, finishShift, weekFor, type Cooldowns } from './core/week/session';
 import {
   createPractice,
   emptyPracticeInput,
@@ -42,9 +46,11 @@ import { createAudioPanel } from './ui/audioPanel';
 import { createHud } from './ui/hud';
 import { createPracticeHud } from './ui/practiceHud';
 import { stepRushIbis } from './core/rushIbis';
+import { ibisForShift } from './sim/events/rareBird';
 import { createIbis, ibisPresent, type Ibis } from './sim/ibis';
 import { createIbisView } from './world/ibis';
 import { createRushHud, nextTicket, railOrder } from './ui/rushHud';
+import { renderShiftSelect } from './ui/screens/shiftSelect';
 import { loadListenSettings, saveListenSettings, type ListenSettings } from './ui/settings';
 import { buildCafe } from './world/cafe';
 import { createCameraRig } from './world/camera';
@@ -99,6 +105,15 @@ async function boot(): Promise<void> {
   const trial = createTrial(seed);
   const clock = createClock();
   let listen: ListenSettings = loadListenSettings();
+  // The week's save (shift, menu, receipts, tips). main.ts may read the clock; core/ and sim/ don't.
+  const store = createSaveStore(browserStorage(), {
+    seed,
+    difficulty: listen.difficulty,
+    createdAt: new Date().toISOString(),
+  });
+  /** Shift-event cooldowns, kept while the page is open (not saved: Edward, 2026-10-15). */
+  let cooldowns: Cooldowns = {};
+  const SAVE_NOTE = "Progress won't be saved in this browser.";
   const audio = createAudioManager(import.meta.env.BASE_URL, {
     voiceOff: params.get('voice') === '0',
   });
@@ -130,10 +145,13 @@ async function boot(): Promise<void> {
   let practiceAction: PracticeAction | null = null;
   let rush: Rush | null = null;
   const rushIn = emptyRushInput();
-  // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare.
+  // The bin chicken: ?ibis=0 never, ?ibis=1 every shift (30 s in); otherwise seeded and rare. On a
+  // week shift the event scheduler books it (RARE_BIRD), unless ?ibis= says otherwise.
   const makeIbis = (): Ibis => {
-    const b = createIbis(seed, params.get('ibis') === '1');
-    if (params.get('ibis') === '0') b.scheduledAt = null;
+    const force = params.get('ibis');
+    if (rush?.week && force === null) return ibisForShift(rush.seed, rush.shiftEvents.bird);
+    const b = createIbis(seed, force === '1');
+    if (force === '0') b.scheduledAt = null;
     return b;
   };
   let ibis = makeIbis();
@@ -204,8 +222,8 @@ async function boot(): Promise<void> {
     audio.setPaused(false);
   };
 
-  /** Start the morning rush (from the title or the trial verdict). */
-  const startDay2 = (): void => {
+  /** Start a rush: Day 2 (no week), a week shift or Endless. Called inside a click (iOS audio). */
+  const startRush = (week: RushWeek | null, rushSeed: number): void => {
     audio.unlock();
     sfx.unlock();
     audio.stopVoice();
@@ -213,7 +231,7 @@ async function boot(): Promise<void> {
     prefetchDay(2);
     resumeAll();
     crowd.clear();
-    rush = createRush(seed, listen.difficulty);
+    rush = createRush(rushSeed, listen.difficulty, {}, week);
     ibis = makeIbis();
     sfx.setNoise(DIFFICULTY[listen.difficulty].noise);
     mode = 'rush';
@@ -223,6 +241,48 @@ async function boot(): Promise<void> {
     hud2Root.classList.remove('hide');
     canvas.classList.remove('aim');
     rushHud.onPhase('intro', rush);
+  };
+  /** Start the morning rush (from the title or the trial verdict). */
+  const startDay2 = (): void => startRush(null, seed);
+  /** The shift the week is on. The save keeps the difficulty it was last played at. */
+  const startShift = (): void => {
+    let save = store.load();
+    if (save.difficulty !== listen.difficulty) {
+      save = { ...save, difficulty: listen.difficulty };
+      store.save(save);
+    }
+    startRush(weekFor(save, cooldowns), save.seed);
+  };
+  const startEndless = (): void => {
+    const save = store.load();
+    startRush(endlessFor(save), save.seed);
+  };
+  /** The week's shifts and Endless Rush, over the title screen. */
+  const openShifts = (): void => {
+    audio.unlock();
+    sfx.unlock();
+    sfx.play('click');
+    if (uiRoot.querySelector('.shift-select')) return;
+    const close = renderShiftSelect(
+      uiRoot,
+      store.load(),
+      {
+        play: (i) => {
+          if (!canPlay(store.load(), i)) return;
+          close();
+          startShift();
+        },
+        endless: () => {
+          close();
+          startEndless();
+        },
+        back: () => close(),
+      },
+      store.memoryOnly ? SAVE_NOTE : '',
+    );
+    uiRoot
+      .querySelector<HTMLButtonElement>('.shift-select button:not(:disabled)')
+      ?.focus({ preventScroll: true });
   };
 
   /** Latte-art practice (from the title screen): straight to a cup and a jug of silky milk. */
@@ -302,6 +362,8 @@ async function boot(): Promise<void> {
       rushAct({ type: 'restart' });
     },
     title: toTitle,
+    nextShift: startShift,
+    memoryOnly: () => store.memoryOnly,
     height: (d) => (touchHeight = d),
     skip: () => (input.skip = true),
     audioButtonsHtml: audioPanel.buttonsHtml,
@@ -326,6 +388,7 @@ async function boot(): Promise<void> {
   const hud = createHud(hud1Root, {
     action: act,
     day2: startDay2,
+    shifts: openShifts,
     practice: startPractice,
     sound: () => {
       audio.unlock();
@@ -469,7 +532,7 @@ async function boot(): Promise<void> {
       if (b.phase === 'pour') input.heightPreset = HEIGHT_PRESETS[Number(k) - 1] ?? null;
       else if (b.ready) {
         const c = railOrder(r)[Number(k) - 1];
-        if (c) rushAct({ type: 'serve', customer: c.def.id });
+        if (c) rushAct({ type: 'serve', customer: c.key });
       }
     } else if (k === 'w' || k === 'arrowup') keyHeight = 1;
     else if (k === 's' || k === 'arrowdown') keyHeight = -1;
@@ -656,6 +719,10 @@ async function boot(): Promise<void> {
         live: audio.voices.live - audio.voices.fading,
       };
     },
+    /** The week's save as stored (shift, menu, receipts, tips). */
+    get save() {
+      return { ...store.load(), memoryOnly: store.memoryOnly };
+    },
     /** Day 2 state for tests (null on Day 1). */
     get rush() {
       const r = rush;
@@ -684,7 +751,9 @@ async function boot(): Promise<void> {
           id: c.def.id,
           state: c.state,
           patience: c.patience,
-          max: c.def.patience,
+          max: c.maxPatience,
+          key: c.key,
+          arriveAt: c.arriveAt,
           ticket: c.ticket,
           outcome: c.outcome,
           rejected: c.rejected,
@@ -695,6 +764,21 @@ async function boot(): Promise<void> {
           listen: { ...c.listen, clarified: [...c.listen.clarified] },
         })),
         difficulty: r.difficulty,
+        week: r.week
+          ? {
+              week: r.week.week ?? 1,
+              shiftIndex: r.week.shiftIndex,
+              endless: r.week.endless === true,
+            }
+          : null,
+        event: r.shiftEvents.current
+          ? {
+              id: r.shiftEvents.current.def.id,
+              customer: r.shiftEvents.current.customer?.def.id ?? null,
+              choices: r.shiftEvents.current.def.choices.map((c) => c.id),
+            }
+          : null,
+        eventsFired: r.shiftEvents.log.fired.map((f) => f.id),
         listening: r.listening.map((x) => ({ ...x, wrong: [...x.wrong] })),
         records: r.records.map((x) => ({ ...x })),
         summary: r.summary,
@@ -840,7 +924,7 @@ async function boot(): Promise<void> {
       else if (ev.type === 'sfx') sfx.play(ev.id);
       else if (ev.type === 'ticket') {
         sfx.play('tick');
-        const c = r.customers.find((x) => x.def.id === ev.customer);
+        const c = customerByKey(r, ev.customer);
         if (c) rushHud.onTicket(c);
       } else if (ev.type === 'ask') rushHud.onAsk(ev.text);
       else if (ev.type === 'served')
@@ -849,7 +933,12 @@ async function boot(): Promise<void> {
           ev.result.satisfaction >= 75 ? 'cheer' : ev.result.satisfaction >= 45 ? 'nod' : 'huff',
         );
       else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
-      else if (ev.type === 'walkout') crowd.react(ev.customer, 'huff');
+      else if (ev.type === 'walkout' || ev.type === 'refused') crowd.react(ev.customer, 'huff');
+      else if (ev.type === 'summary' && r.week && !r.week.endless) {
+        // Autosave: the receipt and tips, the next shift on a pass. Endless isn't a week shift.
+        finishShift(store, ev.summary, r.shiftEvents.affinity);
+        cooldowns = { ...r.shiftEvents.log.lastShift };
+      }
     }
     r.events.length = 0;
 

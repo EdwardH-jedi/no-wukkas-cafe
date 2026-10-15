@@ -5,6 +5,7 @@
 // customer's answer always goes first, so the bird never talks over what the player must hear.
 
 import { ENTER_TIME, type Rush } from './rush';
+import { birdLeft } from './rush/events';
 import { gaz } from './rushSpeech';
 import { stepIbis, type Ibis, type IbisEvent } from '../sim/ibis';
 
@@ -35,7 +36,10 @@ export function stepRushIbis(r: Rush, b: Ibis, input: IbisControls, dt: number):
   for (const e of b.events) {
     if (e.type === 'enter') gaz(r, 'ibis.enter', 'react');
     else if (e.type === 'atBin') gaz(r, 'ibis.bin', 'ambient');
-    else if (e.type === 'leave') gaz(r, e.how === 'shooed' ? 'ibis.out' : 'ibis.ignored', 'react');
+    else if (e.type === 'leave') {
+      gaz(r, e.how === 'shooed' ? 'ibis.out' : 'ibis.ignored', 'react');
+      birdLeft(r, e.how === 'shooed'); // week mode: RARE_BIRD's outcome (queue, reputation)
+    }
   }
   return b.events;
 }
