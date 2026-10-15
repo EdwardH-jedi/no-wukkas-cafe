@@ -24,6 +24,9 @@ export function focusables(el: HTMLElement): HTMLElement[] {
 /** Install the menu key rules on `el` (replacing any earlier ones: safe to call on every draw). */
 export function menuKeys(el: HTMLElement, opts: MenuKeyOptions = {}): void {
   el.onkeydown = (e) => {
+    // A hidden screen can still hold focus (the title's Start button after the trial begins): its
+    // keys are the game's again, Space to pour included.
+    if (el.getClientRects().length === 0) return;
     if (e.key === 'Escape' && opts.escape) {
       e.preventDefault();
       e.stopPropagation();
