@@ -206,6 +206,14 @@ async function pourTrackpadStyle(page: Page): Promise<void> {
     const { phase, t } = await clock();
     if (phase !== 'pour') break;
     if (t < 0) continue;
+    if (t > 8.6) {
+      // Space eases the pour in (SPACE_RAMP), so this plan's cup ends just under the 88 % that
+      // hands it over by itself (headless: 87.4 % against 89.1 % before the ramp). Hand it over
+      // the way a player would.
+      await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+      await page.keyboard.press('Enter');
+      break;
+    }
     const k = at(t);
     const p = await page.evaluate(
       ([x, y]) =>

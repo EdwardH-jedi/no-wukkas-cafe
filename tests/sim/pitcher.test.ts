@@ -15,7 +15,9 @@ import {
   LIP,
   nearestPreset,
   pitcherFlow,
+  pourGain,
   PULL_TILT_CAP,
+  SPACE_RAMP,
   stepPitcher,
   stepPourFrame,
   TILT_DOWN,
@@ -24,6 +26,8 @@ import {
   type PitcherState,
   type PourControlInput,
 } from '../../src/sim/latte/pitcher';
+import { diagnose, createPourLog, trackPour } from '../../src/sim/latte/coach';
+import { scorePattern } from '../../src/sim/latte/score';
 import { SILKY_MILK } from '../../src/sim/milk';
 
 const controls = (): PitcherControls => ({
@@ -364,5 +368,99 @@ describe('pour sensitivity: a gain on how fast holding tips the jug', () => {
     expect(tap(0.5)).toBe(0);
     expect(tap(2)).toBeGreaterThan(0);
     expect(tap(2)).toBeLessThan(0.01);
+  });
+});
+
+describe('Space ramps the pour in over SPACE_RAMP (mouse and finger unchanged)', () => {
+  it('pourGain: the setting for a mouse/finger, a linear ramp to it for Space', () => {
+    expect(SPACE_RAMP).toBeCloseTo(0.3, 9);
+    expect(pourGain(1, null)).toBe(1);
+    expect(pourGain(1.5, null)).toBe(1.5);
+    expect(pourGain(1, 0)).toBe(0);
+    expect(pourGain(1, SPACE_RAMP / 2)).toBeCloseTo(0.5, 9);
+    expect(pourGain(1, SPACE_RAMP)).toBe(1);
+    expect(pourGain(1, 5)).toBe(1);
+    expect(pourGain(2, 5)).toBe(2);
+    expect(pourGain(0.5, SPACE_RAMP / 2)).toBeCloseTo(0.25, 9);
+  });
+
+  /** Tilt after holding for `seconds`, by mouse (gain 1 at once) or by Space (ramped). */
+  const tiltAfter = (seconds: number, space: boolean): number => {
+    const p = createPitcher();
+    const c = controls();
+    const g = createPourGate();
+    applyPourInput(c, g, input()); // arm the gate
+    for (let i = 1; i <= Math.round(seconds / STEP); i++) {
+      applyPourInput(
+        c,
+        g,
+        input({ holding: true, pourGain: pourGain(1, space ? i * STEP : null) }),
+      );
+      stepPitcher(p, c, STEP);
+    }
+    return p.tilt;
+  };
+
+  it('Space reaches full pouring strength after SPACE_RAMP, then tips at the same rate', () => {
+    const mouse = tiltAfter(SPACE_RAMP, false);
+    const space = tiltAfter(SPACE_RAMP, true);
+    expect(mouse).toBeCloseTo(TILT_UP * SPACE_RAMP, 2);
+    // Half as far: the ramp's average strength is one half.
+    expect(space).toBeCloseTo(mouse / 2, 1);
+    // After the ramp it lags by a constant SPACE_RAMP / 2 of tilt time, no more.
+    const lag = tiltAfter(0.7, false) - tiltAfter(0.7, true);
+    expect(lag).toBeCloseTo((TILT_UP * SPACE_RAMP) / 2, 1);
+  });
+
+  it('on Space the first milk comes a little later, still inside the ramp', () => {
+    const firstFlow = (space: boolean): number => {
+      const p = createPitcher();
+      const c = controls();
+      const g = createPourGate();
+      applyPourInput(c, g, input());
+      for (let i = 1; i < 120; i++) {
+        applyPourInput(
+          c,
+          g,
+          input({ holding: true, pourGain: pourGain(1, space ? i * STEP : null) }),
+        );
+        stepPitcher(p, c, STEP);
+        if (pitcherFlow(p) > 0) return i * STEP;
+      }
+      return Infinity;
+    };
+    expect(firstFlow(false)).toBeCloseTo(LIP / TILT_UP, 1);
+    expect(firstFlow(true)).toBeGreaterThan(firstFlow(false));
+    expect(firstFlow(true)).toBeLessThan(SPACE_RAMP);
+  });
+
+  it("Gaz's pour on Space alone (one press, ramped) still makes a proper heart", () => {
+    const pour = createPour();
+    const p = createPitcher();
+    const c = controls();
+    const g = createPourGate();
+    const k = controls();
+    const log = createPourLog();
+    let held = 0;
+    for (let i = 0; i < Math.round(8.2 / STEP); i++) {
+      controlsAt(OWNER_DEMO, i * STEP, k);
+      held = k.holding ? held + STEP : 0;
+      applyPourInput(
+        c,
+        g,
+        input({
+          cupX: k.targetX,
+          cupY: k.targetY,
+          heightPreset: k.targetHeight,
+          holding: k.holding,
+          pourGain: pourGain(1, k.holding ? held : null),
+        }),
+      );
+      stepPourFrame(pour, p, c, SILKY_MILK, STEP);
+      trackPour(log, pour, p);
+    }
+    const s = scorePattern(pour.foam);
+    expect(s.art).toBeGreaterThanOrEqual(0.85);
+    expect(diagnose(s, pour, log).map((f) => f.id)).toEqual(['textbook']);
   });
 });

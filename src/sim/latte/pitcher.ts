@@ -29,6 +29,9 @@ const LIFT = HEIGHT_PRESETS[1];
 /** How far from the cup centre the spout can be aimed, in rim radii: past the rim (a careless pour
  *  still lands on the bench) but never off the mat or out of the close-up. */
 export const AIM_LIMIT = 1.6;
+/** Space eases the pour in: a key has no "how hard", so its press drives the tilt from nothing up
+ *  to full strength over this long (s). A mouse button or a finger drives it fully at once. */
+export const SPACE_RAMP = 0.3;
 const FOLLOW = 0.045; // s, position smoothing time constant
 const HEIGHT_SPEED = 28; // cm/s
 
@@ -100,6 +103,13 @@ export interface PourGate {
 
 export function createPourGate(): PourGate {
   return { armed: false };
+}
+
+/** One step's pour gain (PourControlInput.pourGain): the pour-sensitivity setting, times, when
+ *  Space alone is pouring, how far into its SPACE_RAMP the press is. `spaceFor`: seconds Space has
+ *  been held, or null when a mouse button or finger is down (or nothing is). */
+export function pourGain(sensitivity: number, spaceFor: number | null): number {
+  return spaceFor === null ? sensitivity : sensitivity * clamp(spaceFor / SPACE_RAMP);
 }
 
 /** Keep the aim within AIM_LIMIT of the cup centre (radially). */

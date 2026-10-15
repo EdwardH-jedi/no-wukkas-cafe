@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { STEP } from '../core/clock';
 import { ibisPresent } from '../sim/ibis';
-import type { PourControlInput } from '../sim/latte/pitcher';
+import { pourGain, type PourControlInput } from '../sim/latte/pitcher';
 import { RIM } from '../world/station';
 import type { App } from './context';
 import { practiceAct, practiceKey } from './practiceWiring';
@@ -21,6 +21,8 @@ export function installInput(app: App): () => void {
   // Dev builds: ?pour=0.5…2 stands in for the pour-sensitivity setting on this page (feel-testing
   // without the settings slider; never saved).
   const devPour = import.meta.env.DEV ? Number(app.params.get('pour') ?? NaN) : NaN;
+  /** Game seconds Space has been held (0 when it isn't): Space eases the pour in. */
+  let spaceFor = 0;
   // ---------------------------------------------------------------- input
   const ndc = new THREE.Vector2();
   const ray = new THREE.Raycaster();
@@ -132,8 +134,11 @@ export function installInput(app: App): () => void {
   /** Fill the per-step parts of the input from the latest pointer/keyboard state. */
   const sampleInput = (): void => {
     input.holding = app.held || app.spaceHeld;
-    // Read every step: the settings slider may change it mid-pour.
-    pourIn.pourGain = devPour >= 0.5 && devPour <= 2 ? devPour : app.listen.pourSensitivity;
+    // Read every step: the settings slider may change it mid-pour. Space ramps the pour in over
+    // SPACE_RAMP; a mouse button or finger (also when Space is down) drives it fully at once.
+    const sensitivity = devPour >= 0.5 && devPour <= 2 ? devPour : app.listen.pourSensitivity;
+    spaceFor = app.spaceHeld ? spaceFor + STEP : 0;
+    pourIn.pourGain = pourGain(sensitivity, app.spaceHeld && !app.held ? spaceFor : null);
     input.heightDelta += (app.keyHeight + app.touchHeight) * 9 * STEP;
     if (!pointer.has) return;
     const w = window.innerWidth;
