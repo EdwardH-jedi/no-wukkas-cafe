@@ -369,8 +369,17 @@
 #rsubs .listen {
   color: var(--txt-dim);
 }
+/* Two hands: the camera swings left to the group head and the cup goes with it; the card waits at
+   the top, clear of the cup and the gauges. */
+#revent.aside {
+  top: calc(60px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+}
 @media (max-width: 720px), (max-aspect-ratio: 1/1) {
-  #revent {
+  #revent,
+  #revent.aside {
+    left: 16px;
     top: calc(60px + env(safe-area-inset-top, 0px));
     right: 16px;
     width: auto;

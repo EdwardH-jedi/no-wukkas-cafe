@@ -1,7 +1,7 @@
 // The event card (week mode): what has come up, and the choices with what each costs the customer
 // in patience (EventChoice.costSeconds, data/events.ts). While the card is up, number keys 1–3 pick
 // its choices (rushKey in app/rushWiring.ts asks eventChoiceForKey). Touches the DOM only when the
-// event changes.
+// event (or where it must sit to keep clear of the cup) changes.
 
 import type { Rush } from '../core/rush';
 import { EVENT_PROMPTS } from '../data/events';
@@ -50,8 +50,15 @@ export function createEventCard(
   const head = el.querySelector('.h') as HTMLElement;
   const box = el.querySelector('.b') as HTMLElement;
   let key = '';
+  let aside = false;
   return {
     update(r) {
+      // Two hands swings the camera to the group head, and the cup with it: the card moves aside.
+      const a = r.barista.phase === 'shotSteam';
+      if (a !== aside) {
+        aside = a;
+        el.classList.toggle('aside', a);
+      }
       const def = shownEvent(r);
       const cur = def ? r.shiftEvents.current : null;
       const k = cur ? `${cur.def.id}|${cur.customer ? r.customers.indexOf(cur.customer) : -1}` : '';
