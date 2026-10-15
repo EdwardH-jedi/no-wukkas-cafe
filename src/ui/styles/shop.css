@@ -1,21 +1,281 @@
-/* Shop: café upgrades on the shift select screen. */
+/* The week's screens over the title: shift select (Monday–Friday grid, Endless Rush, the shop's
+   door) and the café upgrade shop. */
 
-.shift-select-shop {
-  width: min(460px, 100%);
+/* ---------- shared: a full-screen scroller with a centred card ---------- */
+:is(.shift-select, .shop) {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  /* The one scroller on these screens: margin: auto centres the card when it fits and lets it
+     scroll from the top when it doesn't (phones, 1024 × 640 with a long note). */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
+  /* Nearly solid: the title's own text mustn't read through. */
+  background: rgba(20, 14, 10, 0.985);
+  pointer-events: auto;
 }
-.shift-select-shop h3 {
-  margin: 6px 0;
+:is(.ss-card, .shop-card) {
+  margin: auto;
+  width: min(560px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+:is(.ss-card, .shop-card) h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 5vw, 40px);
+  letter-spacing: 0.02em;
+  color: var(--paper);
+}
+.ss-card header p {
+  margin: 4px 0 0;
+  color: var(--txt-dim);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.shift-select-note {
+  margin: 0;
   font-size: 13px;
-  font-weight: 800;
+  color: var(--gold);
 }
-.shift-select-shop ul {
+#ui :is(.shift-select-back, .shop-back) {
+  align-self: center;
+  min-width: 180px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  font-weight: 700;
+}
+#ui :is(.shift-select-back, .shop-back):hover {
+  border-color: rgba(246, 237, 225, 0.45);
+}
+
+/* ---------- shift select: the Monday–Friday grid ---------- */
+.ss-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+#ui .ss-grid button {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'day state'
+    'detail detail'
+    'best best';
+  gap: 2px 10px;
+  align-content: start;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--glass2);
+  text-align: left;
+}
+.ss-grid .day {
+  grid-area: day;
+  font-weight: 800;
+  font-size: 16px;
+}
+.ss-grid .state {
+  grid-area: state;
+  align-self: center;
+  justify-self: end;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(246, 237, 225, 0.1);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ss-grid .detail {
+  grid-area: detail;
+  font-size: 12.5px;
+  color: var(--txt-dim);
+  line-height: 1.35;
+}
+.ss-grid .best {
+  grid-area: best;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--crema);
+}
+#ui .ss-grid button:disabled {
+  cursor: default;
+}
+#ui .ss-grid button[data-status='done'] {
+  border-color: rgba(79, 143, 189, 0.6);
+}
+.ss-grid button[data-status='done'] .state {
+  background: var(--harbour);
+  color: var(--ink);
+}
+#ui .ss-grid button[data-status='locked'] {
+  opacity: 0.5;
+  border-style: dashed;
+}
+#ui .ss-grid button:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(243, 196, 80, 0.12);
+}
+.ss-grid button:not(:disabled) .state {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+/* ---------- shift select: the shop's door and Endless Rush ---------- */
+.ss-more {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#ui .ss-more button {
+  flex: 1 1 0;
+  box-sizing: border-box;
+  display: grid;
+  gap: 2px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--glass2);
+  text-align: left;
+}
+.ss-more .name {
+  font-weight: 800;
+  font-size: 15px;
+}
+.ss-more .sub {
+  font-size: 12.5px;
+  color: var(--txt-dim);
+}
+#ui .ss-more button:disabled {
+  cursor: default;
+  border-style: dashed;
+  background: rgba(22, 16, 12, 0.55);
+}
+.ss-more button:disabled .name {
+  color: var(--txt-dim);
+}
+.ss-more button:disabled .sub {
+  color: var(--crema);
+}
+#ui :is(.ss-grid, .ss-more) button:not(:disabled):hover {
+  border-color: rgba(246, 237, 225, 0.55);
+}
+
+/* Wide screens: the five shifts side by side, the shop and Endless Rush on one row. */
+@media (min-width: 760px) {
+  .ss-card {
+    width: min(920px, 100%);
+  }
+  .ss-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  #ui .ss-grid button {
+    min-height: 128px;
+    grid-template-columns: 1fr;
+    grid-template-areas: 'day' 'state' 'detail' 'best';
+    gap: 6px;
+  }
+  .ss-grid .state {
+    justify-self: start;
+  }
+  .ss-more {
+    flex-direction: row;
+  }
+}
+
+/* ---------- the shop ---------- */
+.shop-till {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--gold);
+}
+.shop-card ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
-.shift-select-shop button {
+.shop-card li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'name price'
+    'effect buy';
+  gap: 4px 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--glass2);
+}
+.shop-card li:has(button[data-status='owned']) {
+  border-color: rgba(79, 143, 189, 0.6);
+}
+.shop-card li b {
+  grid-area: name;
+  font-size: 15px;
+}
+.shop-card .price {
+  grid-area: price;
+  justify-self: end;
+  font-family: var(--mono);
+  font-size: 14px;
+}
+.shop-card .effect {
+  grid-area: effect;
   font-size: 13px;
+  color: var(--txt-dim);
+  line-height: 1.35;
+}
+#ui .shop-card li button {
+  grid-area: buy;
+  justify-self: end;
+  min-width: 88px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 800;
+}
+/* The till can't cover it: still pressable (it says why), but not a filled "go" button. */
+#ui .shop-card li button[data-status='short'] {
+  background: transparent;
+  color: var(--gold);
+  border-color: rgba(243, 196, 80, 0.5);
+}
+#ui .shop-card li button[data-status='owned'] {
+  background: transparent;
+  color: var(--harbour);
+  border-color: var(--harbour);
+  cursor: default;
+}
+.shop-msg {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--paper);
 }

@@ -1,4 +1,5 @@
-/* Shell screens: result card, verdict + shift report, sound panel + audio status, shift select. */
+/* Shell screens: result card, verdict + shift report, sound panel + audio status. Shift select and
+   the shop are in shop.css. */
 
 /* ---------- result card ---------- */
 :is(#card, #pcard) {
@@ -376,71 +377,6 @@
   font-size: 12px;
   color: var(--txt-dim);
   text-align: center;
-}
-/* ---------- shift select (title → "The week") ---------- */
-.shift-select {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* Taller than a phone screen with the shop: keep the top reachable when it scrolls. */
-  justify-content: safe center;
-  gap: 10px;
-  padding: 16px;
-  background: rgba(20, 14, 10, 0.96);
-  pointer-events: auto;
-  z-index: 30;
-  overflow-y: auto;
-}
-.shift-select h2 {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-}
-.shift-select ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: min(460px, 100%);
-}
-.shift-select button {
-  width: 100%;
-  min-height: 40px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--glass2);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.shift-select button:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-.shift-select button[data-status='done'] {
-  border-left: 4px solid var(--harbour);
-}
-.shift-select button:not(:disabled)[data-status='open'] {
-  border-left: 4px solid var(--paper);
-  font-weight: 800;
-}
-.shift-select .shift-select-endless,
-.shift-select .shift-select-back {
-  width: min(460px, 100%);
-  text-align: center;
-}
-.shift-select-note {
-  margin: 0;
-  font-size: 12px;
-  color: var(--txt-dim);
 }
 .paper kbd {
   background: rgba(34, 26, 20, 0.08);

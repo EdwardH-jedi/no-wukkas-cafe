@@ -1,27 +1,43 @@
-// Shift select: the week's shifts (locked / open / done, with the best grade), Endless Rush and
-// the café upgrade shop (bought out of the save's till). Opened from the title screen ("The
-// week"). Only the shift the week is on can be played. Built with textContent only.
+// Shift select: the week's Monday–Friday grid (locked / open / done, with the best grade), Endless
+// Rush (or why it's locked), the way into the café upgrade shop, and back. Opened from the title
+// screen ("The week"). Only the shift the week is on can be played. Built with textContent only.
 
-import { endlessUnlocked, shiftRows } from '../../core/week/progress';
-import { canPlay } from '../../core/week/session';
-import { UPGRADES } from '../../data/upgrades';
 import type { SaveV2 } from '../../sim/contracts/save';
-import { DRINKS } from '../../sim/contracts/ticket';
-import { formatCents } from '../../sim/rush';
+import { focusQuietly, menuKeys } from './keys';
+import { endlessReason, shiftCells, shiftLabel, shopEntryLine } from './labels';
 
 export interface ShiftSelectActions {
   play(shift: number): void;
   endless(): void;
+  /** Open the café upgrade shop. */
+  shop(): void;
   back(): void;
-  /** Buy a café upgrade (the screen only offers ones the till covers). */
-  buy?(id: string): void;
 }
 
-function button(label: string, onClick: () => void, disabled = false): HTMLButtonElement {
+function span(className: string, text: string): HTMLSpanElement {
+  const s = document.createElement('span');
+  s.className = className;
+  s.textContent = text;
+  return s;
+}
+
+/** A wide button with a name and a line under it (the line is its description, not its name). */
+function wide(
+  className: string,
+  name: string,
+  sub: string,
+  onClick: () => void,
+  disabled = false,
+): HTMLButtonElement {
   const b = document.createElement('button');
   b.type = 'button';
-  b.textContent = label;
+  b.className = className;
   b.disabled = disabled;
+  b.setAttribute('aria-label', name);
+  const subEl = span('sub', sub);
+  subEl.id = `${className}-sub`;
+  b.setAttribute('aria-describedby', subEl.id);
+  b.append(span('name', name), subEl);
   b.addEventListener('click', onClick);
   return b;
 }
@@ -36,58 +52,68 @@ export function renderShiftSelect(
 ): () => void {
   const el = document.createElement('section');
   el.className = 'shift-select';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
   el.setAttribute('aria-label', 'Shifts');
+  const card = document.createElement('div');
+  card.className = 'ss-card';
+  const head = document.createElement('header');
   const title = document.createElement('h2');
   title.textContent = `Week ${save.week}`;
-  const list = document.createElement('ol');
-  for (const row of shiftRows(save)) {
-    const parts = [`${row.day}`, `${row.customers} customers`];
-    if (row.unlocks.length > 0)
-      parts.push(`new: ${row.unlocks.map((d) => DRINKS[d].name).join(', ')}`);
-    if (row.best) parts.push(`best: ${row.best}`);
-    const b = button(parts.join(' · '), () => on.play(row.index), !canPlay(save, row.index));
-    b.dataset.shift = String(row.index);
-    b.dataset.status = row.status;
-    const li = document.createElement('li');
-    li.append(b);
-    list.append(li);
-  }
-  const endless = button('Endless Rush', () => on.endless(), !endlessUnlocked(save));
-  endless.className = 'shift-select-endless';
-  const back = button('Back', () => on.back());
-  back.className = 'shift-select-back';
-  el.append(title);
+  const intro = document.createElement('p');
+  intro.textContent =
+    'One shift at a time: pass it and the next one opens. A disaster means another go.';
+  head.append(title, intro);
+  card.append(head);
   if (note) {
     const p = document.createElement('p');
     p.className = 'shift-select-note';
     p.textContent = note;
-    el.append(p);
+    card.append(p);
   }
-  el.append(list, endless);
-  if (on.buy) el.append(shop(save, on.buy));
-  el.append(back);
-  root.append(el);
-  return () => el.remove();
-}
 
-/** The upgrade shop: every upgrade, its price, and whether it's owned or affordable. */
-function shop(save: SaveV2, buy: (id: string) => void): HTMLElement {
-  const box = document.createElement('section');
-  box.className = 'shift-select-shop';
-  box.setAttribute('aria-label', 'Café upgrades');
-  const h = document.createElement('h3');
-  h.textContent = `Café upgrades · in the till: ${formatCents(save.cents)}`;
-  const list = document.createElement('ul');
-  for (const u of UPGRADES) {
-    const owned = save.upgrades.includes(u.id);
-    const label = `${u.name} · ${owned ? 'owned' : formatCents(u.costCents)} · ${u.description}`;
-    const b = button(label, () => buy(u.id), owned || save.cents < u.costCents);
-    b.dataset.upgrade = u.id;
-    b.dataset.status = owned ? 'owned' : 'open';
+  const list = document.createElement('ol');
+  list.className = 'ss-grid';
+  let next: HTMLButtonElement | null = null;
+  for (const cell of shiftCells(save)) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.disabled = !cell.playable;
+    b.dataset.shift = String(cell.index);
+    b.dataset.status = cell.status;
+    b.setAttribute('aria-label', shiftLabel(cell));
+    b.append(span('day', cell.day), span('state', cell.state), span('detail', cell.detail));
+    if (cell.best) b.append(span('best', cell.best));
+    b.addEventListener('click', () => on.play(cell.index));
+    if (cell.playable) next = b;
     const li = document.createElement('li');
     li.append(b);
     list.append(li);
   }
-  box.append(h, list);
-  return box;
+
+  const lock = endlessReason(save);
+  const endless = wide(
+    'shift-select-endless',
+    'Endless Rush',
+    lock ?? 'Everything on the menu so far, until the third walk-out.',
+    () => on.endless(),
+    lock !== null,
+  );
+  const shop = wide('shift-select-shop', 'Café upgrades', shopEntryLine(save), () => on.shop());
+  const more = document.createElement('div');
+  more.className = 'ss-more';
+  more.append(shop, endless);
+
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'shift-select-back';
+  back.textContent = 'Back';
+  back.addEventListener('click', () => on.back());
+
+  card.append(list, more, back);
+  el.append(card);
+  menuKeys(el, { modal: true, escape: () => on.back() });
+  root.append(el);
+  focusQuietly(next ?? el.querySelector('button:not(:disabled)'));
+  return () => el.remove();
 }
