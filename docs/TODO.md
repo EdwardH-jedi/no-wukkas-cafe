@@ -84,14 +84,14 @@ Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split 
 - [x] HUD-only: no timing, cost or sim change.
 
 **1C Latte feel** — owns `src/world/{camera,station,coffeeSurface}.ts`, `src/ui/{lesson,practiceHud,pattern}.ts`, `src/ui/styles/latte.css`, `src/sim/latte/feedback.ts` (new)
-- [ ] **HUMAN** feel-test loop: each change ships with a dev URL and one line "feel-test this"; commit only after approval.
+- [!] (HUMAN-only, not done by Claude: awaiting Edward's feel-test of `feat/latte-feel`, recipe in Evidence) **HUMAN** feel-test loop: each change ships with a dev URL and one line "feel-test this"; commit only after approval.
 - [!] (awaiting HUMAN feel-test; built on `feat/latte-feel`, not on main) Input: `settings.pourSensitivity` curve; Space ramps flow over ~300 ms; pinch/scroll never zooms the page.
 - [!] (awaiting HUMAN feel-test; built on `feat/latte-feel`, not on main) `src/sim/latte/feedback.ts`: score breakdown → one actionable tip; pure; unit-tested; shown on inspect.
 - [x] Regression: Playwright replays a recorded perfect pour and asserts the score band is unchanged.
 - [x] Do not change foam physics or the judge.
 
 - [x] 1.E E2E: title → week → shop → Monday → report → next shift; Day 2 bot shift; event via keyboard; screenshots to `docs/verification/<date>-week-ui/`.
-- Exit: **HUMAN** plays Mon–Wed in one sitting without asking "what do I press"; e2e green; main pushed.
+- Exit: `[!]` (HUMAN-only part not done by Claude: Edward's Mon–Wed playtest; e2e green and main pushed are done) **HUMAN** plays Mon–Wed in one sitting without asking "what do I press"; e2e green; main pushed.
 - Evidence:
   - Setup (85b5ff3, 13f11a3): title wiring → `src/ui/screens/title.ts`, shift report → `src/ui/screens/shiftReport.ts`
     (pure moves so 1A and 1B never shared a file); `ListenSettings.pourSensitivity` (default 1, 0.5–2) + tests.
