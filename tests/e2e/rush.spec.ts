@@ -199,6 +199,9 @@ async function twoHands(page: Page, extraHot: boolean): Promise<void> {
   await expect(cards).toHaveCount(2);
   await expect(cards.nth(0)).toContainText('Shot timer');
   await expect(cards.nth(1)).toContainText('Milk');
+  // What each hand is doing, above the cards; the jug's carton named on the milk card.
+  await expect(page.locator('#rgauges .hands')).toContainText('Both hands');
+  await expect(cards.nth(1).locator('[data-g="mk"]')).toContainText(/Full cream|Oat|Soy|Almond/);
   const [a, b] = [await cards.nth(0).boundingBox(), await cards.nth(1).boundingBox()];
   expect((b?.y ?? 0) > (a?.y ?? 0) + (a?.height ?? 0) - 1).toBe(true);
   await expect(page.locator('#rinstr')).toContainText('Enter stops the shot');
@@ -230,6 +233,7 @@ async function twoHands(page: Page, extraHot: boolean): Promise<void> {
   expect(stopped.steamDone).toBe(false);
   await expect(page.locator('#rgauges')).toContainText('Stopped · 26 s');
   await expect(page.locator('#rgauges .gstop')).toBeHidden();
+  await expect(page.locator('#rgauges .hands')).toContainText('Shot done');
   await snap(page, 'shot-stopped');
   await timeScale(page, 1);
   await until(page, (s) => s.temp >= (extraHot ? 70 : 60));

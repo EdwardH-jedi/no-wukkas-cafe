@@ -1,11 +1,13 @@
 // Station gauges (dose, shot timer, milk thermometer + foam, jug height/flow/cup, hot water).
-// Shared by the Day 1 trial HUD and the Day 2 rush HUD. Only touches the DOM when a value changes.
-// Day 2's two hands ('shotSteam'): the shot timer and the milk gauge, stacked.
+// Shared by the Day 1 trial HUD, the Day 2 rush HUD and practice. Only touches the DOM when a value
+// changes. Day 2's two hands ('shotSteam'): a strip saying what each hand is doing, then the shot
+// timer and the milk gauge, stacked. Day 2's milk gauge names the carton in the jug, in words and
+// an icon (never colour alone).
 
 import { DOSE_TARGET, SHOT_TARGET, type EspressoState } from '../sim/espresso';
 import { SURF_HIGH, SURF_LOW, type PourState } from '../sim/latte/field';
 import { HEIGHT_MAX, PITCHER_MILK, pitcherFlow, type PitcherState } from '../sim/latte/pitcher';
-import { LONG_BLACK_WATER } from '../sim/rush';
+import { LONG_BLACK_WATER, MILK_NAME, type Milk } from '../sim/rush';
 import { AERATION_TARGET, TARGET_TEMP, type SteamState } from '../sim/steam';
 
 export type GaugeMode = '' | 'grind' | 'shot' | 'shotSteam' | 'steam' | 'pour' | 'water';
@@ -17,7 +19,40 @@ export interface GaugeView {
   pour: PourState;
   /** Long black hot water, cup volumes. */
   water?: number;
+  /** Day 2: the carton in the jug for this flat white (from the ticket being made). */
+  milkType?: Milk | null;
 }
+
+/** A shape for each carton, so the milk reads without colour (and without reading the word). */
+export const MILK_ICON: Record<Milk, string> = {
+  full: '🐄',
+  oat: '🌾',
+  soy: '🌱',
+  almond: '🌰',
+};
+
+/** The milk gauge's label: "· 🌾 Oat" for the carton in the jug ('' on Day 1 and in practice). */
+export function milkTag(m: Milk | null | undefined): string {
+  if (!m) return '';
+  const name = MILK_NAME[m];
+  return ` · <i aria-hidden="true">${MILK_ICON[m]}</i> ${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+}
+
+export type Hands = 'ready' | 'shot' | 'both' | 'milk';
+
+/** Day 2's two hands while a flat white's shot runs: the pump not on yet, the shot running alone,
+ *  the shot and the steam at once, or the shot done and the milk still to finish. */
+export function handsState(e: EspressoState, s: SteamState): Hands {
+  if (!e.extracting) return e.done ? 'milk' : 'ready';
+  return s.valveOpen ? 'both' : 'shot';
+}
+
+export const HANDS_TEXT: Record<Hands, string> = {
+  ready: 'Two hands: start the shot, then steam while it runs',
+  shot: 'Shot running · steam the milk now',
+  both: 'Both hands: shot running + steaming',
+  milk: 'Shot done · now finish the milk',
+};
 
 export interface Gauges {
   /** `stoppable`: Day 2 two hands, the shot card's Stop button shows (the shot stops on Enter). */
@@ -32,7 +67,7 @@ const shotCard = (
 ): string => `<div class="gauge"><div class="k"><span>Shot timer</span><span>25–31 s</span></div><div class="v" data-g="sv">0<small>s</small></div>
         <div class="bar"><div class="zone" style="left:${pct(SHOT_TARGET[0], 0, 45)}%;width:${pct(SHOT_TARGET[1], 0, 45) - pct(SHOT_TARGET[0], 0, 45)}%"></div><div class="needle" data-g="sn"></div></div>
         <div class="tagRow"><div class="tag" data-g="st"></div><button type="button" class="gstop hide" data-g="ss">${touch ? 'Stop' : 'Stop · Enter'}</button></div></div>`;
-const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk</span><span>55–65 °C</span></div>
+const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk<span data-g="mk"></span></span><span>55–65 °C</span></div>
         <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:${pct(TARGET_TEMP[0], 0, 85)}%;height:${pct(TARGET_TEMP[1], 0, 85) - pct(TARGET_TEMP[0], 0, 85)}%"></div><div class="needle" data-g="mtn"></div></div>
         <div style="flex:1"><div class="v" data-g="mv">5<small>°C</small></div>
         <div class="k" style="margin-top:6px"><span>Foam</span><span>silky</span></div>
@@ -43,15 +78,21 @@ const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk</span><span>55�
 export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => void): Gauges {
   let gaugeMode: GaugeMode | null = null;
   const g: Record<string, HTMLElement> = {};
+  // What the milk label and the two-hands strip show (null: rebuilt, write on the next update).
+  let milkShown: Milk | '' | null = null;
+  let handsShown: Hands | null = null;
   const build = (mode: GaugeMode): void => {
     gaugeMode = mode;
+    milkShown = null;
+    handsShown = null;
     let html = '';
     if (mode === 'grind')
       html = `<div class="gauge"><div class="k"><span>Dose</span><span>18–20 g</span></div><div class="v" data-g="v">0.0<small>g</small></div>
         <div class="bar"><div class="zone" style="left:${pct(DOSE_TARGET[0], 0, 26)}%;width:${pct(DOSE_TARGET[1], 0, 26) - pct(DOSE_TARGET[0], 0, 26)}%"></div><div class="needle" data-g="n"></div></div>
         <div class="tag" data-g="t"></div></div>`;
     else if (mode === 'shot') html = shotCard(touch);
-    else if (mode === 'shotSteam') html = shotCard(touch) + MILK_CARD;
+    else if (mode === 'shotSteam')
+      html = `<div class="hands" role="status" data-g="hands"></div>${shotCard(touch)}${MILK_CARD}`;
     else if (mode === 'steam') html = MILK_CARD;
     else if (mode === 'pour')
       html = `<div class="gauge"><div class="k"><span>Jug height</span><span data-g="hv"></span></div>
@@ -115,8 +156,20 @@ export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => voi
         const show = stoppable && e.extracting;
         if (stop && stop.classList.contains('hide') === show) stop.classList.toggle('hide', !show);
       }
+      if (mode === 'shotSteam') {
+        const h = handsState(e, v.steam);
+        if (h !== handsShown) {
+          handsShown = h;
+          setText('hands', HANDS_TEXT[h]);
+        }
+      }
       if (mode === 'steam' || mode === 'shotSteam') {
         const s = v.steam;
+        const m = v.milkType ?? '';
+        if (m !== milkShown) {
+          milkShown = m;
+          setText('mk', milkTag(v.milkType));
+        }
         setText('mv', `${s.temp.toFixed(0)}<small>°C</small>`);
         setStyle('mtn', 'bottom', pct(s.temp, 0, 85));
         setStyle('mfn', 'left', Math.min(100, s.aeration * 100));

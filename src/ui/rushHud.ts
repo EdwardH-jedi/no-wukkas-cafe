@@ -15,9 +15,9 @@ import {
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
 import { answerAsText, isAnswerKey, transcriptVisible, type ListenStage } from '../sim/listening';
-import { DRINK_NAME, LUKEWARM, MILK_NAME, orderLabel } from '../sim/rush';
+import { DRINK_NAME, LUKEWARM, MILK_NAME, orderLabel, type MadeDrink } from '../sim/rush';
 import { createEventCard, EVENT_KEYS } from './eventCard';
-import { createGauges, type GaugeMode } from './gauges';
+import { createGauges, MILK_ICON, type GaugeMode } from './gauges';
 import { instruction } from './instructions';
 import { createPos } from './pos';
 import { createRail, nextTicket, railOrder } from './rushRail';
@@ -151,6 +151,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     `<button class="btn small${primary ? '' : ' ghost'}" data-a="${a}">${esc(label)}${touch ? '' : ` <kbd>${key}</kbd>`}</button>`;
 
   let lastRush: Rush | null = null;
+  let passDrink: MadeDrink | null = null;
+  let passDeg = -1;
   const makeFor = (c: RushCustomer | null): void => {
     if (c?.heard) cb.action({ type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
   };
@@ -275,14 +277,22 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       const next = nextTicket(r);
 
       // The pass.
-      if (b.ready) {
-        const cold = b.ready.temp < LUKEWARM + 4;
-        pass.classList.remove('hide');
-        pass.classList.toggle('cold', cold);
-        const milk =
-          b.ready.milkType && b.ready.milkType !== 'full' ? `${MILK_NAME[b.ready.milkType]} ` : '';
-        pass.innerHTML = `<span class="k">On the pass</span> <b>${milk}${DRINK_NAME[b.ready.type]}</b> · ${b.ready.temp.toFixed(0)} °C${cold ? ' · going cold!' : ''}`;
-      } else pass.classList.add('hide');
+      // Rewritten only when the drink or its whole degree changes. A flat white's carton shows as
+      // an icon as well as a word (full cream goes unsaid, as on the ticket).
+      const deg = b.ready ? Math.round(b.ready.temp) : -1;
+      if (b.ready !== passDrink || deg !== passDeg) {
+        passDrink = b.ready;
+        passDeg = deg;
+        if (b.ready) {
+          const cold = b.ready.temp < LUKEWARM + 4;
+          pass.classList.remove('hide');
+          pass.classList.toggle('cold', cold);
+          const m = b.ready.milkType;
+          const icon = m ? `<i aria-hidden="true">${MILK_ICON[m]}</i> ` : '';
+          const milk = m && m !== 'full' ? `${MILK_NAME[m]} ` : '';
+          pass.innerHTML = `<span class="k">On the pass</span> ${icon}<b>${milk}${DRINK_NAME[b.ready.type]}</b> · ${deg} °C${cold ? ' · going cold!' : ''}`;
+        } else pass.classList.add('hide');
+      }
 
       // Actions.
       const parts: string[] = [];
