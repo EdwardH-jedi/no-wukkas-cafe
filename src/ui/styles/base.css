@@ -1,0 +1,121 @@
+/* Base: colour tokens, reset, canvas + UI layers, buttons, shared utilities. */
+
+:root {
+  color-scheme: dark;
+  --ink: #16100c;
+  --glass: rgba(22, 16, 12, 0.78);
+  --glass2: rgba(36, 26, 20, 0.92);
+  --paper: #f5f0e5;
+  --paper-ink: #221a14;
+  --paper-dim: #8a7d6e;
+  --crema: #e3a55f;
+  --gum: #74a98c;
+  --harbour: #4f8fbd;
+  --flag: #e0513f;
+  --gold: #f3c450;
+  --txt: #f6ede1;
+  --txt-dim: #b9a998;
+  --line: rgba(246, 237, 225, 0.14);
+  --display: 'Bowlby One', 'Arial Black', Impact, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: var(--ink);
+  color: var(--txt);
+  font-family: var(--body);
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+#app {
+  position: fixed;
+  inset: 0;
+}
+#gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+}
+#gl.aim {
+  cursor: none;
+}
+#ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#ui button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+}
+#ui button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.hide {
+  display: none !important;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  background: var(--gold);
+  color: var(--ink) !important;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 0 #b8892a;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #b8892a;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--txt) !important;
+  border: 1.5px solid var(--line);
+  box-shadow: none;
+}
+.btn.ghost:hover {
+  border-color: rgba(246, 237, 225, 0.4);
+}
+.btn.small {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+.titleBtns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hide-root.hide {
+  display: none !important;
+}

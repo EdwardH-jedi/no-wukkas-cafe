@@ -1,0 +1,338 @@
+/* Day 2 morning rush HUD: tickets, register (POS) + listening feedback, event cards, bin chicken. */
+
+/* ---------- Day 2: the morning rush ---------- */
+#rail {
+  position: absolute;
+  left: 16px;
+  top: 62px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 260px);
+  pointer-events: none;
+}
+.ticket {
+  width: 156px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 8px 10px 10px;
+  border-radius: 3px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  transform: rotate(-0.8deg);
+}
+.ticket:nth-child(even) {
+  transform: rotate(0.7deg);
+}
+.ticket .tn {
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.ticket .tt {
+  color: var(--paper-dim);
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.ticket .to {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.ticket .tp {
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd3c1;
+  overflow: hidden;
+  margin-bottom: 7px;
+}
+.ticket .tp i {
+  display: block;
+  height: 100%;
+  background: var(--gum);
+  transition: width 0.25s linear;
+}
+.ticket .tp i.warn {
+  background: var(--gold);
+}
+.ticket .tp i.bad {
+  background: var(--flag);
+}
+.ticket .serve {
+  width: 100%;
+  padding: 6px 8px;
+  box-shadow: 0 3px 0 #b8892a;
+}
+.ticket .serve:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+  cursor: default;
+}
+#pass {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(205px + env(safe-area-inset-bottom, 0px));
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 7px 14px;
+  font-size: 14px;
+}
+#pass .k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+#pass.cold {
+  border-color: var(--flag);
+  color: #ffd0c8;
+}
+#ractions {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+#rsubs.customer .who {
+  color: var(--harbour);
+}
+@media (max-width: 720px) {
+  #rail {
+    max-width: calc(100vw - 32px);
+  }
+  .ticket {
+    width: 132px;
+  }
+}
+
+#revent {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(300px, calc(100vw - 32px));
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--paper);
+  border-radius: 14px;
+  padding: 10px 12px 12px;
+  pointer-events: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+#revent .h {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+#revent .b {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* ---------- register (POS) + listening feedback ---------- */
+#pos {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(320px, calc(100vw - 32px));
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--harbour);
+  border-radius: 14px;
+  padding: 10px 12px 12px;
+  pointer-events: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+#pos .ph {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+#pos .ph b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--harbour);
+}
+#pos .ph .who {
+  font-weight: 800;
+}
+#pos .ph .st {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--txt-dim);
+}
+#pos .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 5px 0;
+}
+#pos .row.off {
+  opacity: 0.35;
+  pointer-events: none;
+}
+#pos .k {
+  width: 40px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+#pos .opt {
+  background: rgba(246, 237, 225, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 5px 9px;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 30px;
+}
+#pos .opt.on {
+  background: var(--harbour);
+  border-color: var(--harbour);
+  color: #fff;
+}
+#pos .opt:disabled {
+  opacity: 0.4;
+}
+#pos .ask .opt {
+  font-weight: 500;
+}
+#pos .asked {
+  min-height: 1.2em;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--txt-dim);
+  margin: 4px 0;
+}
+#pos .ring {
+  width: 100%;
+  margin-top: 4px;
+}
+#pos .ring:disabled {
+  opacity: 0.45;
+}
+#posFeedback {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(340px, calc(100vw - 32px));
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 10px;
+  padding: 10px 14px;
+  pointer-events: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+#posFeedback .fh {
+  font-family: var(--display);
+  font-size: 16px;
+}
+#posFeedback .fh small {
+  font-family: var(--body);
+  font-size: 12px;
+  color: var(--paper-dim);
+  margin-left: 6px;
+}
+#posFeedback p {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+:is(#posFeedback, .misheard) mark {
+  background: #cfe3c2;
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+:is(#posFeedback, .misheard) mark.miss {
+  background: #ffc9bd;
+  font-weight: 700;
+}
+#posFeedback .miss {
+  color: #a3321f;
+}
+.ticket .tb {
+  display: flex;
+  gap: 6px;
+}
+.ticket .tb .btn {
+  flex: 1;
+  padding: 6px 4px;
+}
+.ticket .btn.ghost.make {
+  color: var(--paper-ink) !important;
+  border-color: #b9ab93;
+}
+.ticket .make:disabled {
+  opacity: 0.4;
+}
+.misheard {
+  font-size: 12.5px;
+  margin: 8px 0;
+}
+.misheard .mh {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+.misheard ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+.misheard li {
+  margin: 4px 0;
+}
+#rsubs .listen {
+  color: var(--txt-dim);
+}
+@media (max-width: 720px) {
+  #pos {
+    top: 60px;
+    transform: none;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: calc(100vh - 230px);
+    overflow-y: auto;
+  }
+  #posFeedback {
+    top: auto;
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+  }
+}
+
+/* ---------- bin chicken hint ---------- */
+#ibisHint {
+  position: absolute;
+  top: calc(64px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--paper);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 4;
+}
+#ibisHint b {
+  color: var(--paper);
+}
