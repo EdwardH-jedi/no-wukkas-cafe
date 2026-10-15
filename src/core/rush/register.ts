@@ -1,9 +1,8 @@
-// Day 2 listening at the register: the aids (replay, "could you repeat that?", clarifying
-// questions), printing the ticket with what the player heard, and setting a misheard ticket
-// straight when the drink made from it is handed back. Pure state changes on the Rush; the
-// rules themselves (answer keys, costs) live in sim/listening.ts.
+// Day 2 at the register: taking the order, the listening aids (replay, "could you repeat that?",
+// clarifying questions) and printing the ticket with what the player heard. Pure state changes on
+// the Rush; the rules themselves (answer keys, costs) live in sim/listening.ts.
 
-import type { Delivery } from '../data/voice/ids';
+import type { Delivery } from '../../data/voice/ids';
 import {
   answerFor,
   CLARIFY_QUESTION,
@@ -13,14 +12,23 @@ import {
   orderTier,
   wrongFields,
   type OrderField,
-} from '../sim/listening';
-import type { MadeDrink, Order } from '../sim/rush';
-import type { Rush, RushCustomer } from './rush';
-import { customerListen, customerSay, gaz, listenQueued, varsFor } from './rushSpeech';
+} from '../../sim/listening';
+import type { Order } from '../../sim/rush';
+import { customerListen, gaz, listenQueued, varsFor } from './speech';
+import { atRegister, setState, type Rush, type RushCustomer } from './state';
 
 /** The customer whose order is being taken (speaking or being rung up), if any. */
 export function atCounter(r: Rush): RushCustomer | null {
   return r.customers.find((c) => c.state === 'ordering' || c.state === 'deciding') ?? null;
+}
+
+/** "Take order": the customer at the register says it. */
+export function takeOrder(r: Rush): void {
+  const c = atRegister(r);
+  if (c) {
+    setState(c, 'ordering');
+    c.orderLine = customerListen(r, c, c.line.id, c.line.text);
+  }
 }
 
 /** Replay, "could you repeat that?" and clarifying questions, for the customer at the counter.
@@ -84,31 +92,4 @@ export function ringUp(r: Rush, heard: Order): void {
   c.ticket = r.nextTicket++;
   r.events.push({ type: 'ticket', customer: c.def.id });
   if (c === r.customers[r.customers.length - 1]) gaz(r, 'rush.lastOrder', 'react');
-}
-
-/**
- * A handed-back drink that matches its ticket means the ticket was wrong: a listening mistake.
- * They set you straight at the pass (naming the milk if that was it) and the ticket is
- * corrected; the cost was the wasted drink, the time and their patience. Returns false when the
- * drink simply didn't match the ticket (a making mistake, not a listening one).
- */
-export function fixMisheardTicket(
-  r: Rush,
-  c: RushCustomer,
-  drink: MadeDrink,
-  wrongMilk: boolean,
-): boolean {
-  const t = c.heard;
-  if (!t) return false;
-  const matchesTicket =
-    drink.type === t.type && (drink.type !== 'flatWhite' || drink.milkType === (t.milk ?? 'full'));
-  if (!matchesTicket || wrongFields(t, c.order).length === 0) return false;
-  if (wrongMilk) {
-    const text = answerFor(c.def.answers, c.order, 'milk');
-    customerSay(r, c, `${c.def.id}.answer.milk`, text, 'annoyed', 'order');
-  }
-  c.heard = { ...c.order };
-  r.events.push({ type: 'ticketFixed', customer: c.def.id });
-  gaz(r, 'rush.misheard', 'react', varsFor(c, drink.type));
-  return true;
 }
