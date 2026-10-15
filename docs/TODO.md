@@ -20,18 +20,24 @@ Global rules for every task:
 
 ---
 
-## Phase 0 — Consolidate (sequential, do first)  `[ ]`
+## Phase 0 — Consolidate (sequential, do first)  `[~]`
 Goal: one branch, one build, no large files that every task must touch.
 
-- [ ] 0.1 Merge `origin/chore/merge-day1-pull-through` into `main` (no-ff), run unit + e2e, push.
+- [x] 0.1 Merge `origin/chore/merge-day1-pull-through` into `main` (no-ff), run unit + e2e, push.
 - [ ] 0.2 Split `src/main.ts` (≈1,180 lines) into `src/app/{boot,title,trialWiring,rushWiring,weekWiring}.ts`,
       each ≤ 300 lines; `src/main.ts` ≤ 60 lines. Pure refactor, exported names unchanged.
 - [ ] 0.3 Split `src/ui/styles.css` (≈1,600 lines) into `src/ui/styles/{base,title,hud,rush,latte,shop,screens}.css`
       with one index import. Pure refactor; screenshot diff before/after at 1024×640.
-- [ ] 0.4 `vitest` `testTimeout` is 20 s (done in run #2) — confirm it is in the config, not per-test.
+- [x] 0.4 `vitest` `testTimeout` is 20 s (done in run #2) — confirm it is in the config, not per-test.
 - [ ] 0.5 Delete nothing, but list stale branches in the report (feat/voice-listening, old fix/*).
 - Exit: `npm run build` ok, e2e green, main pushed.
 - Evidence:
+  - 0.1 (2026-10-16): `git merge --no-ff origin/chore/merge-day1-pull-through` → 6b05ba7, no conflicts.
+    `npm run typecheck && npm run lint && npm test` exit 0: `Test Files  55 passed (55)` · `Tests  493 passed (493)`.
+    `E2E_PORT=5179 npm run test:e2e`: `22 passed (16.4m)`, exit 0.
+  - 0.4: `vite.config.ts` → `test: { …, testTimeout: 20_000 }` (config-wide). Per-test values that remain are
+    only longer runs that need more than 20 s: `tests/core/rushPace.test.ts` 120_000 ×3, `tests/core/rush.test.ts:330`
+    60_000, `tests/core/rushEvents.test.ts:88` 30000, `tests/scripts/voices.test.ts:32` 60_000. None sets 20 s per test.
 
 ## Phase 1 — Playable week (UI pass)  `[ ]`
 Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split below.
