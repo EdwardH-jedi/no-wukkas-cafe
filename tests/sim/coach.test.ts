@@ -5,6 +5,7 @@ import {
   diagnose,
   dirOf,
   drawHeight,
+  DRY_TRAVEL,
   LOBES_DONE,
   trackPour,
   whiteCoverage,
@@ -189,6 +190,18 @@ describe('diagnosis: why the pattern came out like that', () => {
     const f = diagnose(scorePattern(r.pour.foam), r.pour, r.log);
     expect(f[0]?.id).toBe('streamDied');
     expect(f.some((x) => x.cause === 'stayedLow')).toBe(false);
+  });
+
+  it('carrying the jug on after a finished pull-through is not a dead stream', () => {
+    // Gaz's pour, but once he lets go at the far edge the jug carries on forward, past the rim.
+    const carried: TrackKey[] = [
+      ...OWNER_DEMO.slice(0, -1),
+      { t: 7.6, x: 0, y: 1.5, h: 3, hold: false },
+    ];
+    const r = pourLogged(carried);
+    expect(r.log.done[3]).toBe(true);
+    expect(r.log.travelDry).toBe(demo.log.travelDry);
+    expect(r.log.travelDry).toBeLessThan(DRY_TRAVEL);
   });
 
   describe('from synthetic pour logs', () => {

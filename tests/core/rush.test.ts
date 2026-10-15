@@ -23,6 +23,7 @@ import {
   type RushCustomer,
   type RushEvent,
   type RushInput,
+  type RushWeek,
 } from '../../src/core/rush';
 import type { CustomerId } from '../../src/data/customers';
 import { OWNER_LINES } from '../../src/data/ownerLines';
@@ -277,8 +278,8 @@ describe('Day 2 rush, played headless', () => {
 
   describe('handing back the wrong milk', () => {
     /** A flat-white customer waiting on the rail, and their drink made with the wrong milk. */
-    function wrongMilkAtThePass(patience: number) {
-      const r = createRush(3);
+    function wrongMilkAtThePass(patience: number, seed = 3, week: RushWeek | null = null) {
+      const r = createRush(seed, 'normal', {}, week);
       while (r.phase !== 'service') stepRush(r, emptyRushInput(), STEP);
       const c = r.customers.find((x) => x.order.type === 'flatWhite') as RushCustomer;
       c.state = 'waiting';
@@ -303,7 +304,7 @@ describe('Day 2 rush, played headless', () => {
       b.phase = 'ready';
       const serve = (): RushEvent[] => {
         const i = emptyRushInput();
-        i.action = { type: 'serve', customer: c.def.id };
+        i.action = { type: 'serve', customer: c.key };
         stepRush(r, i, STEP);
         const ev = [...r.events];
         r.events.length = 0;
@@ -311,6 +312,28 @@ describe('Day 2 rush, played headless', () => {
       };
       return { r, c, serve };
     }
+
+    it('a week shift raises no wrong-milk event for a hand-back that sends them out', () => {
+      const week: RushWeek = { shiftIndex: 2, unlockedDrinks: ['flatWhite', 'longBlack'] };
+      const handBack = (seed: number, share: number) => {
+        const { r, c, serve } = wrongMilkAtThePass(0, seed, week);
+        c.patience = c.maxPatience * share;
+        const wrongMilk = (): number =>
+          r.shiftEvents.log.fired.filter((f) => f.id === 'WRONG_MILK').length;
+        const before = wrongMilk();
+        const ev = serve();
+        return { c, ev, fired: wrongMilk() - before };
+      };
+      // A seed where the same hand-back, with patience to spare, does bring up WRONG_MILK.
+      const seed = Array.from({ length: 40 }, (_, i) => i + 1).find(
+        (s) => handBack(s, 1).fired > 0,
+      );
+      expect(seed).toBeDefined();
+      const out = handBack(seed as number, REJECT_PENALTY * 0.5);
+      expect(out.c.outcome).toBe('walkout');
+      expect(out.fired).toBe(0);
+      expect(out.ev.some((e) => e.type === 'shiftEvent' && e.event === 'WRONG_MILK')).toBe(false);
+    });
 
     it('each hand-back costs patience; never tops it back up', () => {
       const { c, serve } = wrongMilkAtThePass(60);

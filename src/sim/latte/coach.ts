@@ -55,7 +55,7 @@ export interface PourLog {
   pullStarted: boolean;
   /** Pour time the spout first rose to LIFTED_HEIGHT after the white appeared, or -1. */
   liftedAt: number;
-  /** Forward travel (rim radii) with no milk coming out, after lifting. */
+  /** Forward travel (rim radii) with no milk coming out, after lifting and before the pull is done. */
   travelDry: number;
   /** Spout y at the last step. */
   lastY: number;
@@ -107,8 +107,9 @@ export function trackPour(log: PourLog, pour: PourState, pitcher: PitcherState):
     if (log.pullStarted && pitcher.y > 0 && flow > log.farFlow) log.farFlow = flow;
     if (log.pullStarted && flow === 0 && log.pullReach >= PULL_REACH) d[3] = true;
     if (log.liftedAt < 0 && pitcher.height >= LIFTED_HEIGHT) log.liftedAt = pour.time;
+    // Only before the pull-through is done: carrying the jug on after letting go isn't a dead stream.
     const dy = pitcher.y - log.lastY;
-    if (log.liftedAt >= 0 && flow === 0 && dy > 0) log.travelDry += dy;
+    if (log.liftedAt >= 0 && !d[3] && flow === 0 && dy > 0) log.travelDry += dy;
   }
   log.lastY = pitcher.y;
   // Drawing: from the first white (or, if it never came, from three-quarters full) until the pull.

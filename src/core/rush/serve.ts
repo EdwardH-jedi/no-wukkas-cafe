@@ -79,7 +79,8 @@ export function serve(r: Rush, key: string): void {
     // A listening mistake, the wrong milk (drink made for someone else), or the wrong drink.
     if (!fixMisheardTicket(r, c, drink, wrongMilk))
       gaz(r, wrongMilk ? 'rush.wrongMilk' : 'rush.wrongDrink', 'react', varsFor(c, drink.type));
-    if (wrongMilk) eventHandedBack(r, c);
+    // Not for someone this hand-back sends out: their event would be dropped before it showed.
+    if (wrongMilk && c.patience > 0) eventHandedBack(r, c);
     addFrustration(r.owner, 0.8);
     r.streak.good = 0;
     r.streak.bad++;
