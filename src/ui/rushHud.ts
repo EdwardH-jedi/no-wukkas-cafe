@@ -137,11 +137,13 @@ const GRADE_TEXT: Record<ShiftSummary['grade'], string> = {
   disaster: 'Total disaster',
 };
 
-/** Customers whose tickets are on the rail, oldest ticket first. */
+/** Customers whose tickets are on the rail, oldest ticket first. In week mode the rail holds as
+ *  many as the café's docket rail does (an upgrade); the rest wait their turn behind it. */
 export function railOrder(r: Rush): RushCustomer[] {
-  return r.customers
+  const list = r.customers
     .filter((c) => c.state === 'waiting')
     .sort((a, b) => (a.ticket ?? 0) - (b.ticket ?? 0));
+  return r.week ? list.slice(0, r.barista.station.ticketsShown) : list;
 }
 
 export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud {

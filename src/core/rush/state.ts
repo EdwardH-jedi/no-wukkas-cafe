@@ -6,6 +6,7 @@ import type { Delivery } from '../../data/voice/ids';
 import type { ShiftEventDef, ShiftEventId } from '../../sim/contracts/events';
 import type { DrinkId } from '../../sim/contracts/ticket';
 import type { VoiceRef } from '../../sim/contracts/voice';
+import type { StationParams } from '../../sim/shop';
 import type { EventLog } from '../../sim/events/scheduler';
 import type { Difficulty, ListenRecord, OrderField, OrderLine } from '../../sim/listening';
 import type { Mood, OwnerState } from '../../sim/owner';
@@ -161,6 +162,8 @@ export interface RushWeek {
   eventCooldowns?: Partial<Record<ShiftEventId, number>>;
   /** How well each regular knows the player (SaveV2.regulars). */
   affinity?: Partial<Record<CustomerId, number>>;
+  /** The station the café's upgrades give (SaveV2.upgrades); today's station without. */
+  station?: StationParams;
 }
 
 /** Shift events through one shift (core/rush/events.ts). Inert on Day 2. */

@@ -48,6 +48,7 @@ import { createPracticeHud } from './ui/practiceHud';
 import { stepRushIbis } from './core/rushIbis';
 import { ibisForShift } from './sim/events/rareBird';
 import { createIbis, ibisPresent, type Ibis } from './sim/ibis';
+import { buyUpgrade } from './sim/shop';
 import { createIbisView } from './world/ibis';
 import { createRushHud, nextTicket, railOrder } from './ui/rushHud';
 import { renderShiftSelect } from './ui/screens/shiftSelect';
@@ -277,6 +278,13 @@ async function boot(): Promise<void> {
           startEndless();
         },
         back: () => close(),
+        buy: (id) => {
+          const bought = buyUpgrade(store.load(), id);
+          if (!bought.ok) return;
+          store.save(bought.save);
+          close();
+          openShifts(); // redrawn with the new till
+        },
       },
       store.memoryOnly ? SAVE_NOTE : '',
     );

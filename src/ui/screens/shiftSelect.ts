@@ -1,16 +1,20 @@
-// Shift select: the week's shifts (locked / open / done, with the best grade) and Endless Rush.
-// Opened from the title screen ("The week"). Only the shift the week is on can be played.
-// Built with textContent only.
+// Shift select: the week's shifts (locked / open / done, with the best grade), Endless Rush and
+// the café upgrade shop (bought out of the save's till). Opened from the title screen ("The
+// week"). Only the shift the week is on can be played. Built with textContent only.
 
 import { endlessUnlocked, shiftRows } from '../../core/week/progress';
 import { canPlay } from '../../core/week/session';
+import { UPGRADES } from '../../data/upgrades';
 import type { SaveV2 } from '../../sim/contracts/save';
 import { DRINKS } from '../../sim/contracts/ticket';
+import { formatCents } from '../../sim/rush';
 
 export interface ShiftSelectActions {
   play(shift: number): void;
   endless(): void;
   back(): void;
+  /** Buy a café upgrade (the screen only offers ones the till covers). */
+  buy?(id: string): void;
 }
 
 function button(label: string, onClick: () => void, disabled = false): HTMLButtonElement {
@@ -59,7 +63,31 @@ export function renderShiftSelect(
     p.textContent = note;
     el.append(p);
   }
-  el.append(list, endless, back);
+  el.append(list, endless);
+  if (on.buy) el.append(shop(save, on.buy));
+  el.append(back);
   root.append(el);
   return () => el.remove();
+}
+
+/** The upgrade shop: every upgrade, its price, and whether it's owned or affordable. */
+function shop(save: SaveV2, buy: (id: string) => void): HTMLElement {
+  const box = document.createElement('section');
+  box.className = 'shift-select-shop';
+  box.setAttribute('aria-label', 'Café upgrades');
+  const h = document.createElement('h3');
+  h.textContent = `Café upgrades · in the till: ${formatCents(save.cents)}`;
+  const list = document.createElement('ul');
+  for (const u of UPGRADES) {
+    const owned = save.upgrades.includes(u.id);
+    const label = `${u.name} · ${owned ? 'owned' : formatCents(u.costCents)} · ${u.description}`;
+    const b = button(label, () => buy(u.id), owned || save.cents < u.costCents);
+    b.dataset.upgrade = u.id;
+    b.dataset.status = owned ? 'owned' : 'open';
+    const li = document.createElement('li');
+    li.append(b);
+    list.append(li);
+  }
+  box.append(h, list);
+  return box;
 }

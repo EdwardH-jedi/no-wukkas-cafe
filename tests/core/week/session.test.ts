@@ -6,6 +6,7 @@ import { createSaveStore, SAVE_KEY, type KeyValueStorage } from '../../../src/co
 import { canPlay, endlessFor, finishShift, weekFor } from '../../../src/core/week/session';
 import { newSave, type SaveV2 } from '../../../src/sim/contracts/save';
 import type { ShiftSummary } from '../../../src/sim/rush';
+import { BASE_STATION } from '../../../src/sim/shop';
 
 class CountingStorage implements KeyValueStorage {
   data = new Map<string, string>();
@@ -62,6 +63,7 @@ describe('week session', () => {
       unlockedDrinks: ['flatWhite', 'longBlack', 'cappuccino'],
       eventCooldowns: { THE_NAME: 7 },
       affinity: { dazza: 2 },
+      station: BASE_STATION, // no upgrades bought
     });
     expect(endlessFor(save)).toMatchObject({ week: 2, shiftIndex: 4, endless: true });
   });

@@ -7,6 +7,7 @@ import type { CustomerId } from '../../data/customers';
 import type { ShiftEventId } from '../../sim/contracts/events';
 import { REGULAR_IDS, type SaveV2 } from '../../sim/contracts/save';
 import type { ShiftSummary } from '../../sim/rush';
+import { stationParams } from '../../sim/shop';
 import type { RushWeek } from '../rush';
 import type { SaveStore } from '../save/storage';
 import { nextShift, SHIFTS_PER_WEEK } from './progress';
@@ -33,6 +34,7 @@ export function weekFor(save: SaveV2, cooldowns: Cooldowns = {}): RushWeek {
     unlockedDrinks: [...save.unlockedDrinks],
     eventCooldowns: { ...cooldowns },
     affinity: affinityOf(save),
+    station: stationParams(save.upgrades),
   };
 }
 
@@ -43,6 +45,7 @@ export function endlessFor(save: SaveV2): RushWeek {
     shiftIndex: SHIFTS_PER_WEEK - 1,
     unlockedDrinks: [...save.unlockedDrinks],
     endless: true,
+    station: stationParams(save.upgrades),
   };
 }
 

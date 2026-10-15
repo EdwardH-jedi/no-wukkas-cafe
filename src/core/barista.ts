@@ -32,6 +32,7 @@ import type { PitcherControls, PitcherState, PourGate } from '../sim/latte/pitch
 import { scorePattern } from '../sim/latte/score';
 import type { MilkQuality } from '../sim/milk';
 import { COOL_RATE, type DrinkType, type MadeDrink, type Milk } from '../sim/rush';
+import { BASE_STATION, type StationParams } from '../sim/shop';
 import {
   createSteam,
   milkQuality,
@@ -157,9 +158,11 @@ export interface Barista {
   watch: PourWatch;
   flags: Record<string, boolean>;
   mark: number;
+  /** What the café's upgrades make the machine do (week mode; today's station otherwise). */
+  station: StationParams;
 }
 
-export function createBarista(): Barista {
+export function createBarista(station: Readonly<StationParams> = BASE_STATION): Barista {
   const pitcher = createPitcher();
   return {
     phase: 'idle',
@@ -190,6 +193,7 @@ export function createBarista(): Barista {
     watch: { idle: 0, lowEarly: 0, tooHighSaid: false, drySaid: false },
     flags: {},
     mark: -1,
+    station: { ...station },
   };
 }
 
@@ -342,7 +346,7 @@ function steamMilk(
   const s = b.steam;
   if (s.done) return;
   const wasOpen = s.valveOpen;
-  stepSteam(s, open, depth, dt);
+  stepSteam(s, open, depth, dt * b.station.steamSpeed);
   if (s.valveOpen) {
     if (s.zone === 'screech') live('steam.screech');
     if (s.temp > 42 && s.aeration < 0.12 && !b.flags.noAir) {
@@ -378,7 +382,7 @@ export function stepBarista(
     case 'idle':
       break;
     case 'grind':
-      stepGrind(e, input.holding, dt);
+      stepGrind(e, input.holding, dt * b.station.grindSpeed);
       if (e.grinding && e.dose > 21.5 && !b.flags.grindOver) {
         b.flags.grindOver = true;
         live('grind.over');

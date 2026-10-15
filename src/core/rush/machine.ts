@@ -162,7 +162,7 @@ export function createRush(
     serviceTime: 0,
     owner: createOwner(),
     speech: createChannel(),
-    barista: createBarista(),
+    barista: createBarista(week?.station),
     customers: visits.map(newCustomer),
     records: [],
     listening: [],
