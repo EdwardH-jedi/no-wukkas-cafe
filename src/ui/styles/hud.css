@@ -1,0 +1,357 @@
+/* In-service HUD shared by the days: top bar, subtitles, instruction + gauges, pause menu. */
+
+/* ---------- top bar ---------- */
+:is(#topbar, #rtopbar, #ptopbar) {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.chip {
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.chip .k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+.steps {
+  display: flex;
+  gap: 4px;
+}
+.steps span {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  color: var(--txt-dim);
+}
+.steps span.on {
+  background: var(--gold);
+  color: var(--ink);
+}
+.steps span.done {
+  color: var(--gum);
+}
+.pips {
+  display: flex;
+  gap: 5px;
+}
+.pips i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--txt-dim);
+  display: block;
+}
+.pips i.cur {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(243, 196, 80, 0.25);
+}
+.pips i.ok {
+  background: var(--gum);
+  border-color: var(--gum);
+}
+.pips i.bad {
+  background: var(--flag);
+  border-color: var(--flag);
+}
+:is(#topbar, #rtopbar, #ptopbar) .spacer {
+  flex: 1;
+}
+.iconbtn {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-height: 34px;
+  min-width: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.iconbtn.off {
+  opacity: 0.45;
+}
+
+/* ---------- subtitles ---------- */
+:is(#subs, #rsubs, #psubs) {
+  position: absolute;
+  left: 50%;
+  bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(720px, calc(100vw - 32px));
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px 16px 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+  pointer-events: auto;
+  cursor: pointer;
+}
+:is(#subs, #rsubs, #psubs).gone {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
+  pointer-events: none;
+}
+:is(#subs, #rsubs, #psubs) .who {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--crema);
+}
+:is(#subs, #rsubs, #psubs) .who small {
+  font-family: var(--body);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  font-size: 10px;
+  margin-left: 6px;
+}
+:is(#subs, #rsubs, #psubs) .text {
+  font-size: clamp(16px, 2.1vw, 20px);
+  line-height: 1.4;
+  margin-top: 4px;
+  min-height: 1.4em;
+}
+
+/* ---------- instruction + gauges ---------- */
+:is(#instr, #rinstr) {
+  position: absolute;
+  left: 16px;
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  max-width: min(360px, calc(100vw - 32px));
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+:is(#instr, #rinstr) .h {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 3px;
+}
+:is(#gauges, #rgauges, #pgauges) {
+  position: absolute;
+  right: 16px;
+  top: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 210px;
+}
+.gauge {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.gauge .k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  display: flex;
+  justify-content: space-between;
+}
+.gauge .v {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  margin: 2px 0 6px;
+}
+.gauge .v small {
+  font-size: 12px;
+  color: var(--txt-dim);
+  margin-left: 4px;
+}
+.bar {
+  position: relative;
+  height: 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.bar .zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(116, 169, 140, 0.45);
+  border-left: 1px solid var(--gum);
+  border-right: 1px solid var(--gum);
+}
+.bar .fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--crema);
+  border-radius: 6px;
+}
+.bar .needle {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--paper);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+.gauge .tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.gauge .tagRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+/* Day 2 two hands: stop the shot from its card while the other hand steams. */
+.gauge .gstop {
+  pointer-events: auto;
+  margin-top: 6px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  background: var(--gum);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.tag.good {
+  color: var(--gum);
+}
+.tag.warn {
+  color: var(--gold);
+}
+.tag.bad {
+  color: var(--flag);
+}
+.vgauge {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.vbar {
+  position: relative;
+  width: 14px;
+  height: 120px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  flex: none;
+}
+.vbar .zone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(116, 169, 140, 0.45);
+}
+.vbar .zone.mid {
+  background: rgba(243, 196, 80, 0.22);
+}
+.vbar .needle {
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  height: 3px;
+  margin-top: -1.5px;
+  background: var(--paper);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+.vlabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--txt-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+:is(#actionBar, #ractions, #pactions) {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  gap: 10px;
+}
+:is(#touchHeight, #rtouchHeight, #ptouchHeight) {
+  position: absolute;
+  right: 16px;
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:is(#touchHeight, #rtouchHeight, #ptouchHeight) button {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  font-size: 20px;
+}
+
+/* ---------- pause ---------- */
+:is(#pause, #rpause, #ppause) {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(22, 16, 12, 0.7);
+  pointer-events: auto;
+}
+:is(#pause, #rpause, #ppause) .box {
+  text-align: center;
+}
+:is(#pause, #rpause, #ppause) h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 40px;
+  margin: 0 0 14px;
+}
+
+@media (max-width: 720px) {
+  :is(#gauges, #rgauges, #pgauges) {
+    top: auto;
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    width: 160px;
+  }
+  :is(#instr, #rinstr) {
+    bottom: auto;
+    top: 60px;
+  }
+}

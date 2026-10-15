@@ -1,0 +1,21 @@
+/* Shop: café upgrades on the shift select screen. */
+
+.shift-select-shop {
+  width: min(460px, 100%);
+}
+.shift-select-shop h3 {
+  margin: 6px 0;
+  font-size: 13px;
+  font-weight: 800;
+}
+.shift-select-shop ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.shift-select-shop button {
+  font-size: 13px;
+}
