@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { STEP } from '../../src/core/clock';
 import { createRng } from '../../src/core/rng';
+import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
 import { createPour } from '../../src/sim/latte/field';
 import {
   AIM_LIMIT,
@@ -18,6 +19,7 @@ import {
   stepPitcher,
   stepPourFrame,
   TILT_DOWN,
+  TILT_UP,
   type PitcherControls,
   type PitcherState,
   type PourControlInput,
@@ -260,5 +262,107 @@ describe('deterministic pouring', () => {
     const a = wander(11);
     const c = wander(12);
     expect(Array.from(a.foam)).not.toEqual(Array.from(c.foam));
+  });
+});
+
+describe('pour sensitivity: a gain on how fast holding tips the jug', () => {
+  /** Gaz's pour through the player's input path (aim, height, button), with a given gain. */
+  function demoThroughInput(pourGain?: number) {
+    const pour = createPour();
+    const p = createPitcher();
+    const c = controls();
+    const g = createPourGate();
+    const k = controls();
+    for (let i = 0; i < Math.round(8.2 / STEP); i++) {
+      controlsAt(OWNER_DEMO, i * STEP, k);
+      const over: Partial<PourControlInput> = {
+        cupX: k.targetX,
+        cupY: k.targetY,
+        heightPreset: k.targetHeight,
+        holding: k.holding,
+      };
+      if (pourGain !== undefined) over.pourGain = pourGain;
+      applyPourInput(c, g, input(over));
+      stepPourFrame(pour, p, c, SILKY_MILK, STEP);
+    }
+    return { pour, p };
+  }
+  /** Seconds of holding (from a level jug) until the flow is full. */
+  const secondsToFull = (gain: number | undefined): number => {
+    const p = createPitcher();
+    const c: PitcherControls = { ...controls(), holding: true, tiltGain: gain };
+    let n = 0;
+    while (pitcherFlow(p) < 1 && n < 1000) {
+      stepPitcher(p, c, STEP);
+      n++;
+    }
+    return n * STEP;
+  };
+
+  it('at 1 (the default) the pour is bit for bit what it was without the setting', () => {
+    const before = demoThroughInput();
+    const at1 = demoThroughInput(1);
+    expect(before.pour.poured).toBeGreaterThan(0.5);
+    expect(Array.from(at1.pour.foam)).toEqual(Array.from(before.pour.foam));
+    expect(at1.pour.fill).toBe(before.pour.fill);
+    expect(at1.p).toEqual(before.p);
+  });
+
+  it('scales how fast the stream builds: 2× twice as fast, 0.5× half as fast', () => {
+    const base = secondsToFull(undefined);
+    expect(base).toBeCloseTo(1 / TILT_UP, 1);
+    expect(secondsToFull(1)).toBe(base);
+    expect(secondsToFull(2)).toBeCloseTo(base / 2, 1);
+    expect(secondsToFull(0.5)).toBeCloseTo(base * 2, 1);
+  });
+
+  it('never changes the full flow, the let-go rate or the pull-through cap', () => {
+    for (const gain of [0.5, 2]) {
+      const p = createPitcher();
+      const c: PitcherControls = {
+        ...controls(),
+        targetHeight: HEIGHT_PRESETS[2],
+        holding: true,
+        tiltGain: gain,
+      };
+      for (let i = 0; i < 300; i++) stepPitcher(p, c, STEP);
+      expect(pitcherFlow(p)).toBe(1);
+      // Lifted to [2] after drawing low: the same thin stream at any gain.
+      c.targetHeight = HEIGHT_PRESETS[1];
+      for (let i = 0; i < 120; i++) stepPitcher(p, c, STEP);
+      expect(p.tilt).toBeCloseTo(PULL_TILT_CAP, 9);
+      // Let go: back at TILT_DOWN.
+      c.holding = false;
+      const t0 = p.tilt;
+      stepPitcher(p, c, STEP);
+      expect(p.tilt).toBeCloseTo(t0 - TILT_DOWN * STEP, 9);
+    }
+  });
+
+  it('applyPourInput hands the gain to the jug, and a fresh demo track never has one', () => {
+    const c = controls();
+    applyPourInput(c, createPourGate(), input({ pourGain: 1.5 }));
+    expect(c.tiltGain).toBe(1.5);
+    applyPourInput(c, createPourGate(), input());
+    expect(c.tiltGain).toBeUndefined();
+    expect(controlsAt(OWNER_DEMO, 1).tiltGain).toBeUndefined();
+  });
+
+  it('at 2× a 0.1 s tap pours a dribble; at the default it still pours nothing', () => {
+    const tap = (pourGain: number) => {
+      const pour = createPour();
+      const p = createPitcher();
+      const c = controls();
+      const g = createPourGate();
+      for (let i = 0; i < 40; i++) {
+        applyPourInput(c, g, input({ holding: i >= 10 && i < 16, pourGain }));
+        stepPourFrame(pour, p, c, SILKY_MILK, STEP);
+      }
+      return pour.poured;
+    };
+    expect(tap(1)).toBe(0);
+    expect(tap(0.5)).toBe(0);
+    expect(tap(2)).toBeGreaterThan(0);
+    expect(tap(2)).toBeLessThan(0.01);
   });
 });

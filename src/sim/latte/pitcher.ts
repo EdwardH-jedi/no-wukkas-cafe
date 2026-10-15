@@ -40,6 +40,9 @@ export interface PitcherControls {
   targetHeight: number;
   /** Pour button held. */
   holding: boolean;
+  /** Factor on how fast holding tips the jug (TILT_UP), from the player's input (see
+   *  PourControlInput.pourGain). Absent = 1: the demo's track never sets it. */
+  tiltGain?: number;
 }
 
 export interface PitcherState {
@@ -82,6 +85,11 @@ export interface PourControlInput {
   heightPreset: number | null;
   /** Pour button held. */
   holding: boolean;
+  /** How strongly the held button drives the flow: a factor on the tilt-up rate (the
+   *  pour-sensitivity setting; app/input.ts). Only the rise is scaled: letting go tips the jug
+   *  back at TILT_DOWN, and the flow at full tilt and the pull-through's thin stream are the same
+   *  at any gain. Absent = 1, today's feel exactly. */
+  pourGain?: number;
 }
 
 /** Guards against accidental pours: a button already held when the pour began (clicking through
@@ -114,6 +122,7 @@ export function applyPourInput(c: PitcherControls, gate: PourGate, input: PourCo
   c.targetHeight = clamp(c.targetHeight + input.heightDelta, HEIGHT_MIN, HEIGHT_MAX);
   if (!input.holding) gate.armed = true;
   c.holding = input.holding && gate.armed;
+  c.tiltGain = input.pourGain;
 }
 
 /** Index into HEIGHT_PRESETS of the preset nearest a height (what key "1/2/3" it's closest to). */
@@ -149,12 +158,13 @@ export function stepPitcher(p: PitcherState, c: PitcherControls, dt: number, lai
   p.height = Math.abs(dh) <= maxStep ? th : p.height + Math.sign(dh) * maxStep;
   const lifted = p.height >= LIFT;
   if (!lifted && laid) p.lowered = true;
+  const up = c.tiltGain === undefined ? TILT_UP : TILT_UP * c.tiltGain;
   if (c.holding && p.lowered && lifted)
     p.tilt =
       p.tilt > PULL_TILT_CAP
         ? Math.max(PULL_TILT_CAP, p.tilt - TILT_DOWN * dt)
-        : Math.min(PULL_TILT_CAP, p.tilt + TILT_UP * dt);
-  else p.tilt = clamp(p.tilt + (c.holding ? TILT_UP : -TILT_DOWN) * dt);
+        : Math.min(PULL_TILT_CAP, p.tilt + up * dt);
+  else p.tilt = clamp(p.tilt + (c.holding ? up : -TILT_DOWN) * dt);
 }
 
 /** Stream flow 0–1 from the pitcher's tilt. */

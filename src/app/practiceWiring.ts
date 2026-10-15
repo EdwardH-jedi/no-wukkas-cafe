@@ -10,7 +10,7 @@ import {
 } from '../core/practice';
 import { createEspresso } from '../sim/espresso';
 import { surfacing } from '../sim/latte/field';
-import { HEIGHT_PRESETS, pitcherFlow } from '../sim/latte/pitcher';
+import { HEIGHT_PRESETS, pitcherFlow, type PourControlInput } from '../sim/latte/pitcher';
 import { createSteam } from '../sim/steam';
 import { createPracticeHud, type PracticeHud } from '../ui/practiceHud';
 import type { StationView } from '../world/station';
@@ -85,6 +85,10 @@ export function createPracticeLoop(app: App): PracticeLoop {
   const { input, trial, station, owner, ibisView, camera, rig, audio, sfx, canvas } = app;
   const { look, focus } = app;
   const pIn = emptyPracticeInput();
+  // The pour gain (sensitivity) is neither a TrialInput nor a PracticeInput field: it rides along
+  // on both objects as the pour reads them (app/input.ts sets it).
+  const shared: PourControlInput = input;
+  const pPour: PourControlInput = pIn;
 
   /** Copy the shared input into practice's input for one step. */
   const samplePracticeInput = (): void => {
@@ -94,6 +98,7 @@ export function createPracticeLoop(app: App): PracticeLoop {
     pIn.hasCup = input.hasCup;
     pIn.heightDelta = input.heightDelta;
     pIn.heightPreset = input.heightPreset;
+    pPour.pourGain = shared.pourGain;
     // As on Day 1, a click (or Space) during Gaz's demo hurries his narration along.
     pIn.skip = input.skip || (app.practice?.phase === 'demo' && input.pressed);
     pIn.voiceHold = input.voiceHold === true;
