@@ -45,5 +45,6 @@ describe('rush trace', () => {
         "normal": "acfaeccc5d087a1de57fa73ab74153caf354a973",
       }
     `);
-  });
+    // Seven whole shifts: about 4 s alone, more beside the other shift-playing test files.
+  }, 20000);
 });

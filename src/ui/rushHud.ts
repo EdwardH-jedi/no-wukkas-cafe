@@ -5,6 +5,7 @@ import type { StationPhase } from '../core/barista';
 import {
   atCounter,
   atRegister,
+  presentSpeaker,
   type Rush,
   type RushAction,
   type RushCustomer,
@@ -13,6 +14,7 @@ import {
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
 import { EVENT_PROMPTS } from '../data/events';
+import { passFail, shiftDef } from '../core/week/progress';
 import {
   cueSpans,
   summariseListening,
@@ -40,6 +42,10 @@ export interface RushHudCallbacks {
   pause(p: boolean): void;
   restart(): void;
   title(): void;
+  /** Week mode, after the report: the next shift (a pass) or the same one again (a fail). */
+  nextShift(): void;
+  /** The save only lasts until the page closes (storage blocked or full). */
+  memoryOnly(): boolean;
   height(dir: -1 | 0 | 1): void;
   skip(): void;
   audioButtonsHtml: string;
@@ -105,7 +111,7 @@ function misheardList(r: Rush): string {
   const items = r.listening
     .filter((x) => x.wrong.length > 0)
     .map((x) => {
-      const c = r.customers.find((k) => k.def.id === x.customer);
+      const c = r.customers.find((k) => k.line.id === x.lineId);
       if (!c || !x.heard) return '';
       const wrong = wrongFields(x.heard, x.truth);
       return `<li><b>${esc(c.def.callName)}</b> said “${marked(c.line.text, cueSpans(c.line), wrong)}”<br><small>You rang up ${esc(orderLabel(x.heard))} · they wanted ${esc(orderLabel(x.truth))}</small></li>`;
@@ -138,7 +144,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const touch = window.matchMedia('(pointer: coarse)').matches;
   root.innerHTML = `
     <div id="rtopbar" class="hide">
-      <div class="chip"><span class="k">Day 2</span><b>Morning rush</b></div>
+      <div class="chip" id="rday"><span class="k">Day 2</span><b>Morning rush</b></div>
       <div class="chip"><span class="k">Time</span><b id="rclock">7:00</b></div>
       <div class="chip"><span class="k">Served</span><b id="rserved">0/5</b></div>
       <div class="chip"><span class="k">Tips</span><b id="rtips">$0.00</b></div>
@@ -254,7 +260,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     const list = railOrder(r);
     const ready = r.barista.ready !== null;
     const canMake = r.barista.phase === 'idle' && !ready;
-    const key = `${list.map((c) => `${c.def.id}:${c.heard ? orderLabel(c.heard) : ''}`).join(',')}|${ready}|${canMake}`;
+    const key = `${list.map((c) => `${c.key}:${c.heard ? orderLabel(c.heard) : ''}`).join(',')}|${ready}|${canMake}`;
     if (key !== railKey) {
       railKey = key;
       rail.innerHTML = '';
@@ -268,18 +274,18 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           <div class="to">${esc(c.heard ? orderLabel(c.heard) : '')}</div>
           <div class="tp"><i></i></div>
           <div class="tb"><button class="btn small ghost make" ${canMake ? '' : 'disabled'}>Make</button>
-          <button class="btn small serve" data-c="${c.def.id}" ${ready ? '' : 'disabled'}>Serve${touch || !ready ? '' : ` <kbd>${i + 1}</kbd>`}</button></div>`;
+          <button class="btn small serve" data-c="${esc(c.key)}" ${ready ? '' : 'disabled'}>Serve${touch || !ready ? '' : ` <kbd>${i + 1}</kbd>`}</button></div>`;
         (el.querySelector('.serve') as HTMLButtonElement).onclick = () =>
-          cb.action({ type: 'serve', customer: c.def.id as CustomerId });
+          cb.action({ type: 'serve', customer: c.key });
         (el.querySelector('.make') as HTMLButtonElement).onclick = () => makeFor(c);
         rail.appendChild(el);
-        ticketEls.set(c.def.id, el);
+        ticketEls.set(c.key, el);
       });
     }
     for (const c of list) {
-      const el = ticketEls.get(c.def.id);
+      const el = ticketEls.get(c.key);
       if (!el) continue;
-      const f = Math.max(0, c.patience / c.def.patience);
+      const f = Math.max(0, c.patience / c.maxPatience);
       const bar = el.querySelector('.tp i') as HTMLElement;
       bar.style.width = `${(f * 100).toFixed(0)}%`;
       const cls = f > 0.5 ? 'ok' : f > 0.22 ? 'warn' : 'bad';
@@ -331,15 +337,54 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       replayHold = seconds;
     },
     onPhase(phase, r) {
-      if (phase === 'intro') endQuote = '';
+      if (phase === 'intro') {
+        endQuote = '';
+        const [k, v] = !r.week
+          ? ['Day 2', 'Morning rush']
+          : r.week.endless
+            ? ['Endless', 'Rush']
+            : [`Week ${r.week.week ?? 1}`, shiftDef(r.week.shiftIndex).day];
+        $('#rday').innerHTML = `<span class="k">${esc(k)}</span><b>${esc(v)}</b>`;
+      }
       topbar.classList.toggle('hide', phase === 'summary');
       summary.classList.toggle('hide', phase !== 'summary');
       if (phase === 'summary' && r.summary) {
         const s = r.summary;
         const quote = endQuote;
+        const w = r.week;
+        const head = !w
+          ? 'DAY 2 · MORNING RUSH · SHIFT REPORT'
+          : w.endless
+            ? 'ENDLESS RUSH · REPORT'
+            : `WEEK ${w.week ?? 1} · ${shiftDef(w.shiftIndex).day.toUpperCase()} · SHIFT REPORT`;
+        const band =
+          s.grade === 'excellent' || s.grade === 'good'
+            ? 'hired'
+            : s.grade === 'okay'
+              ? 'almost'
+              : s.grade === 'poor'
+                ? 'failed'
+                : 'disaster';
+        // Endless always ends at the third walk-out, so its stamp is the count, not a grade.
+        const stamp = w?.endless
+          ? `<div class="stamp hired">Served ${s.ordersCompleted}</div>`
+          : `<div class="stamp ${band}">${esc(GRADE_TEXT[s.grade])}</div>`;
+        // A week shift moves on after a pass and is played again after a disaster; a passed
+        // shift isn't replayed (Edward, 2026-10-15).
+        const [act, label] = !w
+          ? ['again', 'Run the rush again']
+          : w.endless
+            ? ['again', 'Go again']
+            : passFail(s) === 'pass'
+              ? ['next', 'Next shift']
+              : ['next', 'Try this shift again'];
+        const note =
+          w && !w.endless && cb.memoryOnly()
+            ? `<p class="saveNote">Progress won't be saved in this browser.</p>`
+            : '';
         summary.innerHTML = `<div class="verdictCard"><div class="paper">
-          <div class="hd"><b>NO WUKKAS</b><span>DAY 2 · MORNING RUSH · SHIFT REPORT</span></div>
-          <div class="stamp ${s.grade === 'excellent' || s.grade === 'good' ? 'hired' : s.grade === 'okay' ? 'almost' : s.grade === 'poor' ? 'failed' : 'disaster'}">${esc(GRADE_TEXT[s.grade])}</div>
+          <div class="hd"><b>NO WUKKAS</b><span>${esc(head)}</span></div>
+          ${stamp}
           <div class="rows">
             <div class="kv"><span>Orders completed</span><b>${s.ordersCompleted}/${s.customers}</b></div>
             <div class="kv"><span>Correct orders</span><b>${s.correctOrders}/${s.customers}</b></div>
@@ -353,10 +398,13 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           </div>
           ${misheardList(r)}
           ${quote ? `<div class="quote">“${esc(quote)}”<br><small>— Gaz, owner</small></div>` : ''}
-          <div class="cardBtns"><button class="btn" data-s="again">Run the rush again</button><button class="btn ghost" data-s="title">Title screen</button></div>
+          ${note}
+          <div class="cardBtns"><button class="btn" data-s="${act}">${label}</button><button class="btn ghost" data-s="title">Title screen</button></div>
         </div></div>`;
         summary.querySelectorAll<HTMLButtonElement>('button[data-s]').forEach((b) => {
-          b.onclick = () => (b.dataset.s === 'again' ? cb.restart() : cb.title());
+          const s = b.dataset.s;
+          b.onclick = () =>
+            s === 'again' ? cb.restart() : s === 'next' ? cb.nextShift() : cb.title();
         });
         (summary.querySelector('button') as HTMLButtonElement).focus({ preventScroll: true });
       }
@@ -367,7 +415,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     update(r, dt) {
       // Subtitles. Orders and answers only show when the rules allow: listening is the game.
       if (listenLine && r.speech.current === listenLine) {
-        const c = r.customers.find((x) => x.def.id === listenLine?.speaker);
+        const c = listenLine ? presentSpeaker(r, listenLine.speaker) : null;
         const s = cb.settings();
         const vis = c
           ? transcriptVisible(subtitleMode(s), s.learning, stageOf(c), c.listen.repeats)
@@ -407,8 +455,9 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       (root.querySelector('#rclock') as HTMLElement).textContent =
         `7:${String(mins).padStart(2, '0')}`;
       const served = r.records.length;
-      (root.querySelector('#rserved') as HTMLElement).textContent =
-        `${served}/${r.customers.length}`;
+      (root.querySelector('#rserved') as HTMLElement).textContent = r.week?.endless
+        ? String(served)
+        : `${served}/${r.customers.length}`;
       (root.querySelector('#rtips') as HTMLElement).textContent = formatCents(
         r.records.reduce((s, x) => s + x.tipCents, 0),
       );

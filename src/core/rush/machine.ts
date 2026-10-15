@@ -6,9 +6,10 @@
 // This file is the shift itself (create, restart, phases, the fixed step); the parts it drives are
 // in the sibling modules (see index.ts).
 
-import { CUSTOMERS } from '../../data/customers';
+import { CUSTOMERS, customerDef, type CustomerDef, type CustomerId } from '../../data/customers';
 import { RUSH_INTRO } from '../../data/ownerLines';
-import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
+import { PATIENCE_SCALE } from '../../data/week';
+import { normaliseOrder, pickOrder, type Difficulty, type OrderLine } from '../../sim/listening';
 import { generateOrders } from '../../sim/listening/generate';
 import { createOwner } from '../../sim/owner';
 import { summariseShift } from '../../sim/rush';
@@ -20,14 +21,121 @@ import {
   type BaristaEvent,
   type BaristaInput,
 } from '../barista';
-import { createRng } from '../rng';
+import { createRng, type Rng } from '../rng';
 import { channelBusy, createChannel, updateChannel } from '../speech';
+import { endlessArrival, endlessOver } from '../week/endless';
+import { arrivalTimes, shiftDef, SHIFTS_PER_WEEK } from '../week/progress';
 import { stepCustomers } from './customers';
 import { chooseEvent, createShiftEvents, endShiftEvents, stepShiftEvents } from './events';
 import { listenAction, ringUp, takeOrder } from './register';
 import { serve } from './serve';
 import { gaz, gazDef, startSay } from './speech';
-import type { CustomerState, LineOverrides, Rush, RushInput, RushPhase, RushWeek } from './state';
+import {
+  absoluteShift,
+  type CustomerState,
+  type LineOverrides,
+  type Rush,
+  type RushCustomer,
+  type RushInput,
+  type RushPhase,
+  type RushWeek,
+} from './state';
+
+/** Endless Rush lines this many customers up in advance: far more than anyone gets through
+ *  before the third walk-out (arrivals reach one every 8 s). */
+export const ENDLESS_BATCH = 40;
+/** The generator's shift number for Endless orders (well clear of any week's shifts). */
+const ENDLESS_ORDERS = 100;
+
+interface Visit {
+  key: string;
+  def: CustomerDef;
+  line: OrderLine;
+  arriveAt: number;
+  maxPatience: number;
+}
+
+function newCustomer(v: Visit): RushCustomer {
+  return {
+    key: v.key,
+    def: v.def,
+    arriveAt: v.arriveAt,
+    maxPatience: v.maxPatience,
+    line: v.line,
+    order: normaliseOrder(v.line.order),
+    heard: null,
+    listen: { replays: 0, repeats: 0, clarified: [], questions: 0 },
+    lastListen: null,
+    state: 'outside' as CustomerState,
+    stateTime: 0,
+    patience: v.maxPatience,
+    registerAt: null,
+    orderedAt: null,
+    ticket: null,
+    rejected: 0,
+    outcome: null,
+    result: null,
+    reaction: null,
+    said: { impatient: false, angry: false },
+    nags: { register: 0, slow: 0, pos: 0 },
+    orderLine: null,
+    eventSatisfaction: 0,
+  };
+}
+
+/** A curated line fixed for this speaker (tests and debugging), else what was picked. */
+function chosen(def: CustomerDef, picked: OrderLine, lines: LineOverrides): OrderLine {
+  const forced = lines[def.id];
+  const line = forced ? def.orders.find((o) => o.id === forced) : picked;
+  if (!line) throw new Error(`${def.id} has no order line ${forced}`);
+  return line;
+}
+
+/** Day 2: the six regulars, each picking one of their curated lines (in this RNG draw order). */
+function day2Visits(difficulty: Difficulty, lines: LineOverrides, rng: Rng): Visit[] {
+  return CUSTOMERS.map((def) => ({
+    key: def.id,
+    def,
+    line: chosen(def, pickOrder(def.orders, difficulty, rng), lines),
+    arriveAt: def.arriveAt,
+    maxPatience: def.patience,
+  }));
+}
+
+/** A week shift (or Endless): its size and pace from the week table, generated orders, patience
+ *  scaled by difficulty. With more customers than regulars, the regulars come back (speakers
+ *  cycle), and each later visit gets its own key. */
+function weekVisits(
+  seed: number,
+  difficulty: Difficulty,
+  lines: LineOverrides,
+  week: RushWeek,
+): Visit[] {
+  const endless = week.endless === true;
+  const d = shiftDef(week.shiftIndex);
+  const specs = generateOrders(seed, {
+    shiftIndex: endless ? ENDLESS_ORDERS : absoluteShift(week, SHIFTS_PER_WEEK),
+    difficulty,
+    count: endless ? ENDLESS_BATCH : d.customers,
+    unlockedDrinks: week.unlockedDrinks,
+    speakers: CUSTOMERS.map((c) => c.id),
+  });
+  const arrivals = endless ? specs.map((_, n) => endlessArrival(n)) : arrivalTimes(d);
+  const scale = PATIENCE_SCALE[difficulty];
+  const visits = new Map<CustomerId, number>();
+  return specs.map((spec, i) => {
+    const def = customerDef(spec.speaker);
+    const n = (visits.get(def.id) ?? 0) + 1;
+    visits.set(def.id, n);
+    return {
+      key: n === 1 ? def.id : `${def.id}#${n}`,
+      def,
+      line: chosen(def, spec, lines),
+      arriveAt: arrivals[i] ?? endlessArrival(i),
+      maxPatience: def.patience * scale,
+    };
+  });
+}
 
 export function createRush(
   seed: number,
@@ -36,16 +144,10 @@ export function createRush(
   week: RushWeek | null = null,
 ): Rush {
   const rng = createRng(seed ^ 0x2d2);
-  // Week mode: this shift's orders from the generator. Day 2 (null) keeps its RNG draw order.
-  const specs = week
-    ? generateOrders(seed, {
-        shiftIndex: week.shiftIndex,
-        difficulty,
-        count: CUSTOMERS.length,
-        unlockedDrinks: week.unlockedDrinks,
-        speakers: CUSTOMERS.map((c) => c.id),
-      })
-    : null;
+  // Day 2 (no week) keeps its RNG draw order; week mode takes the generator's orders.
+  const visits = week
+    ? weekVisits(seed, difficulty, lines, week)
+    : day2Visits(difficulty, lines, rng);
   return {
     seed,
     difficulty,
@@ -59,34 +161,7 @@ export function createRush(
     owner: createOwner(),
     speech: createChannel(),
     barista: createBarista(),
-    customers: CUSTOMERS.map((def, i) => {
-      const picked = specs?.[i] ?? pickOrder(def.orders, difficulty, rng);
-      const forced = lines[def.id];
-      const line = forced ? def.orders.find((o) => o.id === forced) : picked;
-      if (!line) throw new Error(`${def.id} has no order line ${forced}`);
-      return {
-        def,
-        line,
-        order: normaliseOrder(line.order),
-        heard: null,
-        listen: { replays: 0, repeats: 0, clarified: [], questions: 0 },
-        lastListen: null,
-        state: 'outside' as CustomerState,
-        stateTime: 0,
-        patience: def.patience,
-        registerAt: null,
-        orderedAt: null,
-        ticket: null,
-        rejected: 0,
-        outcome: null,
-        result: null,
-        reaction: null,
-        said: { impatient: false, angry: false },
-        nags: { register: 0, slow: 0, pos: 0 },
-        orderLine: null,
-        eventSatisfaction: 0,
-      };
-    }),
+    customers: visits.map(newCustomer),
     records: [],
     listening: [],
     summary: null,
@@ -115,6 +190,17 @@ export function restartRush(r: Rush): void {
 }
 
 // ---------------------------------------------------------------- flow
+
+/** Everyone has been and gone; Endless Rush also ends at the third walk-out. */
+function shiftOver(r: Rush): boolean {
+  let gone = 0;
+  let walkouts = 0;
+  for (const c of r.customers) {
+    if (c.state === 'gone') gone++;
+    if (c.outcome === 'walkout') walkouts++;
+  }
+  return gone === r.customers.length || (r.week?.endless === true && endlessOver(walkouts));
+}
 
 function setPhase(r: Rush, phase: RushPhase): void {
   r.phase = phase;
@@ -191,12 +277,15 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
       handleBarista(r, baristaOut);
       stepCustomers(r, dt, input.voiceHold === true);
       stepShiftEvents(r);
-      if (r.customers.every((c) => c.state === 'gone')) {
+      if (shiftOver(r)) {
         endShiftEvents(r);
         setPhase(r, 'wrapup');
         const wasted = r.barista.binned + (r.barista.ready || r.barista.phase !== 'idle' ? 1 : 0);
-        // Anyone an event showed the door doesn't count against the shift.
-        const counted = r.customers.length - r.shiftEvents.refused;
+        // Visits that ended in a drink or a walk-out. Anyone an event showed the door isn't held
+        // against the shift, and Endless ends with people still waiting or yet to come.
+        let counted = 0;
+        for (const c of r.customers)
+          if (c.outcome === 'served' || c.outcome === 'walkout') counted++;
         r.summary = summariseShift(r.records, counted, wasted);
         gaz(r, `rush.end.${r.summary.grade}`, 'react');
         if (r.barista.ready) gaz(r, 'rush.wasteLeft', 'react');

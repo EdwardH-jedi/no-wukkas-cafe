@@ -115,7 +115,7 @@ export function createCrowd(scene: THREE.Scene): Crowd {
       c.state !== 'queue'
     )
       return 'neutral';
-    const f = c.patience / c.def.patience;
+    const f = c.patience / c.maxPatience;
     return f > 0.5 ? 'neutral' : f > 0.22 ? 'annoyed' : 'furious';
   };
 
@@ -129,19 +129,19 @@ export function createCrowd(scene: THREE.Scene): Crowd {
     update(r, dt, now, player, voice = -1) {
       regHas = false;
       for (const c of r.customers) {
-        let w = walkers.get(c.def.id);
+        let w = walkers.get(c.key);
         if (!w && c.state !== 'outside' && c.state !== 'gone') {
           const h = makeHuman(c.def.look);
           h.root.position.copy(DOOR);
           scene.add(h.root);
           w = { c, h, path: [], planned: '', heading: Math.PI, cup: null };
-          walkers.set(c.def.id, w);
+          walkers.set(c.key, w);
         }
         if (!w) continue;
         if (c.state === 'gone') {
           w.cup?.removeFromParent();
           w.h.dispose();
-          walkers.delete(c.def.id);
+          walkers.delete(c.key);
           continue;
         }
         w.c = c;

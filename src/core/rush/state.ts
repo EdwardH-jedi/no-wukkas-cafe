@@ -42,7 +42,14 @@ export const STEP_UP_TIME = 1.4;
 export const LEAVE_TIME = 4;
 
 export interface RushCustomer {
+  /** Who this visit is: the speaker's id on Day 2 and for a first visit; `${id}#2` and on when a
+   *  regular comes back later in a longer shift. Actions and events name customers by it. */
+  key: string;
   def: CustomerDef;
+  /** Service seconds they walk in (a returning regular waits until their earlier visit has left). */
+  arriveAt: number;
+  /** Their full patience in seconds (the customer's own, scaled by difficulty in week mode). */
+  maxPatience: number;
   /** How they order today (picked for the difficulty), and what that means: the answer key. */
   line: OrderLine;
   order: Order;
@@ -84,7 +91,7 @@ export type RushAction =
   /** Print the ticket with what the player heard. */
   | { type: 'ringUp'; order: Order }
   | { type: 'make'; drink: DrinkType; milk?: Milk }
-  | { type: 'serve'; customer: CustomerId }
+  | { type: 'serve'; customer: string }
   | { type: 'bin' }
   | { type: 'next' }
   | { type: 'restart' }
@@ -119,28 +126,33 @@ export type RushEvent =
   | { type: 'phase'; phase: RushPhase }
   | { type: 'station'; phase: StationPhase }
   | { type: 'sfx'; id: SfxId }
-  | { type: 'ticket'; customer: CustomerId }
+  | { type: 'ticket'; customer: string }
   /** A misheard ticket corrected after the customer handed the drink back. */
-  | { type: 'ticketFixed'; customer: CustomerId }
+  | { type: 'ticketFixed'; customer: string }
   /** The player asked a customer something (shown as the player's subtitle). */
-  | { type: 'ask'; customer: CustomerId; text: string }
-  | { type: 'served'; customer: CustomerId; result: ServeResult }
-  | { type: 'rejected'; customer: CustomerId }
-  | { type: 'walkout'; customer: CustomerId }
+  | { type: 'ask'; customer: string; text: string }
+  | { type: 'served'; customer: string; result: ServeResult }
+  | { type: 'rejected'; customer: string }
+  | { type: 'walkout'; customer: string }
   | { type: 'summary'; summary: ShiftSummary }
   /** Week mode only (never on Day 2): a shift event wants the player's choice, it was answered
    *  (or dropped, choice null, when its customer left), and an event ended someone's service. */
-  | { type: 'shiftEvent'; event: ShiftEventId; customer: CustomerId | null }
+  | { type: 'shiftEvent'; event: ShiftEventId; customer: string | null }
   | { type: 'shiftEventEnd'; event: ShiftEventId; choice: string | null }
-  | { type: 'refused'; customer: CustomerId };
+  | { type: 'refused'; customer: string };
 
 /** Week mode: which shift of the week this is and what's on the menu. Orders come from the
  *  generator (sim/listening/generate.ts) instead of each customer's curated lines. */
 export interface RushWeek {
-  /** 0-based across the week. */
+  /** 1-based week of the save (default 1). */
+  week?: number;
+  /** 0-based within the week: the row of the week table (data/week.ts). */
   shiftIndex: number;
+  /** Endless Rush: the same loop with arrivals that keep coming until the third walk-out, no
+   *  shift events, and a report that isn't a week shift. */
+  endless?: boolean;
   unlockedDrinks: readonly DrinkId[];
-  /** Shift each event last fired in, from earlier shifts (cooldowns). */
+  /** Shift each event last fired in, from earlier shifts (cooldowns; absolute shift numbers). */
   eventCooldowns?: Partial<Record<ShiftEventId, number>>;
   /** How well each regular knows the player (SaveV2.regulars). */
   affinity?: Partial<Record<CustomerId, number>>;
@@ -205,6 +217,22 @@ export function setState(c: RushCustomer, s: CustomerState): void {
   c.state = s;
   c.stateTime = 0;
 }
+
+/** Shifts since the save began (0-based): what orders and event cooldowns count in, so week 2's
+ *  Monday doesn't replay week 1's. */
+export const absoluteShift = (w: RushWeek, perWeek: number): number =>
+  ((w.week ?? 1) - 1) * perWeek + w.shiftIndex;
+
+/** Someone whose visit is under way (walked in, not yet gone). */
+export const inCafe = (c: RushCustomer): boolean => c.state !== 'outside' && c.state !== 'gone';
+
+/** The customer with this key, if any. */
+export const customerByKey = (r: Rush, key: string): RushCustomer | null =>
+  r.customers.find((c) => c.key === key) ?? null;
+
+/** The visit of this speaker that is under way, if any (at most one: see stepCustomers). */
+export const presentSpeaker = (r: Rush, id: string): RushCustomer | null =>
+  r.customers.find((c) => c.def.id === id && inCafe(c)) ?? null;
 
 export const registerBusy = (r: Rush): boolean =>
   r.customers.some(

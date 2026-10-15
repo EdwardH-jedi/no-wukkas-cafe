@@ -8,12 +8,19 @@ import { eventsAtRegister } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
 import {
   ENTER_TIME,
+  inCafe,
   LEAVE_TIME,
   registerBusy,
   setState,
   type Rush,
   type RushCustomer,
 } from './state';
+
+/** Another visit by the same regular is still in the café. */
+function visitUnderWay(r: Rush, c: RushCustomer): boolean {
+  for (const o of r.customers) if (o !== c && o.def === c.def && inCafe(o)) return true;
+  return false;
+}
 
 export function walkout(r: Rush, c: RushCustomer): void {
   c.outcome = 'walkout';
@@ -24,16 +31,17 @@ export function walkout(r: Rush, c: RushCustomer): void {
   gaz(r, 'rush.walkout', 'react', varsFor(c));
   addFrustration(r.owner, 1.2);
   r.streak.good = 0;
-  r.events.push({ type: 'walkout', customer: c.def.id });
+  r.events.push({ type: 'walkout', customer: c.key });
 }
 
 export function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
   for (const c of r.customers) {
     c.stateTime += dt;
-    const max = c.def.patience;
+    const max = c.maxPatience;
     switch (c.state) {
       case 'outside':
-        if (r.serviceTime >= c.def.arriveAt) setState(c, 'entering');
+        // A regular coming back waits until their earlier visit has left: one of each at a time.
+        if (r.serviceTime >= c.arriveAt && !visitUnderWay(r, c)) setState(c, 'entering');
         break;
       case 'entering':
         if (c.stateTime >= ENTER_TIME) setState(c, 'queue');

@@ -52,7 +52,7 @@ export function listenAction(
     if (c.listen.repeats >= MAX_REPEATS) return;
     c.listen.repeats++;
     c.patience -= LISTEN_COST.repeat;
-    r.events.push({ type: 'ask', customer: c.def.id, text: 'Sorry, could you repeat that?' });
+    r.events.push({ type: 'ask', customer: c.key, text: 'Sorry, could you repeat that?' });
     const u = customerListen(r, c, `${c.line.id}.slow`, c.line.text, 'slow');
     if (c.state === 'ordering') c.orderLine = u;
     // Queued after their repeat ('live' would never get a word in while they're talking).
@@ -61,7 +61,7 @@ export function listenAction(
     if (!c.listen.clarified.includes(a.field)) c.listen.clarified.push(a.field);
     c.listen.questions++;
     c.patience -= LISTEN_COST.clarify;
-    r.events.push({ type: 'ask', customer: c.def.id, text: CLARIFY_QUESTION[a.field] });
+    r.events.push({ type: 'ask', customer: c.key, text: CLARIFY_QUESTION[a.field] });
     const text = answerFor(c.def.answers, c.order, a.field);
     const u = customerListen(r, c, `${c.def.id}.answer.${a.field}`, text);
     if (c.state === 'ordering') c.orderLine = u;
@@ -90,6 +90,6 @@ export function ringUp(r: Rush, heard: Order): void {
   c.stateTime = 0;
   c.orderedAt = r.time;
   c.ticket = r.nextTicket++;
-  r.events.push({ type: 'ticket', customer: c.def.id });
+  r.events.push({ type: 'ticket', customer: c.key });
   if (c === r.customers[r.customers.length - 1]) gaz(r, 'rush.lastOrder', 'react');
 }

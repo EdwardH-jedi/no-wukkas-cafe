@@ -11,6 +11,8 @@ export { createRush, restartRush, stepRush } from './machine';
 export { atCounter } from './register';
 export {
   atRegister,
+  customerByKey,
+  presentSpeaker,
   emptyRushInput,
   ENTER_TIME,
   LEAVE_TIME,

@@ -154,8 +154,8 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
         el.classList.add('hide');
         forCustomer = '';
       } else {
-        if (c.def.id !== forCustomer) {
-          forCustomer = c.def.id;
+        if (c.key !== forCustomer) {
+          forCustomer = c.key;
           sel = { drink: null, milk: 'full', temp: 'normal', heart: 'no' };
           asked.textContent = '';
           who.textContent = c.def.name;

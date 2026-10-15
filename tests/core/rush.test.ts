@@ -192,7 +192,7 @@ function play(o: BotOpts = {}, seed = 3, maxSeconds = 900): Played {
       if (e.type === 'say') said.push(e.line.key);
       if (e.type === 'served') {
         const c = r.customers.find((x) => x.def.id === e.customer) as RushCustomer;
-        leftAtServe[e.customer] = c.patience / c.def.patience;
+        leftAtServe[c.def.id] = c.patience / c.def.patience;
       }
     }
     r.events.length = 0;

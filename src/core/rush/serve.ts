@@ -2,14 +2,13 @@
 // (wrong drink, wrong milk) and setting a misheard ticket straight, and the reactions from the
 // customer and Gaz. Split out of core/rush.ts and core/rushListening.ts with no behaviour change.
 
-import type { CustomerId } from '../../data/customers';
 import { answerFor, wrongFields } from '../../sim/listening';
 import { addFrustration } from '../../sim/owner';
 import { evaluateServe, REJECT_PENALTY, type MadeDrink } from '../../sim/rush';
 import { returnReady, takeReady } from '../barista';
 import { eventHandedBack } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
-import { setState, type Rush, type RushCustomer } from './state';
+import { customerByKey, setState, type Rush, type RushCustomer } from './state';
 
 /**
  * A handed-back drink that matches its ticket means the ticket was wrong: a listening mistake.
@@ -33,20 +32,21 @@ export function fixMisheardTicket(
     customerSay(r, c, `${c.def.id}.answer.milk`, text, 'annoyed', 'order');
   }
   c.heard = { ...c.order };
-  r.events.push({ type: 'ticketFixed', customer: c.def.id });
+  r.events.push({ type: 'ticketFixed', customer: c.key });
   gaz(r, 'rush.misheard', 'react', varsFor(c, drink.type));
   return true;
 }
 
-export function serve(r: Rush, id: CustomerId): void {
+/** Hand the drink on the pass to the customer with this key. */
+export function serve(r: Rush, key: string): void {
   const b = r.barista;
-  const c = r.customers.find((x) => x.def.id === id);
+  const c = customerByKey(r, key);
   if (!b.ready || !c || c.state !== 'waiting') return;
   const drink = takeReady(b, []);
   if (!drink) return;
   const judged = evaluateServe(c.order, drink, {
     waited: r.time - (c.registerAt ?? r.time),
-    patience: c.def.patience,
+    patience: c.maxPatience,
     tolerance: c.def.tolerance,
     tipCents: c.def.tipCents,
   });
@@ -64,7 +64,7 @@ export function serve(r: Rush, id: CustomerId): void {
     // They hand it back: it stays on the pass, still cooling, and their patience takes a hit.
     returnReady(b, drink);
     c.rejected++;
-    c.patience = Math.max(1, c.patience - c.def.patience * REJECT_PENALTY);
+    c.patience = Math.max(1, c.patience - c.maxPatience * REJECT_PENALTY);
     c.reaction = 'annoyed';
     const wrongMilk = result.complaints.includes('wrongMilk');
     customerSay(
@@ -83,7 +83,7 @@ export function serve(r: Rush, id: CustomerId): void {
     r.streak.good = 0;
     r.streak.bad++;
     if (r.streak.bad === 2) gaz(r, 'rush.streakBad', 'react');
-    r.events.push({ type: 'rejected', customer: c.def.id });
+    r.events.push({ type: 'rejected', customer: c.key });
     return;
   }
   c.outcome = 'served';
@@ -98,7 +98,7 @@ export function serve(r: Rush, id: CustomerId): void {
     satisfaction: result.satisfaction,
     tipCents: result.tipCents,
   });
-  r.events.push({ type: 'served', customer: c.def.id, result });
+  r.events.push({ type: 'served', customer: c.key, result });
   r.events.push({ type: 'sfx', id: result.satisfaction >= 60 ? 'good' : 'bad' });
 
   // What the customer says: delighted, a specific grumble, or a shrug.

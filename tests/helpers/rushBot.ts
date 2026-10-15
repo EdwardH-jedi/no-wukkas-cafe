@@ -125,7 +125,7 @@ function stationInput(r: Rush, m: Mem, i: RushInput): RushAction | null {
         !d ||
         d.type !== t.heard.type ||
         (d.type === 'flatWhite' && d.milkType !== t.heard.milk);
-      return stale ? { type: 'bin' } : { type: 'serve', customer: t.def.id };
+      return stale ? { type: 'bin' } : { type: 'serve', customer: t.key };
     }
     default:
       return null;
