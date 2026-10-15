@@ -67,7 +67,8 @@ src/
   main.ts            entry: fonts + stylesheet imports, then app/boot
   app/               wiring (DOM/three glue, no game rules): boot.ts (renderer, audio, HUDs, RAF loop),
                      context.ts (the shared App state), input.ts, title.ts, trialWiring.ts,
-                     rushWiring.ts, practiceWiring.ts, weekWiring.ts (shift select, shop, autosave),
+                     rushWiring.ts + rushView.ts, practiceWiring.ts, weekWiring.ts (shift select, shop,
+                     report buttons, autosave),
                      debug.ts (window.__trial), shared.ts
   core/              state machines (Day 1 trial.ts, Day 2 rush/ + barista.ts + speech.ts),
                      week progression and shift select glue (week/), the save store (save/),
