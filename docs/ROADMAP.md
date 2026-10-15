@@ -69,9 +69,12 @@ See `OVERNIGHT_REPORT.md` for evidence and what is still placeholder.
 - [x] **V.1 Audio:** one AudioContext unlocked in the Start click; voice/ambience/SFX buses and volumes; recorded clips with decode checks; replay; pause freezes audio; visible status and fallback to browser speech
 - [x] **V.2 Voice pipeline:** every spoken line enumerated; `npm run voices` renders MP3s and a manifest (ids, character, accent, locale, transcript, duration); subtitle timing follows clip length
 - [ ] **V.3 Real voices:** replace the placeholder macOS voices (Gaz is a pitched-down female voice; all Australians share one voice) with licensed actors or a licensed TTS service; a native-speaker listen-through for each accent
+  - Progress (2026-10-14, `VOICE_V2_REPORT.md`): casting page `/dev/casting.html` (auditions side by side, ratings, decisions → JSON, release rules as checks), provider and actor research (`docs/VOICE_PROVIDERS.md`). **No real audition audio yet**: waiting on Edward's provider/actor and budget decision.
 - [x] **V.4 Listening on Day 2:** 30 curated orders with answer keys (4 accent groups × tiers 1–3), register, replay / "repeat that?" / clarifying questions with costs, misheard tickets have consequences, Easy/Normal/Hard, subtitle rules, learning mode, listening stats in the report
 - [x] **V.5 NPCs:** eye contact, audio-driven mouths, blinks, reactions; ghosted jug while pouring
 - [ ] **V.6 Playtest** listening difficulty and aid costs with real players; iPhone Safari audio check
+- [x] **V.7 Music QA tools:** `/dev/listening.html` on the real engine (moods, bus volumes, ducking under real dialogue, pause), offline loudness / true-peak / clipping / DC measurement; DC offset in the FM keys fixed with a regression test
+- [ ] **V.8 Human listening review** of the three moods on speakers, headphones and a phone (lab notes → `reports/listening-notes.json`)
 
 ## Phase 2: Listen (real comprehension)
 

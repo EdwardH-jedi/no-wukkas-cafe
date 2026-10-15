@@ -4,11 +4,13 @@
 // provider 'macos'  local `say`: pipeline test only, never a casting candidate (placeholder licence)
 // provider 'files'  recordings delivered by an actor or provider, imported from a folder
 // provider 'azure'  Azure Neural TTS: needs --allow-paid and credentials; untested (no account)
+// provider 'google' Google Cloud TTS (Chirp 3 HD): listed to audition, no renderer yet (no account)
 //
-// Azure voice names are from Microsoft's published catalogue as known in 2026-10; check them
-// against the current list before an audition.
+// Voice names were checked against Microsoft's and Google's published voice lists on 2026-10-14
+// (docs/VOICE_PROVIDERS.md). Google's one-word persona descriptions ("Gravelly") come from its
+// Gemini voice list: that they fit the en-AU variants is unverified. Listen before trusting them.
 
-export type Provider = 'macos' | 'files' | 'azure';
+export type Provider = 'macos' | 'files' | 'azure' | 'google';
 
 export interface Candidate {
   provider: Provider;
@@ -29,6 +31,11 @@ export const CASTING: Record<string, readonly Candidate[]> = {
       note: 'older Australian male; check dryness',
     },
     { provider: 'azure', voice: 'en-AU-WilliamNeural', note: 'Australian male, warmer' },
+    {
+      provider: 'google',
+      voice: 'en-AU-Chirp3-HD-Algenib',
+      note: 'HD; persona described as "Gravelly" (unverified for en-AU)',
+    },
     { provider: 'files', voice: 'gaz-actor-a', note: 'preferred: a human actor for comic timing' },
   ],
   dazza: [
@@ -39,18 +46,38 @@ export const CASTING: Record<string, readonly Candidate[]> = {
       note: 'younger Australian male, fast',
     },
     { provider: 'azure', voice: 'en-AU-KenNeural', rate: 1.1, note: 'alternative' },
+    {
+      provider: 'google',
+      voice: 'en-AU-Chirp3-HD-Fenrir',
+      note: 'HD; persona described as "Excitable" (unverified for en-AU)',
+    },
   ],
   beryl: [
     { provider: 'azure', voice: 'en-AU-ElsieNeural', rate: 0.9, note: 'mature Australian female' },
+    {
+      provider: 'google',
+      voice: 'en-AU-Chirp3-HD-Gacrux',
+      note: 'HD; persona described as "Mature" (unverified for en-AU); no provider has an elderly voice',
+    },
     { provider: 'files', voice: 'beryl-actor-a', note: 'older actor if TTS sounds too young' },
   ],
   karen: [
     { provider: 'azure', voice: 'en-AU-NatashaNeural', note: 'crisp Australian female' },
     { provider: 'azure', voice: 'en-AU-JoanneNeural', note: 'alternative' },
+    {
+      provider: 'google',
+      voice: 'en-AU-Chirp3-HD-Kore',
+      note: 'HD; persona described as "Firm" (unverified for en-AU)',
+    },
   ],
   priya: [
     { provider: 'azure', voice: 'en-IN-NeerjaNeural', rate: 0.95, note: 'Indian English female' },
     { provider: 'azure', voice: 'en-IN-AnanyaNeural', rate: 0.95, note: 'alternative' },
+    {
+      provider: 'google',
+      voice: 'en-IN-Chirp3-HD-Leda',
+      note: 'HD; persona described as "Youthful" (unverified for en-IN)',
+    },
   ],
   jiwoo: [
     { provider: 'files', voice: 'jiwoo-actor-a', note: 'Korean L2 English speaker (recommended)' },
@@ -66,4 +93,108 @@ export const PIPELINE_TEST: Record<string, Candidate> = {
   priya: { provider: 'macos', voice: 'Tara', note: 'pipeline test only' },
   jiwoo: { provider: 'macos', voice: 'Yuna', note: 'pipeline test only' },
   mei: { provider: 'macos', voice: 'Tingting', note: 'pipeline test only' },
+};
+
+/** Who each character is, for the casting page's identity cards (docs/VOICE_CASTING.md). The
+ *  personality belongs to the person, never to the accent (AGENTS.md §6). */
+export interface CastBrief {
+  name: string;
+  role: string;
+  age: string;
+  accent: string;
+  /** How they should sound. */
+  voice: string;
+}
+
+export const CAST_BRIEFS: Record<string, CastBrief> = {
+  gaz: {
+    name: 'Gaz',
+    role: 'Café owner: sarcastic, gruff, secretly fair',
+    age: '50s',
+    accent: 'General/broad Australian (Sydney)',
+    voice: 'Low, dry, unhurried; deadpan comic timing; warmth under the sarcasm.',
+  },
+  dazza: {
+    name: 'Dazza',
+    role: 'Tradie regular, always late for site',
+    age: '30s',
+    accent: 'Broad Australian',
+    voice: 'Fast, clipped, slangy, friendly; slight rasp.',
+  },
+  beryl: {
+    name: 'Nan Beryl',
+    role: 'Regular since 1987; chatty nan',
+    age: '70s+',
+    accent: 'Older Australian',
+    voice: 'Slow, warm, a bit wavery; "love", "darl".',
+  },
+  karen: {
+    name: 'Karen',
+    role: 'Demanding, curt, precise',
+    age: '40s',
+    accent: 'General Australian',
+    voice: 'Crisp, clipped consonants, controlled irritation; never shouting.',
+  },
+  priya: {
+    name: 'Priya',
+    role: 'Nurse after a night shift; polite, tired',
+    age: 'Late 20s',
+    accent: 'Indian English',
+    voice: 'Soft, slightly slow, tired but clear.',
+  },
+  jiwoo: {
+    name: 'Jiwoo',
+    role: 'Working-holiday maker; cheerful',
+    age: 'Early 20s',
+    accent: 'Korean-accented English (fluent L2)',
+    voice: 'Bright, quick; a few Korean words said naturally (아아, 감사합니다).',
+  },
+  mei: {
+    name: 'Mei',
+    role: 'Product manager on a call; brisk, confident',
+    age: '30s',
+    accent: 'Mandarin-accented English (fluent L2, professional)',
+    voice: 'Quick, efficient, assured; not "cute", not halting.',
+  },
+};
+
+/** Where a provider's voices can be heard before anything is bought, and what using them needs.
+ *  The casting page links to these pages; it never embeds or stores their audio. */
+export interface ProviderInfo {
+  name: string;
+  /** Official page with voice previews, or null when there's nothing to hear yet. */
+  previewUrl: string | null;
+  previewNeedsLogin: boolean;
+  /** One line on licensing, details in docs/VOICE_PROVIDERS.md. */
+  licence: string;
+}
+
+export const PROVIDER_INFO: Record<Provider, ProviderInfo> = {
+  macos: {
+    name: 'macOS system voice',
+    previewUrl: null,
+    previewNeedsLogin: false,
+    licence: 'Personal, non-commercial use only: pipeline testing, never shipped.',
+  },
+  files: {
+    name: 'Delivered recordings (actor or provider)',
+    previewUrl: null,
+    previewNeedsLogin: false,
+    licence: 'Needs a signed buyout or written licence covering games, trailers and stores.',
+  },
+  azure: {
+    name: 'Microsoft Azure AI Speech (neural TTS)',
+    // A JavaScript app with a sign-in prompt: may need a (free) Microsoft login.
+    previewUrl: 'https://speech.microsoft.com/portal/voicegallery',
+    previewNeedsLogin: true,
+    licence:
+      'Commercial game use allowed (transparency note lists video games); Microsoft requires disclosing that voices are synthetic.',
+  },
+  google: {
+    name: 'Google Cloud Text-to-Speech (Chirp 3 HD)',
+    previewUrl: 'https://cloud.google.com/text-to-speech/docs/list-voices-and-types',
+    previewNeedsLogin: false,
+    licence:
+      'Output is customer data under the Google Cloud terms; no disclosure rule found, but credit AI voices anyway.',
+  },
 };

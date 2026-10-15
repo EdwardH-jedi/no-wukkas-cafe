@@ -60,6 +60,9 @@ export interface AudioManager {
   readonly musicDuck: number;
   /** RMS after the master gain right now (everything audible), for tests. */
   masterRms(): number;
+  /** Largest |sample| after the master gain over the last ~43 ms (2048 samples at 48 kHz): 1 or
+   *  more means the output clips. Read-only probe for the listening lab (dev/listening.html). */
+  masterPeak(): number;
   /** Call from inside a user gesture. Safe to call often. */
   unlock(): void;
   say(req: VoiceRequest): void;
@@ -118,8 +121,17 @@ interface Saved {
   voiceOn: boolean;
 }
 
-const loadSaved = (): Saved => {
-  const d: Saved = { voice: 1, music: 0.45, ambience: 0.7, sfx: 0.8, voiceOn: true };
+/** Bus volumes a new player starts with. */
+export const DEFAULT_VOLUMES: Readonly<Record<Bus, number>> = {
+  voice: 1,
+  music: 0.45,
+  ambience: 0.7,
+  sfx: 0.8,
+};
+
+const loadSaved = (read: boolean): Saved => {
+  const d: Saved = { ...DEFAULT_VOLUMES, voiceOn: true };
+  if (!read) return d;
   try {
     const raw = localStorage.getItem(STORE);
     if (!raw) return d;
@@ -139,9 +151,14 @@ const loadSaved = (): Saved => {
 };
 
 /** `voiceOff`: start with voices off for this page only (the ?voice=0 test switch), without
- *  touching the player's saved setting. */
-export function createAudioManager(base: string, opts: { voiceOff?: boolean } = {}): AudioManager {
-  const saved = loadSaved();
+ *  touching the player's saved setting. `persist: false`: start from the defaults and never save
+ *  volumes (the dev listening lab, so tuning there doesn't change the player's game settings). */
+export function createAudioManager(
+  base: string,
+  opts: { voiceOff?: boolean; persist?: boolean } = {},
+): AudioManager {
+  const persist = opts.persist !== false;
+  const saved = loadSaved(persist);
   const vol: Record<Bus, number> = {
     voice: saved.voice,
     music: saved.music,
@@ -160,6 +177,8 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
   let scope: Float32Array<ArrayBuffer> | null = null;
   let masterTap: AnalyserNode | null = null;
   let masterScope: Float32Array<ArrayBuffer> | null = null;
+  let peakTap: AnalyserNode | null = null;
+  let peakScope: Float32Array<ArrayBuffer> | null = null;
   // Voice sources started and not yet ended; `fading` = being faded out by a newer line.
   const live = new Set<AudioBufferSourceNode>();
   const fading = new Set<AudioBufferSourceNode>();
@@ -194,6 +213,7 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     emit();
   };
   const save = (): void => {
+    if (!persist) return;
     try {
       localStorage.setItem(STORE, JSON.stringify({ ...vol, voiceOn: voicePref }));
     } catch {
@@ -221,6 +241,10 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
     masterTap.fftSize = 512;
     masterScope = new Float32Array(masterTap.fftSize);
     master.connect(masterTap);
+    peakTap = ctx.createAnalyser();
+    peakTap.fftSize = 2048;
+    peakScope = new Float32Array(peakTap.fftSize);
+    master.connect(peakTap);
     for (const b of ['voice', 'music', 'ambience', 'sfx'] as const) {
       const g = ctx.createGain();
       g.gain.value = b === 'voice' && !voiceEnabled ? 0 : vol[b];
@@ -383,6 +407,13 @@ export function createAudioManager(base: string, opts: { voiceOff?: boolean } = 
       let m = 0;
       for (let i = 0; i < masterScope.length; i++) m += (masterScope[i] as number) ** 2;
       return Math.sqrt(m / masterScope.length);
+    },
+    masterPeak() {
+      if (!peakTap || !peakScope) return 0;
+      peakTap.getFloatTimeDomainData(peakScope);
+      let m = 0;
+      for (let i = 0; i < peakScope.length; i++) m = Math.max(m, Math.abs(peakScope[i] as number));
+      return m;
     },
     unlock() {
       try {
