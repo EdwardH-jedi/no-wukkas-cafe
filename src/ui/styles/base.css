@@ -60,9 +60,11 @@ body {
   cursor: pointer;
   pointer-events: auto;
 }
-#ui button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+/* Keyboard focus is always visible: a gold ring set off from the control, so it shows on the gold
+   buttons (through the gap), the paper receipts and the dark glass alike. */
+#ui :is(button, input, select):focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }
 .hide {
   display: none !important;

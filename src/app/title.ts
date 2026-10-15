@@ -1,17 +1,23 @@
-// The title screen: its buttons (Day 2, the week, practice, sound) and the way back to it.
+// The title screen: its buttons (Day 2, the week, Endless Rush, practice, settings) and the way
+// back to it.
 
 import { createTrial } from '../core/trial';
-import type { TitleCallbacks } from '../ui/screens/title';
+import { focusQuietly } from '../ui/screens/keys';
+import { endlessReason } from '../ui/screens/labels';
+import { renderTitle, type TitleCallbacks } from '../ui/screens/title';
 import type { App } from './context';
 import { makeIbis } from './shared';
+import { act } from './trialWiring';
 
 /** The title screen's buttons (Start is the trial's own), for the Day 1 HUD that draws them. */
 export function titleCallbacks(app: App): Omit<TitleCallbacks, 'start'> {
   return {
     day2: () => app.nav.startDay2(),
     shifts: () => app.nav.openShifts(),
+    endless: () => app.nav.startEndless(),
+    endlessLock: () => endlessReason(app.store.load()),
     practice: () => app.nav.startPractice(),
-    sound: () => {
+    settings: () => {
       app.audio.unlock();
       app.audioPanel.open();
     },
@@ -33,4 +39,11 @@ export function toTitle(app: App): void {
   app.hud1Root.classList.remove('hide');
   app.canvas.classList.remove('aim');
   app.hud.onPhase('title', app.trial);
+  // Redrawn: a shift may have changed the save since (Endless Rush opens after Monday). The button
+  // that brought the player here is hidden now, so keyboard focus starts on the menu again.
+  const title = app.hud1Root.querySelector<HTMLElement>('#title');
+  if (title) {
+    renderTitle(title, app.hud.touch, { ...titleCallbacks(app), start: () => act(app, 'start') });
+    focusQuietly(title.querySelector('button:not(:disabled)'));
+  }
 }
