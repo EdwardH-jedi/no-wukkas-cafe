@@ -3,7 +3,8 @@
 // trial and practice. Built once; per frame only classes, widths and short texts change.
 
 import { LESSON_HINT, STEP_TEXT } from '../data/coaching';
-import { POUR_STEPS, type PourLog } from '../sim/latte/coach';
+import { POUR_STEPS, readyToPull, type PourLog } from '../sim/latte/coach';
+import { demoPullFill } from '../sim/latte/demo';
 import { SURF_LOW, type PourState } from '../sim/latte/field';
 import {
   nearestPreset,
@@ -202,7 +203,8 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
           h = LESSON_HINT.goLow;
         else if (log.step === 2 && flowing && p.height > SURF_LOW + 0.9)
           h = LESSON_HINT.tooHighToDraw;
-        else if (log.step === 3 && !log.pullStarted && flowing) h = LESSON_HINT.pullNow;
+        else if (readyToPull(log, pour.fill) && flowing)
+          h = LESSON_HINT.pullNow.replace('{n}', String(Math.round(demoPullFill() * 20) * 5));
         else if (log.step === 4) h = LESSON_HINT.done;
       }
       if (h !== hintText) {

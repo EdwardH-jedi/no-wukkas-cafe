@@ -14,6 +14,7 @@ import { moodFor } from './audio/musicPatterns';
 import { createSfx } from './audio/sfx';
 import { consumeFrame, createClock, STEP, tickStep } from './core/clock';
 import { parseSeed } from './core/rng';
+import { cancelPress } from './core/barista';
 import {
   atCounter,
   atRegister,
@@ -57,7 +58,7 @@ import { buildCafe } from './world/cafe';
 import { createCameraRig } from './world/camera';
 import { createCrowd } from './world/crowd';
 import { buildOwner } from './world/owner';
-import { buildStation, RIM, type StationView } from './world/station';
+import { buildStation, GROUP_SPOUT, RIM, type StationView } from './world/station';
 
 const params = new URLSearchParams(location.search);
 const seed = parseSeed(params.get('seed'));
@@ -192,6 +193,8 @@ async function boot(): Promise<void> {
     if (p) {
       held = false;
       spaceHeld = false;
+      // A button let go while paused must not read as a click on resume (it would stop the shot).
+      if (rush) cancelPress(rush.barista);
     }
   };
 
@@ -525,7 +528,9 @@ async function boot(): Promise<void> {
       // Enter rings up even with a register option focused (it would just re-press it).
       if (t.tagName === 'BUTTON' && !(t.closest('#pos') && atCounter(r))) return;
       e.preventDefault();
-      if (b.phase === 'grind' || b.phase === 'pour') rushAct({ type: 'next' });
+      // While steaming during the shot, Enter stops the shot (a click would just grab the jug).
+      const stopShot = b.phase === 'shotSteam' && b.espresso.extracting;
+      if (b.phase === 'grind' || b.phase === 'pour' || stopShot) rushAct({ type: 'next' });
       else if (atCounter(r)) rushHud.ringUp();
       else if (atRegister(r)) rushAct({ type: 'takeOrder' });
       else input.skip = true;
@@ -667,6 +672,16 @@ async function boot(): Promise<void> {
       return {
         x: ((projV.x + 1) / 2) * window.innerWidth,
         y: ((1 - projV.y) / 2) * window.innerHeight,
+      };
+    },
+    /** Screen position (CSS px, plus whether it's inside the view) of the group head's spout or
+     *  the milk jug's spout tip. */
+    projectAnchor(which: 'groupHead' | 'jug'): { x: number; y: number; inView: boolean } {
+      projV.copy(which === 'groupHead' ? GROUP_SPOUT : station.jugTip).project(camera);
+      return {
+        x: ((projV.x + 1) / 2) * window.innerWidth,
+        y: ((1 - projV.y) / 2) * window.innerHeight,
+        inView: Math.abs(projV.x) <= 1 && Math.abs(projV.y) <= 1 && projV.z < 1,
       };
     },
     get mode() {
@@ -953,9 +968,8 @@ async function boot(): Promise<void> {
     r.events.length = 0;
 
     const b = r.barista;
-    // Two hands (shot running + steaming) looks like steaming to the world and the camera: the
-    // jug is what the player is working. TODO: show the shot's stream too.
-    const shown = b.phase === 'shotSteam' ? 'steam' : b.phase;
+    // Two hands (shot running + steaming) has its own view: the shot and the jug side by side.
+    const shown = b.phase;
     sv.phase = r.phase === 'service' ? shown : 'idle';
     sv.phaseTime = b.phaseTime;
     sv.espresso = b.espresso;
@@ -1018,8 +1032,8 @@ async function boot(): Promise<void> {
     sfx.update({
       grind: b.phase === 'grind' && b.espresso.grinding ? 1 : 0,
       pump: (b.phase === 'shot' || b.phase === 'shotSteam') && b.espresso.extracting ? 1 : 0,
-      steam: shown === 'steam' && b.steam.valveOpen ? 1 : 0,
-      steamZone: shown === 'steam' ? b.steam.zone : 'off',
+      steam: (shown === 'steam' || shown === 'shotSteam') && b.steam.valveOpen ? 1 : 0,
+      steamZone: shown === 'steam' || shown === 'shotSteam' ? b.steam.zone : 'off',
       pour:
         b.phase === 'pour' ? pitcherFlow(b.pitcher) : b.phase === 'water' && b.dispensing ? 0.7 : 0,
       pourHigh: b.phase === 'water' ? 0.8 : 1 - surfacing(b.pitcher.height),

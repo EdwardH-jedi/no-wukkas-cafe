@@ -32,6 +32,7 @@ export const AWAITING_RENDER: ReadonlySet<string> = new Set([
   'beryl.happy.longBlack',
   'jiwoo.happy', // "와, perfect!" (was "Wah, perfect!"), the same for every drink
   'shot.overlap', // Gaz: "Two hands. Now you're a barista."
+  'demo.pull', // Gaz: "Lift a touch, keep pouring, sweep straight through. Let go at the edge. Done."
 ]);
 
 /** Is this line (a script or runtime key, or the manifest key of a clip it replaces) awaiting a

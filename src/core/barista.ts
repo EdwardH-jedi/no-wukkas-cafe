@@ -4,8 +4,10 @@
 //   flat white: grind → lock → shot → steam → pour → ready
 //               grind → lock → shot → shotSteam → (steam) → pour → ready   (two hands)
 //   long black: grind → lock → water → shot → ready   (water first keeps the crema)
-// Two hands: while a flat white's shot runs, holding the button steams the milk (shotSteam); a
-// click still stops the shot. That overlap is where a busy shift's speed comes from.
+// Two hands: while a flat white's shot runs, holding the button steams the milk (shotSteam).
+// Before that, a click stops the shot as usual; once steaming, Enter (or the shot card) does,
+// because a click can't be told from grabbing the jug again. That overlap is where a busy
+// shift's speed comes from.
 
 import {
   createEspresso,
@@ -61,8 +63,8 @@ export const WATER_RATE = 0.12;
 /** Gaz only warns about hot milk past this in a shift: extra-hot orders want 68–74 °C. */
 export const SHIFT_HOT_WARNING = 75;
 const LONG_BLACK_TEMP = 70;
-/** During a flat white's shot, a press let go within this is a click (stops the shot); held
- *  longer, it steams the milk. */
+/** During a flat white's shot (before the milk goes on), a press let go within this is a click
+ *  (stops the shot); held longer, it steams the milk. */
 export const TAP_MAX = 0.25;
 /** After two hands, seconds into the steam step a warm jug can be left before it counts as
  *  finished (on top of the 0.6 s the shot takes to settle). */
@@ -77,7 +79,7 @@ export interface BaristaInput {
   jugDepth: number;
   heightDelta: number;
   heightPreset: number | null;
-  /** Lock in / hand over. */
+  /** Lock in / hand over / stop the shot while steaming. */
   next: boolean;
 }
 
@@ -85,6 +87,10 @@ export type BaristaEvent =
   | { type: 'line'; key: string; priority: 'live' | 'react' }
   | { type: 'sfx'; id: SfxId }
   | { type: 'phase'; phase: StationPhase }
+  /** The shot is over and scored. */
+  | { type: 'shotDone' }
+  /** The milk is finished and scored. */
+  | { type: 'milkDone' }
   | { type: 'ready' };
 
 /** The station button while a flat white's shot runs: click or hold. */
@@ -98,9 +104,9 @@ export interface Press {
 
 const createPress = (): Press => ({ gate: createPourGate(), held: 0 });
 
-/** One step of the button during the shot. A press let go within TAP_MAX is a click; a press and
- *  release inside one step (keyboard, the headless bots) is a click; a second press while already
- *  steaming (mouse held, Space tapped) is a click too. Held past TAP_MAX, it steams. */
+/** One step of the button during the shot, before the milk goes on. A press let go within TAP_MAX
+ *  is a click; a press and release inside one step (keyboard, the headless bots) is a click. Held
+ *  past TAP_MAX, it steams. A second press while one is held is just more holding. */
 export function stepPress(
   p: Press,
   input: Pick<BaristaInput, 'holding' | 'pressed'>,
@@ -114,9 +120,29 @@ export function stepPress(
     return { click, steam: false };
   }
   if (!p.gate.armed) return { click: false, steam: false };
-  if (input.pressed && p.held >= TAP_MAX) return { click: true, steam: true };
   p.held += dt;
   return { click: false, steam: p.held >= TAP_MAX };
+}
+
+/** One step of the button while steaming during the shot: holding steams, nothing held pauses
+ *  the valve. No click timing here; the shot stops on `next` (Enter or the shot card) or a press
+ *  and release inside one step. */
+function stepHands(
+  p: Press,
+  input: Pick<BaristaInput, 'holding' | 'pressed' | 'next'>,
+): { click: boolean; steam: boolean } {
+  if (!input.holding) {
+    p.gate.armed = true;
+    p.held = 0;
+    return { click: input.pressed || input.next, steam: false };
+  }
+  return { click: input.next, steam: p.gate.armed };
+}
+
+/** The game paused: forget any press in flight, so a release first seen on resume is never a
+ *  click (the button may have been let go while the clock was stopped). */
+export function cancelPress(b: Barista): void {
+  b.press.held = 0;
 }
 
 interface PourWatch {
@@ -317,7 +343,7 @@ function finishDrink(b: Barista, now: number, out: BaristaEvent[]): void {
 type Say = (key: string) => void;
 
 /** The milk is done: score it and let Gaz judge it. */
-function finishMilk(b: Barista, react: Say): void {
+function finishMilk(b: Barista, react: Say, out: BaristaEvent[]): void {
   const s = b.steam;
   s.done = true;
   s.valveOpen = false;
@@ -325,6 +351,7 @@ function finishMilk(b: Barista, react: Say): void {
   const milk = milkQuality(s);
   b.milk = milk;
   b.milkScore = scoreMilk(milk);
+  out.push({ type: 'milkDone' });
   const f = b.milkScore.faults;
   if (f.includes('scalded')) react('steam.scalded');
   else if (f.includes('flatMilk')) react('steam.flat');
@@ -342,6 +369,7 @@ function steamMilk(
   live: Say,
   react: Say,
   pauseOnly: boolean,
+  out: BaristaEvent[],
 ): void {
   const s = b.steam;
   if (s.done) return;
@@ -363,7 +391,7 @@ function steamMilk(
     }
   }
   const released = wasOpen && !s.valveOpen;
-  if (s.temp >= SCALD_TEMP || (released && s.temp >= 45 && !pauseOnly)) finishMilk(b, react);
+  if (s.temp >= SCALD_TEMP || (released && s.temp >= 45 && !pauseOnly)) finishMilk(b, react, out);
   else if (released && !pauseOnly) live('steam.tooEarly');
 }
 
@@ -420,22 +448,24 @@ export function stepBarista(
     case 'shot':
     case 'shotSteam': {
       const twoHands = b.drink === 'flatWhite';
+      // Was the shot running as this step began? (Letting go of the jug then only pauses it.)
+      let running = false;
+      let steam = false;
       if (!e.extracting && !e.done) {
         if (input.pressed) {
           startShot(e);
           b.press = createPress(); // the click that started the pump has to be let go first
         }
       } else if (twoHands) {
-        // Was the shot running as this step began? (Letting go to click it off only pauses.)
-        const running = e.extracting;
-        const p = stepPress(b.press, input, dt);
+        running = e.extracting;
+        const p =
+          b.phase === 'shotSteam' ? stepHands(b.press, input) : stepPress(b.press, input, dt);
         if (p.click && running) stopShot(e);
-        if (p.steam && running && b.phase === 'shot') {
+        steam = p.steam;
+        if (steam && running && b.phase === 'shot') {
           go(b, 'shotSteam', out);
           if (b.overlaps++ === 0) live('shot.overlap');
         }
-        if (b.phase === 'shotSteam')
-          steamMilk(b, p.steam, input.jugDepth, dt, live, react, running);
       } else if (e.extracting && input.pressed) stopShot(e);
       stepShot(e, dt);
       if (e.extracting && e.shotTime > SHOT_TARGET[1] + 2 && !b.flags.shotLong) {
@@ -452,9 +482,13 @@ export function stepBarista(
         b.mark = b.phaseTime;
         const s = scoreEspresso(e);
         b.espressoScore = s;
+        out.push({ type: 'shotDone' });
         if (s.faults.includes('shotLong') || e.shotTime >= SHOT_MAX) react('shot.over');
         else if (s.faults.includes('shotShort')) react('shot.short');
       }
+      // The milk after the shot, so a shot stopped on the step the milk finishes is judged first.
+      if (b.phase === 'shotSteam')
+        steamMilk(b, steam, input.jugDepth, dt, live, react, running, out);
       if (b.mark >= 0 && b.phaseTime - b.mark > 0.6) {
         if (b.drink === 'longBlack') finishDrink(b, now, out);
         else if (b.phase === 'shotSteam') {
@@ -474,8 +508,9 @@ export function stepBarista(
       if (input.holding) b.flags.carried = false;
       // Milk steamed during the shot, then left alone once the shot was off: the player let go
       // of it deliberately, so (warm enough) it's finished. Grabbing it again carries on.
-      if (b.flags.carried && b.phaseTime >= CARRIED_GRACE && s.temp >= 45) finishMilk(b, react);
-      else steamMilk(b, input.holding, input.jugDepth, dt, live, react, false);
+      if (b.flags.carried && b.phaseTime >= CARRIED_GRACE && s.temp >= 45)
+        finishMilk(b, react, out);
+      else steamMilk(b, input.holding, input.jugDepth, dt, live, react, false, out);
       if (s.done) b.mark = b.phaseTime;
       break;
     }

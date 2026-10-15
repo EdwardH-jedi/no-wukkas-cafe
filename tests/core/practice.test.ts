@@ -14,6 +14,7 @@ import {
 } from '../../src/core/practice';
 import { OWNER_LINES } from '../../src/data/ownerLines';
 import { clipFor } from '../../src/data/voice';
+import { awaitingRender } from '../../src/data/voice/script';
 import {
   controlsAt,
   DEMO_CHAPTERS,
@@ -250,9 +251,10 @@ describe('practice mode: watching Gaz', () => {
     expect(p.pour.poured).toBe(0);
   });
 
-  it('every line practice can say has a recording (no new voice lines)', () => {
+  it('every line practice can say has a recording (or is awaiting its render)', () => {
     for (const key of ['demo.intro', 'demo.again', ...DEMO_CHAPTERS.map((c) => c.cue)])
-      for (const d of OWNER_LINES[key]?.tiers.flat() ?? [])
-        expect(clipFor('gaz', d.text), d.text).not.toBeNull();
+      if (!awaitingRender(key))
+        for (const d of OWNER_LINES[key]?.tiers.flat() ?? [])
+          expect(clipFor('gaz', d.text), d.text).not.toBeNull();
   });
 });

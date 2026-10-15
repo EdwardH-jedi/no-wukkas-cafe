@@ -94,6 +94,7 @@ export function createAudioPanel(
   const setListen = (): void => {
     const was = cb.listen.get().subtitles;
     cb.listen.set({
+      version: 2,
       difficulty: diffSel.value as Difficulty,
       // Unticked: back to following the difficulty (an older saved choice is kept).
       subtitles: subChk.checked ? 'always' : was === 'always' ? 'auto' : was,

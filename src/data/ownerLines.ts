@@ -304,7 +304,9 @@ export const OWNER_LINES: LineBook = {
     mood: 'neutral',
   },
   'demo.pull': {
-    tiers: [[{ text: 'Lift, ease off, and pull straight through. Done.' }]],
+    tiers: [
+      [{ text: 'Lift a touch, keep pouring, sweep straight through. Let go at the edge. Done.' }],
+    ],
     mood: 'smug',
   },
   'demo.after': {

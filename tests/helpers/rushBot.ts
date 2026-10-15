@@ -18,10 +18,25 @@ import {
   type RushWeek,
 } from '../../src/core/rush';
 import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
-import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
+import { controlsAt, type TrackKey } from '../../src/sim/latte/demo';
 import { pitcherFlow } from '../../src/sim/latte/pitcher';
 import type { Difficulty } from '../../src/sim/listening';
 import type { Order } from '../../src/sim/rush';
+
+/** The bot's pour: Gaz's demo as it was in Session A (lift, let go, sweep within 0.3 s). It still
+ *  pours a heart with the pull-through cap, bit for bit as before, so `npm run pace` stays
+ *  comparable across changes to the taught pour (OWNER_DEMO now keeps pouring through the sweep). */
+export const BOT_POUR: readonly TrackKey[] = [
+  { t: 0.0, x: 0, y: -0.3, h: 7, hold: false },
+  { t: 0.5, x: 0, y: -0.3, h: 7, hold: true },
+  { t: 3.6, x: 0, y: -0.3, h: 6, hold: true },
+  { t: 4.0, x: 0, y: -0.35, h: 0.7, hold: true },
+  { t: 6.4, x: 0, y: -0.35, h: 0.7, hold: true },
+  { t: 6.5, x: 0, y: -0.4, h: 2.6, hold: true },
+  { t: 6.7, x: 0, y: 0.1, h: 3.0, hold: false },
+  { t: 7.0, x: 0, y: 0.85, h: 3.6, hold: false },
+  { t: 7.6, x: 0, y: 0.6, h: 8, hold: false },
+];
 
 /** How long a human takes to act, in game seconds. Zero everywhere is the old instant bot. */
 export interface BotLatency {
@@ -185,9 +200,9 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
       return null;
     }
     case 'pour': {
-      // The owner's demo pour, started `lag` late.
+      // The Session A demo pour, started `lag` late.
       if (b.phaseTime < lag) return null;
-      const k = controlsAt(OWNER_DEMO, b.phaseTime - lag);
+      const k = controlsAt(BOT_POUR, b.phaseTime - lag);
       i.hasCup = true;
       i.cupX = k.targetX;
       i.cupY = k.targetY;

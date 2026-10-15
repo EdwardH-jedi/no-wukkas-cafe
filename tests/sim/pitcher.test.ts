@@ -11,11 +11,15 @@ import {
   HEIGHT_MIN,
   HEIGHT_PRESETS,
   limitAim,
+  LIP,
   nearestPreset,
   pitcherFlow,
+  PULL_TILT_CAP,
   stepPitcher,
   stepPourFrame,
+  TILT_DOWN,
   type PitcherControls,
+  type PitcherState,
   type PourControlInput,
 } from '../../src/sim/latte/pitcher';
 import { SILKY_MILK } from '../../src/sim/milk';
@@ -34,6 +38,65 @@ const input = (over: Partial<PourControlInput> = {}): PourControlInput => ({
   heightPreset: null,
   holding: false,
   ...over,
+});
+
+describe('pull-through: lifted after drawing low, the stream thins', () => {
+  const [HIGH, LIFT, LOW] = HEIGHT_PRESETS;
+  const run = (p: PitcherState, c: PitcherControls, seconds: number): void => {
+    for (let i = 0; i < Math.round(seconds / STEP); i++) stepPitcher(p, c, STEP);
+  };
+  /** A jug that has drawn low at full tilt, still held. */
+  const drawn = (): { p: PitcherState; c: PitcherControls } => {
+    const p = createPitcher();
+    const c = { ...controls(), targetHeight: LOW, holding: true };
+    run(p, c, 1.5);
+    return { p, c };
+  };
+
+  it('filling from up high is never thinned (the jug has not been low yet)', () => {
+    const p = createPitcher();
+    const c: PitcherControls = { ...controls(), targetHeight: HIGH, holding: true };
+    run(p, c, 1.5);
+    expect(pitcherFlow(p)).toBe(1);
+    c.targetHeight = LIFT;
+    run(p, c, 0.5);
+    expect(pitcherFlow(p)).toBe(1);
+  });
+
+  it('lifted to [2] after drawing low, holding pours a thin stream', () => {
+    const { p, c } = drawn();
+    expect(pitcherFlow(p)).toBe(1);
+    c.targetHeight = LIFT;
+    run(p, c, 1);
+    expect(p.tilt).toBeCloseTo(PULL_TILT_CAP, 9);
+    expect(pitcherFlow(p)).toBeGreaterThan(0.3);
+    expect(pitcherFlow(p)).toBeLessThan(0.4);
+  });
+
+  it('thins at the let-go rate, not all at once', () => {
+    const { p, c } = drawn();
+    c.targetHeight = LIFT;
+    for (let i = 0; i < 60 && p.tilt === 1; i++) stepPitcher(p, c, STEP);
+    expect(p.tilt).toBeCloseTo(1 - TILT_DOWN * STEP, 9);
+    stepPitcher(p, c, STEP);
+    expect(p.tilt).toBeCloseTo(1 - 2 * TILT_DOWN * STEP, 9);
+  });
+
+  it('below the lift height nothing changes', () => {
+    const { p, c } = drawn();
+    c.targetHeight = LIFT - 0.5;
+    run(p, c, 1);
+    expect(pitcherFlow(p)).toBe(1);
+  });
+
+  it('letting go still stops the stream', () => {
+    const { p, c } = drawn();
+    c.targetHeight = LIFT;
+    run(p, c, 1);
+    c.holding = false;
+    run(p, c, (PULL_TILT_CAP - LIP) / TILT_DOWN + 2 * STEP);
+    expect(pitcherFlow(p)).toBe(0);
+  });
 });
 
 describe('pour controls: boundaries', () => {

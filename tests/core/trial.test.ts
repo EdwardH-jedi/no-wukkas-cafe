@@ -11,6 +11,7 @@ import {
 } from '../../src/core/trial';
 import { OWNER_LINES } from '../../src/data/ownerLines';
 import { clipFor } from '../../src/data/voice';
+import { awaitingRender } from '../../src/data/voice/script';
 import { controlsAt, OWNER_DEMO, type TrackKey } from '../../src/sim/latte/demo';
 import { HEIGHT_PRESETS } from '../../src/sim/latte/pitcher';
 
@@ -142,8 +143,9 @@ describe('trial shift, played headless', () => {
         for (const e of t.events) {
           if (e.type !== 'say') continue;
           const clip = clipFor('gaz', e.line.text);
-          if (!clip) missing.add(e.line.text);
-          else expect(e.line.duration).toBeGreaterThan(clip.duration);
+          if (!clip) {
+            if (!awaitingRender(e.line.key)) missing.add(e.line.text);
+          } else expect(e.line.duration).toBeGreaterThan(clip.duration);
         }
         t.events.length = 0;
         if (t.phase === 'verdict' && t.phaseTime > 1) break;

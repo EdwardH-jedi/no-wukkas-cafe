@@ -30,8 +30,9 @@ export const STEP_TEXT: Record<PourStep, StepText> = {
   },
   pull: {
     title: 'Lift and pull through',
-    how: 'Lift a touch [2], ease off the button, and sweep forward across the white.',
-    touch: 'Lift a touch (▲), lift your finger, and sweep forward across the white.',
+    how: 'Lift a touch [2], keep pouring, and sweep forward through the white. Let go at the far edge.',
+    touch:
+      'Lift a touch (▲), keep pressing, and sweep forward through the white. Let go at the far edge.',
   },
 };
 
@@ -43,7 +44,8 @@ export const LESSON_HINT = {
   tooLowEarly: 'Too early to go low: fill from up high first [1].',
   goLow: 'Half full. Drop right down now [3].',
   tooHighToDraw: 'Too high to draw: the foam is sinking. Lower [3].',
-  pullNow: 'Wide enough. Lift [2], ease off and pull forward.',
+  /** {n}: the cup fill (%) when Gaz starts his own pull-through. */
+  pullNow: 'Wide enough, cup ~{n}%. Lift [2], keep pouring and sweep forward.',
   done: 'Done. Hands off and let it settle.',
 } as const;
 
@@ -61,12 +63,17 @@ export const FINDING_TEXT: Record<FindingId, { label: string; why: string; fix: 
   split: {
     label: 'Cut in half',
     why: 'The dip runs {n}% as deep as a textbook heart’s.',
-    fix: 'Ease off the button before you pull through. A heavy stream slices it apart.',
+    fix: 'Lift [2] before you sweep: up there the stream thins. Low and heavy, it slices the heart apart.',
   },
   noPull: {
     label: 'Blob, no pull-through',
     why: 'Nothing was dragged through the white, so there’s no dip and no point.',
-    fix: 'Finish with [2], ease off, and sweep forward across the white.',
+    fix: 'Lift a touch [2], keep pouring, and sweep forward through the white. Let go at the far edge.',
+  },
+  streamDied: {
+    label: 'Stream died',
+    why: 'The jug moved {n}% of the radius forward after the milk had stopped, so nothing was dragged through the white.',
+    fix: 'You let go before the sweep. Keep pouring through it, let go at the far edge.',
   },
   shortPull: {
     label: 'No point',
@@ -77,6 +84,11 @@ export const FINDING_TEXT: Record<FindingId, { label: string; why: string; fix: 
     label: 'No dip at the top',
     why: 'The dip between the lobes is only {n}% as deep as it should be.',
     fix: 'Start the pull-through from the near edge of the white, not the middle.',
+  },
+  sweptLong: {
+    label: 'Too much in the sweep',
+    why: 'The sweep poured heavy past the middle, or ran on past the far rim, and washed the dip out.',
+    fix: 'Too much milk in the sweep. Lift, thin the stream, one pass.',
   },
   lopsided: {
     label: 'Lopsided',

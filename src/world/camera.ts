@@ -37,6 +37,7 @@ type Shot =
   | 'grind'
   | 'lock'
   | 'shot'
+  | 'shotSteam'
   | 'steam'
   | 'pour'
   | 'review'
@@ -51,6 +52,7 @@ const SHOTS = new Set<string>([
   'grind',
   'lock',
   'shot',
+  'shotSteam',
   'steam',
   'pour',
   'review',
@@ -121,6 +123,13 @@ export function createCameraRig(): CameraRig {
         wantPos.set(-1.13, 1.36, -0.1);
         wantTarget.set(LAYOUT.group.x, CT + 0.1, LAYOUT.group.z);
         wantFov = 44;
+        break;
+      case 'shotSteam':
+        // Two hands: the shot running in the group head and the jug on the wand, side by side,
+        // stood back enough that the jug stays clear of the gauge cards on the right.
+        wantPos.set(-0.9, 1.42, 0.1);
+        wantTarget.set(-0.8, CT + 0.1, LAYOUT.group.z);
+        wantFov = 50;
         break;
       case 'steam':
         wantPos.set(-0.45, 1.42, -0.12);
