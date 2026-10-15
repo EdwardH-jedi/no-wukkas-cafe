@@ -5,6 +5,7 @@
 //   npm run voices -- --only gaz,priya
 //   npm run voices -- --jobs 4         parallel renders (default 6)
 //   npm run voices -- --prune          delete cached clips the manifest no longer lists
+//   npm run voices -- --segments       render generated-order segments → voice-cache/segments/
 //
 // PLACEHOLDER PIPELINE (docs/VOICE_ASSETS.md): macOS `say` voices, which Apple licenses for
 // personal, non-commercial use. Clips go to voice-cache/ (gitignored), are served by the dev
@@ -71,6 +72,7 @@ const LICENCE =
 const args = process.argv.slice(2);
 const force = args.includes('--force');
 const prune = args.includes('--prune');
+const segmentsOnly = args.includes('--segments');
 const onlyArg = argValue(args, '--only');
 const only = onlyArg ? new Set(onlyArg.split(',')) : null;
 const jobs = Number(argValue(args, '--jobs') ?? 6) || 6;
@@ -222,6 +224,74 @@ async function serially<T>(voice: string, fn: () => Promise<T>): Promise<T> {
   }
 }
 
+/** `--segments`: every generated-order segment (data/voice/segments.ts) as its own placeholder
+ *  clip, voice-cache/segments/<speaker>/<id>.mp3, plus voice-cache/segments/index.json (what is on
+ *  disk, provenance 'placeholder'). The committed manifest is left alone: segment clips are
+ *  development-only until a licensed pipeline exists, and timing never depends on them. */
+async function renderSegments(castings: Map<string, Casting>): Promise<void> {
+  const { SEGMENT_INVENTORY } = await import('../src/data/voice/segments.ts');
+  const { segmentFile } = await import('../src/data/voice/manifest.ts');
+  const todo = Object.entries(SEGMENT_INVENTORY).flatMap(([speaker, segs]) =>
+    segs.map((g) => ({ speaker, id: g.id, text: g.text.trim(), file: segmentFile(g.id) })),
+  );
+  const index: Array<{
+    id: string;
+    speaker: string;
+    transcript: string;
+    file: string;
+    duration: number;
+    meanDb: number;
+    voice: string;
+  }> = [];
+  const failures: string[] = [];
+  let rendered = 0;
+  await pool(todo, jobs, async (j) => {
+    const c = castings.get(j.speaker);
+    const abs = cachePath(j.file);
+    try {
+      if (!c) throw new Error('no voice cast');
+      if (force || !existsSync(abs)) {
+        const line: ScriptLine = {
+          speaker: j.speaker,
+          key: j.id,
+          text: j.text,
+          delivery: 'normal',
+          rate: 1,
+        };
+        // One clip at a time per voice: some macOS voices misbehave under parallel load.
+        await serially(c.voice, () => renderOne(line, c, abs));
+        rendered++;
+      }
+      const m = await measure(abs);
+      if (!(m.duration > 0.05)) throw new Error(`duration ${m.duration} s`);
+      index.push({
+        id: j.id,
+        speaker: j.speaker,
+        transcript: j.text,
+        file: j.file,
+        duration: m.duration,
+        meanDb: m.meanDb,
+        voice: `macos:${c.voice}`,
+      });
+    } catch (e) {
+      rmSync(abs, { force: true });
+      failures.push(`${j.id} ("${j.text}"): ${(e as Error).message.split('\n')[0] ?? ''}`);
+    }
+  });
+  index.sort((a, b) => (a.id < b.id ? -1 : 1));
+  const dir = join(CACHE_DIR, 'segments');
+  mkdirSync(dir, { recursive: true });
+  const out = { provenance: 'placeholder', provider: PROVIDER, licence: LICENCE, segments: index };
+  writeFileSync(join(dir, 'index.json'), `${JSON.stringify(out, null, 2)}\n`);
+  console.log(
+    `segments: rendered ${rendered}, ${index.length}/${todo.length} on disk in ${dir} (placeholder)`,
+  );
+  if (failures.length) {
+    console.error(`${failures.length} segment failure(s):\n  ${failures.join('\n  ')}`);
+    process.exitCode = 1;
+  }
+}
+
 interface Job {
   line: ScriptLine;
   c: Casting;
@@ -250,6 +320,8 @@ async function main(): Promise<void> {
     process.exitCode = 1;
     return;
   }
+
+  if (segmentsOnly) return renderSegments(castings);
 
   // Before 2026-10-13 this script wrote placeholder clips into public/, where builds copy them.
   // Builds now strip placeholders, but the old folder should go.

@@ -8,7 +8,7 @@
 
 import { clipFor, VOICE_MANIFEST } from '../data/voice';
 import type { Delivery } from '../data/voice/ids';
-import type { VoiceClip } from '../data/voice/manifest';
+import { segmentFile, type VoiceClip } from '../data/voice/manifest';
 import { VOICE_PROFILES } from '../data/voice/profiles';
 import { duckLevel } from './musicPatterns';
 import { createTts, type TtsStyle } from './voice';
@@ -25,6 +25,8 @@ export interface VoiceRequest {
   delivery?: Delivery;
   /** An order or answer the player must hear: the music ducks deeper under it. */
   listen?: boolean;
+  /** A generated line: the segment ids that voice `text`, played back to back. */
+  segments?: readonly string[];
 }
 
 export interface PlayRecord {
@@ -47,6 +49,8 @@ export interface PlayRecord {
   /** ms from request to the first sample. */
   latencyMs: number;
   error: string | null;
+  /** A segmented line: how many of its segment clips have started. Absent for a single clip. */
+  segments?: number;
 }
 
 export interface AudioManager {
@@ -112,6 +116,9 @@ const STORE = 'nwc.audio.v1';
 const shipped = (c: VoiceClip): boolean => import.meta.env.DEV || c.source.placeholder === false;
 const NOT_SHIPPED = 'Recorded voices are development-only placeholders and are not in this build.';
 const DECODED_CACHE = 16;
+/** Segment clips exist only as dev placeholders so far (voice-cache/segments/, served by the dev
+ *  server); a build has none, so generated lines go straight to the browser voice there. */
+const SEGMENTS_SERVED = import.meta.env.DEV;
 
 interface Saved {
   voice: number;
@@ -190,6 +197,8 @@ export function createAudioManager(
   const tts = createTts();
 
   const encoded = new Map<string, Promise<ArrayBuffer>>();
+  /** Segment files that failed to load: a line needing one goes to the browser voice at once. */
+  const missingSegments = new Set<string>();
   const decoded = new Map<string, AudioBuffer>(); // insertion order = LRU
   let source: AudioBufferSourceNode | null = null;
   let sourceGain: GainNode | null = null;
@@ -272,31 +281,34 @@ export function createAudioManager(
     }
   };
 
-  const fetchClip = (clip: VoiceClip): Promise<ArrayBuffer> => {
-    let p = encoded.get(clip.file);
+  const fetchClip = (file: string): Promise<ArrayBuffer> => {
+    let p = encoded.get(file);
     if (!p) {
-      p = fetch(base + clip.file).then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status} for ${clip.file}`);
+      p = fetch(base + file).then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} for ${file}`);
+        // The dev server answers a missing file with its HTML page, not a 404.
+        if (r.headers.get('content-type')?.includes('text/html'))
+          throw new Error(`no audio at ${file}`);
         return r.arrayBuffer();
       });
-      p.catch(() => encoded.delete(clip.file)); // allow a retry later
-      encoded.set(clip.file, p);
+      p.catch(() => encoded.delete(file)); // allow a retry later
+      encoded.set(file, p);
     }
     return p;
   };
 
-  const bufferFor = async (clip: VoiceClip): Promise<AudioBuffer> => {
-    const hit = decoded.get(clip.file);
+  const bufferFor = async (file: string): Promise<AudioBuffer> => {
+    const hit = decoded.get(file);
     if (hit) {
-      decoded.delete(clip.file);
-      decoded.set(clip.file, hit);
+      decoded.delete(file);
+      decoded.set(file, hit);
       return hit;
     }
-    const bytes = await fetchClip(clip);
+    const bytes = await fetchClip(file);
     const c = ctx as AudioContext;
     // decodeAudioData detaches its input: hand it a copy so the cached bytes survive.
     const buf = await c.decodeAudioData(bytes.slice(0));
-    decoded.set(clip.file, buf);
+    decoded.set(file, buf);
     while (decoded.size > DECODED_CACHE) {
       const oldest = decoded.keys().next().value as string;
       decoded.delete(oldest);
@@ -381,6 +393,81 @@ export function createAudioManager(
     });
   };
 
+  /** A generated line: its segment clips back to back, as one line (one record, one fade, one
+   *  hold while loading). Every part is fetched and decoded before the first plays, so the line
+   *  never stalls halfway; if any part is missing the WHOLE line goes to the browser voice. Each
+   *  part starts when the one before ends, on the context's clock: pausing (which suspends the
+   *  context) freezes the list, and a newer line or stopVoice drops the parts not yet played. */
+  const saySegments = (req: VoiceRequest, ids: readonly string[], my: number): void => {
+    const files = ids.map(segmentFile);
+    if (!ctx || !SEGMENTS_SERVED || files.some((f) => missingSegments.has(f))) {
+      viaTts(req, ctx ? 'No recording for part of this line.' : null, my);
+      return;
+    }
+    const asked = performance.now();
+    loadingGen = my;
+    const load = (f: string): Promise<AudioBuffer> =>
+      bufferFor(f).catch((e: unknown) => {
+        missingSegments.add(f);
+        throw e;
+      });
+    Promise.all(files.map(load)).then(
+      (bufs) => {
+        if (loadingGen === my) loadingGen = -1;
+        if (my !== gen || !ctx) return;
+        const c = ctx;
+        const g = c.createGain();
+        g.connect(analyser as AnalyserNode);
+        const r: PlayRecord = {
+          id: ids.join('+'),
+          speaker: req.speaker,
+          text: req.text,
+          via: 'clip',
+          file: files.join(' '),
+          manifestDuration: 0,
+          bufferDuration: bufs.reduce((t, b) => t + b.duration, 0),
+          startedAt: c.currentTime,
+          endedAt: null,
+          maxRms: 0,
+          latencyMs: Math.round(performance.now() - asked),
+          error: null,
+          maxMasterRms: 0,
+          interrupted: false,
+          segments: 0,
+        };
+        const part = (i: number): void => {
+          const s = c.createBufferSource();
+          s.buffer = bufs[i] as AudioBuffer;
+          s.connect(g);
+          s.onended = () => {
+            live.delete(s);
+            fading.delete(s);
+            if (source !== s) return; // cut off: the rest of the list is dropped
+            if (i + 1 < bufs.length) return part(i + 1);
+            r.endedAt = c.currentTime;
+            source = null;
+            sourceGain = null;
+          };
+          s.start();
+          source = s;
+          sourceGain = g;
+          live.add(s);
+          maxLive = Math.max(maxLive, live.size);
+          maxAudible = Math.max(maxAudible, live.size - fading.size);
+          r.segments = i + 1;
+        };
+        record(r);
+        part(0);
+        if (status === 'fallback' || status === 'error') setStatus('ok', okMessage());
+      },
+      (e: unknown) => {
+        if (loadingGen === my) loadingGen = -1;
+        if (my !== gen) return;
+        viaTts(req, `Couldn't load part of this line (${(e as Error).message}).`, my);
+      },
+    );
+  };
+
   const m: AudioManager = {
     get context() {
       return ctx;
@@ -447,6 +534,11 @@ export function createAudioManager(
       stopSource();
       tts.stop();
       if (!voiceEnabled) return;
+      // Segments are rendered at normal pace only: a slow repeat is the browser voice, whole.
+      if (req.segments?.length && req.delivery !== 'slow') {
+        saySegments(req, req.segments, my);
+        return;
+      }
       const clip = clipFor(req.speaker, req.text, req.delivery);
       if (!clip || !ctx || !shipped(clip)) {
         viaTts(req, !clip ? 'No recording for this line.' : shipped(clip) ? null : NOT_SHIPPED, my);
@@ -454,7 +546,7 @@ export function createAudioManager(
       }
       const asked = performance.now();
       loadingGen = my;
-      bufferFor(clip).then(
+      bufferFor(clip.file).then(
         (buf) => {
           if (loadingGen === my) loadingGen = -1;
           if (my !== gen || !ctx) return;
@@ -543,7 +635,7 @@ export function createAudioManager(
     prefetch(reqs) {
       for (const q of reqs) {
         const c = clipFor(q.speaker, q.text, q.delivery);
-        if (c && shipped(c)) fetchClip(c).catch(() => undefined);
+        if (c && shipped(c)) fetchClip(c.file).catch(() => undefined);
       }
     },
     volume(b) {

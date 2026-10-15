@@ -58,3 +58,9 @@ export const VOICE_CACHE_DIR = 'voice-cache';
 export const VOICE_RELEASE_DIR = 'public/assets/voice';
 /** URL prefix of every clip's `file`. */
 export const VOICE_URL_PREFIX = 'assets/voice/';
+
+/** Where a generated-order segment's clip is served (data/voice/segments.ts): one file per segment
+ *  id under its speaker. Placeholder segment clips are rendered by `npm run voices -- --segments`
+ *  into voice-cache/segments/ (dev server only, never built or committed). */
+export const segmentFile = (id: string): string =>
+  `${VOICE_URL_PREFIX}segments/${id.split('.')[0] ?? ''}/${id}.mp3`;

@@ -27,7 +27,7 @@ export function takeOrder(r: Rush): void {
   const c = atRegister(r);
   if (c && r.shiftEvents.current?.customer !== c) {
     setState(c, 'ordering');
-    c.orderLine = customerListen(r, c, c.line.id, c.line.text);
+    c.orderLine = customerListen(r, c, c.line.id, c.line.text, 'normal', c.line.voice);
   }
 }
 
@@ -43,10 +43,15 @@ export function listenAction(
     // Something of theirs is already waiting to be said: that's what they'll hear next, so a
     // replay request adds nothing (no line, no cost, not counted).
     if (listenQueued(r, c)) return;
-    const l = c.lastListen ?? { text: c.line.text, delivery: 'normal' as Delivery, key: c.line.id };
+    const l = c.lastListen ?? {
+      text: c.line.text,
+      delivery: 'normal' as Delivery,
+      key: c.line.id,
+      voice: c.line.voice,
+    };
     c.listen.replays++;
     c.patience -= LISTEN_COST.replay;
-    const u = customerListen(r, c, l.key, l.text, l.delivery);
+    const u = customerListen(r, c, l.key, l.text, l.delivery, l.voice);
     if (c.state === 'ordering') c.orderLine = u;
   } else if (a.type === 'repeat') {
     if (c.listen.repeats >= MAX_REPEATS) return;

@@ -6,6 +6,7 @@ import { GAZ_EVENT_LINES } from '../../data/dialogue/gazEvents';
 import { OWNER_LINES } from '../../data/ownerLines';
 import { spokenDuration } from '../../data/voice';
 import type { Delivery } from '../../data/voice/ids';
+import type { VoiceRef } from '../../sim/contracts/voice';
 import { pickLine, type LineBook, type LineDef, type Mood } from '../../sim/owner';
 import { DRINK_NAME, type DrinkType } from '../../sim/rush';
 import type { Rush, RushCustomer } from './state';
@@ -80,13 +81,14 @@ export function customerSay(
 }
 
 /** Something the player must hear: the order, a slower repeat, or an answer. Starts at once (the
- *  player asked for it) and becomes what Replay plays. */
+ *  player asked for it) and becomes what Replay plays. `voice`: how a generated line is voiced. */
 export function customerListen(
   r: Rush,
   c: RushCustomer,
   key: string,
   text: string,
   delivery: Delivery = 'normal',
+  voice?: VoiceRef,
 ): Utterance {
   const u: Utterance = {
     speaker: c.def.id,
@@ -98,8 +100,9 @@ export function customerListen(
     priority: 'order',
     delivery,
     listen: true,
+    ...(voice ? { voice } : {}),
   };
-  c.lastListen = { text, delivery, key };
+  c.lastListen = { text, delivery, key, ...(voice ? { voice } : {}) };
   // The same request asked again while it's still waiting replaces it instead of piling up
   // (a customer has at most six distinct listening lines, so the queue stays bounded).
   dropQueued(

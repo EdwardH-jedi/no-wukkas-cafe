@@ -759,6 +759,7 @@ async function boot(): Promise<void> {
           rejected: c.rejected,
           satisfaction: c.result?.satisfaction ?? null,
           lineId: c.line.id,
+          segments: c.line.voice?.kind === 'segments' ? c.line.voice.ids.length : 0,
           order: { ...c.order },
           heard: c.heard ? { ...c.heard } : null,
           listen: { ...c.listen, clarified: [...c.listen.clarified] },
@@ -912,6 +913,7 @@ async function boot(): Promise<void> {
           text: u.text,
           delivery: u.delivery ?? 'normal',
           listen: u.listen === true,
+          ...(u.voice?.kind === 'segments' ? { segments: u.voice.ids } : {}),
         });
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);

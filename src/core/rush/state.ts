@@ -5,6 +5,7 @@ import type { CustomerDef, CustomerId } from '../../data/customers';
 import type { Delivery } from '../../data/voice/ids';
 import type { ShiftEventDef, ShiftEventId } from '../../sim/contracts/events';
 import type { DrinkId } from '../../sim/contracts/ticket';
+import type { VoiceRef } from '../../sim/contracts/voice';
 import type { EventLog } from '../../sim/events/scheduler';
 import type { Difficulty, ListenRecord, OrderField, OrderLine } from '../../sim/listening';
 import type { Mood, OwnerState } from '../../sim/owner';
@@ -41,6 +42,10 @@ export const ENTER_TIME = 3.5;
 export const STEP_UP_TIME = 1.4;
 export const LEAVE_TIME = 4;
 
+/** An order line as a customer holds it: a generated one (an OrderSpec) also says how it is
+ *  voiced. */
+export type VoicedLine = OrderLine & { voice?: VoiceRef };
+
 export interface RushCustomer {
   /** Who this visit is: the speaker's id on Day 2 and for a first visit; `${id}#2` and on when a
    *  regular comes back later in a longer shift. Actions and events name customers by it. */
@@ -51,13 +56,13 @@ export interface RushCustomer {
   /** Their full patience in seconds (the customer's own, scaled by difficulty in week mode). */
   maxPatience: number;
   /** How they order today (picked for the difficulty), and what that means: the answer key. */
-  line: OrderLine;
+  line: VoicedLine;
   order: Order;
   /** What the player rang up: the ticket. Null until rung up. */
   heard: Order | null;
   listen: { replays: number; repeats: number; clarified: OrderField[]; questions: number };
   /** The last thing they said for the player to hear (order, repeat or answer), for Replay. */
-  lastListen: { text: string; delivery: Delivery; key: string } | null;
+  lastListen: { text: string; delivery: Delivery; key: string; voice?: VoiceRef } | null;
   state: CustomerState;
   stateTime: number;
   /** Seconds of patience left. */

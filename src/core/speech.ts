@@ -7,6 +7,7 @@
 //   ambient nags and asides: only when nobody is talking and nothing is queued
 
 import type { Delivery } from '../data/voice/ids';
+import type { VoiceRef } from '../sim/contracts/voice';
 import type { Gesture, Mood } from '../sim/owner';
 
 export type Priority = 'order' | 'react' | 'live' | 'ambient';
@@ -24,6 +25,8 @@ export interface Utterance {
   delivery?: Delivery;
   /** An order or a clarifying answer: what the player must hear (subtitle rules apply). */
   listen?: boolean;
+  /** How a generated line is voiced (its segment clips); absent: looked up by its words. */
+  voice?: VoiceRef;
 }
 
 export interface Channel {

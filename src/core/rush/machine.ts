@@ -9,7 +9,7 @@
 import { CUSTOMERS, customerDef, type CustomerDef, type CustomerId } from '../../data/customers';
 import { RUSH_INTRO } from '../../data/ownerLines';
 import { PATIENCE_SCALE } from '../../data/week';
-import { normaliseOrder, pickOrder, type Difficulty, type OrderLine } from '../../sim/listening';
+import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
 import { generateOrders } from '../../sim/listening/generate';
 import { createOwner } from '../../sim/owner';
 import { summariseShift } from '../../sim/rush';
@@ -39,6 +39,7 @@ import {
   type RushInput,
   type RushPhase,
   type RushWeek,
+  type VoicedLine,
 } from './state';
 
 /** Endless Rush lines this many customers up in advance: far more than anyone gets through
@@ -50,7 +51,7 @@ const ENDLESS_ORDERS = 100;
 interface Visit {
   key: string;
   def: CustomerDef;
-  line: OrderLine;
+  line: VoicedLine;
   arriveAt: number;
   maxPatience: number;
 }
@@ -84,7 +85,7 @@ function newCustomer(v: Visit): RushCustomer {
 }
 
 /** A curated line fixed for this speaker (tests and debugging), else what was picked. */
-function chosen(def: CustomerDef, picked: OrderLine, lines: LineOverrides): OrderLine {
+function chosen(def: CustomerDef, picked: VoicedLine, lines: LineOverrides): VoicedLine {
   const forced = lines[def.id];
   const line = forced ? def.orders.find((o) => o.id === forced) : picked;
   if (!line) throw new Error(`${def.id} has no order line ${forced}`);
