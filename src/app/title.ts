@@ -1,14 +1,12 @@
 // The title screen: its buttons (Day 2, the week, practice, sound) and the way back to it.
 
 import { createTrial } from '../core/trial';
-import type { HudCallbacks } from '../ui/hud';
+import type { TitleCallbacks } from '../ui/screens/title';
 import type { App } from './context';
 import { makeIbis } from './shared';
 
-/** The title screen's buttons, for the Day 1 HUD that draws them. */
-export type TitleCallbacks = Pick<HudCallbacks, 'day2' | 'shifts' | 'practice' | 'sound'>;
-
-export function titleCallbacks(app: App): TitleCallbacks {
+/** The title screen's buttons (Start is the trial's own), for the Day 1 HUD that draws them. */
+export function titleCallbacks(app: App): Omit<TitleCallbacks, 'start'> {
   return {
     day2: () => app.nav.startDay2(),
     shifts: () => app.nav.openShifts(),

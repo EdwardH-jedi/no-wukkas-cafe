@@ -3,6 +3,7 @@
 import type { Rush, RushEvent } from '../core/rush';
 import { canPlay, endlessFor, finishShift, weekFor } from '../core/week/session';
 import { buyUpgrade } from '../sim/shop';
+import type { ShiftReportCallbacks } from '../ui/screens/shiftReport';
 import { renderShiftSelect } from '../ui/screens/shiftSelect';
 import type { App } from './context';
 
@@ -70,4 +71,14 @@ export function onShiftSummary(
   // Autosave: the receipt and tips, the next shift on a pass. Endless isn't a week shift.
   finishShift(app.store, ev.summary, r.shiftEvents.affinity);
   app.cooldowns = { ...r.shiftEvents.log.lastShift };
+}
+
+/** The shift report's buttons: `again` replays Day 2 or Endless, `next` moves the week on. */
+export function reportCallbacks(app: App, again: () => void): ShiftReportCallbacks {
+  return {
+    again,
+    next: () => startShift(app),
+    title: () => app.nav.toTitle(),
+    memoryOnly: () => app.store.memoryOnly,
+  };
 }

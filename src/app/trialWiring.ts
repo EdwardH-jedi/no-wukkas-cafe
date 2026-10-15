@@ -6,7 +6,7 @@ import { HEIGHT_PRESETS, pitcherFlow } from '../sim/latte/pitcher';
 import { createHud, type Hud } from '../ui/hud';
 import type { App } from './context';
 import { prefetchDay } from './shared';
-import type { TitleCallbacks } from './title';
+import type { TitleCallbacks } from '../ui/screens/title';
 
 export function act(app: App, a: TrialAction): void {
   // Inside the click: this is what lets the browser play the owner's first line.
@@ -20,13 +20,11 @@ export function act(app: App, a: TrialAction): void {
 }
 
 /** The Day 1 HUD, which also draws the title screen (its buttons come from title.ts). */
-export function createTrialHud(app: App, title: TitleCallbacks): Hud {
+export function createTrialHud(app: App, title: Omit<TitleCallbacks, 'start'>): Hud {
   return createHud(app.hud1Root, {
     action: (a) => act(app, a),
+    title,
     day2: title.day2,
-    shifts: title.shifts,
-    practice: title.practice,
-    sound: title.sound,
     audioButtonsHtml: app.audioPanel.buttonsHtml,
     bindAudio: (el) => app.audioPanel.bind(el),
     pause: (p) => app.setPaused(p),
