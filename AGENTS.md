@@ -64,7 +64,11 @@ Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `
 
 ```
 src/
-  main.ts            boot, wires everything, owns the RAF loop
+  main.ts            entry: fonts + stylesheet imports, then app/boot
+  app/               wiring (DOM/three glue, no game rules): boot.ts (renderer, audio, HUDs, RAF loop),
+                     context.ts (the shared App state), input.ts, title.ts, trialWiring.ts,
+                     rushWiring.ts, practiceWiring.ts, weekWiring.ts (shift select, shop, autosave),
+                     debug.ts (window.__trial), shared.ts
   core/              state machines (Day 1 trial.ts, Day 2 rush/ + barista.ts + speech.ts),
                      week progression and shift select glue (week/), the save store (save/),
                      latte-art practice.ts, fixed-step game clock with pause, seeded RNG; later: event bus
@@ -75,7 +79,8 @@ src/
   world/             Three.js only: scene, café build, humans, cup visual, camera look, raycast picking
   audio/             one AudioContext (manager.ts: voice/ambience/SFX buses, clips, replay, status),
                      synthesised SFX, browser-speech fallback (voice.ts)
-  ui/                DOM HUD, docket, bar, modals, shop, cheat sheet
+  ui/                DOM HUD, docket, bar, modals, shop, cheat sheet; styles/ (index.css imports
+                     base, title, hud, rush, latte, shop, screens)
   dev/               dev-only review pages (casting, listening lab), loaded by dev/*.html; never built
 scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
 scripts/day2-pace.ts Day 2 pacing table from the headless rush bot (tests/helpers/rushBot.ts profiles)
