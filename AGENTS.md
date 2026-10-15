@@ -58,7 +58,7 @@ Voice clips are **placeholders** (Apple system voices, personal-use only): they 
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
-Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `mode`, `project(x, y)`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
+Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `mode`, `project(x, y)`, `projectAnchor('groupHead' | 'jug')`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
 
 ## 4. Architecture and hard boundaries
 

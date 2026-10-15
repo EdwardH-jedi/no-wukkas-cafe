@@ -6,6 +6,7 @@
 import { clamp } from '../math';
 import type { MilkQuality } from '../milk';
 import { MAX_FLOW, stepPour, type PourInput, type PourState } from './field';
+import { FILL_DONE, LAY_DONE, whiteCoverage } from './lay';
 
 /** Milk in the pitcher at the start of a pour, in cup volumes. Enough to overfill if careless. */
 export const PITCHER_MILK = 1.0;
@@ -20,6 +21,11 @@ export const TILT_UP = 1.0;
 export const TILT_DOWN = 2.4;
 /** Milk only reaches the spout past this tilt. */
 export const LIP = 0.12;
+/** The pull-through: once the white is laid and the jug has been down low since, lifting it back
+ *  to the LIFT preset while still holding thins the stream to this tilt (flow ≈ 0.34), so "lift,
+ *  keep pouring and sweep" draws the point without a mouse button having to "ease off". */
+export const PULL_TILT_CAP = 0.42;
+const LIFT = HEIGHT_PRESETS[1];
 /** How far from the cup centre the spout can be aimed, in rim radii: past the rim (a careless pour
  *  still lands on the bench) but never off the mat or out of the close-up. */
 export const AIM_LIMIT = 1.6;
@@ -43,10 +49,24 @@ export interface PitcherState {
   tilt: number;
   /** Milk left, in cup volumes. */
   milk: number;
+  /** White has come up on the surface this pour (LAY_DONE of it, as the coach counts it). */
+  white: boolean;
+  /** The jug has been below the lift height since the white was laid (cup half full and white
+   *  seen: the coach's lay step, PourLog.step >= 2), so lifting it back up is the pull-through,
+   *  not the fill. A dip during the fill doesn't count, even one that leaves a fleck of white. */
+  lowered: boolean;
 }
 
 export function createPitcher(): PitcherState {
-  return { x: 0, y: -0.2, height: HEIGHT_START, tilt: 0, milk: PITCHER_MILK };
+  return {
+    x: 0,
+    y: -0.2,
+    height: HEIGHT_START,
+    tilt: 0,
+    milk: PITCHER_MILK,
+    white: false,
+    lowered: false,
+  };
 }
 
 /** What one step of player input says about the jug (Day 1's TrialInput and Day 2's RushInput
@@ -108,15 +128,33 @@ export function nearestPreset(height: number): number {
   return best;
 }
 
-export function stepPitcher(p: PitcherState, c: PitcherControls, dt: number): void {
+/** Is the white laid (the coach's lay step done)? The cup only fills, so "half full" is sticky. */
+export function whiteLaid(p: PitcherState, pour: PourState): boolean {
+  return p.white && pour.fill >= FILL_DONE;
+}
+
+/**
+ * Move the jug one step. `laid` says whether the white is laid yet (stepPourFrame reads it from
+ * the pour); without a pour to read, the jug's height alone arms the pull-through.
+ */
+export function stepPitcher(p: PitcherState, c: PitcherControls, dt: number, laid = true): void {
   const k = 1 - Math.exp(-dt / FOLLOW);
   p.x += (c.targetX - p.x) * k;
   p.y += (c.targetY - p.y) * k;
   const th = clamp(c.targetHeight, HEIGHT_MIN, HEIGHT_MAX);
   const dh = th - p.height;
   const maxStep = HEIGHT_SPEED * dt;
-  p.height += Math.abs(dh) <= maxStep ? dh : Math.sign(dh) * maxStep;
-  p.tilt = clamp(p.tilt + (c.holding ? TILT_UP : -TILT_DOWN) * dt);
+  // Lands exactly on the target, so a jug sent to the LIFT preset is at it, not a rounding error
+  // under it.
+  p.height = Math.abs(dh) <= maxStep ? th : p.height + Math.sign(dh) * maxStep;
+  const lifted = p.height >= LIFT;
+  if (!lifted && laid) p.lowered = true;
+  if (c.holding && p.lowered && lifted)
+    p.tilt =
+      p.tilt > PULL_TILT_CAP
+        ? Math.max(PULL_TILT_CAP, p.tilt - TILT_DOWN * dt)
+        : Math.min(PULL_TILT_CAP, p.tilt + TILT_UP * dt);
+  else p.tilt = clamp(p.tilt + (c.holding ? TILT_UP : -TILT_DOWN) * dt);
 }
 
 /** Stream flow 0–1 from the pitcher's tilt. */
@@ -137,10 +175,12 @@ export function stepPourFrame(
   milk: MilkQuality,
   dt: number,
 ): void {
-  stepPitcher(pitcher, controls, dt);
+  stepPitcher(pitcher, controls, dt, whiteLaid(pitcher, pour));
   const input = pourInput(pitcher);
   const wanted = input.flow * MAX_FLOW * dt;
   if (wanted > pitcher.milk) input.flow = pitcher.milk / (MAX_FLOW * dt);
   stepPour(pour, input, milk, dt);
   pitcher.milk = Math.max(0, pitcher.milk - input.flow * MAX_FLOW * dt);
+  // Measured after the step, as trackPour does: whiteLaid() then agrees with the log's step.
+  if (!pitcher.white) pitcher.white = whiteCoverage(pour.foam) >= LAY_DONE;
 }

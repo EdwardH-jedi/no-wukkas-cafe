@@ -5,9 +5,11 @@ import {
   diagnose,
   dirOf,
   drawHeight,
+  DRY_TRAVEL,
   LOBES_DONE,
   trackPour,
   whiteCoverage,
+  type PourLog,
 } from '../../src/sim/latte/coach';
 import {
   controlsAt,
@@ -21,7 +23,7 @@ import {
 } from '../../src/sim/latte/demo';
 import { CELL, createPour, GRID } from '../../src/sim/latte/field';
 import { createPitcher, stepPourFrame, type PitcherControls } from '../../src/sim/latte/pitcher';
-import { scorePattern } from '../../src/sim/latte/score';
+import { scorePattern, type PatternScore } from '../../src/sim/latte/score';
 import { SILKY_MILK } from '../../src/sim/milk';
 
 /** Pour a track headless with the log attached; also records when each step was ticked off. */
@@ -47,9 +49,18 @@ function pourLogged(track: readonly TrackKey[], duration = 8.2) {
   return { pour, pitcher, log, stepAt };
 }
 
+/** Stays low where it bloomed, lets go, and never lifts or sweeps. */
 const BLOB_TRACK: TrackKey[] = OWNER_DEMO.map((k) =>
-  k.t >= 6.4 ? { ...k, x: 0, y: -0.35, h: k.hold ? 0.7 : 8 } : { ...k },
+  k.t >= 6.4 ? { ...k, x: 0, y: -0.35, h: 0.7 } : { ...k },
 );
+/** Day 1 attempt 1 (2026-10-14): lift [2], let go, and sweep forward once the stream has died. */
+const DIED_TRACK: TrackKey[] = [
+  ...OWNER_DEMO.filter((k) => k.t <= 6.4),
+  { t: 6.5, x: 0, y: -0.4, h: 3, hold: false },
+  { t: 7.1, x: 0, y: -0.4, h: 3, hold: false },
+  { t: 7.4, x: 0, y: 0.85, h: 3, hold: false },
+  { t: 8.0, x: 0, y: 0.6, h: 8, hold: false },
+];
 
 describe('pour log: the four steps of a heart', () => {
   const demo = pourLogged(OWNER_DEMO);
@@ -169,6 +180,66 @@ describe('diagnosis: why the pattern came out like that', () => {
     const f = diagnose(scorePattern(r.pour.foam), r.pour, r.log);
     expect(f[0]?.id).toBe('noPull');
     expect(f[0]?.cause).toBe('stayedLow');
+  });
+
+  it('a pull swept after the stream died is blamed on letting go, not on staying low', () => {
+    // The B1 regression track: lifted, let go, waited, swept dry.
+    const r = pourLogged(DIED_TRACK, 8.8);
+    expect(r.log.liftedAt).toBeGreaterThanOrEqual(0);
+    expect(r.log.travelDry).toBeGreaterThan(1);
+    const f = diagnose(scorePattern(r.pour.foam), r.pour, r.log);
+    expect(f[0]?.id).toBe('streamDied');
+    expect(f.some((x) => x.cause === 'stayedLow')).toBe(false);
+  });
+
+  it('carrying the jug on after a finished pull-through is not a dead stream', () => {
+    // Gaz's pour, but once he lets go at the far edge the jug carries on forward, past the rim.
+    const carried: TrackKey[] = [
+      ...OWNER_DEMO.slice(0, -1),
+      { t: 7.6, x: 0, y: 1.5, h: 3, hold: false },
+    ];
+    const r = pourLogged(carried);
+    expect(r.log.done[3]).toBe(true);
+    expect(r.log.travelDry).toBe(demo.log.travelDry);
+    expect(r.log.travelDry).toBeLessThan(DRY_TRAVEL);
+  });
+
+  describe('from synthetic pour logs', () => {
+    const blob = scorePattern(pourLogged(BLOB_TRACK).pour.foam);
+    /** A heart with no dip: the tip is there, the cleft isn't. */
+    const noDip = { ...demoScore, notch: 0.3, notchRatio: 0.3, heartness: 0.6 };
+    const log = (over: Partial<PourLog>): PourLog => ({
+      ...createPourLog(),
+      done: [true, true, true, false],
+      layY: -0.35,
+      ...over,
+    });
+    const ids = (p: PatternScore, l: PourLog) => diagnose(p, cupOk, l).map((x) => x.id);
+
+    it('streamDied: lifted, then 0.25 radii or more forward with no milk coming out', () => {
+      expect(ids(blob, log({ liftedAt: 6.5, travelDry: 0.3 }))[0]).toBe('streamDied');
+      expect(ids(blob, log({ liftedAt: 6.5, travelDry: 0.2 }))[0]).toBe('noPull');
+      expect(ids(blob, log({ liftedAt: -1, travelDry: 0.3 }))[0]).toBe('noPull');
+    });
+
+    it('stayedLow only when the jug never rose above 2.5 cm', () => {
+      const low = diagnose(blob, cupOk, log({ liftedAt: -1 }))[0];
+      expect(low?.id).toBe('noPull');
+      expect(low?.cause).toBe('stayedLow');
+      const lifted = diagnose(blob, cupOk, log({ liftedAt: 6.5, travelDry: 0 }))[0];
+      expect(lifted?.id).toBe('noPull');
+      expect(lifted?.cause).not.toBe('stayedLow');
+    });
+
+    it('sweptLong: the pull ran past the far rim, or poured heavy past the middle', () => {
+      const pulled = { pullStarted: true, done: [true, true, true, true] as PourLog['done'] };
+      expect(ids(noDip, log({ ...pulled, pullReach: 1.5, farFlow: 0.34 }))).toContain('sweptLong');
+      expect(ids(noDip, log({ ...pulled, pullReach: 0.9, farFlow: 0.9 }))).toContain('sweptLong');
+      // A thin stream that stops before the rim: the dip is just missing.
+      const thin = ids(noDip, log({ ...pulled, pullReach: 0.9, farFlow: 0.34 }));
+      expect(thin).toContain('noCleft');
+      expect(thin).not.toContain('sweptLong');
+    });
   });
 
   it('says which way an off-centre heart sits', () => {

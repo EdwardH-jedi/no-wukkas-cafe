@@ -17,7 +17,7 @@ import {
   stopShot,
 } from '../sim/espresso';
 import type { EspressoScore, EspressoState } from '../sim/espresso';
-import { createPourLog, trackPour, type PourLog } from '../sim/latte/coach';
+import { createPourLog, diagnose, trackPour, type Finding, type PourLog } from '../sim/latte/coach';
 import { createPour, type PourState } from '../sim/latte/field';
 import { createDemoPlayer, startDemo, stepDemoPlayer, type DemoPlayer } from '../sim/latte/demo';
 import {
@@ -154,6 +154,8 @@ export interface Trial {
   results: AttemptResult[];
   /** Final foam field of each attempt, for the result card. */
   patterns: Float32Array[];
+  /** Why each attempt's pattern came out as it did (the result card shows these fixes). */
+  findings: Finding[][];
   outcome: TrialOutcome | null;
   watch: PourWatch;
   /** Consecutive attempts that improved by 8+ / that failed (invalid or under 60). */
@@ -191,6 +193,7 @@ export function createTrial(seed: number): Trial {
     attempt: 0,
     results: [],
     patterns: [],
+    findings: [],
     outcome: null,
     watch: freshWatch(),
     streak: { improved: 0, failed: 0 },
@@ -382,6 +385,7 @@ function judge(t: Trial): void {
   const last = t.results[t.results.length - 1] ?? null;
   t.results.push(result);
   t.patterns.push(t.pour.foam.slice());
+  t.findings.push(diagnose(pattern, t.pour, t.log));
   t.events.push({ type: 'attempt', index: t.attempt, result });
 
   if (!result.valid) addFrustration(t.owner, 2);

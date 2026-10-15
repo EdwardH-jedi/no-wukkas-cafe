@@ -20,15 +20,18 @@ export interface GaugeView {
 }
 
 export interface Gauges {
-  update(mode: GaugeMode, v: GaugeView): void;
+  /** `stoppable`: Day 2 two hands, the shot card's Stop button shows (the shot stops on Enter). */
+  update(mode: GaugeMode, v: GaugeView, stoppable?: boolean): void;
 }
 
 const pct = (v: number, lo: number, hi: number): number =>
   Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
 
-const SHOT_CARD = `<div class="gauge"><div class="k"><span>Shot timer</span><span>25–31 s</span></div><div class="v" data-g="sv">0<small>s</small></div>
+const shotCard = (
+  touch: boolean,
+): string => `<div class="gauge"><div class="k"><span>Shot timer</span><span>25–31 s</span></div><div class="v" data-g="sv">0<small>s</small></div>
         <div class="bar"><div class="zone" style="left:${pct(SHOT_TARGET[0], 0, 45)}%;width:${pct(SHOT_TARGET[1], 0, 45) - pct(SHOT_TARGET[0], 0, 45)}%"></div><div class="needle" data-g="sn"></div></div>
-        <div class="tag" data-g="st"></div></div>`;
+        <div class="tagRow"><div class="tag" data-g="st"></div><button type="button" class="gstop hide" data-g="ss">${touch ? 'Stop' : 'Stop · Enter'}</button></div></div>`;
 const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk</span><span>55–65 °C</span></div>
         <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:${pct(TARGET_TEMP[0], 0, 85)}%;height:${pct(TARGET_TEMP[1], 0, 85) - pct(TARGET_TEMP[0], 0, 85)}%"></div><div class="needle" data-g="mtn"></div></div>
         <div style="flex:1"><div class="v" data-g="mv">5<small>°C</small></div>
@@ -36,7 +39,8 @@ const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk</span><span>55�
         <div class="bar"><div class="zone" style="left:${AERATION_TARGET[0] * 100}%;width:${(AERATION_TARGET[1] - AERATION_TARGET[0]) * 100}%"></div><div class="needle" data-g="mfn"></div></div>
         <div class="tag" data-g="mt"></div></div></div></div>`;
 
-export function createGauges(el: HTMLElement, touch: boolean): Gauges {
+/** `onStop`: the shot card's Stop button was pressed (Day 2 two hands). */
+export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => void): Gauges {
   let gaugeMode: GaugeMode | null = null;
   const g: Record<string, HTMLElement> = {};
   const build = (mode: GaugeMode): void => {
@@ -46,8 +50,8 @@ export function createGauges(el: HTMLElement, touch: boolean): Gauges {
       html = `<div class="gauge"><div class="k"><span>Dose</span><span>18–20 g</span></div><div class="v" data-g="v">0.0<small>g</small></div>
         <div class="bar"><div class="zone" style="left:${pct(DOSE_TARGET[0], 0, 26)}%;width:${pct(DOSE_TARGET[1], 0, 26) - pct(DOSE_TARGET[0], 0, 26)}%"></div><div class="needle" data-g="n"></div></div>
         <div class="tag" data-g="t"></div></div>`;
-    else if (mode === 'shot') html = SHOT_CARD;
-    else if (mode === 'shotSteam') html = SHOT_CARD + MILK_CARD;
+    else if (mode === 'shot') html = shotCard(touch);
+    else if (mode === 'shotSteam') html = shotCard(touch) + MILK_CARD;
     else if (mode === 'steam') html = MILK_CARD;
     else if (mode === 'pour')
       html = `<div class="gauge"><div class="k"><span>Jug height</span><span data-g="hv"></span></div>
@@ -65,6 +69,7 @@ export function createGauges(el: HTMLElement, touch: boolean): Gauges {
     el.classList.toggle('hide', html === '');
     for (const k of Object.keys(g)) delete g[k];
     el.querySelectorAll<HTMLElement>('[data-g]').forEach((n) => (g[n.dataset.g as string] = n));
+    if (g.ss) g.ss.onclick = () => onStop?.();
   };
   const setText = (k: string, v: string): void => {
     const n = g[k];
@@ -83,7 +88,7 @@ export function createGauges(el: HTMLElement, touch: boolean): Gauges {
   };
 
   return {
-    update(mode, v) {
+    update(mode, v, stoppable = false) {
       if (mode !== gaugeMode) build(mode);
       const e = v.espresso;
       if (mode === 'grind') {
@@ -106,6 +111,9 @@ export function createGauges(el: HTMLElement, touch: boolean): Gauges {
         else if (e.shotTime < SHOT_TARGET[0]) setTag('st', 'Flowing', 'warn');
         else if (inBand) setTag('st', 'Stop now!', 'good');
         else setTag('st', 'Running long', 'bad');
+        const stop = g.ss;
+        const show = stoppable && e.extracting;
+        if (stop && stop.classList.contains('hide') === show) stop.classList.toggle('hide', !show);
       }
       if (mode === 'steam' || mode === 'shotSteam') {
         const s = v.steam;

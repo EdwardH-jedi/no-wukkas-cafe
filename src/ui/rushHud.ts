@@ -183,7 +183,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const subsText = subs.querySelector('.text') as HTMLElement;
   const summary = $('#rsummary');
   const pauseEl = $('#rpause');
-  const gauges = createGauges($('#rgauges'), touch);
+  // The shot card's Stop button: the same as Enter while steaming during the shot.
+  const gauges = createGauges($('#rgauges'), touch, () => cb.action({ type: 'next' }));
   const pos = createPos(root, touch, cb.action);
   const eventEl = $('#revent');
   let eventKey = '';
@@ -567,7 +568,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           (instr.querySelector('.b') as HTMLElement).innerHTML = ins.html;
         }
       }
-      gauges.update(r.phase === 'service' ? stationMode(b) : '', b);
+      gauges.update(r.phase === 'service' ? stationMode(b) : '', b, b.phase === 'shotSteam');
       touchPad.classList.toggle('hide', !(touch && b.phase === 'pour'));
     },
   };

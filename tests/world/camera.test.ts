@@ -4,7 +4,7 @@ import { STEP } from '../../src/core/clock';
 import { AIM_LIMIT } from '../../src/sim/latte/pitcher';
 import { createCameraRig, type CameraFocus } from '../../src/world/camera';
 import { CUP, LAYOUT } from '../../src/world/layout';
-import { RIM } from '../../src/world/station';
+import { GROUP_SPOUT, RIM, WAND_TIP } from '../../src/world/station';
 
 // The cup on the pour mat, as the station places it (rim = base + saucer + cup height).
 const cupRim = new THREE.Vector3(LAYOUT.cup.x, LAYOUT.cup.y + 0.006 + CUP.height, LAYOUT.cup.z);
@@ -137,6 +137,34 @@ describe('camera: pour framing', () => {
       }
     });
   }
+
+  it('two hands (shot + steam): the group head and the jug at the wand are both in view', () => {
+    // At 16:10 the gauge cards cover the right ~22% of the screen and the instruction strip the
+    // bottom quarter: the shot and the jug have to sit in the open part of the frame.
+    for (const [w, h] of [
+      [1280, 800],
+      [1024, 640],
+    ] as const) {
+      const { run, camera } = rigAt(w, h);
+      run('shotSteam', 3);
+      camera.updateMatrixWorld();
+      const jugRim = WAND_TIP.clone().add(new THREE.Vector3(0.012, 0.065, 0.01));
+      const cupUnderGroup = new THREE.Vector3(LAYOUT.group.x, LAYOUT.group.y, LAYOUT.group.z);
+      for (const [name, p] of [
+        ['portafilter spout', GROUP_SPOUT],
+        ['cup under the group', cupUnderGroup],
+        ['jug rim at the wand', jugRim],
+        ['wand tip', WAND_TIP],
+      ] as const) {
+        const s = p.clone().project(camera);
+        expect(s.x, `${name} x (${w}x${h})`).toBeGreaterThan(-0.85);
+        expect(s.x, `${name} x, left of the gauges (${w}x${h})`).toBeLessThan(0.5);
+        expect(s.y, `${name} y, above the instruction strip (${w}x${h})`).toBeGreaterThan(-0.3);
+        expect(s.y, `${name} y (${w}x${h})`).toBeLessThan(0.75);
+        expect(s.z, `${name} in front`).toBeLessThan(1);
+      }
+    }
+  });
 
   it('practice review looks straight down, with the cup clear of the card', () => {
     const { run, camera } = rigAt();
