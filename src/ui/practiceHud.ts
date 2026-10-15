@@ -1,6 +1,7 @@
 // Practice HUD: top bar (pours, best, guide), the lesson strip, pour gauges, side buttons, Gaz's
-// subtitles while he demonstrates, and the review card: what the foam field actually made, why,
-// and how it compares with the pour before. Only touches the DOM when something changed.
+// subtitles while he demonstrates, and the review card: what the foam field actually made, the one
+// thing to do next pour, why, and how it compares with the pour before. Only touches the DOM when
+// something changed.
 
 import {
   latestAttempt,
@@ -9,9 +10,10 @@ import {
   type PracticeAction,
   type PracticeAttempt,
 } from '../core/practice';
-import { CAUSE_TEXT, DIR_TEXT, FINDING_TEXT } from '../data/coaching';
+import { CAUSE_TEXT, FINDING_TEXT } from '../data/coaching';
 import { createEspresso } from '../sim/espresso';
 import type { Finding } from '../sim/latte/coach';
+import { fillCopy, pourTip, type PourTip } from '../sim/latte/feedback';
 import { band } from '../sim/math';
 import type { SpokenLine } from '../sim/owner';
 import { createSteam } from '../sim/steam';
@@ -50,20 +52,32 @@ function verdict(art: number): { text: string; cls: string } {
   return { text: 'Not a heart yet', cls: 'disaster' };
 }
 
-function fillSlots(template: string, f: Finding): string {
-  const dir = f.id === 'lopsided' ? f.dir : DIR_TEXT[f.dir];
-  return template.replace('{n}', String(f.n)).replace('{c}', String(f.cn)).replace('{dir}', dir);
-}
-
-function findingHtml(f: Finding): string {
+/** One reason. `tipped`: its fix is the "Next pour" tip right above, so it isn't said twice. */
+function findingHtml(f: Finding, tipped: boolean): string {
   const t = FINDING_TEXT[f.id];
   const ok = f.id === 'textbook';
   const cause = f.cause
-    ? `<span class="cause">${keysHtml(fillSlots(CAUSE_TEXT[f.cause], f))}</span>`
+    ? `<span class="cause">${keysHtml(fillCopy(CAUSE_TEXT[f.cause], f))}</span>`
     : '';
   return `<div class="f${ok ? ' ok' : ''}"><b>${ok ? '✓' : '✗'} ${keysHtml(t.label)}</b>
-    <span>${keysHtml(fillSlots(t.why, f))}</span>${cause}
-    <span class="fix">→ ${keysHtml(t.fix)}</span></div>`;
+    <span>${keysHtml(fillCopy(t.why, f))}</span>${cause}
+    ${tipped ? '' : `<span class="fix">→ ${keysHtml(t.fix)}</span>`}</div>`;
+}
+
+/** The tip is the first reason's own fix (its why and cause are listed below it). */
+const tipListed = (tip: PourTip | null, findings: readonly Finding[]): boolean =>
+  tip !== null &&
+  tip.id !== 'textbook' &&
+  tip.finding !== null &&
+  tip.finding === findings[0] &&
+  tip.id === tip.finding.id;
+
+/** The one thing to do next pour, above the reasons. A textbook heart has nothing to add (its
+ *  finding says so), and the detail is left out when the first reason below already says it. */
+function tipHtml(tip: PourTip, findings: readonly Finding[]): string {
+  if (tip.id === 'textbook') return '';
+  const detail = tipListed(tip, findings) ? '' : `<small>${keysHtml(tip.detail)}</small>`;
+  return `<div class="tip" role="note"><b>Next pour</b><span>${keysHtml(tip.text)}</span>${detail}</div>`;
 }
 
 function row(label: string, v: number, prev: number | null, value: string): string {
@@ -79,6 +93,7 @@ function row(label: string, v: number, prev: number | null, value: string): stri
 function renderReview(
   el: HTMLElement,
   p: Practice,
+  tip: PourTip | null,
   act: (a: PracticeAction) => void,
   toTitle: () => void,
   touch: boolean,
@@ -94,7 +109,11 @@ function renderReview(
     ps && prev
       ? `<div class="vs">${d === 0 ? 'Same as' : d > 0 ? `<em class="up">▲${d}</em> on` : `<em class="down">▼${-d}</em> on`} pour #${prev.n}</div>`
       : '';
-  const findings = a.findings.slice(0, 3).map(findingHtml).join('');
+  const tipped = tipListed(tip, a.findings);
+  const findings = a.findings
+    .slice(0, 3)
+    .map((f, i) => findingHtml(f, tipped && i === 0))
+    .join('');
   const history = p.attempts
     .slice(-6)
     .map(
@@ -113,6 +132,7 @@ function renderReview(
       </div>
     </div>
     <div class="legend"><span class="lg guide">guide</span><span class="lg fit">closest heart</span><span class="lg ctr">centre → yours</span></div>
+    ${tip ? tipHtml(tip, a.findings) : ''}
     <div class="rows">
       ${row('Heart', s.shape, ps?.shape ?? null, `${pct(s.shape)}%`)}
       ${row('Symmetry', s.symmetry, ps?.symmetry ?? null, `${pct(s.symmetry)}%`)}
@@ -200,6 +220,17 @@ export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): 
   let actionKey = '';
   let topKey = '';
   let guideOn: boolean | null = null;
+  // The latest attempt's tip: on its review card, then in the lesson strip for the next pour.
+  let tipOf: PracticeAttempt | null = null;
+  let tip: PourTip | null = null;
+  const latestTip = (p: Practice): PourTip | null => {
+    const a = latestAttempt(p);
+    if (a !== tipOf) {
+      tipOf = a;
+      tip = a ? pourTip(a.score, a.findings) : null;
+    }
+    return tip;
+  };
 
   const setActions = (
     key: string,
@@ -233,7 +264,7 @@ export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): 
     },
     onPhase(p) {
       card.classList.toggle('hide', p.phase !== 'review');
-      if (p.phase === 'review') renderReview(card, p, cb.action, cb.title, touch);
+      if (p.phase === 'review') renderReview(card, p, latestTip(p), cb.action, cb.title, touch);
     },
     setPaused(paused) {
       pauseEl.classList.toggle('hide', !paused);
@@ -269,6 +300,7 @@ export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): 
         held,
         rate: p.demo.rate,
         chapter: demo ? p.demo.chapter - 1 : undefined,
+        tip: latestTip(p),
       });
       // The pour gauge reads only the jug and the cup; practice has no grinder or steam wand.
       gaugeView ??= {

@@ -114,6 +114,7 @@ async function endPour(page: Page): Promise<void> {
 /** Mouse style: the demo track, holding the button to pour and using the wheel for height. */
 async function pourWithMouse(page: Page): Promise<void> {
   const clock = await startPour(page);
+  await expect(page.locator('#lesson .last')).toBeHidden(); // first attempt: no last pour yet
   const DT = 0.04;
   const samples = Array.from({ length: Math.ceil(8 / DT) + 1 }, (_, i) =>
     controlsAt(OWNER_DEMO, i * DT),
@@ -164,6 +165,9 @@ async function pourWithMouse(page: Page): Promise<void> {
 /** Trackpad style: no mouse button. Hover to steer, Space to tip, small scroll deltas, presets. */
 async function pourTrackpadStyle(page: Page): Promise<void> {
   const clock = await startPour(page);
+  // Attempt 2: the first attempt's tip rides along in the lesson strip.
+  await expect(page.locator('#lesson .last')).toBeVisible();
+  await expect(page.locator('#lesson .last')).toContainText('Last pour');
   const [HIGH, LIFT, LOW] = HEIGHT_PRESETS;
   // (time, x, y, space held, height action)
   const plan: Array<{

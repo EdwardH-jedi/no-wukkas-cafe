@@ -1,10 +1,12 @@
 // The lesson strip: the four steps of a heart, the one the pour is on, and the controls doing it
-// right now ("your hands" while you pour, "Gaz's hands" during his demo). Shared by the Day 1
-// trial and practice. Built once; per frame only classes, widths and short texts change.
+// right now ("your hands" while you pour, "Gaz's hands" during his demo), plus the last pour's tip
+// while you pour again. Shared by the Day 1 trial and practice. Built once; per frame only
+// classes, widths and short texts change.
 
 import { LESSON_HINT, STEP_TEXT } from '../data/coaching';
-import { POUR_STEPS, readyToPull, type PourLog } from '../sim/latte/coach';
+import { POUR_STEPS, readyToPull, type Finding, type PourLog } from '../sim/latte/coach';
 import { demoPullFill } from '../sim/latte/demo';
+import { pourTip, type PourTip } from '../sim/latte/feedback';
 import { SURF_LOW, type PourState } from '../sim/latte/field';
 import {
   nearestPreset,
@@ -13,6 +15,7 @@ import {
   type PitcherState,
   type PourGate,
 } from '../sim/latte/pitcher';
+import type { PatternScore } from '../sim/latte/score';
 
 export interface LessonView {
   log: PourLog;
@@ -20,6 +23,10 @@ export interface LessonView {
   pitcher: PitcherState;
   controls: PitcherControls;
   gate?: PourGate;
+  /** Judged attempts so far (Day 1 hands over the whole trial, which has both): the latest one's
+   *  tip shows while the next pour is on, unless LessonExtra.tip says otherwise. */
+  findings?: readonly (readonly Finding[])[];
+  results?: readonly { readonly pattern: PatternScore; readonly valid: boolean }[];
 }
 
 export type LessonMode = 'demo' | 'pour';
@@ -31,6 +38,9 @@ export interface LessonExtra {
   rate?: number;
   /** Demo: the chapter Gaz is narrating (steps before it count as done), instead of the log. */
   chapter?: number;
+  /** The last pour's tip, shown while pouring (null: none). Left out, it comes from the view's
+   *  judged attempts (Day 1). */
+  tip?: PourTip | null;
 }
 
 export interface Lesson {
@@ -60,6 +70,7 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
     ? ''
     : [0, 1, 2].map((i) => `<span class="hk" data-k="h${i}"><kbd>${i + 1}</kbd></span>`).join('');
   el.innerHTML = `<div class="lh"><span class="who"></span><span class="rate"></span></div>
+    <div class="last hide"><b>Last pour</b><span></span></div>
     <ol>${steps}</ol>
     <div class="hands" aria-hidden="true">
       <span class="hk pour" data-k="pour"><kbd>${touch ? 'Hold' : 'Space'}</kbd>pour</span>
@@ -85,6 +96,8 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
   const hcup = q('.hcup');
   const hint = q('.hint');
   const sr = q('.sr');
+  const last = q('.last');
+  const lastText = q('.last span');
 
   let shown = false;
   let lastMode: LessonMode | null = null;
@@ -101,6 +114,26 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
   let cmText = '';
   let flowW = -1;
   let cupText = '';
+  let tipShown: PourTip | null = null;
+  // Day 1: the tip of the latest judged attempt, worked out once per attempt.
+  let judgedFrom: readonly unknown[] | null = null;
+  let judgedCount = -1;
+  let judgedTip: PourTip | null = null;
+  const trialTip = (v: LessonView): PourTip | null => {
+    const fs = v.findings;
+    const rs = v.results;
+    if (!fs || !rs) return null;
+    const n = Math.min(fs.length, rs.length);
+    if (rs !== judgedFrom || n !== judgedCount) {
+      judgedFrom = rs;
+      judgedCount = n;
+      const r = rs[n - 1];
+      const f = fs[n - 1];
+      // An attempt that didn't count (poured on the bench…) has its own reason on the card.
+      judgedTip = r && f && r.valid ? pourTip(r.pattern, f) : null;
+    }
+    return judgedTip;
+  };
 
   const setText = (n: HTMLElement, v: string, cur: string): string => {
     if (v !== cur) n.textContent = v;
@@ -117,6 +150,14 @@ export function createLesson(parent: HTMLElement, touch: boolean, id: string): L
       }
       if (!on || !v || !mode) return;
       const p = v.pitcher;
+
+      // The last pour's tip, while pouring again.
+      const tip = mode === 'pour' ? (extra.tip !== undefined ? extra.tip : trialTip(v)) : null;
+      if (tip !== tipShown) {
+        if ((tip === null) !== (tipShown === null)) last.classList.toggle('hide', tip === null);
+        if (tip && tip.text !== tipShown?.text) lastText.innerHTML = keysHtml(tip.text);
+        tipShown = tip;
+      }
       if (mode !== lastMode) {
         lastMode = mode;
         who.textContent = mode === 'demo' ? 'Gaz’s hands' : 'Your pour';

@@ -1,7 +1,8 @@
 // Latte-art practice in a real browser with real input: start from the title, pour a heart with
 // the mouse (the demo's own control track), read the review, pour again holding Space through the
-// restart (the gate must ignore it), reset mid-pour, toggle the guide, pour a blob and read why it
-// failed, watch Gaz with the lesson strip, then back to the title. Screenshots land in
+// restart (the gate must ignore it) with the last pour's tip in the lesson strip, reset mid-pour,
+// toggle the guide, pour a blob and read why it failed and the one tip for next time, watch Gaz
+// with the lesson strip, then back to the title. Screenshots land in
 // test-results/evidence/practice-*.png.
 
 import { expect, test, type Page } from '@playwright/test';
@@ -124,6 +125,7 @@ test('latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz', a
   await expect(page.locator('#plesson .who')).toHaveText('Your pour');
   await expect(page.locator('#plesson li.cur b')).toHaveText('Pour high to fill');
   await expect(page.locator('#pGuide')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#plesson .last')).toBeHidden(); // no pour yet, no tip
   await snap(page, '01-start');
 
   // --- pour a heart with the mouse; the review is scored from the foam field
@@ -147,6 +149,9 @@ test('latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz', a
   expect(s.poured).toBe(0);
   expect(s.armed).toBe(false);
   await expect(page.locator('#plesson .hint')).toHaveText('Let go, then press again to pour.');
+  // The last pour's tip stays with you while you pour again.
+  await expect(page.locator('#plesson .last')).toBeVisible();
+  await expect(page.locator('#plesson .last')).toContainText('Last pour');
   await snap(page, '03-held-through-restart');
   await page.keyboard.up(' ');
   await until(page, (x) => x.armed);
@@ -177,6 +182,10 @@ test('latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz', a
   s = await until(page, (x) => x.phase === 'review' && x.count === 2);
   expect(s.attempts[1]?.findings[0]).toBe('noPull');
   await expect(page.locator('#pcard .faults')).toContainText('Blob, no pull-through');
+  // One tip above the reasons: what to do next pour.
+  await expect(page.locator('#pcard .tip')).toHaveCount(1);
+  await expect(page.locator('#pcard .tip')).toContainText('Next pour');
+  await expect(page.locator('#pcard .tip')).toContainText('sweep forward through the white');
   await expect(page.locator('#pcard .vs')).toContainText('pour #1');
   await expect(page.locator('#pcard .attempts canvas')).toHaveCount(2);
   await page.waitForTimeout(1200);
@@ -194,6 +203,7 @@ test('latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz', a
   s = await until(page, (x) => x.phase === 'pour');
   expect(s.poured).toBe(0);
   expect(s.drawCalls).toBeLessThan(150);
+  await expect(page.locator('#plesson .last')).toContainText('sweep forward through the white');
 
   // --- pause → back to the title
   await page.keyboard.press('Escape');
