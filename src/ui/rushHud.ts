@@ -27,6 +27,7 @@ import {
   orderLabel,
   type ShiftSummary,
 } from '../sim/rush';
+import { accuracyByField } from '../sim/listening/stats';
 import { createGauges, type GaugeMode } from './gauges';
 import { instruction } from './instructions';
 import { createPos, marked } from './pos';
@@ -67,10 +68,18 @@ export function nextTicket(r: Rush, type?: string): RushCustomer | null {
 
 const DIFF_NAME = { easy: 'Easy', normal: 'Normal', hard: 'Hard' } as const;
 
+const FIELD_HEARD = { drink: 'Drink', milk: 'Milk', temp: 'Temp', heart: 'Heart' } as const;
+
 /** Receipt rows for the listening side of the shift. */
 function listenRows(r: Rush): string {
   const l = summariseListening(r.listening);
+  const acc = accuracyByField(r.listening);
+  const fields = (Object.keys(FIELD_HEARD) as Array<keyof typeof FIELD_HEARD>)
+    .filter((f) => acc[f].total > 0)
+    .map((f) => `${FIELD_HEARD[f]} ${acc[f].correct}/${acc[f].total}`)
+    .join(' · ');
   return `<div class="kv"><span>Orders heard right (${DIFF_NAME[r.difficulty]})</span><b>${l.heardRight}/${l.orders}</b></div>
+    ${fields ? `<div class="kv"><span>Heard right by part</span><b>${fields}</b></div>` : ''}
     <div class="kv"><span>Replays · repeats · questions</span><b>${l.replays} · ${l.repeats} · ${l.questions}</b></div>`;
 }
 

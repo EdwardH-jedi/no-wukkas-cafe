@@ -15,6 +15,7 @@ import {
   type RushCustomer,
   type RushEvent,
   type RushInput,
+  type RushWeek,
 } from '../../src/core/rush';
 import type { CustomerId } from '../../src/data/customers';
 import { controlsAt, OWNER_DEMO } from '../../src/sim/latte/demo';
@@ -32,6 +33,8 @@ export interface ListenBot {
   idle?: boolean;
   difficulty?: Difficulty;
   lines?: LineOverrides;
+  /** Week mode (generated orders); default Day 2. */
+  week?: RushWeek;
   seed?: number;
   maxSeconds?: number;
   /** Called after every step (assertions, tracing). */
@@ -142,7 +145,7 @@ function botInput(r: Rush, o: ListenBot, m: Mem): RushInput {
 }
 
 export function playRush(o: ListenBot = {}): Played {
-  const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {});
+  const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {}, o.week ?? null);
   const m: Mem = { target: null, step: 0, aidsLeft: new Map() };
   const events: Played['events'] = [];
   const said: string[] = [];

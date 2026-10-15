@@ -3,6 +3,7 @@
 
 import type { CustomerDef, CustomerId } from '../../data/customers';
 import type { Delivery } from '../../data/voice/ids';
+import type { DrinkId } from '../../sim/contracts/ticket';
 import type { Difficulty, ListenRecord, OrderField, OrderLine } from '../../sim/listening';
 import type { Mood, OwnerState } from '../../sim/owner';
 import type {
@@ -121,10 +122,20 @@ export type RushEvent =
   | { type: 'walkout'; customer: CustomerId }
   | { type: 'summary'; summary: ShiftSummary };
 
+/** Week mode: which shift of the week this is and what's on the menu. Orders come from the
+ *  generator (sim/listening/generate.ts) instead of each customer's curated lines. */
+export interface RushWeek {
+  /** 0-based across the week. */
+  shiftIndex: number;
+  unlockedDrinks: readonly DrinkId[];
+}
+
 export interface Rush {
   seed: number;
   difficulty: Difficulty;
   lines: LineOverrides;
+  /** Null = Day 2 exactly as it has always played (the trace test guards it). */
+  week: RushWeek | null;
   rng: Rng;
   time: number;
   phase: RushPhase;

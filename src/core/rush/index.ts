@@ -24,4 +24,5 @@ export {
   type RushEvent,
   type RushInput,
   type RushPhase,
+  type RushWeek,
 } from './state';

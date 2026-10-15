@@ -9,6 +9,7 @@
 import { CUSTOMERS } from '../../data/customers';
 import { RUSH_INTRO } from '../../data/ownerLines';
 import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
+import { generateOrders } from '../../sim/listening/generate';
 import { createOwner } from '../../sim/owner';
 import { summariseShift } from '../../sim/rush';
 import {
@@ -25,18 +26,30 @@ import { stepCustomers } from './customers';
 import { listenAction, ringUp, takeOrder } from './register';
 import { serve } from './serve';
 import { gaz, gazDef, startSay } from './speech';
-import type { CustomerState, LineOverrides, Rush, RushInput, RushPhase } from './state';
+import type { CustomerState, LineOverrides, Rush, RushInput, RushPhase, RushWeek } from './state';
 
 export function createRush(
   seed: number,
   difficulty: Difficulty = 'normal',
   lines: LineOverrides = {},
+  week: RushWeek | null = null,
 ): Rush {
   const rng = createRng(seed ^ 0x2d2);
+  // Week mode: this shift's orders from the generator. Day 2 (null) keeps its RNG draw order.
+  const specs = week
+    ? generateOrders(seed, {
+        shiftIndex: week.shiftIndex,
+        difficulty,
+        count: CUSTOMERS.length,
+        unlockedDrinks: week.unlockedDrinks,
+        speakers: CUSTOMERS.map((c) => c.id),
+      })
+    : null;
   return {
     seed,
     difficulty,
     lines,
+    week,
     rng,
     time: 0,
     phase: 'intro',
@@ -45,8 +58,8 @@ export function createRush(
     owner: createOwner(),
     speech: createChannel(),
     barista: createBarista(),
-    customers: CUSTOMERS.map((def) => {
-      const picked = pickOrder(def.orders, difficulty, rng);
+    customers: CUSTOMERS.map((def, i) => {
+      const picked = specs?.[i] ?? pickOrder(def.orders, difficulty, rng);
       const forced = lines[def.id];
       const line = forced ? def.orders.find((o) => o.id === forced) : picked;
       if (!line) throw new Error(`${def.id} has no order line ${forced}`);
@@ -89,7 +102,7 @@ export function restartRush(r: Rush): void {
   const owner = r.owner;
   const rng = r.rng;
   const time = r.time;
-  Object.assign(r, createRush(r.seed, r.difficulty, r.lines));
+  Object.assign(r, createRush(r.seed, r.difficulty, r.lines, r.week));
   r.rng = rng;
   r.time = time;
   r.owner = { ...owner, frustration: 0, lastAt: {} };
