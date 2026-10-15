@@ -26,7 +26,7 @@ test('music plays, follows the day and ducks under an order', async ({ page }) =
   test.setTimeout(150_000);
   await page.goto('/?seed=7&ibis=0');
   // Only music left at the master: everything else to zero.
-  await page.getByRole('button', { name: 'Sound settings' }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   for (const l of ['Voices volume', 'Café ambience volume', 'Machine & effects volume'])
     await page.getByLabel(l).fill('0');
   await page.getByLabel('Music volume').fill('100');

@@ -481,7 +481,7 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   });
 
   // Replay, then back to the title from the pause menu.
-  await page.getByRole('button', { name: 'Run the rush again' }).click();
+  await page.getByRole('button', { name: 'Try again', exact: true }).click();
   const fresh = await until(page, (x) => x.phase === 'intro');
   expect(fresh.records).toHaveLength(0);
   expect(fresh.crowd).toBe(0);
