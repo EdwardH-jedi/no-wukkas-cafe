@@ -458,6 +458,7 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 1));
   await page.waitForTimeout(300);
   await snap(page, 'walkout');
+  await expect(page.locator('#rwalk')).not.toHaveText('0'); // the top chip counts them
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 4));
   const end = await until(page, (s) => s.phase === 'summary', 240_000);
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 1));

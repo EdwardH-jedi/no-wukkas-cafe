@@ -14,14 +14,14 @@ import {
 } from '../core/rush';
 import type { Utterance } from '../core/speech';
 import { customerDef, type CustomerId } from '../data/customers';
-import { shiftDef } from '../core/week/progress';
 import { answerAsText, isAnswerKey, transcriptVisible, type ListenStage } from '../sim/listening';
-import { DRINK_NAME, formatCents, LUKEWARM, MILK_NAME, orderLabel } from '../sim/rush';
+import { DRINK_NAME, LUKEWARM, MILK_NAME, orderLabel } from '../sim/rush';
 import { createEventCard, EVENT_KEYS } from './eventCard';
 import { createGauges, type GaugeMode } from './gauges';
 import { instruction } from './instructions';
 import { createPos } from './pos';
 import { createRail, nextTicket, railOrder } from './rushRail';
+import { createTopChips, TOP_CHIPS_HTML } from './rushTopbar';
 import { esc } from './screens';
 import { renderShiftReport, type ShiftReportCallbacks } from './screens/shiftReport';
 import { subtitleMode, type ListenSettings } from './settings';
@@ -68,10 +68,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const touch = window.matchMedia('(pointer: coarse)').matches;
   root.innerHTML = `
     <div id="rtopbar" class="hide">
-      <div class="chip" id="rday"><span class="k">Day 2</span><b>Morning rush</b></div>
-      <div class="chip"><span class="k">Time</span><b id="rclock">7:00</b></div>
-      <div class="chip"><span class="k">Served</span><b id="rserved">0/5</b></div>
-      <div class="chip"><span class="k">Tips</span><b id="rtips">$0.00</b></div>
+      ${TOP_CHIPS_HTML}
       <div class="spacer"></div>
       ${cb.audioButtonsHtml}
       <button class="iconbtn" id="rpauseBtn" aria-label="Pause">❚❚</button>
@@ -91,6 +88,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       <button class="btn ghost" data-p="title">Title screen</button></div></div></div>`;
   const $ = <T extends HTMLElement>(s: string): T => root.querySelector(s) as T;
   const topbar = $('#rtopbar');
+  const chips = createTopChips(topbar);
   const rail = $('#rail');
   const pass = $('#pass');
   const instr = $('#rinstr');
@@ -217,12 +215,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       if (phase === 'intro') {
         endQuote = '';
         railView.reset();
-        const [k, v] = !r.week
-          ? ['Day 2', 'Morning rush']
-          : r.week.endless
-            ? ['Endless', 'Rush']
-            : [`Week ${r.week.week ?? 1}`, shiftDef(r.week.shiftIndex).day];
-        $('#rday').innerHTML = `<span class="k">${esc(k)}</span><b>${esc(v)}</b>`;
+        chips.setDay(r);
       }
       topbar.classList.toggle('hide', phase === 'summary');
       summary.classList.toggle('hide', phase !== 'summary');
@@ -270,17 +263,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         return;
       }
 
-      // Top bar: 7:00 am plus six game-minutes per real minute... rushed.
-      const mins = Math.floor(r.serviceTime / 10);
-      (root.querySelector('#rclock') as HTMLElement).textContent =
-        `7:${String(mins).padStart(2, '0')}`;
-      const served = r.records.length;
-      (root.querySelector('#rserved') as HTMLElement).textContent = r.week?.endless
-        ? String(served)
-        : `${served}/${r.customers.length}`;
-      (root.querySelector('#rtips') as HTMLElement).textContent = formatCents(
-        r.records.reduce((s, x) => s + x.tipCents, 0),
-      );
+      chips.update(r);
 
       lastRush = r;
       railView.update(r);
