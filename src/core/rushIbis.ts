@@ -6,7 +6,7 @@
 
 import { ENTER_TIME, type Rush } from './rush';
 import { birdLeft } from './rush/events';
-import { gaz } from './rushSpeech';
+import { gaz, orderLineDue } from './rushSpeech';
 import { stepIbis, type Ibis, type IbisEvent } from '../sim/ibis';
 
 export interface IbisControls {
@@ -30,7 +30,14 @@ export function stepRushIbis(r: Rush, b: Ibis, input: IbisControls, dt: number):
   if (r.phase !== 'service') return b.events;
   stepIbis(
     b,
-    { serviceTime: r.serviceTime, doorOpen: doorOpen(r), shoo: input.shoo, noticed: input.noticed },
+    {
+      serviceTime: r.serviceTime,
+      doorOpen: doorOpen(r),
+      // RARE_BIRD's rule (sim/events/defs.ts): it never walks in, honking, over an order.
+      midOrder: orderLineDue(r),
+      shoo: input.shoo,
+      noticed: input.noticed,
+    },
     dt,
   );
   for (const e of b.events) {

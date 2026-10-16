@@ -3,7 +3,7 @@
 // out on its own feet). A small deterministic state machine, separate from the rush: its own
 // seeded RNG, its own state, driven by inputs. No DOM, no three.
 //
-//   absent ─(its time comes and the door is open)→ entering ─→ foraging ─(shoo)→ herded
+//   absent ─(its time comes, door open, no one mid-order)→ entering ─→ foraging ─(shoo)→ herded
 //      herded ─(3 shoos)→ leaving ─→ gone        herded ─(left alone 7 s)→ foraging
 //      foraging ─(ignored 30 s)→ leaving (bin raided) ─→ gone
 
@@ -43,6 +43,9 @@ export interface IbisInput {
   serviceTime: number;
   /** The front door is open (someone is walking in or out). */
   doorOpen: boolean;
+  /** A customer is saying their order or an answer (or is about to): the bird waits outside for
+   *  the next open door, so it never walks in, honking, over a line the player must hear. */
+  midOrder: boolean;
   /** The player clapped/waved at it this step. */
   shoo: boolean;
   /** The player is looking at it (pointer over it). */
@@ -116,7 +119,12 @@ export function stepIbis(b: Ibis, input: IbisInput, dt: number): void {
 
   switch (b.state) {
     case 'absent':
-      if (b.scheduledAt !== null && input.serviceTime >= b.scheduledAt && input.doorOpen) {
+      if (
+        b.scheduledAt !== null &&
+        input.serviceTime >= b.scheduledAt &&
+        input.doorOpen &&
+        !input.midOrder
+      ) {
         go(b, 'entering');
         b.target = 1;
         b.events.push({ type: 'enter' });

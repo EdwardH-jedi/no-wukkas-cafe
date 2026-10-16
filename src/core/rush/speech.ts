@@ -117,6 +117,11 @@ export function customerListen(
   return u;
 }
 
+/** A customer's order or answer is being said, or is queued to be: a line the player must hear. */
+export function orderLineDue(r: Rush): boolean {
+  return r.speech.current?.listen === true || r.speech.queue.some((q) => q.listen === true);
+}
+
 /** This customer has a listening line queued that hasn't started yet. */
 export function listenQueued(r: Rush, c: RushCustomer): boolean {
   return r.speech.queue.some((q) => q.listen === true && q.speaker === c.def.id);
