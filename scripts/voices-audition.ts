@@ -11,6 +11,9 @@
 //   npm run voices:audition -- --provider azure --allow-paid
 //                                                Azure candidates; needs AZURE_SPEECH_KEY and
 //                                                AZURE_SPEECH_REGION; prints the character count first
+//   npm run voices:audition -- --provider google --allow-paid
+//                                                Google Chirp 3 HD candidates (scripts/tts-google.ts);
+//                                                needs GOOGLE_TTS_ACCESS_TOKEN + GOOGLE_CLOUD_PROJECT
 //
 // Output: voice-auditions/ (gitignored) with one folder per character/candidate and index.json,
 // the audition index the casting page reads (dev/casting.html on the dev server: `npm run dev`,
@@ -30,6 +33,8 @@ import { tmpdir } from 'node:os';
 import { basename, extname, join } from 'node:path';
 import { argValue, measure, ROOT, run } from './voice-node.ts';
 import { azureSsml, azureSynthesize } from './tts-azure.ts';
+import { GOOGLE_NEEDS, googleAuthFrom, googleProvider } from './tts-google.ts';
+import { estimateCost, forTts, paidAccess, type TtsProvider } from './tts-provider.ts';
 
 const { AUDITIONS } = await import('../src/data/voice/auditions.ts');
 const { CASTING, PIPELINE_TEST } = await import('../src/data/voice/casting.ts');
@@ -99,6 +104,24 @@ async function renderAzure(who: string, c: Candidate, key: string, region: strin
       ...(c.style ? { style: c.style } : {}),
     });
     const mp3 = Buffer.from(await azureSynthesize(ssml, key, region));
+    const raw = join(tmpdir(), `nwc-audition-${process.pid}-${i}.mp3`);
+    writeFileSync(raw, mp3);
+    await encode(raw, join(dir, `${i + 1}.mp3`));
+    rmSync(raw, { force: true });
+  }
+  writeFileSync(join(dir, 'candidate.json'), JSON.stringify({ ...c, character: who }, null, 2));
+}
+
+async function renderGoogle(who: string, c: Candidate, tts: TtsProvider): Promise<void> {
+  const dir = join(OUT, who, slug(c));
+  mkdirSync(dir, { recursive: true });
+  for (const [i, text] of (AUDITIONS[who] ?? []).entries()) {
+    const mp3 = await tts.render({
+      text: forTts(text),
+      voice: c.voice,
+      languageCode: c.voice.split('-').slice(0, 2).join('-'),
+      rate: c.rate ?? 1,
+    });
     const raw = join(tmpdir(), `nwc-audition-${process.pid}-${i}.mp3`);
     writeFileSync(raw, mp3);
     await encode(raw, join(dir, `${i + 1}.mp3`));
@@ -237,9 +260,25 @@ async function main(): Promise<void> {
     for (const [who, cs] of Object.entries(CASTING))
       for (const c of cs.filter((x) => x.provider === 'azure'))
         await renderAzure(who, c, key, region);
+  } else if (provider === 'google') {
+    const n = Object.entries(CASTING).reduce(
+      (s, [who, cs]) => s + cs.filter((c) => c.provider === 'google').length * chars(who),
+      0,
+    );
+    const { TTS_BUDGET } = await import('../src/data/voice/casting.ts');
+    console.log(
+      `Google would synthesise ${n} characters (~AU$${estimateCost(n, TTS_BUDGET).aud.toFixed(2)} if none were free).`,
+    );
+    const access = paidAccess(args, googleAuthFrom(process.env), GOOGLE_NEEDS);
+    if (!access.ok) {
+      console.error(`Not calling Google: ${access.reason} (Edward approves spending first).`);
+      process.exitCode = 1;
+      return;
+    }
+    const tts = googleProvider(access.auth);
+    for (const [who, cs] of Object.entries(CASTING))
+      for (const c of cs.filter((x) => x.provider === 'google')) await renderGoogle(who, c, tts);
   } else if (provider) {
-    // Google candidates are listed to hear on Google's own voice list (docs/VOICE_PROVIDERS.md);
-    // there's no account and no renderer yet, so nothing is called.
     console.error(
       `No renderer for provider "${provider}". Listen on the provider's own page, or deliver takes with --import.`,
     );

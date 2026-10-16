@@ -4,7 +4,8 @@
 // provider 'macos'  local `say`: pipeline test only, never a casting candidate (placeholder licence)
 // provider 'files'  recordings delivered by an actor or provider, imported from a folder
 // provider 'azure'  Azure Neural TTS: needs --allow-paid and credentials; untested (no account)
-// provider 'google' Google Cloud TTS (Chirp 3 HD): listed to audition, no renderer yet (no account)
+// provider 'google' Google Cloud TTS (Chirp 3 HD): needs --allow-paid and credentials
+//                   (scripts/tts-google.ts); untested against the live service (no account)
 //
 // Voice names were checked against Microsoft's and Google's published voice lists on 2026-10-14
 // (docs/VOICE_PROVIDERS.md). Google's one-word persona descriptions ("Gravelly") come from its
