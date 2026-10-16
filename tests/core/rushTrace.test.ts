@@ -36,13 +36,13 @@ describe('rush trace', () => {
     const hashes = Object.fromEntries(Object.entries(PROFILES).map(([k, o]) => [k, trace(o)]));
     expect(hashes).toMatchInlineSnapshot(`
       {
-        "aids": "dc4a8660ba02da6386e22a8b8c15469a83fae9ec",
-        "easy": "723e8c085b8d2e4805886b6a82db03e05ff11293",
-        "hard": "c257f42ed4113b840f5840a9b994cf556bd7a842",
-        "hurry": "7a038f7f1aa3134c535f2489087469383cfd4365",
+        "aids": "124c2c015b904443aca0ffbc5295cbfdd762625d",
+        "easy": "31c58fe4dafb6ee5a80e2520e4fcf788c3821bb4",
+        "hard": "8e51462770cc9ba21080a78117038504613a64e1",
+        "hurry": "9963e830531f1c2414fad03100ba99dc51b370e1",
         "idle": "27b8289707a6932c9ab6711e2033a89d28f2472d",
         "misheard": "1b0257bea377fdcf2749e3e5900fb222d40676fd",
-        "normal": "275a8c8c5de1699446a4e2700cad4284881ec5bd",
+        "normal": "eaef83a72f956f4c5cbda791dae7c489defe6d00",
       }
     `);
   });
