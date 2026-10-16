@@ -1,6 +1,12 @@
 # Voice casting plan
 
-**Status (2026-10-14): plan, pipeline and casting page; no real auditions yet.**
+**Status (2026-10-16): cast decided, pass built, nothing rendered yet.**
+- Edward chose Google Cloud TTS for Dazza, Beryl, Karen and Priya, and actors for Gaz, Jiwoo
+  (native Korean speaker) and Mei (native Mandarin speaker), with a AU$20 cap.
+- The cast is `CAST` in `src/data/voice/casting.ts`. The pipeline is in docs/VOICE_ASSETS.md
+  ("The licensed pass").
+
+**Earlier status (2026-10-14): plan, pipeline and casting page; no real auditions yet.**
 - No replacement voices have been generated.
 - No paid service has been used.
 - No credits have been bought.

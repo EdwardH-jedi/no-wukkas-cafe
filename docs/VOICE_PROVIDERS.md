@@ -101,6 +101,36 @@ personas give the widest set of distinct Australian voices.
 
 Retakes multiply TTS costs 3–5×, which is still small.
 
+## Google Cloud TTS: what the API takes (checked 2026-10-16)
+
+Chosen for the release pass (Edward, 2026-10-16). Source: Google's public docs (docs.cloud.google.com
+text-to-speech pages and cloud.google.com/terms). No account was used and nothing was called.
+`scripts/tts-google.ts` follows these facts.
+
+- **Synthesize** [V]: `POST https://texttospeech.googleapis.com/v1/text:synthesize` with
+  `{ input: { text }, voice: { languageCode, name }, audioConfig: { audioEncoding: "MP3", speakingRate } }`.
+  It returns `{ audioContent }` in base64 (MP3 at 32 kbps). Input is limited to 5000 bytes.
+- **Voices** [V]: `GET …/v1/voices?languageCode=en-AU`. The four cast voices exist with these spellings:
+  en-AU-Chirp3-HD-Fenrir (m), en-AU-Chirp3-HD-Gacrux (f), en-AU-Chirp3-HD-Kore (f), en-IN-Chirp3-HD-Leda (f).
+- **Chirp 3 HD** [V]:
+  - pace (`speakingRate` 0.25–2) works;
+  - SSML is in Preview with a fixed tag set;
+  - pause tags exist only in `markup`;
+  - pitch isn't documented, so none is sent;
+  - quota is 200 requests per minute per project.
+  - The voice-types page still says "no SSML / rate / pitch", but the release notes added pace
+    (2025-03-27) and SSML (2025-10-17).
+- **Auth** [V]: an OAuth bearer token with `x-goog-user-project` (Google's own curl example). Whether
+  this API takes **API keys** is **[U]**: no TTS page says so.
+- **Price** [V]: US$30 per 1M characters (spaces and newlines count), with the first 1M each month
+  free. Billing must be enabled.
+- **Terms** [V]: output may "power your applications", and the customer keeps the IP in customer data.
+  No attribution or AI-disclosure rule was found.
+- **Open risk for Edward** [U]: Google's service terms list TTS under AI/ML services. If Chirp 3 HD
+  counts as a "Generative AI Service", Service Terms §20(d) restricts use in services "directed
+  towards or likely to be accessed by individuals under the age of 18". Check this before shipping
+  (cloud.google.com/terms/service-terms).
+
 ## Legal and risk notes (for a lawyer to check)
 
 - **Australia** has no statutory personality or voice right; soundalikes are pursued through

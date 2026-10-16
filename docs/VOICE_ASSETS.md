@@ -1,6 +1,7 @@
 # Voice assets: sources, licence status, workflow
 
-**Status (2026-10-13): every voice clip is a PLACEHOLDER.** The manifest says so
+**Status (2026-10-16): every voice clip is still a PLACEHOLDER**; the licensed pass below is built
+and waits for Edward's paid render, the listen-through and the actors' recordings. The manifest says so
 (`status: "placeholder"`, `source.placeholder: true` on every clip). Nothing here is cleared
 for distribution.
 
@@ -75,6 +76,34 @@ npm run voices:check -- --release         # what a release build would need (fai
   Re-rendering needs macOS.
 - **Clips from before 2026-10-13** were written to `public/assets/voice/`. Delete that folder
   (it is gitignored, and builds strip it anyway) and run `npm run voices` to fill `voice-cache/`.
+
+## The licensed pass (Phase 3, 2026-10-16)
+
+Edward's decisions: **Google Cloud TTS** (Chirp 3 HD) for Dazza, Beryl, Karen and Priya; **actors**
+for Gaz, Jiwoo and Mei; a **AU$20** cap. The cast is `CAST` in `src/data/voice/casting.ts`.
+
+```bash
+npm run voices:estimate -- --segments  # characters and AU$ per TTS speaker; refuses over the cap
+npm run voices:render                  # dry run: what would render
+npm run voices:render -- --allow-paid  # paid (Edward): → voice-cache/licensed/ + index.json
+npm run voices:sheet                   # voice-auditions/review-sheet.{json,md}: listen-through + recording script
+npm run voices:render -- --promote     # offline: approved staging → public/assets/voice/ + manifest
+npm run voices:render -- --import <dir> # actors' takes (<hash>.wav, source.json {licence, performer})
+npm run release:check                  # passes only with 0 placeholders
+```
+
+- The paid render needs `--allow-paid` and `GOOGLE_TTS_ACCESS_TOKEN` (`gcloud auth print-access-token`)
+  plus `GOOGLE_CLOUD_PROJECT`. Nothing calls Google without both.
+- Today the full TTS pass is 5,536 characters (AU$0.27), or 7,599 (AU$0.36) with segments.
+- Staging is resumable: `index.json` is written after every clip, and a re-run only renders what
+  is missing or changed.
+- `--promote` and `--import` write the manifest only when it still validates.
+- Release clips carry `source.provenance` (`licensed_tts` or `recorded`). The validator and the
+  build gate refuse anything else.
+- **Never commit audio.** Release clips live in `public/assets/voice/` (gitignored); commit the
+  manifest only. Each machine that builds a release needs the clips there (render or copy them).
+- Generated-order segments are rendered and staged, but **don't ship yet**: that needs a committed
+  segment manifest the gate and the game read (docs/TODO.md Phase 3).
 
 ## Moving to release audio
 
