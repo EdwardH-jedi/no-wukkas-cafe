@@ -141,21 +141,52 @@ Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split 
     pull-through only thins at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`, Edward's
     call). (7) `src/app/input.ts` Space handler `preventDefault`s on focused buttons (worked around by `menuKeys`).
 
-## Phase 1.5 — Polish  `[ ]`
+## Phase 1.5 — Polish  `[x]` five fixed; 1.5.5 and 1.5.6 `[!]` (Edward's design calls)
 Goal: the seven follow-ups found in Phase 1 (Evidence above), each fixed or marked `[!]` with the reason.
 Owns `src/ui/styles/{hud,rush}.css`, `src/ui/{rushHud,pos}.ts`, `src/data/ownerLines.ts` + `src/sim/owner.ts`
 (copy and line keys), `src/app/input.ts`, `src/data/voice/manifest.json` (placeholder re-render, never audio).
-- [ ] 1.5.1 Day 2 HUD on a phone (390×844): `#rinstr` off the rail, the gauge column never clips the cup during a
+- [x] 1.5.1 Day 2 HUD on a phone (390×844): `#rinstr` off the rail, the gauge column never clips the cup during a
       flat white's shot, `#ractions` visible beside the gauges. Screenshots before/after.
-- [ ] 1.5.2 "Bin it" never sits under the register's "Ring it up" (drink on the pass + a customer ordering).
-- [ ] 1.5.3 Week shifts after the first don't replay `RUSH_INTRO` ("your first paid shift", `src/data/ownerLines.ts:38`).
-- [ ] 1.5.4 `rush.end.excellent` doesn't say "Five for five" after 6/6 (or 9/9, 10/10): count-agnostic copy; Gaz
+- [x] 1.5.2 "Bin it" never sits under the register's "Ring it up" (drink on the pass + a customer ordering).
+- [x] 1.5.3 Week shifts after the first don't replay `RUSH_INTRO` ("your first paid shift", `src/data/ownerLines.ts:38`).
+- [x] 1.5.4 `rush.end.excellent` doesn't say "Five for five" after 6/6 (or 9/9, 10/10): count-agnostic copy; Gaz
       placeholder clips re-rendered, manifest only committed.
-- [ ] 1.5.5 Saved regulars fire: something besides THE_USUAL (affinity ≥ 2, ROADMAP 3.1) writes `regulars`.
-- [ ] 1.5.6 Pull-through thins only at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`).
-- [ ] 1.5.7 `src/app/input.ts` Space handler no longer `preventDefault`s on focused buttons (today worked around by `menuKeys`).
+- [!] (design call for Edward: how affinity accrues is ROADMAP 3.1, and turning THE_USUAL on moves the Phase 2 week curve) 1.5.5 Saved regulars fire: something besides THE_USUAL (affinity ≥ 2, ROADMAP 3.1) writes `regulars`.
+- [!] (Edward's call, as Phase 1 said: it changes pour physics, which 1C says not to touch without his feel-test) 1.5.6 Pull-through thins only at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`).
+- [x] 1.5.7 `src/app/input.ts` Space handler no longer `preventDefault`s on focused buttons (today worked around by `menuKeys`).
 - Exit: typecheck, lint, test exit 0; rush + weekUi e2e green; main pushed.
 - Evidence:
+  - 1.5.3 + 1.5.4 (47c51f4, 7312c5a): `WEEK_INTRO` (one per row of `data/week.ts`; its Monday is for week 2 on)
+    and `ENDLESS_INTRO` in `src/data/ownerLines.ts`, picked by `introLines()` in `core/rush/machine.ts`; Day 2 and the
+    first Monday keep `RUSH_INTRO`. Intros name no drink the station can't make (cappuccino, latte, piccolo and iced
+    long black are unlocks with `playable: false`) and no head counts. Excellent needs zero walk-outs, so the line is
+    "Bloody oath. Not one walked out. You might actually be good at this." `npm run voices -- --only gaz`: 13 rendered,
+    manifest +13 / −1 (three Priya re-measurements put back: unrelated drift of a non-deterministic voice), no audio
+    committed. `tests/core/rushIntro.test.ts` (7). Mistake: 47c51f4 went in with `rushTrace` stale (the check's exit code
+    was grep's); a diff of the seed-3 event log against 1796120 showed only the excellent line's text, its clip length
+    (4.032 → 4.366 s) and the wrap-up times after it changed, so 7312c5a re-recorded it. Every later commit ran a check
+    script that keeps the real exit code.
+  - 1.5.7 (48bd0b1, 2a6fe94): `controlOwnsSpace` (`ui/screens/keys.ts`): Space belongs to a visible focused control
+    outside the play HUD; the play HUD's containers (top bars, action bars, gauges, tickets, register, event card, jug
+    buttons) and the practice review's "Pour again (Space)" carry `data-play`. `tests/ui/keys.test.ts` (4). Browser
+    check (scratch script, 1024×640): practice review, Tab to "Watch Gaz", Space → phase `demo`; on 1796120 the same
+    keys → `pour`. Overlap for the 1C merge: `feat/latte-feel` edfaa37 edits the same Space branch (300 ms ramp).
+  - 1.5.1 + 1.5.2 (6c10050): wrappers `#rtl` (tickets + instruction) and `#rbl` (gauges + buttons + jug buttons),
+    `display: contents` above 720 px. Phone: instruction under the tickets, gauges in a row above the bottom line,
+    buttons and jug buttons on the bottom line, clear of the middle of the screen where a finger steers the steam jug
+    (a first layout put "Bin it, start again" there and the pump tap binned the drink). Desktop: while the side buttons
+    show, the register moves to the top (scrolls if taller). Measured with a scratch Playwright run (seed 7, Priya's
+    almond flat white, element boxes per state): 390×844 before: instruction on tickets in all 8 states, gauges over
+    the buttons in grind/shot/two-hands/pour, gauges over the cup in shot/pour; after: none in ticket/grind/shot/
+    two-hands. 375×667 shot/two-hands: none (before: gauges over the cup by ~29 px). 1024×640 pass + register: "Bin it"
+    vs "Ring it up" gone, every other overlap as before. Left: the pour close-up still has HUD over the cup's rim (the
+    cup fills the screen). Shots before/after: `docs/verification/2026-10-17-polish/`.
+  - 1.5.5 not done: only THE_USUAL writes `regulars`, and it needs affinity ≥ 2 that only it can raise (the Phase 4
+    fuzz confirms it never fires from a fresh save; `RegularMemory.visits` is never written). Proposal for Edward:
+    count a visit and +1 affinity for each correct serve to a regular, so THE_USUAL can fire from about Wednesday;
+    that changes the event mix the Phase 2 curve was tuned on, so it needs a balance diff.
+  - 1.5.6 not done: pour physics (Phase 1C rule: no foam-physics change without the feel-test).
+  - Also: `.claude/` (subagent worktrees) is now ignored by prettier and eslint (1e9da79).
 
 ## Phase 2 — Balance  `[x]`
 Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,upgrades,events}.ts` (numbers only), `scripts/balance.ts`, `tests/helpers/{rushBot,pace}.ts`, `reports/` (gitignored).
