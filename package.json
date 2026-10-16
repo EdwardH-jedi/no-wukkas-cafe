@@ -22,6 +22,7 @@
     "voices:check": "node scripts/voices-check.ts",
     "voices:estimate": "node scripts/voices-estimate.ts",
     "voices:render": "node scripts/voices-render.ts",
+    "voices:sheet": "node scripts/voices-sheet.ts",
     "release:check": "node scripts/voices-check.ts --release && npm run build",
     "voices:audition": "node scripts/voices-audition.ts"
   },

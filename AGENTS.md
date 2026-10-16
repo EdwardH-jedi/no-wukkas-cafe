@@ -48,6 +48,7 @@ npm run voices -- --segments # macOS only: generated-order segment clips → voi
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)
 npm run voices:estimate # licensed voice pass: characters + AUD per TTS speaker of the release cast (CAST), the actors' share; refuses over the AU$20 cap (-- --segments, -- --cap N)
 npm run voices:render  # licensed pass: dry run by default; -- --allow-paid renders the TTS cast (Google; GOOGLE_TTS_ACCESS_TOKEN + GOOGLE_CLOUD_PROJECT) → voice-cache/licensed/; -- --promote (offline) → public/assets/voice/ + manifest; -- --import <dir> actors' takes; -- --segments, --only
+npm run voices:sheet   # listen-through + recording sheet → voice-auditions/review-sheet.{json,md}: review fields per TTS speaker, file names per line for the actors
 npm run voices:audition # casting auditions → voice-auditions/ + index.json (dry run by default; see docs/VOICE_CASTING.md)
 npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
 ```
