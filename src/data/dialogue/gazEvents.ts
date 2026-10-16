@@ -1,7 +1,7 @@
 // Gaz's lines for shift events (sim/events/defs.ts), keyed `event.<event>.<case>`, three variants
 // each so the no-repeat pools and cooldowns in sim/owner.ts keep them fresh. Same rules as
 // data/ownerLines.ts: the jokes are about the coffee, never about who the customer is, and Gaz
-// backs his staff. Not rendered yet (the voice pipeline renders these keys with the segments).
+// backs his staff. In the voice script with every other Gaz line (data/voice/script.ts).
 
 import type { LineBook, LinePool } from '../../sim/owner';
 

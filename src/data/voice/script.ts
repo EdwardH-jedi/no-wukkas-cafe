@@ -2,6 +2,7 @@
 // list, and a test checks that whatever the game says at runtime is in it.
 
 import { CUSTOMERS } from '../customers';
+import { GAZ_EVENT_LINES } from '../dialogue/gazEvents';
 import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../ownerLines';
 import { PACE_RATE, type Pace } from '../../sim/listening';
 import { DRINK_NAME } from '../../sim/rush';
@@ -26,14 +27,7 @@ export const SLOW_RATE = 0.8;
  * these lines only, and the coverage tests allow exactly these to be missing (plus the old clips
  * they replace, including a line split into per-drink keys). Empty this once they're rendered.
  */
-export const AWAITING_RENDER: ReadonlySet<string> = new Set([
-  'dazza.3', // "Morning." (was "Mornin'."), normal and slow
-  'beryl.happy.flatWhite',
-  'beryl.happy.longBlack',
-  'jiwoo.happy', // "와, perfect!" (was "Wah, perfect!"), the same for every drink
-  'shot.overlap', // Gaz: "Two hands. Now you're a barista."
-  'demo.pull', // Gaz: "Lift a touch, keep pouring, sweep straight through. Let go at the edge. Done."
-]);
+export const AWAITING_RENDER: ReadonlySet<string> = new Set<string>([]);
 
 /** Is this line (a script or runtime key, or the manifest key of a clip it replaces) awaiting a
  *  render? An entry covers its own key and the keys under it ('dazza.3' covers 'dazza.3.slow',
@@ -78,7 +72,8 @@ export function voiceScript(): ScriptLine[] {
   GREETING_OPENERS.forEach((d) => add('gaz', 'greet.open', d.text));
   GREETING.forEach((d, i) => add('gaz', `greet.${i}`, d.text));
   RUSH_INTRO.forEach((d, i) => add('gaz', `rush.intro.${i}`, d.text));
-  for (const [key, pool] of Object.entries(OWNER_LINES))
+  // Gaz's lines, the shift events' included (core/rush/speech.ts speaks both books).
+  for (const [key, pool] of Object.entries({ ...OWNER_LINES, ...GAZ_EVENT_LINES }))
     for (const tier of pool.tiers)
       for (const d of tier) for (const t of fillAll(d.text)) add('gaz', key, t);
   for (const c of CUSTOMERS) {
