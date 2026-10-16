@@ -1,7 +1,9 @@
 // Scenario 2: a customer's order clip that 404s, or takes 10 s to arrive, never makes the game skip
 // that order: it is still heard (the clip when it comes, or the browser voice) and the register
 // still takes it. Real wiring and audio stack (harness.ts); Day 2 on Normal, where the order's
-// words are not on screen, so the voice is the only way to get it. (25 s: the .failing file.)
+// words are not on screen, so the voice is the only way to get it. A clip still loading after the
+// manager's load timeout (12 s) is given up for the browser voice, so a 25 s clip doesn't lose the
+// order to Gaz's nag either.
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { orderWith } from './orderFlow';
@@ -37,6 +39,14 @@ describe('S2: a slow or missing order clip never skips the order', () => {
   it('404 after 10 s: the browser voice says it once the clip has failed', async () => {
     const { o, c, heard } = await orderWith({ status: 404, delay: 10 });
     expect(heard, `${o.id}'s order was never heard`).toBe(true);
+    expect(c.outcome).toBeNull();
+    expect(c.ticket).not.toBeNull();
+  }, 15_000);
+
+  it('25 s: the order is still heard (clip or browser voice) before it is rung up', async () => {
+    const { o, c, heard, subtitle } = await orderWith({ status: 200, delay: 25 });
+    expect(subtitle).toBe(false); // Normal: the words aren't on screen, only the voice can say it
+    expect(heard, `${o.id}'s order ("${o.text}") was never voiced`).toBe(true);
     expect(c.outcome).toBeNull();
     expect(c.ticket).not.toBeNull();
   }, 15_000);

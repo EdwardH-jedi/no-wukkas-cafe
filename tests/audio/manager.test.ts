@@ -1,8 +1,15 @@
-// The audio manager playing a generated line as its segment clips, against a fake AudioContext
-// whose clock only runs while the context is running (as a suspended context's does).
+// The audio manager playing a generated line as its segment clips, and a clip slow to load, against
+// a fake AudioContext whose clock only runs while the context is running (as a suspended
+// context's does).
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createAudioManager, type AudioManager, type VoiceRequest } from '../../src/audio/manager';
+import {
+  createAudioManager,
+  LOAD_TIMEOUT,
+  type AudioManager,
+  type VoiceRequest,
+} from '../../src/audio/manager';
+import { VOICE_MANIFEST } from '../../src/data/voice';
 import { segmentFile } from '../../src/data/voice/manifest';
 
 class Param {
@@ -220,5 +227,79 @@ describe('segmented lines', () => {
     expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: LINE.text });
     expect(ctx.started).toHaveLength(0);
     expect(fetched).toHaveLength(0);
+  });
+});
+
+describe('a clip slow to load', () => {
+  const clip = VOICE_MANIFEST.clips.find(
+    (c) => c.characterId === 'dazza' && c.delivery === 'normal',
+  )!;
+  const ORDER: VoiceRequest = { speaker: clip.characterId, text: clip.transcript, listen: true };
+  /** Answers the clip's request (held until the test calls it). */
+  let land: () => void;
+  beforeEach(() => {
+    land = () => undefined;
+    vi.stubGlobal(
+      'fetch',
+      () =>
+        new Promise((ok) => {
+          land = () =>
+            ok({
+              ok: true,
+              status: 200,
+              headers: { get: () => 'audio/mpeg' },
+              arrayBuffer: () => Promise.resolve(new Float32Array([1.2]).buffer),
+            });
+        }),
+    );
+  });
+
+  /** A frame: the audio clock runs `s` seconds, then the frame loop's update(). */
+  const wait = (m: AudioManager, ctx: FakeCtx, s: number): void => {
+    ctx.advance(s);
+    m.update();
+  };
+
+  it('still plays when it lands within the timeout', async () => {
+    const { m, ctx } = await started();
+    m.say(ORDER);
+    wait(m, ctx, LOAD_TIMEOUT - 2);
+    expect(m.loading).toBe(true);
+    land();
+    await flush();
+    expect(m.history.at(-1)).toMatchObject({ via: 'clip', text: ORDER.text });
+    expect(ctx.started).toHaveLength(1);
+  });
+
+  it('past the timeout the browser voice says the line, and the late clip is dropped', async () => {
+    const { m, ctx } = await started();
+    m.say(ORDER);
+    wait(m, ctx, LOAD_TIMEOUT - 0.1);
+    expect(m.loading).toBe(true);
+    wait(m, ctx, 0.2);
+    expect(m.loading).toBe(false); // the game's line no longer waits for it
+    expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: ORDER.text });
+    land();
+    await flush();
+    expect(ctx.started).toHaveLength(0); // never said twice
+    expect(m.history.filter((h) => h.text === ORDER.text)).toHaveLength(1);
+    expect(m.lastLine).toBe(ORDER); // Replay still says it
+  });
+
+  it('time spent paused does not count towards the timeout', async () => {
+    const { m, ctx } = await started();
+    m.say(ORDER);
+    wait(m, ctx, 5);
+    m.setPaused(true);
+    await flush();
+    wait(m, ctx, 60); // the suspended context's clock stands still
+    expect(m.loading).toBe(true);
+    m.setPaused(false);
+    await flush();
+    wait(m, ctx, LOAD_TIMEOUT - 5 - 0.1);
+    expect(m.loading).toBe(true);
+    wait(m, ctx, 0.2);
+    expect(m.loading).toBe(false);
+    expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: ORDER.text });
   });
 });
