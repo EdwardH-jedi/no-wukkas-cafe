@@ -56,7 +56,7 @@ export const WEEK: readonly ShiftDef[] = [
     customers: 10,
     unlocks: ['icedLongBlack'],
     eventCap: 2,
-    gap: { first: 18, last: 12 },
+    gap: { first: 16, last: 10 },
   },
 ];
 
