@@ -1,0 +1,22 @@
+src/dev/offlineMix.ts:90:  const r = await fetch(url);
+src/app/rushWiring.ts:24:import { makeIbis, prefetchDay } from './shared';
+src/app/rushWiring.ts:39:  prefetchDay(audio, 2);
+src/audio/manager.ts:86:  prefetch(reqs: readonly VoiceRequest[]): void;
+src/audio/manager.ts:100:  /** True while the latest line's clip is still being fetched/decoded (nothing audible yet).
+src/audio/manager.ts:300:  const fetchClip = (file: string): Promise<ArrayBuffer> => {
+src/audio/manager.ts:303:      p = fetch(base + file).then((r) => {
+src/audio/manager.ts:323:    const bytes = await fetchClip(file);
+src/audio/manager.ts:420:   *  hold while loading). Every part is fetched and decoded before the first plays, so the line
+src/audio/manager.ts:670:    prefetch(reqs) {
+src/audio/manager.ts:673:        if (c && shipped(c)) fetchClip(c.file).catch(() => undefined);
+src/dev/devui.ts:37:    const r = await fetch(`/__dev/load/${kind}`, { cache: 'no-store' });
+src/dev/devui.ts:47:    const r = await fetch(`/__dev/save/${kind}`, {
+src/app/shared.ts:12:export function prefetchDay(audio: AudioManager, day: 1 | 2): void {
+src/app/shared.ts:14:  if (day === 1) audio.prefetch([...GREETING_OPENERS, ...GREETING].map((d) => asReq(d.text)));
+src/app/shared.ts:15:  audio.prefetch(
+src/dev/takes.ts:20:      const r = await fetch(url);
+src/dev/casting.ts:302:    const r = await fetch(`${AUDITIONS_ROOT}index.json`, { cache: 'no-store' });
+src/app/trialWiring.ts:8:import { prefetchDay } from './shared';
+src/app/trialWiring.ts:17:    prefetchDay(app.audio, 1);
+src/app/practiceWiring.ts:18:import { prefetchDay } from './shared';
+src/app/practiceWiring.ts:27:  prefetchDay(audio, 1); // Gaz's demo lines

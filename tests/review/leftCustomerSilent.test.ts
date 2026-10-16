@@ -40,6 +40,21 @@ describe('S3: nobody speaks after they have left (clips on time)', () => {
 });
 
 describe('S3: nobody speaks after they have left (late audio)', () => {
+  it('a replay requested during loading is cancelled when the customer leaves before the response', async () => {
+    const { h, id, cust, arm } = await firstOnTheRail({ status: 200, delay: 5 });
+    arm();
+    serveNow(h, cust());
+    expect(await h.until(() => h.audio.loading && h.audio.lastLine?.speaker === id, 2)).toBe(true);
+    const requestedAt = h.now;
+    h.replay();
+    expect(h.audio.loading).toBe(true);
+    expect(await h.until(() => cust().state === 'gone', 4)).toBe(true);
+    expect(h.now - requestedAt).toBeLessThan(5);
+    await h.run(8); // Let the same pending fetch resolve after stopSpeaker has invalidated it.
+    expect(h.starts.filter((s) => s.speaker === id && s.at >= requestedAt)).toEqual([]);
+    expect(afterGone(h, id)).toEqual([]);
+  }, 15_000);
+
   it('served, reaction clip 5 s late: it does not start once they have gone', async () => {
     const { h, id, cust, arm } = await firstOnTheRail({ status: 200, delay: 5 });
     arm();

@@ -1,0 +1,273 @@
+{
+  "hashes": {
+    "320ee32": {
+      "normal": {
+        "sha1": "275a8c8c5de1699446a4e2700cad4284881ec5bd",
+        "withoutGone": "275a8c8c5de1699446a4e2700cad4284881ec5bd"
+      },
+      "hard": {
+        "sha1": "c257f42ed4113b840f5840a9b994cf556bd7a842",
+        "withoutGone": "c257f42ed4113b840f5840a9b994cf556bd7a842"
+      },
+      "easy": {
+        "sha1": "723e8c085b8d2e4805886b6a82db03e05ff11293",
+        "withoutGone": "723e8c085b8d2e4805886b6a82db03e05ff11293"
+      },
+      "aids": {
+        "sha1": "dc4a8660ba02da6386e22a8b8c15469a83fae9ec",
+        "withoutGone": "dc4a8660ba02da6386e22a8b8c15469a83fae9ec"
+      },
+      "misheard": {
+        "sha1": "1b0257bea377fdcf2749e3e5900fb222d40676fd",
+        "withoutGone": "1b0257bea377fdcf2749e3e5900fb222d40676fd"
+      },
+      "hurry": {
+        "sha1": "7a038f7f1aa3134c535f2489087469383cfd4365",
+        "withoutGone": "7a038f7f1aa3134c535f2489087469383cfd4365"
+      },
+      "idle": {
+        "sha1": "27b8289707a6932c9ab6711e2033a89d28f2472d",
+        "withoutGone": "27b8289707a6932c9ab6711e2033a89d28f2472d"
+      }
+    },
+    "1796120": {
+      "normal": {
+        "sha1": "275a8c8c5de1699446a4e2700cad4284881ec5bd",
+        "withoutGone": "275a8c8c5de1699446a4e2700cad4284881ec5bd"
+      },
+      "hard": {
+        "sha1": "c257f42ed4113b840f5840a9b994cf556bd7a842",
+        "withoutGone": "c257f42ed4113b840f5840a9b994cf556bd7a842"
+      },
+      "easy": {
+        "sha1": "723e8c085b8d2e4805886b6a82db03e05ff11293",
+        "withoutGone": "723e8c085b8d2e4805886b6a82db03e05ff11293"
+      },
+      "aids": {
+        "sha1": "dc4a8660ba02da6386e22a8b8c15469a83fae9ec",
+        "withoutGone": "dc4a8660ba02da6386e22a8b8c15469a83fae9ec"
+      },
+      "misheard": {
+        "sha1": "1b0257bea377fdcf2749e3e5900fb222d40676fd",
+        "withoutGone": "1b0257bea377fdcf2749e3e5900fb222d40676fd"
+      },
+      "hurry": {
+        "sha1": "7a038f7f1aa3134c535f2489087469383cfd4365",
+        "withoutGone": "7a038f7f1aa3134c535f2489087469383cfd4365"
+      },
+      "idle": {
+        "sha1": "27b8289707a6932c9ab6711e2033a89d28f2472d",
+        "withoutGone": "27b8289707a6932c9ab6711e2033a89d28f2472d"
+      }
+    },
+    "7312c5a": {
+      "normal": {
+        "sha1": "eaef83a72f956f4c5cbda791dae7c489defe6d00",
+        "withoutGone": "eaef83a72f956f4c5cbda791dae7c489defe6d00"
+      },
+      "hard": {
+        "sha1": "8e51462770cc9ba21080a78117038504613a64e1",
+        "withoutGone": "8e51462770cc9ba21080a78117038504613a64e1"
+      },
+      "easy": {
+        "sha1": "31c58fe4dafb6ee5a80e2520e4fcf788c3821bb4",
+        "withoutGone": "31c58fe4dafb6ee5a80e2520e4fcf788c3821bb4"
+      },
+      "aids": {
+        "sha1": "124c2c015b904443aca0ffbc5295cbfdd762625d",
+        "withoutGone": "124c2c015b904443aca0ffbc5295cbfdd762625d"
+      },
+      "misheard": {
+        "sha1": "1b0257bea377fdcf2749e3e5900fb222d40676fd",
+        "withoutGone": "1b0257bea377fdcf2749e3e5900fb222d40676fd"
+      },
+      "hurry": {
+        "sha1": "9963e830531f1c2414fad03100ba99dc51b370e1",
+        "withoutGone": "9963e830531f1c2414fad03100ba99dc51b370e1"
+      },
+      "idle": {
+        "sha1": "27b8289707a6932c9ab6711e2033a89d28f2472d",
+        "withoutGone": "27b8289707a6932c9ab6711e2033a89d28f2472d"
+      }
+    },
+    "1a54a00": {
+      "normal": {
+        "sha1": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+        "withoutGone": "eaef83a72f956f4c5cbda791dae7c489defe6d00"
+      },
+      "hard": {
+        "sha1": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+        "withoutGone": "8e51462770cc9ba21080a78117038504613a64e1"
+      },
+      "easy": {
+        "sha1": "f4065c58885c4122e4c40ca5652e86af91f89348",
+        "withoutGone": "31c58fe4dafb6ee5a80e2520e4fcf788c3821bb4"
+      },
+      "aids": {
+        "sha1": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+        "withoutGone": "124c2c015b904443aca0ffbc5295cbfdd762625d"
+      },
+      "misheard": {
+        "sha1": "9cb0c12941833c576d9f797b618c271d93ddf528",
+        "withoutGone": "1b0257bea377fdcf2749e3e5900fb222d40676fd"
+      },
+      "hurry": {
+        "sha1": "d975462d381d8b61e57311db657d280d7a302bff",
+        "withoutGone": "9963e830531f1c2414fad03100ba99dc51b370e1"
+      },
+      "idle": {
+        "sha1": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+        "withoutGone": "27b8289707a6932c9ab6711e2033a89d28f2472d"
+      }
+    }
+  },
+  "changes": {
+    "normal": {
+      "baseToPrePolish": [],
+      "polish": [
+        [
+          ".events[92].line.duration",
+          4.032,
+          4.366
+        ],
+        [
+          ".events[92].line.text",
+          "Bloody oath. Five for five. You might actually be good at this.",
+          "Bloody oath. Not one walked out. You might actually be good at this."
+        ],
+        [
+          ".events[93].at",
+          226.20000000007215,
+          226.53333333340575
+        ],
+        [
+          ".events[94].at",
+          226.20000000007215,
+          226.53333333340575
+        ]
+      ],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "hard": {
+      "baseToPrePolish": [],
+      "polish": [
+        [
+          ".events[93].line.duration",
+          4.032,
+          4.366
+        ],
+        [
+          ".events[93].line.text",
+          "Bloody oath. Five for five. You might actually be good at this.",
+          "Bloody oath. Not one walked out. You might actually be good at this."
+        ],
+        [
+          ".events[94].at",
+          228.20000000007374,
+          228.53333333340734
+        ],
+        [
+          ".events[95].at",
+          228.20000000007374,
+          228.53333333340734
+        ]
+      ],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "easy": {
+      "baseToPrePolish": [],
+      "polish": [
+        [
+          ".events[90].line.duration",
+          4.032,
+          4.366
+        ],
+        [
+          ".events[90].line.text",
+          "Bloody oath. Five for five. You might actually be good at this.",
+          "Bloody oath. Not one walked out. You might actually be good at this."
+        ],
+        [
+          ".events[91].at",
+          211.93333333339413,
+          212.26666666672773
+        ],
+        [
+          ".events[92].at",
+          211.93333333339413,
+          212.26666666672773
+        ]
+      ],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "aids": {
+      "baseToPrePolish": [],
+      "polish": [
+        [
+          ".events[121].line.duration",
+          4.032,
+          4.366
+        ],
+        [
+          ".events[121].line.text",
+          "Bloody oath. Five for five. You might actually be good at this.",
+          "Bloody oath. Not one walked out. You might actually be good at this."
+        ],
+        [
+          ".events[122].at",
+          226.36666666673895,
+          226.70000000007255
+        ],
+        [
+          ".events[123].at",
+          226.36666666673895,
+          226.70000000007255
+        ]
+      ],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "misheard": {
+      "baseToPrePolish": [],
+      "polish": [],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "hurry": {
+      "baseToPrePolish": [],
+      "polish": [
+        [
+          ".events[91].line.duration",
+          4.032,
+          4.366
+        ],
+        [
+          ".events[91].line.text",
+          "Bloody oath. Five for five. You might actually be good at this.",
+          "Bloody oath. Not one walked out. You might actually be good at this."
+        ],
+        [
+          ".events[92].at",
+          207.93333333339095,
+          208.26666666672455
+        ],
+        [
+          ".events[93].at",
+          207.93333333339095,
+          208.26666666672455
+        ]
+      ],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    },
+    "idle": {
+      "baseToPrePolish": [],
+      "polish": [],
+      "goneCount": 6,
+      "remainingAfterGone": []
+    }
+  }
+}

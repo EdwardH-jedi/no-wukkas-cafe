@@ -293,6 +293,8 @@ export interface HarnessOptions {
   query?: string;
   listen?: Partial<ListenSettings>;
   plan?: Plan;
+  /** Wall time is what Web Audio uses. Legacy mode reproduces the original harness defect. */
+  audioClock?: 'wall' | 'legacy-scaled';
 }
 
 export function createHarness(o: HarnessOptions = {}): Harness {
@@ -565,7 +567,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       if (app.mode === 'rush' && app.rush) rushLoop.frame(app.rush, vdt);
       else trialFrame(app, vdt);
       // ---- the audio clock runs on its own (frozen while suspended).
-      FakeCtx.last?.advance(real);
+      FakeCtx.last?.advance(o.audioClock === 'legacy-scaled' ? real : Math.max(0, dt));
       await settle();
       const last = audio.history[audio.history.length - 1] ?? null;
       if (last !== lastRecord) {

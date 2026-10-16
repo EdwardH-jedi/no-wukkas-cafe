@@ -1,0 +1,597 @@
+
+> no-wukkas-cafe@0.1.0 test
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 <repo>
+
+stdout | tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+{"output":"pruned 2 cached clip(s) no longer in the manifest","outsideSentinelSurvived":false}
+
+ ❯ tests/review/independentPrune.test.ts (2 tests | 1 failed) 192ms
+   × prune must never follow a cache subdirectory symlink and delete a file outside voice-cache 73ms
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+[audio-gate] ok: 0 licensed audio file(s) in the build
+
+stderr | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+[audio-gate] removed 1 placeholder voice clip(s) from <scratch> placeholder audio never ships
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+{"placeholder":true,"error":null,"remainsInBuild":false}
+
+ ❯ tests/review/independentGate.test.ts (5 tests | 1 failed) 90ms
+   ❯ independent release build mutations in scratch projects (5)
+     × rejects a segment of provenance placeholder (placeholder flag true) 18ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+{"scale":1,"captionAt":6.049999999999984,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+{"scale":2,"captionAt":6.049999999999984,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+{"scale":3,"heard":false,"starts":[],"ticket":null,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+{"scale":3,"captionAt":6.049999999999984}
+
+ ❯ tests/review/independentSlowAudio.test.ts (8 tests | 4 failed) 270ms
+   ❯ independent audio clock and order guarantees (8)
+     × 10 s load at timeScale 1: subtitle dispatch must not lead audible speech 26ms
+     × 10 s load at timeScale 2: subtitle dispatch must not lead audible speech 21ms
+     × 25 s load at timeScale 3: the order must be heard before ticketing 22ms
+     × 10 s load at timeScale 3: subtitle dispatch must not lead audible speech 13ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-day2: {"seeds":500,"scheduled":134,"appeared":134,"honks":803,"orders":3000,"answers":3000,"overlaps":[{"seed":7,"at":79.1333,"event":"honk","line":"beryl.3"},{"seed":16,"at":150.05,"event":"honk","line":"jiwoo.2"},{"seed":17,"at":115.0667,"event":"honk","line":"mei.answer.milk"},{"seed":25,"at":80.0667,"event":"honk","line":"beryl.2"},{"seed":25,"at":85.05,"event":"honk","line":"beryl.answer.milk"}],"overlapCount":189}
+
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-shift-3: {"seeds":500,"scheduled":186,"appeared":186,"honks":1116,"orders":4000,"answers":4000,"overlaps":[{"seed":2,"at":49.5333,"event":"honk","line":"beryl.3"},{"seed":2,"at":54.5333,"event":"honk","line":"beryl.answer.milk"},{"seed":2,"at":69.55,"event":"honk","line":"mei.4"},{"seed":4,"at":51.7333,"event":"honk","line":"gen-4-2-2"},{"seed":4,"at":56.7333,"event":"honk","line":"beryl.answer.milk"}],"overlapCount":541}
+
+(node:81008) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-index-3: {"seeds":500,"scheduled":186,"appeared":186,"honks":1116,"orders":4500,"answers":4500,"overlaps":[{"seed":2,"at":38.8833,"event":"honk","line":"gen-2-3-2"},{"seed":2,"at":43.8667,"event":"honk","line":"beryl.answer.milk"},{"seed":2,"at":53.8667,"event":"honk","line":"mei.answer.milk"},{"seed":2,"at":64.15,"event":"honk","line":"gen-2-3-4"},{"seed":4,"at":38.7333,"event":"honk","line":"beryl.1"}],"overlapCount":716}
+
+ ❯ tests/review/independentFuzz.test.ts (5 tests | 4 failed) 29136ms
+   ❯ independent ibis fuzz: 500 seeds per mode (3)
+     × day2: no honk overlaps orders/answers and 25-35% of shifts get a bird 2732ms
+     × week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 2187ms
+     × week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 1986ms
+   × PROPOSED RULE awaiting Edward: serving a regular correctly raises affinity by 1 2ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird
+AssertionError: 189 overlaps: expected [ …(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "at": 79.1333,
++     "event": "honk",
++     "line": "beryl.3",
++     "seed": 7,
++   },
++   {
++     "at": 150.05,
++     "event": "honk",
++     "line": "jiwoo.2",
++     "seed": 16,
++   },
++   {
++     "at": 115.0667,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 17,
++   },
++   {
++     "at": 80.0667,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 25,
++   },
++   {
++     "at": 85.05,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 25,
++   },
++   {
++     "at": 80.0667,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 26,
++   },
++   {
++     "at": 85.05,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 26,
++   },
++   {
++     "at": 77.7833,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 32,
++   },
++   {
++     "at": 82.7833,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 32,
++   },
++   {
++     "at": 80.0667,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 36,
++   },
++   {
++     "at": 85.05,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 36,
++   },
++   {
++     "at": 150.05,
++     "event": "honk",
++     "line": "jiwoo.1",
++     "seed": 37,
++   },
++   {
++     "at": 155.0333,
++     "event": "honk",
++     "line": "jiwoo.answer.milk",
++     "seed": 37,
++   },
++   {
++     "at": 150.05,
++     "event": "honk",
++     "line": "jiwoo.5",
++     "seed": 39,
++   },
++   {
++     "at": 112.3333,
++     "event": "honk",
++     "line": "mei.5",
++     "seed": 42,
++   },
++   {
++     "at": 117.35,
++     "event": "honk",
++     "line": "mei.5",
++     "seed": 42,
++   },
++   {
++     "at": 117.4833,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 42,
++   },
++   {
++     "at": 80.0667,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 50,
++   },
++   {
++     "at": 85.05,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 50,
++   },
++   {
++     "at": 111.4,
++     "event": "honk",
++     "line": "mei.2",
++     "seed": 51,
++   },
++ ]
+
+ ❯ tests/review/independentFuzz.test.ts:63:63
+     61|       expect.soft(orders).toBeGreaterThan(0);
+     62|       expect.soft(answers).toBeGreaterThan(0);
+     63|       expect.soft(bad.slice(0, 20), `${bad.length} overlaps`).toEqual(…
+       |                                                               ^
+     64|       expect.soft(appeared / 500).toBeGreaterThanOrEqual(0.25);
+     65|       expect.soft(appeared / 500).toBeLessThanOrEqual(0.35);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+AssertionError: 541 overlaps: expected [ …(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "at": 49.5333,
++     "event": "honk",
++     "line": "beryl.3",
++     "seed": 2,
++   },
++   {
++     "at": 54.5333,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 2,
++   },
++   {
++     "at": 69.55,
++     "event": "honk",
++     "line": "mei.4",
++     "seed": 2,
++   },
++   {
++     "at": 51.7333,
++     "event": "honk",
++     "line": "gen-4-2-2",
++     "seed": 4,
++   },
++   {
++     "at": 56.7333,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 4,
++   },
++   {
++     "at": 71.75,
++     "event": "honk",
++     "line": "gen-4-2-3",
++     "seed": 4,
++   },
++   {
++     "at": 71.8833,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 4,
++   },
++   {
++     "at": 50.1333,
++     "event": "honk",
++     "line": "gen-6-2-2",
++     "seed": 6,
++   },
++   {
++     "at": 70.15,
++     "event": "honk",
++     "line": "gen-6-2-3",
++     "seed": 6,
++   },
++   {
++     "at": 50.7833,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 7,
++   },
++   {
++     "at": 55.7833,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 7,
++   },
++   {
++     "at": 70.8,
++     "event": "honk",
++     "line": "gen-7-2-3",
++     "seed": 7,
++   },
++   {
++     "at": 48.6833,
++     "event": "honk",
++     "line": "gen-8-2-2",
++     "seed": 8,
++   },
++   {
++     "at": 53.6833,
++     "event": "honk",
++     "line": "gen-8-2-2",
++     "seed": 8,
++   },
++   {
++     "at": 68.7,
++     "event": "honk",
++     "line": "gen-8-2-3",
++     "seed": 8,
++   },
++   {
++     "at": 49.1167,
++     "event": "honk",
++     "line": "gen-13-2-2",
++     "seed": 13,
++   },
++   {
++     "at": 54.1167,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 13,
++   },
++   {
++     "at": 69.1333,
++     "event": "honk",
++     "line": "gen-13-2-3",
++     "seed": 13,
++   },
++   {
++     "at": 49.8833,
++     "event": "honk",
++     "line": "gen-15-2-2",
++     "seed": 15,
++   },
++   {
++     "at": 54.8833,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 15,
++   },
++ ]
+
+ ❯ tests/review/independentFuzz.test.ts:63:63
+     61|       expect.soft(orders).toBeGreaterThan(0);
+     62|       expect.soft(answers).toBeGreaterThan(0);
+     63|       expect.soft(bad.slice(0, 20), `${bad.length} overlaps`).toEqual(…
+       |                                                               ^
+     64|       expect.soft(appeared / 500).toBeGreaterThanOrEqual(0.25);
+     65|       expect.soft(appeared / 500).toBeLessThanOrEqual(0.35);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ FAIL  tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+AssertionError: expected 0.372 to be less than or equal to 0.35
+ ❯ tests/review/independentFuzz.test.ts:65:35
+     63|       expect.soft(bad.slice(0, 20), `${bad.length} overlaps`).toEqual(…
+     64|       expect.soft(appeared / 500).toBeGreaterThanOrEqual(0.25);
+     65|       expect.soft(appeared / 500).toBeLessThanOrEqual(0.35);
+       |                                   ^
+     66|     }, 180_000);
+     67|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+AssertionError: 716 overlaps: expected [ …(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "at": 38.8833,
++     "event": "honk",
++     "line": "gen-2-3-2",
++     "seed": 2,
++   },
++   {
++     "at": 43.8667,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 2,
++   },
++   {
++     "at": 53.8667,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 2,
++   },
++   {
++     "at": 64.15,
++     "event": "honk",
++     "line": "gen-2-3-4",
++     "seed": 2,
++   },
++   {
++     "at": 38.7333,
++     "event": "honk",
++     "line": "beryl.1",
++     "seed": 4,
++   },
++   {
++     "at": 43.7167,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 4,
++   },
++   {
++     "at": 53.7167,
++     "event": "honk",
++     "line": "gen-4-3-3",
++     "seed": 4,
++   },
++   {
++     "at": 58.7333,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 4,
++   },
++   {
++     "at": 64.15,
++     "event": "honk",
++     "line": "gen-4-3-4",
++     "seed": 4,
++   },
++   {
++     "at": 38.7333,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 6,
++   },
++   {
++     "at": 43.7167,
++     "event": "honk",
++     "line": "beryl.2",
++     "seed": 6,
++   },
++   {
++     "at": 53.7167,
++     "event": "honk",
++     "line": "gen-6-3-3",
++     "seed": 6,
++   },
++   {
++     "at": 38.7333,
++     "event": "honk",
++     "line": "beryl.1",
++     "seed": 7,
++   },
++   {
++     "at": 43.7167,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 7,
++   },
++   {
++     "at": 53.7167,
++     "event": "honk",
++     "line": "mei.4",
++     "seed": 7,
++   },
++   {
++     "at": 64.1667,
++     "event": "honk",
++     "line": "gen-7-3-4",
++     "seed": 7,
++   },
++   {
++     "at": 40.2833,
++     "event": "honk",
++     "line": "beryl.answer.milk",
++     "seed": 8,
++   },
++   {
++     "at": 50.6667,
++     "event": "honk",
++     "line": "mei.2",
++     "seed": 8,
++   },
++   {
++     "at": 55.2667,
++     "event": "honk",
++     "line": "mei.answer.milk",
++     "seed": 8,
++   },
++   {
++     "at": 65.2833,
++     "event": "honk",
++     "line": "jiwoo.3",
++     "seed": 8,
++   },
++ ]
+
+ ❯ tests/review/independentFuzz.test.ts:63:63
+     61|       expect.soft(orders).toBeGreaterThan(0);
+     62|       expect.soft(answers).toBeGreaterThan(0);
+     63|       expect.soft(bad.slice(0, 20), `${bad.length} overlaps`).toEqual(…
+       |                                                               ^
+     64|       expect.soft(appeared / 500).toBeGreaterThanOrEqual(0.25);
+     65|       expect.soft(appeared / 500).toBeLessThanOrEqual(0.35);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  tests/review/independentFuzz.test.ts > PROPOSED RULE awaiting Edward: serving a regular correctly raises affinity by 1
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/review/independentFuzz.test.ts:109:45
+    107|   expect(dazza.result?.correct).toBe(true); // Non-vacuous: a genuinel…
+    108|   // This is the delta finishShift receives, not a mock of the propose…
+    109|   expect(r.shiftEvents.affinity.dazza ?? 0).toBe(1);
+       |                                             ^
+    110| });
+    111|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+AssertionError: The requested strict gate must reject the build, not only strip its file: expected null not to be null
+ ❯ tests/review/independentGate.test.ts:79:13
+     77|         err,
+     78|         'The requested strict gate must reject the build, not only str…
+     79|       ).not.toBeNull();
+       |             ^
+     80|     });
+     81|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/review/independentPrune.test.ts:76:70
+     74|     }),
+     75|   );
+     76|   expect(existsSync(join(result.dir, 'outside-cache/sentinel.mp3'))).t…
+       |                                                                      ^
+     77| });
+     78|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+AssertionError: expected 6.049999999999984 to be greater than or equal to 16.05000000000037
+ ❯ tests/review/independentSlowAudio.test.ts:42:27
+     40|       // This observes the real rushView -> HUD boundary. The browser …
+     41|       // visible text; Normal/auto hides order words, so a no-op HUD a…
+     42|       expect(caption!.at).toBeGreaterThanOrEqual(sound!.at);
+       |                           ^
+     43|     }, 15_000);
+     44|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+AssertionError: scale 3: dazza's order was skipped: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/review/independentSlowAudio.test.ts:28:68
+     26|       const starts = h.starts.filter((s) => s.speaker === o.id && s.at…
+     27|       console.log(JSON.stringify({ scale, heard, starts, ticket: c.tic…
+     28|       expect(heard, `scale ${scale}: ${o.id}'s order was skipped`).toB…
+       |                                                                    ^
+     29|       expect(c.ticket).not.toBeNull();
+     30|       expect(c.outcome).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+AssertionError: expected undefined to be defined
+ ❯ tests/review/independentSlowAudio.test.ts:39:21
+     37|       console.log(JSON.stringify({ scale, captionAt: caption?.at, soun…
+     38|       expect(caption).toBeDefined();
+     39|       expect(sound).toBeDefined();
+       |                     ^
+     40|       // This observes the real rushView -> HUD boundary. The browser …
+     41|       // visible text; Normal/auto hides order words, so a no-op HUD a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/12]⎯
+
+
+ Test Files  4 failed | 91 passed (95)
+      Tests  10 failed | 765 passed (775)
+   Start at  02:38:54
+   Duration  55.71s (tests 98%, import 1%, transform 1%)

@@ -1,0 +1,169 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 <repo>
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing
+{"scale":1,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"deciding"}],"ticket":1,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+{"scale":1,"captionAt":6.049999999999984,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing
+{"scale":2,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"deciding"}],"ticket":1,"outcome":null}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > Web Audio advances by wall time, including a long RAF gap, and freezes on pause 7ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing 62ms
+ × tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech 18ms
+   → expected 6.049999999999984 to be greater than or equal to 16.05000000000037
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+{"scale":2,"captionAt":6.049999999999984,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+{"scale":3,"heard":false,"starts":[],"ticket":null,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+{"scale":3,"captionAt":6.049999999999984}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing 55ms
+ × tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech 10ms
+   → expected 6.049999999999984 to be greater than or equal to 16.05000000000037
+ × tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing 15ms
+   → scale 3: dazza's order was skipped: expected false to be true // Object.is equality
+ × tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech 13ms
+   → expected undefined to be defined
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > legacy scaled audio clock masks the timeScale 3 timeout ordering defect 48ms
+stdout | tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone
+pruned 2 cached clip(s) no longer in the manifest
+
+stdout | tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+{"output":"pruned 2 cached clip(s) no longer in the manifest","outsideSentinelSurvived":false}
+
+ ✓ tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone 104ms
+ × tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache 54ms
+   → expected false to be true // Object.is equality
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public
+public .aif: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  probe.aif: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src
+src .mp3 import: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/probe-Ctu3S1jV.mp3: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing
+missing licence: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/voice/probe.mp3: release voice clip without a licence
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+[audio-gate] ok: 0 licensed audio file(s) in the build
+
+stderr | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+[audio-gate] removed 1 placeholder voice clip(s) from <scratch> placeholder audio never ships
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+{"placeholder":true,"error":null,"remainsInBuild":false}
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false)
+{"placeholder":false,"error":"[audio-gate] 1 audio file(s) in the build have no verified licence:\n  assets/voice/segments/dazza/probe.mp3: release voice clip provenance is placeholder, not licensed_tts or recorded\nRemove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).","remainsInBuild":true}
+
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public 24ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src 9ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing 8ms
+ × tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true) 10ms
+   → The requested strict gate must reject the build, not only strip its file: expected null not to be null
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false) 9ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (clips on time) > served: their reaction is heard while they leave, and nothing of theirs after 24ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (clips on time) > walked out: their parting shot is heard while they leave, and nothing of theirs after 21ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > a replay requested during loading is cancelled when the customer leaves before the response 12ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > served, reaction clip 5 s late: it does not start once they have gone 10ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > walked out, parting-shot clip 5 s late: it does not start once they have gone 11ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > served, reaction clip fails after 5 s: the browser voice does not stand in once they have gone 10ms
+ ✓ tests/review/independentTelemetry.test.ts > exports a valid JSON Blob of generated records without PII fields and clears it 9ms
+ ✓ tests/review/independentTelemetry.test.ts > real QuotaExceededError during a gameplay checkpoint falls back to memory and never escapes 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+AssertionError: The requested strict gate must reject the build, not only strip its file: expected null not to be null
+ ❯ tests/review/independentGate.test.ts:79:13
+     77|         err,
+     78|         'The requested strict gate must reject the build, not only str…
+     79|       ).not.toBeNull();
+       |             ^
+     80|     });
+     81|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/review/independentPrune.test.ts:76:70
+     74|     }),
+     75|   );
+     76|   expect(existsSync(join(result.dir, 'outside-cache/sentinel.mp3'))).t…
+       |                                                                      ^
+     77| });
+     78|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+AssertionError: expected 6.049999999999984 to be greater than or equal to 16.05000000000037
+ ❯ tests/review/independentSlowAudio.test.ts:42:27
+     40|       // This observes the real rushView -> HUD boundary. The browser …
+     41|       // visible text; Normal/auto hides order words, so a no-op HUD a…
+     42|       expect(caption!.at).toBeGreaterThanOrEqual(sound!.at);
+       |                           ^
+     43|     }, 15_000);
+     44|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+AssertionError: scale 3: dazza's order was skipped: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/review/independentSlowAudio.test.ts:28:68
+     26|       const starts = h.starts.filter((s) => s.speaker === o.id && s.at…
+     27|       console.log(JSON.stringify({ scale, heard, starts, ticket: c.tic…
+     28|       expect(heard, `scale ${scale}: ${o.id}'s order was skipped`).toB…
+       |                                                                    ^
+     29|       expect(c.ticket).not.toBeNull();
+     30|       expect(c.outcome).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+AssertionError: expected undefined to be defined
+ ❯ tests/review/independentSlowAudio.test.ts:39:21
+     37|       console.log(JSON.stringify({ scale, captionAt: caption?.at, soun…
+     38|       expect(caption).toBeDefined();
+     39|       expect(sound).toBeDefined();
+       |                     ^
+     40|       // This observes the real rushView -> HUD boundary. The browser …
+     41|       // visible text; Normal/auto hides order words, so a no-op HUD a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+
+ Test Files  3 failed | 2 passed (5)
+      Tests  6 failed | 17 passed (23)
+   Start at  02:43:24
+   Duration  1.39s (tests 49%, transform 30%, import 20%, worker 1%)

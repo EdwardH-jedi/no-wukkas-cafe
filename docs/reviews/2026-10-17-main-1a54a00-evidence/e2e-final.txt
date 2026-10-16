@@ -1,0 +1,58 @@
+
+> no-wukkas-cafe@0.1.0 test:e2e
+> playwright test --config tests/review/playwright.ipv6.config.ts
+
+[WebServer] (node:1485) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:1510) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 28 tests using 1 worker
+
+(node:1511) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+first line: "Oi. You the trial? You're late. Well, you're not, but I like saying it." decoded 5.002 s (manifest 5.002), played 5.003 s, peak RMS 0.236
+  ✓   1 [chromium] › tests/e2e/audio.spec.ts:36:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work (12.4s)
+  ✓   2 [chromium] › tests/e2e/audio.spec.ts:91:1 › a voice clip that fails to load is reported, not silent (4.3s)
+owner: "Oi. You the trial? You're late. Well, yo…" 5.002 s, voice RMS 0.246, master RMS 0.256, sim moved on 0.696 s after the clip (game time 0.363 s behind audio over the line); output {"state":"running","sampleRate":48000,"baseLatency":0.005333333333333333,"outputLatency":0.024,"destinationChannels":2,"sinkId":""}
+  ✓   3 [chromium] › tests/e2e/audioSmoke.spec.ts:105:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active (15.9s)
+order: "Morning. Long black, cheers, mate. Big d…" 3.823 s; register opened 0.725 s after the clip (game time 0.396 s behind audio)
+  ✓   4 [chromium] › tests/e2e/audioSmoke.spec.ts:154:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause (28.4s)
+  ✓   5 [chromium] › tests/e2e/audioSmoke.spec.ts:237:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on (14.9s)
+  ✓   6 [chromium] › tests/e2e/audioState.spec.ts:89:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running (10.6s)
+  ✓   7 [chromium] › tests/e2e/audioState.spec.ts:114:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks (13.9s)
+  ✓   8 [chromium] › tests/e2e/audioState.spec.ts:147:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard (19.2s)
+  ✓   9 [chromium] › tests/e2e/audioState.spec.ts:191:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume (10.4s)
+  ✓  10 [chromium] › tests/e2e/casting.spec.ts:156:1 › casting page: identity cards, missing assets, waveforms, one take at a time, decisions (6.7s)
+  ✓  11 [chromium] › tests/e2e/ibis.spec.ts:45:3 › bin chicken › three presses of I see it out; Gaz reacts; draw calls stay in budget (37.8s)
+  ✓  12 [chromium] › tests/e2e/ibis.spec.ts:66:3 › bin chicken › clicking the bird shoos it too (28.7s)
+perfect pour: {"art":0.893275486526024,"findings":["textbook"],"rows":{"Heart":82,"Symmetry":100,"Centred":100,"Crisp":100,"White":35},"verdict":"Proper heart"}
+  ✓  13 [chromium] › tests/e2e/latteRegression.spec.ts:136:1 › latte regression: a recorded perfect pour keeps its score band (1.2m)
+duck under an order 0.28, under chat 0.55
+  ✓  14 [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes (20.8s)
+opening: -20.1 LUFS, -4.1 dBTP, DC 0.00000; worst case -0.5 dBTP, 0 clipped
+rush: -20.5 LUFS, -2.5 dBTP, DC 0.00000; worst case -0.6 dBTP, 0 clipped
+afternoon: -20.3 LUFS, -1.4 dBTP, DC 0.00001; worst case -0.8 dBTP, 0 clipped
+  ✓  15 [chromium] › tests/e2e/listening.spec.ts:176:1 › the three moods: no clipping, no DC offset, even loudness, orders above the music (7.7s)
+opening: master RMS peak with only music audible 0.1150
+rush: music ducked to 0.28 under Dazza's order, then recovered
+  ✓  16 [chromium] › tests/e2e/music.spec.ts:25:1 › music plays, follows the day and ducks under an order (24.5s)
+  ✓  17 [chromium] › tests/e2e/practice.spec.ts:112:1 › latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz (1.5m)
+  ✓  18 [chromium] › tests/e2e/rush.spec.ts:316:1 › Day 2 morning rush: listening at the register, a misheard ticket, walk-outs, report (4.9m)
+  ✓  19 [chromium] › tests/e2e/segments.spec.ts:45:1 › a generated order plays two or more segment clips as one line (14.2s)
+  ✓  20 [chromium] › tests/e2e/trial.spec.ts:234:1 › Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart (3.1m)
+  ✓  21 [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved (3.8m)
+  ✓  22 [chromium] › tests/e2e/week.spec.ts:116:3 › the week › a save on Wednesday opens Wednesday only, and Endless Rush (4.6s)
+  ✓  23 [chromium] › tests/e2e/week.spec.ts:140:3 › the week › Day 2 from the title is still Day 2 (4.2s)
+  ✓  24 [chromium] › tests/e2e/week.spec.ts:148:3 › the week › the title lists every mode; Endless Rush unlocks on the way back (4.7s)
+  ✓  25 [chromium] › tests/e2e/week.spec.ts:196:3 › the week › the shop sells what the till covers and says why it refuses the rest (5.3s)
+  ✓  26 [chromium] › tests/e2e/weekUi.spec.ts:77:3 › the week UI › title → the week → shop → a passed Monday → next shift (3.1m)
+  ✓  27 [chromium] › tests/e2e/weekUi.spec.ts:212:3 › the week UI › Day 2: the bot plays the whole morning rush to its report (3.8m)
+  ✓  28 [chromium] › tests/e2e/weekUi.spec.ts:244:3 › the week UI › a shift event is answered with the number key 1 (14.0s)
+
+  Slow test file: [chromium] › tests/e2e/weekUi.spec.ts (7.2m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  28 passed (26.5m)

@@ -1,0 +1,110 @@
+
+> no-wukkas-cafe@0.1.0 test:e2e
+> playwright test --config tests/review/playwright.probes.config.ts
+
+[WebServer] (node:86020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:86059) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+(node:86176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"scale":1,"firstCaption":{"audio":6.224,"sim":5.18333333333332,"text":"Morning","speaker":"dazza","clipStart":null,"via":null},"firstClip":{"audio":16.282666666666668,"sim":14.216666666666953,"text":"Morning. Long black, cheers, mate. Big day on the tools.","speaker":"dazza","clipStart":16.245333333333335,"via":"clip"},"leadSeconds":10.021333333333335}
+  ✘  1 [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 1: visible subtitle never precedes the clip (26.5s)
+(node:87041) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"scale":2,"firstCaption":{"audio":5.9093333333333335,"sim":5.2999999999999865,"text":"Morning.","speaker":"dazza","clipStart":null,"via":null},"firstClip":{"audio":15.941333333333333,"sim":21.70000000000005,"text":"Morning. Long black, cheers, mate. Big day on the tools.","speaker":null,"clipStart":15.925333333333333,"via":"clip"},"leadSeconds":10.015999999999998}
+  ✘  2 [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 2: visible subtitle never precedes the clip (26.0s)
+(node:89127) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"scale":3,"firstCaption":{"audio":6.458666666666667,"sim":5.366666666666653,"text":"Morning. Long b","speaker":"dazza","clipStart":null,"via":null},"firstClip":{"audio":16.496,"sim":21.166666666666746,"text":"Morning. Long black, cheers, mate. Big day on the tools.","speaker":null,"clipStart":16.48,"via":"clip"},"leadSeconds":10.021333333333335}
+  ✘  3 [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 3: visible subtitle never precedes the clip (26.6s)
+
+
+  1) [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 1: visible subtitle never precedes the clip
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 16.245333333333335
+    Received:    6.224
+
+      85 |     expect.soft(caption).toBeDefined();
+      86 |     expect.soft(clip).toBeDefined();
+    > 87 |     if (caption && clip) expect(caption.audio).toBeGreaterThanOrEqual(clip.clipStart!);
+         |                                                ^
+      88 |   });
+      89 | }
+      90 |
+        at <repo>/tests/review/independentSlowAudio.browser.ts:87:48
+
+    Error Context: tests/review/.e2e-results/probes/independentSlowAudio.brows-b98a2-tle-never-precedes-the-clip-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/probes/independentSlowAudio.brows-b98a2-tle-never-precedes-the-clip-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/probes/independentSlowAudio.brows-b98a2-tle-never-precedes-the-clip-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 2: visible subtitle never precedes the clip
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 15.925333333333333
+    Received:    5.9093333333333335
+
+      85 |     expect.soft(caption).toBeDefined();
+      86 |     expect.soft(clip).toBeDefined();
+    > 87 |     if (caption && clip) expect(caption.audio).toBeGreaterThanOrEqual(clip.clipStart!);
+         |                                                ^
+      88 |   });
+      89 | }
+      90 |
+        at <repo>/tests/review/independentSlowAudio.browser.ts:87:48
+
+    Error Context: tests/review/.e2e-results/probes/independentSlowAudio.brows-590b2-tle-never-precedes-the-clip-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/probes/independentSlowAudio.brows-590b2-tle-never-precedes-the-clip-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/probes/independentSlowAudio.brows-590b2-tle-never-precedes-the-clip-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 3: visible subtitle never precedes the clip
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 16.48
+    Received:    6.458666666666667
+
+      85 |     expect.soft(caption).toBeDefined();
+      86 |     expect.soft(clip).toBeDefined();
+    > 87 |     if (caption && clip) expect(caption.audio).toBeGreaterThanOrEqual(clip.clipStart!);
+         |                                                ^
+      88 |   });
+      89 | }
+      90 |
+        at <repo>/tests/review/independentSlowAudio.browser.ts:87:48
+
+    Error Context: tests/review/.e2e-results/probes/independentSlowAudio.brows-cab18-tle-never-precedes-the-clip-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/probes/independentSlowAudio.brows-cab18-tle-never-precedes-the-clip-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/probes/independentSlowAudio.brows-cab18-tle-never-precedes-the-clip-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 1: visible subtitle never precedes the clip
+    [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 2: visible subtitle never precedes the clip
+    [chromium] › tests/review/independentSlowAudio.browser.ts:8:3 › 10 s load, timeScale 3: visible subtitle never precedes the clip

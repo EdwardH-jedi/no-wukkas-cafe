@@ -1,0 +1,160 @@
+$ git rev-parse HEAD
+1a54a00120e6bb83171a2cadc0d70c89b6fccd30
+
+exit 0
+
+$ git log --format=%h %s 320ee32..1a54a00
+1a54a00 docs(todo): phase 5 telemetry evidence; the run's final checks (e2e 28 passed, 752 unit, build)
+4c08363 Merge feat/telemetry: local playtest log, Export / Clear in Settings
+57116c5 Merge feat/ship-segments: the segment manifest ships licensed segment clips (0 today)
+44de38b Merge fix/phase1-5-polish: Phase 1.5 polish (intros, excellent line, Space on focused buttons, phone HUD)
+f250831 docs(voice): segment clips ship through the segment manifest (0 today)
+9ea7bea docs(todo): phase 4 fixes 4.F1–4.F7 done
+3293034 fix(voice): voices --prune keeps segment clips and the licensed staging
+7d4cd01 docs(todo): phase 1.5 — five follow-ups fixed, regulars and pull-through left for Edward
+933e633 Merge fix/p4-gate: bird waits out order lines; gate checks AIFF/CAF and never inlines audio (4.F5–4.F7)
+068c55a Merge fix/p4-audio: slow clips fall back, gone customers fall silent, title resets Replay and murmur (4.F1–4.F4)
+05c81e7 feat(voice): voices:render --promote and --import write segment clips
+6c10050 fix(hud): Day 2 on a phone stacks the instruction under the tickets and the gauges below the cup
+61e37f2 feat(voice): voices:check covers the segment manifest
+d9c8b35 docs(telemetry): window.__trial.telemetry and the nwc.telemetry.v1 key
+de68a89 feat(telemetry): record shifts and the trial; Export/Clear log in Settings
+20d5c54 feat(audio): builds play segment clips the segment manifest ships
+e552167 feat(telemetry): local log store under its own key
+9e7123b feat(voice): the build gate keeps segment clips the segment manifest lists
+f0f6eb4 feat(telemetry): pure per-shift and Day 1 trial records
+ecc0d4d feat(voice): a committed segment manifest for the segment clips that ship
+cc443b7 feat(telemetry): timestamp "Take order" on each rush customer
+f5fb955 fix(audio): going to the title puts the café murmur back to its default
+2c7f23d fix(audio): back to the title, Replay forgets the quit game's last line
+1497280 fix(rush): the bin chicken waits outside while an order is being said
+a3e0bdb fix(rush): a customer's line still in flight stops when they leave
+497e2ee fix(build): audio imported from code can't ship inside the JS
+323b1e5 fix(build): the audio gate checks AIFF and CAF files too
+d2cd928 fix(audio): a clip still loading after 12 s hands its line to the browser voice
+933987e docs(todo): phase 4 — independent review, fuzz and determinism evidence; fixes 4.F1–4.F7 listed
+599c84f test(review): regression tests for the eight audio, event, latte and build scenarios
+f5ebe60 test(lint): purity guard for src/core as well as src/sim, plus an AST source scan
+b7c2fdc test(fuzz): 500-seed fuzz for week progression, order generator and event scheduler
+2a6fe94 fix(practice): Pour again keeps Space as the game's (press and hold to pour on)
+48bd0b1 fix(input): a focused card or menu button keeps its Space
+1e9da79 chore(lint): skip .claude/ (subagent worktrees live there)
+7312c5a test(rush): re-record the Day 2 trace for the new excellent line
+47c51f4 fix(rush): later week shifts and Endless get their own Gaz intro; excellent line counts no one
+1796120 docs(todo): add Phase 1.5 polish list from the Phase 1 follow-ups
+e7bcb46 docs(todo): phase 3 — licensed voice pass built, HUMAN steps left, e2e green
+043a2f7 docs(voice): the licensed pass, Google's API facts and the open terms risk
+84425bd feat(voice): Gaz's shift-event lines join the voice script
+e9d9c67 feat(voice): npm run voices:sheet, the listen-through and recording sheet
+230d7de feat(voice): npm run voices:render, stage the licensed pass, promote it, import recordings
+d0616d6 test(voice): estimate spec regex without a run of spaces (lint)
+6428542 feat(voice): npm run voices:estimate, characters and AUD per speaker against the cap
+6d26a90 feat(voice): Google Cloud TTS adapter behind a paid-call guard
+fdda4a6 feat(voice): the release cast and the TTS budget
+4cdb399 feat(voice): release clips carry a provenance, and only licensed TTS or recordings ship
+9b77c8e docs(balance): register reaction time waits for the playtest (decision b)
+5484d87 docs(todo): phase 2 — balance real, week curve tuned and guarded, e2e green
+dd40dba docs(balance): hook 1 done; QUEUE_JUMP's real cause, and the CSV on HEAD
+692c380 fix(events): never the same event twice in a row, even after a quiet shift
+2ae2cbf test(e2e): the week shop spec buys at the new prices
+6af8048 docs(balance): week 1 balance CSV and the hooks numbers can't reach
+fab2636 test(balance): guard week 1's difficulty curve
+2b323a0 balance(shop): price the upgrades in an average player's tips
+52ae6e0 balance(week): Friday's arrivals closer together (18→12 s to 16→10 s)
+cfaeabe balance(week): Thursday's arrivals closer together (20→14 s to 16→10 s)
+ef903a5 fix(events): "just a coffee" never comes back in the next shift
+f668628 feat(balance): headless week 1 with novice, average and expert bots
+
+exit 0
+
+$ git show --format= 3293034 -- scripts/voices.ts
+diff --git a/scripts/voices.ts b/scripts/voices.ts
+index c8ffcc9..735d8a2 100644
+--- a/scripts/voices.ts
++++ b/scripts/voices.ts
+@@ -28,6 +28,7 @@ import {
+   listClips,
+   MANIFEST,
+   measure,
++  ownIndex,
+   pool,
+   ROOT,
+   run,
+@@ -486,8 +487,9 @@ async function main(): Promise<void> {
+   if (prune && !failures.length) {
+     const listed = new Set(manifest.clips.map((c) => c.file));
+     let removed = 0;
++    // Never the segment placeholders or the licensed (paid) staging: they have their own index.
+     for (const f of listClips(CACHE_DIR))
+-      if (!listed.has(f)) {
++      if (!listed.has(f) && !ownIndex(f)) {
+         rmSync(cachePath(f), { force: true });
+         removed++;
+       }
+
+exit 0
+
+$ git ls-tree -r --name-only 1a54a00 docs/verification/2026-10-17-polish
+docs/verification/2026-10-17-polish/d1024-pass-and-register-after.jpg
+docs/verification/2026-10-17-polish/d1024-pass-and-register-before.jpg
+docs/verification/2026-10-17-polish/p375-shot-after.jpg
+docs/verification/2026-10-17-polish/p375-shot-before.jpg
+docs/verification/2026-10-17-polish/p390-pass-and-register-after.jpg
+docs/verification/2026-10-17-polish/p390-pass-and-register-before.jpg
+docs/verification/2026-10-17-polish/p390-pour-after.jpg
+docs/verification/2026-10-17-polish/p390-pour-before.jpg
+docs/verification/2026-10-17-polish/p390-shot-after.jpg
+docs/verification/2026-10-17-polish/p390-shot-before.jpg
+docs/verification/2026-10-17-polish/p390-two-hands-after.jpg
+docs/verification/2026-10-17-polish/p390-two-hands-before.jpg
+
+exit 0
+
+$ wc -l src/audio/manager.ts
+     760 src/audio/manager.ts
+
+exit 0
+
+$ rg -n fetch|XMLHttpRequest|sendBeacon|WebSocket src/app/telemetry.ts src/sim/telemetry.ts src/core/save/telemetry.ts
+
+exit 1
+
+$ sips -g pixelWidth -g pixelHeight docs/verification/2026-10-17-polish/*.jpg
+docs/verification/2026-10-17-polish/d1024-pass-and-register-after.jpg
+  pixelWidth: 1024
+  pixelHeight: 640
+docs/verification/2026-10-17-polish/d1024-pass-and-register-before.jpg
+  pixelWidth: 1024
+  pixelHeight: 640
+docs/verification/2026-10-17-polish/p375-shot-after.jpg
+  pixelWidth: 750
+  pixelHeight: 1334
+docs/verification/2026-10-17-polish/p375-shot-before.jpg
+  pixelWidth: 750
+  pixelHeight: 1334
+docs/verification/2026-10-17-polish/p390-pass-and-register-after.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-pass-and-register-before.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-pour-after.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-pour-before.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-shot-after.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-shot-before.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-two-hands-after.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+docs/verification/2026-10-17-polish/p390-two-hands-before.jpg
+  pixelWidth: 416
+  pixelHeight: 900
+
+exit 0
