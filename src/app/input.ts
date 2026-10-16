@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { STEP } from '../core/clock';
 import { ibisPresent } from '../sim/ibis';
+import { controlOwnsSpace } from '../ui/screens/keys';
 import { RIM } from '../world/station';
 import type { App } from './context';
 import { practiceAct, practiceKey } from './practiceWiring';
@@ -76,6 +77,8 @@ export function installInput(app: App): () => void {
       return;
     }
     if (clock.paused) return;
+    // A focused card or menu button presses with Space; only the play HUD's never take it.
+    if (k === ' ' && controlOwnsSpace(e.target)) return;
     const { practice, rush } = app;
     if (k === ' ') {
       e.preventDefault();

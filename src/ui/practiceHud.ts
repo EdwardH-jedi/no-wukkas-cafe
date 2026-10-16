@@ -147,7 +147,7 @@ function renderReview(
 export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): PracticeHud {
   const touch = window.matchMedia('(pointer: coarse)').matches;
   root.innerHTML = `
-    <div id="ptopbar">
+    <div id="ptopbar" data-play>
       <div class="chip"><span class="k">Practice</span><b>Latte art</b></div>
       <div class="chip"><span class="k">Pours</span><b data-v="count">0</b></div>
       <div class="chip"><span class="k">Best</span><b data-v="best">–</b></div>
@@ -156,9 +156,9 @@ export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): 
       ${cb.audioButtonsHtml}
       <button class="iconbtn" id="pPause" aria-label="Pause">❚❚</button>
     </div>
-    <div id="pgauges" class="hide"></div>
-    <div id="pactions" class="side"></div>
-    <div id="ptouchHeight" class="hide"><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
+    <div id="pgauges" class="hide" data-play></div>
+    <div id="pactions" class="side" data-play></div>
+    <div id="ptouchHeight" class="hide" data-play><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
     <div id="psubs" class="gone" role="status" aria-live="polite"><div class="who">GAZ<small>Owner</small></div><div class="text"></div></div>
     <div id="pcard" class="hide"></div>
     <div id="ppause" class="hide"><div class="box"><h3>Paused</h3><div class="titleBtns"><button class="btn" id="pResume">Back to it</button><button class="btn ghost" id="pTitle">Back to title</button></div></div></div>`;

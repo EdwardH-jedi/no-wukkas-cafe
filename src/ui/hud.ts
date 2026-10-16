@@ -39,7 +39,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   const touch = window.matchMedia('(pointer: coarse)').matches;
   root.innerHTML = `
     <div id="title"></div>
-    <div id="topbar" class="hide">
+    <div id="topbar" class="hide" data-play>
       <div class="chip"><span class="k">Trial</span><div class="steps"><span data-s="shot">1 Shot</span><span data-s="milk">2 Milk</span><span data-s="art">3 Heart</span></div></div>
       <div class="chip"><span class="k">Goes</span><div class="pips"><i></i><i></i><i></i></div></div>
       <div class="chip" id="bestChip"><span class="k">Best</span><b id="bestV">–</b></div>
@@ -48,9 +48,9 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
       <button class="iconbtn" id="pauseBtn" aria-label="Pause">❚❚</button>
     </div>
     <div id="instr" class="hide"><div class="h"></div><div class="b"></div></div>
-    <div id="gauges" class="hide"></div>
-    <div id="actionBar"></div>
-    <div id="touchHeight" class="hide"><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
+    <div id="gauges" class="hide" data-play></div>
+    <div id="actionBar" data-play></div>
+    <div id="touchHeight" class="hide" data-play><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
     <div id="subs" class="gone" role="status" aria-live="polite"><div class="who">GAZ<small>Owner</small></div><div class="text"></div></div>
     <div id="card" class="hide"></div>
     <div id="verdict" class="hide"></div>
