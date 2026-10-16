@@ -47,6 +47,46 @@ export const RUSH_INTRO: readonly LineDef[] = [
   },
 ];
 
+/** A week shift's opening, by its row in data/week.ts, said in order. The first week's Monday is
+ *  the first paid shift (RUSH_INTRO); this Monday is every later week's. No drink a station can't
+ *  make yet, and no head counts (they live in data/week.ts). */
+export const WEEK_INTRO: readonly (readonly LineDef[])[] = [
+  [
+    { text: 'Monday again. New week, same rules.', mood: 'neutral' },
+    {
+      text: 'Listen, ring it up right, hand it to the right person.',
+      mood: 'sceptical',
+      gesture: 'point',
+    },
+  ],
+  [
+    { text: "Back again. Good. Didn't scare you off, then.", mood: 'smug' },
+    { text: 'Bit busier today. Keep the line moving.', mood: 'neutral', gesture: 'point' },
+  ],
+  [
+    { text: 'Wednesday. The line gets longer from here.', mood: 'neutral' },
+    {
+      text: 'Listen first. A wrong ticket costs you more than a replay.',
+      mood: 'sceptical',
+      gesture: 'point',
+    },
+  ],
+  [
+    { text: 'Thursday. They come in quicker now.', mood: 'sceptical' },
+    { text: "Don't stand there admiring your work.", mood: 'smug', gesture: 'point' },
+  ],
+  [
+    { text: 'Friday. Last shift of the week, and the busiest.', mood: 'neutral' },
+    { text: "Get through today and the week's yours.", mood: 'smug', gesture: 'point' },
+  ],
+];
+
+/** Endless Rush's opening, said in order. */
+export const ENDLESS_INTRO: readonly LineDef[] = [
+  { text: 'Endless rush. They keep coming till three of them walk out.', mood: 'smug' },
+  { text: "Let's see how long you last.", mood: 'neutral', gesture: 'point' },
+];
+
 export const OWNER_LINES: LineBook = {
   'grind.intro': {
     tiers: [
@@ -821,7 +861,7 @@ export const OWNER_LINES: LineBook = {
     mood: 'sceptical',
   },
   'rush.end.excellent': {
-    tiers: [[{ text: 'Bloody oath. Five for five. You might actually be good at this.' }]],
+    tiers: [[{ text: 'Bloody oath. Not one walked out. You might actually be good at this.' }]],
     mood: 'impressed',
     gesture: 'thumbsUp',
   },

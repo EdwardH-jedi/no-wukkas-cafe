@@ -67,19 +67,23 @@ const stageOf = (c: RushCustomer): ListenStage =>
 export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud {
   const touch = window.matchMedia('(pointer: coarse)').matches;
   root.innerHTML = `
-    <div id="rtopbar" class="hide">
+    <div id="rtopbar" class="hide" data-play>
       ${TOP_CHIPS_HTML}
       <div class="spacer"></div>
       ${cb.audioButtonsHtml}
       <button class="iconbtn" id="rpauseBtn" aria-label="Pause">❚❚</button>
     </div>
-    <div id="rail" aria-label="Order tickets"></div>
+    <div id="rtl" class="hudcol">
+      <div id="rail" aria-label="Order tickets" data-play></div>
+      <div id="rinstr" class="hide"><div class="h"></div><div class="b"></div></div>
+    </div>
     <div id="pass" class="hide"></div>
-    <div id="rinstr" class="hide"><div class="h"></div><div class="b"></div></div>
-    <div id="revent" class="hide" role="group" aria-label="Something's come up"><div class="ek">Something's come up</div><div class="h"></div><div class="b"></div></div>
-    <div id="rgauges" class="hide"></div>
-    <div id="ractions"></div>
-    <div id="rtouchHeight" class="hide"><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
+    <div id="revent" class="hide" data-play role="group" aria-label="Something's come up"><div class="ek">Something's come up</div><div class="h"></div><div class="b"></div></div>
+    <div id="rbl" class="hudcol">
+      <div id="rgauges" class="hide" data-play></div>
+      <div id="ractions" data-play></div>
+      <div id="rtouchHeight" class="hide" data-play><button data-h="1" aria-label="Raise jug">▲</button><button data-h="-1" aria-label="Lower jug">▼</button></div>
+    </div>
     <div id="rsubs" class="gone" role="status" aria-live="polite"><div class="who"></div><div class="text"></div></div>
     <div id="rsummary" class="hide"></div>
     <div id="rpause" class="hide"><div class="box"><h3>Paused</h3><div class="titleBtns">

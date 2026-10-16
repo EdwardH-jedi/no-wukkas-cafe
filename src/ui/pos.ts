@@ -80,6 +80,7 @@ function missNote(truth: Order, wrong: readonly OrderField[]): string {
 export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction) => void): Pos {
   const el = document.createElement('div');
   el.id = 'pos';
+  el.dataset.play = '';
   el.className = 'hide';
   el.setAttribute('role', 'region');
   el.setAttribute('aria-label', 'Register');

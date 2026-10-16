@@ -1905,6 +1905,31 @@
       }
     },
     {
+      "dialogueId": "gaz:05793c94",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.endless.1",
+      "delivery": "normal",
+      "transcript": "Let's see how long you last.",
+      "file": "assets/voice/gaz/05793c94.mp3",
+      "duration": 1.594,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:05978e67",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -1991,6 +2016,56 @@
       "file": "assets/voice/gaz/0bc46fb8.mp3",
       "duration": 3.443,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0c020da2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift3.0",
+      "delivery": "normal",
+      "transcript": "Thursday. They come in quicker now.",
+      "file": "assets/voice/gaz/0c020da2.mp3",
+      "duration": 1.984,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:0c084383",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift4.0",
+      "delivery": "normal",
+      "transcript": "Friday. Last shift of the week, and the busiest.",
+      "file": "assets/voice/gaz/0c084383.mp3",
+      "duration": 3.066,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -2315,6 +2390,31 @@
       "transcript": "Pulled through way too hard. It's two blobs having a fight.",
       "file": "assets/voice/gaz/128d12a5.mp3",
       "duration": 3.155,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:13e4d923",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift0.1",
+      "delivery": "normal",
+      "transcript": "Listen, ring it up right, hand it to the right person.",
+      "file": "assets/voice/gaz/13e4d923.mp3",
+      "duration": 3.099,
       "meanDb": -17,
       "playback": {
         "gain": 1,
@@ -2991,6 +3091,31 @@
       "file": "assets/voice/gaz/296d151f.mp3",
       "duration": 3.129,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:2a9d2e56",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift1.0",
+      "delivery": "normal",
+      "transcript": "Back again. Good. Didn't scare you off, then.",
+      "file": "assets/voice/gaz/2a9d2e56.mp3",
+      "duration": 3.237,
+      "meanDb": -16.6,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -4455,6 +4580,56 @@
       }
     },
     {
+      "dialogueId": "gaz:4f45a567",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift1.1",
+      "delivery": "normal",
+      "transcript": "Bit busier today. Keep the line moving.",
+      "file": "assets/voice/gaz/4f45a567.mp3",
+      "duration": 2.398,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:4f782e49",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift4.1",
+      "delivery": "normal",
+      "transcript": "Get through today and the week's yours.",
+      "file": "assets/voice/gaz/4f782e49.mp3",
+      "duration": 1.813,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:500fa8b2",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -5066,6 +5241,31 @@
       "file": "assets/voice/gaz/60a83bd4.mp3",
       "duration": 2.924,
       "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:61524a71",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.excellent",
+      "delivery": "normal",
+      "transcript": "Bloody oath. Not one walked out. You might actually be good at this.",
+      "file": "assets/voice/gaz/61524a71.mp3",
+      "duration": 4.016,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5991,6 +6191,31 @@
       "file": "assets/voice/gaz/73fa39e7.mp3",
       "duration": 1.879,
       "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:740a51a2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.endless.0",
+      "delivery": "normal",
+      "transcript": "Endless rush. They keep coming till three of them walk out.",
+      "file": "assets/voice/gaz/740a51a2.mp3",
+      "duration": 3.283,
+      "meanDb": -17.2,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -7030,6 +7255,31 @@
       }
     },
     {
+      "dialogueId": "gaz:94b36772",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift0.0",
+      "delivery": "normal",
+      "transcript": "Monday again. New week, same rules.",
+      "file": "assets/voice/gaz/94b36772.mp3",
+      "duration": 2.81,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:953bc6bc",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -7166,31 +7416,6 @@
       "file": "assets/voice/gaz/9947507c.mp3",
       "duration": 2.734,
       "meanDb": -16.8,
-      "playback": {
-        "gain": 1,
-        "rate": 1
-      },
-      "source": {
-        "engine": "macos-say",
-        "voice": "Karen",
-        "rate": 182,
-        "pitch": 0.88,
-        "placeholder": true,
-        "deterministic": true
-      }
-    },
-    {
-      "dialogueId": "gaz:9a5870ab",
-      "characterId": "gaz",
-      "voiceId": "macos:Karen",
-      "accent": "australian",
-      "locale": "en-AU",
-      "key": "rush.end.excellent",
-      "delivery": "normal",
-      "transcript": "Bloody oath. Five for five. You might actually be good at this.",
-      "file": "assets/voice/gaz/9a5870ab.mp3",
-      "duration": 3.682,
-      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -7791,6 +8016,31 @@
       "file": "assets/voice/gaz/a881d5f0.mp3",
       "duration": 8.609,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:ab008b2d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift2.1",
+      "delivery": "normal",
+      "transcript": "Listen first. A wrong ticket costs you more than a replay.",
+      "file": "assets/voice/gaz/ab008b2d.mp3",
+      "duration": 3.248,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -8766,6 +9016,31 @@
       "file": "assets/voice/gaz/c5281df8.mp3",
       "duration": 3.223,
       "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c57a093a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift3.1",
+      "delivery": "normal",
+      "transcript": "Don't stand there admiring your work.",
+      "file": "assets/voice/gaz/c57a093a.mp3",
+      "duration": 1.844,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -9816,6 +10091,31 @@
       "file": "assets/voice/gaz/dbb4918d.mp3",
       "duration": 3.309,
       "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:dbb52ebc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.intro.shift2.0",
+      "delivery": "normal",
+      "transcript": "Wednesday. The line gets longer from here.",
+      "file": "assets/voice/gaz/dbb52ebc.mp3",
+      "duration": 2.258,
+      "meanDb": -16.7,
       "playback": {
         "gain": 1,
         "rate": 1

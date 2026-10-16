@@ -427,3 +427,85 @@
 #ibisHint b {
   color: var(--paper);
 }
+
+/* ---------- layout columns (TODO 1.5.1, 1.5.2) ---------- */
+/* #rtl holds the tickets and the instruction, #rbl the station's gauges and buttons. On wider
+   screens they are display: contents and every part keeps its own place. On a phone each is one
+   stack: the instruction sits under the tickets (never on them), the gauges lie in a row below
+   the cup, and the buttons (with the jug buttons beside them) stay on the bottom line, out of the
+   middle of the screen where a finger steers the steam jug and the pour. */
+.hudcol {
+  display: contents;
+}
+/* A drink on the pass while someone orders: the side buttons sit bottom right, so the register
+   moves up out of their way instead of covering them. */
+#rbl:has(> #ractions.side:not(:empty)) ~ #pos {
+  top: calc(64px + env(safe-area-inset-top, 0px));
+  transform: none;
+  max-height: calc(
+    100vh - 259px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  );
+  overflow-y: auto;
+}
+@media (max-width: 720px) {
+  .hudcol {
+    display: flex;
+    gap: 8px;
+    position: absolute;
+    left: 16px;
+    right: 16px;
+  }
+  #rtl {
+    top: calc(62px + env(safe-area-inset-top, 0px));
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #rbl {
+    bottom: calc(108px + env(safe-area-inset-bottom, 0px));
+    flex-flow: row wrap;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .hudcol > :is(#rinstr, #rail, #ractions, #rgauges, #rtouchHeight) {
+    position: static;
+    transform: none;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  #rinstr {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+  #rbl > #rgauges {
+    flex: 0 0 100%;
+    width: auto;
+    flex-direction: row;
+    align-items: stretch;
+  }
+  #rgauges > .gauge {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Pouring: the jug height reads as a number; the tall scale would cover the cup. */
+  #rgauges .gauge:has(.vlabels) .vgauge {
+    display: none;
+  }
+  #rbl > #ractions.side {
+    flex-direction: row;
+    margin-left: auto;
+  }
+  #rbl > #rtouchHeight {
+    flex-direction: row;
+    margin-left: auto;
+  }
+  #rbl:has(> #ractions.side:not(:empty)) ~ #pos {
+    top: calc(60px + env(safe-area-inset-top, 0px));
+    max-height: calc(100vh - 230px);
+  }
+}
+/* Short phones (iPhone SE, 667 px): tighter gauge cards keep the row below the shot's cup. */
+@media (max-width: 720px) and (max-height: 700px) {
+  #rbl > #rgauges .gauge {
+    padding: 6px 10px;
+  }
+}

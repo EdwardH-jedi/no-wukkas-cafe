@@ -1,9 +1,24 @@
 // Keyboard handling for the menu screens. The game's window key handler treats Space as "hold to
-// pour" (it calls preventDefault, which cancels a focused button's click) and Enter as "next" (on
-// the title, that starts the trial). Keys pressed on a control inside a menu belong to that
+// pour" (except on a focused control outside the play HUD: controlOwnsSpace) and Enter as "next"
+// (on the title, that starts the trial). Keys pressed on a control inside a menu belong to that
 // control, so they are stopped here, before they bubble up to the window.
 
 const CONTROL = 'button, input, select, textarea, a[href]';
+
+/** Containers whose controls are clicked mid-play (action bar, register, tickets, top bar, jug
+ *  buttons): a click leaves them focused, and Space there stays the game's "hold to pour". */
+export const PLAY_AREA = '[data-play]';
+
+/** Does Space belong to the focused control rather than the game? A visible button, slider or
+ *  link outside the play HUD (a result card, a menu): Space presses it, as anywhere on the web.
+ *  A hidden control that kept focus (the title's Start button once the trial runs) does not. */
+export function controlOwnsSpace(target: EventTarget | null): boolean {
+  const t = target as Partial<Pick<Element, 'closest' | 'getClientRects'>> | null;
+  if (typeof t?.closest !== 'function' || typeof t.getClientRects !== 'function') return false;
+  return (
+    t.closest(CONTROL) !== null && t.closest(PLAY_AREA) === null && t.getClientRects().length > 0
+  );
+}
 
 const FOCUSABLE =
   'button:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])';

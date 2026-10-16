@@ -7,11 +7,11 @@
 // in the sibling modules (see index.ts).
 
 import { CUSTOMERS, customerDef, type CustomerDef, type CustomerId } from '../../data/customers';
-import { RUSH_INTRO } from '../../data/ownerLines';
+import { ENDLESS_INTRO, RUSH_INTRO, WEEK_INTRO } from '../../data/ownerLines';
 import { PATIENCE_SCALE } from '../../data/week';
 import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
 import { generateOrders } from '../../sim/listening/generate';
-import { createOwner } from '../../sim/owner';
+import { createOwner, type LineDef } from '../../sim/owner';
 import { summariseShift } from '../../sim/rush';
 import {
   binDrink,
@@ -210,8 +210,23 @@ function setPhase(r: Rush, phase: RushPhase): void {
   r.events.push({ type: 'phase', phase });
 }
 
+/** Gaz's opening lines and their voice keys. Day 2 and the first week's Monday are the first paid
+ *  shift (RUSH_INTRO); every later week shift and Endless Rush have their own (data/ownerLines.ts). */
+export function introLines(
+  week: RushWeek | null | undefined,
+): Array<{ key: string; def: LineDef }> {
+  const keyed = (prefix: string, lines: readonly LineDef[]) =>
+    lines.map((def, i) => ({ key: `${prefix}${i}`, def }));
+  if (week?.endless) return keyed('rush.intro.endless.', ENDLESS_INTRO);
+  if (week && ((week.week ?? 1) > 1 || week.shiftIndex > 0)) {
+    const own = WEEK_INTRO[week.shiftIndex];
+    if (own) return keyed(`rush.intro.shift${week.shiftIndex}.`, own);
+  }
+  return keyed('rush.intro.', RUSH_INTRO);
+}
+
 function beginIntro(r: Rush): void {
-  for (const [i, d] of RUSH_INTRO.entries()) gazDef(r, `rush.intro.${i}`, d);
+  for (const { key, def } of introLines(r.week)) gazDef(r, key, def);
 }
 
 function handleBarista(r: Rush, out: BaristaEvent[]): void {

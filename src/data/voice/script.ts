@@ -3,7 +3,14 @@
 
 import { CUSTOMERS } from '../customers';
 import { GAZ_EVENT_LINES } from '../dialogue/gazEvents';
-import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../ownerLines';
+import {
+  ENDLESS_INTRO,
+  GREETING,
+  GREETING_OPENERS,
+  OWNER_LINES,
+  RUSH_INTRO,
+  WEEK_INTRO,
+} from '../ownerLines';
 import { PACE_RATE, type Pace } from '../../sim/listening';
 import { DRINK_NAME } from '../../sim/rush';
 import type { Delivery } from './ids';
@@ -72,6 +79,10 @@ export function voiceScript(): ScriptLine[] {
   GREETING_OPENERS.forEach((d) => add('gaz', 'greet.open', d.text));
   GREETING.forEach((d, i) => add('gaz', `greet.${i}`, d.text));
   RUSH_INTRO.forEach((d, i) => add('gaz', `rush.intro.${i}`, d.text));
+  WEEK_INTRO.forEach((lines, s) =>
+    lines.forEach((d, i) => add('gaz', `rush.intro.shift${s}.${i}`, d.text)),
+  );
+  ENDLESS_INTRO.forEach((d, i) => add('gaz', `rush.intro.endless.${i}`, d.text));
   // Gaz's lines, the shift events' included (core/rush/speech.ts speaks both books).
   for (const [key, pool] of Object.entries({ ...OWNER_LINES, ...GAZ_EVENT_LINES }))
     for (const tier of pool.tiers)
