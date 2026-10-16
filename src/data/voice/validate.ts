@@ -35,7 +35,9 @@ export type IssueCode =
   | 'missing-clip'
   | 'stale-clip'
   | 'shared-voice'
-  | 'pitch-shift';
+  | 'pitch-shift'
+  | 'unknown-segment'
+  | 'segment-text';
 
 export interface Issue {
   level: 'error' | 'warn';

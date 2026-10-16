@@ -74,3 +74,45 @@ export const VOICE_URL_PREFIX = 'assets/voice/';
  *  into voice-cache/segments/ (dev server only, never built or committed). */
 export const segmentFile = (id: string): string =>
   `${VOICE_URL_PREFIX}segments/${id.split('.')[0] ?? ''}/${id}.mp3`;
+
+/** A generated-order segment clip that ships: an entry of src/data/voice/segments.manifest.json.
+ *  Release audio only (licensed TTS or a recording, with its licence); placeholder segment clips
+ *  never get an entry. Kept apart from the line manifest, whose shape and version stay as they are. */
+export interface SegmentClip {
+  /** The segment id (data/voice/segments.ts SEGMENT_INVENTORY), e.g. "dazza.greet.1". */
+  id: string;
+  /** Who says it: the id's first part. */
+  characterId: string;
+  /** Engine:voice that produced the clip, e.g. "google-tts:en-AU-Chirp3-HD-Fenrir". */
+  voiceId: string;
+  /** The segment's exact words, trimmed (segments carry their joining spaces). */
+  transcript: string;
+  /** segmentFile(id). */
+  file: string;
+  /** Seconds, measured from the encoded file. */
+  duration: number;
+  /** Mean loudness from ffmpeg volumedetect, dB. */
+  meanDb: number;
+  source: VoiceClip['source'];
+}
+
+/** src/data/voice/segments.manifest.json: written by `npm run voices:render -- --promote` and
+ *  `-- --import <dir>`, kept by the build gate, checked by `npm run voices:check`. */
+export interface SegmentManifest {
+  version: 1;
+  clips: SegmentClip[];
+}
+
+/** Release audio a build may ship: not a placeholder, a licence, and a provenance of licensed_tts
+ *  or recorded (the rule scripts/audio-gate.ts applies to the files). */
+export const isReleaseSource = (s: Partial<VoiceClip['source']> | undefined): boolean =>
+  s?.placeholder === false &&
+  typeof s.licence === 'string' &&
+  s.licence.trim().length > 0 &&
+  s.provenance !== undefined &&
+  RELEASE_PROVENANCE.includes(s.provenance);
+
+/** The segment ids whose clips ship: listed in the segment manifest as release audio. */
+export function releaseSegmentIds(m: SegmentManifest): ReadonlySet<string> {
+  return new Set(m.clips.filter((c) => isReleaseSource(c.source)).map((c) => c.id));
+}
