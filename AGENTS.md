@@ -29,7 +29,7 @@ Keep it true. If you change a command, folder or rule, update this file in the s
 
 ## 3. Commands
 
-> All scripts exist. The dev server uses port **5183**, not Vite's default 5173: older sibling projects in `~/Desktop/Developer/cafe*` hold 5173, and a page that only says "No Wukkas Café" means you're looking at one of those. `balance` is a stub until the economy is ported. `test:e2e` needs Playwright's Chromium (`npx playwright install chromium`) and starts its own dev server on port 5179.
+> All scripts exist. The dev server uses port **5183**, not Vite's default 5173: older sibling projects in `~/Desktop/Developer/cafe*` hold 5173, and a page that only says "No Wukkas Café" means you're looking at one of those. `test:e2e` needs Playwright's Chromium (`npx playwright install chromium`) and starts its own dev server on port 5179.
 
 ```bash
 npm install            # install deps (Node 24 LTS)
@@ -41,7 +41,7 @@ npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
 npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, the week (+ weekUi: browser bot passes Monday), audio specs, dev review pages (~25 min); E2E_PORT=… to run beside another checkout; WEEK_UI_SHOTS=<dir> to write the week UI screenshots there
-npm run balance        # headless 30-day economy sim → reports/balance.csv (stub for now)
+npm run balance        # headless week 1 × {novice, average, expert} bots × 30 seeds → reports/balance.csv + first-try pass table (~3 min; -- --seeds N, -- --out path)
 npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-timer} bot × {easy, normal} (-- --detail per seed)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices -- --segments # macOS only: generated-order segment clips → voice-cache/segments/ (dev only; manifest untouched)
@@ -83,7 +83,7 @@ src/
   ui/                DOM HUD, docket, bar, modals, shop, cheat sheet; styles/ (index.css imports
                      base, title, hud, rush, latte, shop, screens)
   dev/               dev-only review pages (casting, listening lab), loaded by dev/*.html; never built
-scripts/balance.ts   runs sim/ headless for N days with skill profiles (novice/average/expert)
+scripts/balance.ts   plays week 1 headless with skill profiles (novice/average/expert; tests/helpers/rushBot.ts SKILLS)
 scripts/day2-pace.ts Day 2 pacing table from the headless rush bot (tests/helpers/rushBot.ts profiles)
 scripts/voices.ts    renders every spoken line to MP3 (macOS `say` + ffmpeg) and writes the manifest
 scripts/vite-dev-tools.ts  dev-server plumbing for the review pages (serves voice-auditions/, fixed save paths)

@@ -17,11 +17,17 @@ import {
   type RushInput,
   type RushWeek,
 } from '../../src/core/rush';
+import { createRng, type Rng } from '../../src/core/rng';
 import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
 import { controlsAt, type TrackKey } from '../../src/sim/latte/demo';
 import { pitcherFlow } from '../../src/sim/latte/pitcher';
-import type { Difficulty } from '../../src/sim/listening';
-import type { Order } from '../../src/sim/rush';
+import {
+  difficultyScore,
+  normaliseOrder,
+  type Difficulty,
+  type OrderField,
+} from '../../src/sim/listening';
+import type { Milk, Order } from '../../src/sim/rush';
 
 /** The bot's pour: Gaz's demo as it was in Session A (lift, let go, sweep within 0.3 s). It still
  *  pours a heart with the pull-through cap, bit for bit as before, so `npm run pace` stays
@@ -66,6 +72,131 @@ export const BOT_FIRST_TIMER: Pick<ListenBot, 'latency' | 'aids'> = {
     CUSTOMERS.indexOf(c.def) < 2 ? [{ type: 'clarify', field: 'drink' } as RushAction] : [],
 };
 
+/** A heart that didn't come off: the white laid on the surface but never pulled through
+ *  (art ≈ 0.16, no heart, the cup still full). */
+export const BOT_POUR_BLOB: readonly TrackKey[] = [
+  { t: 0.0, x: 0, y: -0.3, h: 7, hold: false },
+  { t: 0.5, x: 0, y: -0.3, h: 7, hold: true },
+  { t: 3.6, x: 0, y: -0.3, h: 6, hold: true },
+  { t: 4.0, x: 0, y: -0.35, h: 0.7, hold: true },
+  { t: 6.4, x: 0, y: -0.35, h: 0.7, hold: true },
+  { t: 6.6, x: 0, y: -0.35, h: 8, hold: false },
+];
+
+/** How well someone listens, works the station and pours: the week's balance profiles
+ *  (scripts/balance.ts). Guesses, not measurements, until playtests give real numbers. */
+export interface Skill {
+  latency: BotLatency;
+  /** Steams a flat white's milk while its shot runs (two hands). */
+  overlap: boolean;
+  handOver: boolean;
+  /** Chance of ringing up one said part of an order (the drink, an alternative milk, extra hot,
+   *  a heart) wrong, for an order of average difficulty; harder orders scale it up. */
+  mishear: number;
+  /** Chance of noticing they aren't sure and asking (clarify) instead of guessing. */
+  notice: number;
+  /** Chance a flat white's pour comes off (otherwise a blob, BOT_POUR_BLOB). */
+  art: number;
+}
+
+export type SkillName = 'novice' | 'average' | 'expert';
+
+export const SKILLS: Record<SkillName, Skill> = {
+  /** The first-timer's hands (BOT_FIRST_TIMER), one thing at a time, often unsure of the words. */
+  novice: {
+    latency: BOT_FIRST_TIMER.latency as BotLatency,
+    overlap: false,
+    handOver: false,
+    mishear: 0.12,
+    notice: 0.4,
+    art: 0.3,
+  },
+  /** Has played the trial and Day 2: two hands most of the time, asks when unsure. */
+  average: {
+    latency: { decide: 3, perAid: 3, station: 0.8 },
+    overlap: true,
+    handOver: true,
+    mishear: 0.06,
+    notice: 0.5,
+    art: 0.7,
+  },
+  /** Knows the slang and the station. */
+  expert: {
+    latency: { decide: 1, perAid: 1.5, station: 0.3 },
+    overlap: true,
+    handOver: true,
+    mishear: 0.02,
+    notice: 0.8,
+    art: 0.95,
+  },
+};
+
+const ALT_MILKS: readonly Milk[] = ['oat', 'soy', 'almond'];
+
+/** What a skill hears for one customer: the fields it asks about, and the ticket it rings up. */
+interface Heard {
+  aids: RushAction[];
+  order: Order;
+}
+
+function hear(skill: Skill, c: RushCustomer, rng: Rng): Heard {
+  const truth = normaliseOrder(c.order);
+  const line = c.line;
+  // An order of average difficulty (score 4) hears at `mishear`; the easiest at a third of it.
+  const hardness = (1 + difficultyScore(line)) / 5;
+  const changed = 'change' in line || line.connected === 2;
+  const said: OrderField[] = ['drink'];
+  if (line.cues.milk) said.push('milk');
+  if (line.cues.temp) said.push('temp');
+  if (line.cues.heart) said.push('heart');
+  const aids: RushAction[] = [];
+  const order: Order = { ...truth };
+  // "Just a coffee": nobody can guess that, so everyone asks.
+  if (!line.cues.drink) aids.push({ type: 'clarify', field: 'drink' });
+  for (const f of said) {
+    if (f === 'drink' && !line.cues.drink) continue;
+    const p = Math.min(0.9, skill.mishear * hardness * (f === 'drink' && changed ? 2 : 1));
+    if (rng.next() >= p) continue;
+    if (rng.next() < skill.notice) {
+      aids.push({ type: 'clarify', field: f });
+      continue;
+    }
+    if (f === 'drink')
+      Object.assign(
+        order,
+        truth.type === 'flatWhite'
+          ? { type: 'longBlack', milk: null, extraHot: false, heart: false }
+          : { type: 'flatWhite', milk: 'full', extraHot: false, heart: false },
+      );
+    else if (f === 'milk') order.milk = rng.pick(ALT_MILKS.filter((m) => m !== truth.milk));
+    else if (f === 'temp') order.extraHot = false;
+    else order.heart = false;
+  }
+  return { aids, order: normaliseOrder(order) };
+}
+
+/** A bot that listens and pours with this skill. `seed` drives its mistakes (one seed, one run). */
+export function skillBot(skill: Skill, seed: number): ListenBot {
+  const rng = createRng(seed);
+  const plans = new Map<string, Heard>();
+  const plan = (c: RushCustomer): Heard => {
+    let p = plans.get(c.key);
+    if (!p) {
+      p = hear(skill, c, rng);
+      plans.set(c.key, p);
+    }
+    return p;
+  };
+  return {
+    latency: skill.latency,
+    overlap: skill.overlap,
+    handOver: skill.handOver,
+    aids: (c) => [...plan(c).aids],
+    heard: (c) => plan(c).order,
+    pour: () => (rng.next() < skill.art ? BOT_POUR : BOT_POUR_BLOB),
+  };
+}
+
 export interface ListenBot {
   /** What to ring up for this customer (default: exactly what they said). */
   heard?: (c: RushCustomer) => Order;
@@ -85,6 +216,8 @@ export interface ListenBot {
   overlap?: boolean;
   /** Hand the drink over as soon as the pour is done, instead of waiting for it to settle. */
   handOver?: boolean;
+  /** The pour for this customer's drink, chosen when it is started (default BOT_POUR). */
+  pour?: (c: RushCustomer) => readonly TrackKey[];
   seed?: number;
   maxSeconds?: number;
   /** Answer to a shift event on screen (week mode); default its first choice. */
@@ -103,6 +236,8 @@ export interface Played {
 
 interface Mem {
   target: RushCustomer | null;
+  /** The pour for the drink being made. */
+  track: readonly TrackKey[];
   step: number;
   aidsLeft: Map<string, RushAction[]>;
   /** When the customer at the counter last finished talking (null while they talk). */
@@ -169,6 +304,7 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
       const next = queue[0];
       if (!next?.heard || !stepReady(r, o, m, `make:${next.def.id}`)) return null;
       m.target = next;
+      m.track = o.pour?.(next) ?? BOT_POUR;
       return { type: 'make', drink: next.heard.type, milk: next.heard.milk ?? 'full' };
     }
     case 'grind':
@@ -200,9 +336,9 @@ function stationInput(r: Rush, o: ListenBot, m: Mem, i: RushInput): RushAction |
       return null;
     }
     case 'pour': {
-      // The Session A demo pour, started `lag` late.
+      // The Session A demo pour (or the profile's), started `lag` late.
       if (b.phaseTime < lag) return null;
-      const k = controlsAt(BOT_POUR, b.phaseTime - lag);
+      const k = controlsAt(m.track, b.phaseTime - lag);
       i.hasCup = true;
       i.cupX = k.targetX;
       i.cupY = k.targetY;
@@ -252,6 +388,7 @@ export function playRush(o: ListenBot = {}): Played {
   const r = createRush(o.seed ?? 3, o.difficulty ?? 'normal', o.lines ?? {}, o.week ?? null);
   const m: Mem = {
     target: null,
+    track: BOT_POUR,
     step: 0,
     aidsLeft: new Map(),
     quietSince: null,
