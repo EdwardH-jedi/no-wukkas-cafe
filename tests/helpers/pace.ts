@@ -250,6 +250,13 @@ export function passRate(rows: readonly WeekRow[], profile: SkillName, shift: nu
   return xs.length ? xs.filter((x) => x.pass).length / xs.length : 0;
 }
 
+/** First-try pass rate per shift (Monday first) for a profile over these seeds: the week played
+ *  once through, a failed shift moving straight on. */
+export function firstTryRates(profile: SkillName, seeds: readonly number[]): number[] {
+  const rows = seeds.flatMap((seed) => playWeek(profile, seed, { tries: 1 }));
+  return Array.from({ length: SHIFTS_PER_WEEK }, (_, s) => passRate(rows, profile, s));
+}
+
 const pct = (x: number): string => `${Math.round(x * 100)} %`;
 const avg = (xs: number[]): number => mean(xs);
 
