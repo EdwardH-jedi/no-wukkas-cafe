@@ -1,7 +1,8 @@
 # Balance hook: what Phase 2 could not do with numbers alone
 
-Phase 2 (docs/TODO.md) owns the numbers in `src/data/{week,upgrades,events}.ts`. These targets need
-code outside that, so they are written up here and left for a session that owns the code.
+Phase 2 (docs/TODO.md) owns the numbers in `src/data/{week,upgrades,events}.ts`. These two needed
+code outside that. They were written up here first; on Edward's go-ahead (2026-10-16, branch
+`fix/event-hooks`) §1 was implemented, and §2 turned out to rest on a wrong diagnosis (see its end).
 
 ## 1. No event twice in a row, even after a quiet shift
 
@@ -33,19 +34,42 @@ balance run, because a shift after Monday almost always fires at least one event
 again. A fresh page has no last event, so the e2e Tuesday save (seed 1, THE_NAME at Dazza) doesn't
 move.
 
-## 2. QUEUE_JUMP never fires in the real rush (finding, not a Phase 2 target)
+**Done:** as proposed. `EventLog.lastId` (scheduler), `RushWeek.lastEvent`, `weekFor(save, cooldowns,
+lastEvent)`, `App.lastEvent` kept beside `App.cooldowns` (page only), and `playWeek` carries it the
+same way. The scheduler test is strict now (no repeat at all over 1,000 seeds; seed 275 failed it
+before), plus tests that the last event carries into the next shift and is never its first event.
+
+## 2. QUEUE_JUMP never fires in the balance runs (finding, not a Phase 2 target)
 
 In `docs/balance/2026-10-16.csv` (90 weeks, 509 events) QUEUE_JUMP fired 0 times: JUST_COFFEE 159,
 THE_NAME 155, CHANGE_MIND 148, RARE_BIRD 96, CALL_MANAGER 39, WRONG_MILK 2, THE_USUAL 0. THE_USUAL
 is expected (week 1 never reaches affinity 2). QUEUE_JUMP isn't.
 
-Why: someone pushing in is only asked for at the 20-second poll (`EVENT_POLL` in
-`src/core/rush/events.ts`), with QUEUE_JUMP as its only candidate. Tallied over 277 polls (average
-bot, Wednesday–Friday, 8 seeds): 166 came after the shift's cap (2) was already used by events at
-the register, 111 had fewer than two people queueing, and none were left open. Changing the weight
-can't help, because QUEUE_JUMP is alone in that pool. Raising `eventCap` would also add register
-events and move the Thursday/Friday curve this phase just set.
+**First diagnosis (wrong):** the 20-second poll (`EVENT_POLL` in `src/core/rush/events.ts`) found
+the shift's cap used up (166 of 277 polls) or fewer than two queueing (111). The proposed fix was an
+extra slot for the poll. That tally checked the cap first, so it hid the real cause.
 
-Options for whoever owns `src/core/rush/events.ts`: count the poll against its own cap, or offer
-QUEUE_JUMP at the register too when the queue is 2 or more. Then re-run `npm run balance` and
-compare it with the committed CSV.
+**What it really is: no line ever forms at the register.** QUEUE_JUMP needs two or more customers
+in the `queue` state (walked in, not yet at the register). The balance bots press "Take order" the
+moment someone steps up, so the backlog builds up as tickets (`waiting`), never as a line. At the
+polls (Wednesday–Friday, 10 seeds), `queue` ≥ 2 was 0 of 347 (average) and 0 of 391 (novice), while
+four or more were often waiting for drinks. QUEUE_JUMP is already a candidate at the register too
+(`AT_REGISTER` only leaves out RARE_BIRD and WRONG_MILK), so it isn't the pool either.
+
+**Measured with a bot that doesn't take orders while it's making a drink** (an experiment, not
+committed): the line forms (`queue` ≥ 2 at 298 of 796 polls, average) and QUEUE_JUMP is 10 of 112
+events (average) and 17 of 113 (novice) under the game's rules as they are. With the extra poll
+slot the numbers were identical, so it was **not shipped**: it changes nothing.
+
+**Decision for Edward:**
+
+- (a) Give the balance bots a register reaction time (how long a player leaves someone at the
+  register while their hands are busy). That changes every profile and moves the whole curve, so it
+  means re-tuning Thursday and Friday, not a tweak.
+- (b) Leave it, and let the Phase 5 playtest show how long real players leave someone waiting at
+  the register (ROADMAP 0.8 telemetry can log it). **Recommended:** today's profiles are guesses, and
+  a second guess (the reaction time) would decide the curve.
+
+Either way, remember when reading `npm run balance`: the bots' instant "Take order" means the
+balance runs never see a line at the register, so no QUEUE_JUMP and no queue-patience effects
+(CHANGE_MIND `busy`, RARE_BIRD `busy`).
