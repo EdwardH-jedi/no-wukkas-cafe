@@ -18,7 +18,7 @@ export const EVENT_DATA: Record<ShiftEventId, EventData> = {
   JUST_COFFEE: {
     weight: 3,
     minShift: 1,
-    cooldownShifts: 0,
+    cooldownShifts: 1,
     choices: [
       { id: 'ask', label: 'What sort of coffee?', costSeconds: 3 },
       { id: 'guess', label: 'Make them a flat white', costSeconds: 0 },

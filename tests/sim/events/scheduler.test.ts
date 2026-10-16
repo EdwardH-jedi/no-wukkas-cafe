@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../../src/core/rng';
-import { CUSTOMERS } from '../../../src/data/customers';
+import { CUSTOMERS, type CustomerId } from '../../../src/data/customers';
+import { USUAL_AFFINITY } from '../../../src/data/events';
 import type { EventContext, ShiftEventId } from '../../../src/sim/contracts/events';
 import { eventDef, SHIFT_EVENTS } from '../../../src/sim/events/defs';
 import {
@@ -18,11 +19,16 @@ interface Check {
   shift: number;
   t: number;
   orderWindow: boolean;
+  customer: CustomerId | null;
   id: ShiftEventId | null;
 }
 
 /** Five shifts of checks every 10 s, with a seeded world (who's at the register, the queue). */
-function playWeek(seed: number, options: Partial<SchedulerOptions> = {}): Check[] {
+function playWeek(
+  seed: number,
+  options: Partial<SchedulerOptions> = {},
+  affinity: EventContext['affinity'] = { dazza: 3, beryl: 3 },
+): Check[] {
   const rng = createRng(seed);
   const world = createRng(seed ^ 0x5eed);
   const out: Check[] = [];
@@ -36,12 +42,12 @@ function playWeek(seed: number, options: Partial<SchedulerOptions> = {}): Check[
         secondsIntoService: t,
         queueLength: world.int(5),
         customer: world.next() < 0.7 ? world.pick(IDS) : null,
-        affinity: { dazza: 3, beryl: 3 },
+        affinity,
         playerMistake: world.next() < 0.3,
         rng,
       };
       const e = pickEvents(ctx, SHIFT_EVENTS, log, orderWindow, options);
-      out.push({ shift, t, orderWindow, id: e?.id ?? null });
+      out.push({ shift, t, orderWindow, customer: ctx.customer, id: e?.id ?? null });
     }
   }
   return out;
@@ -86,6 +92,38 @@ describe('event scheduler', () => {
           );
       }
     }
+  });
+
+  // Every cooldown is at least one shift, so an event never comes straight back: not in the same
+  // shift, not in the next. After a shift with no events at all it can (1 week in 1000 here, none
+  // in `npm run balance`); ruling that out needs the scheduler to remember the last event
+  // (docs/integration/balance-hook.md).
+  it('never fires the same event twice in a row in one shift or the next (1000 seeds)', () => {
+    for (const s of SEEDS) {
+      const fired = playWeek(s).filter((c) => c.id !== null);
+      for (let i = 1; i < fired.length; i++) {
+        const [a, b] = [fired[i - 1] as Check, fired[i] as Check];
+        if (a.id === b.id)
+          expect(
+            b.shift - a.shift,
+            `seed ${s}: ${b.id} in shifts ${a.shift} and ${b.shift}`,
+          ).toBeGreaterThan(1);
+      }
+    }
+    for (const e of SHIFT_EVENTS) expect(e.cooldownShifts, e.id).toBeGreaterThanOrEqual(1);
+  });
+
+  it('THE_USUAL only for a regular who knows the player (1000 seeds)', () => {
+    for (const s of SEEDS) {
+      expect(playWeek(s, {}, {}).some((c) => c.id === 'THE_USUAL')).toBe(false);
+      for (const c of playWeek(s, {}, { beryl: USUAL_AFFINITY }))
+        if (c.id === 'THE_USUAL') expect(c.customer).toBe('beryl');
+    }
+    expect(
+      SEEDS.some((s) =>
+        playWeek(s, {}, { beryl: USUAL_AFFINITY }).some((c) => c.id === 'THE_USUAL'),
+      ),
+    ).toBe(true);
   });
 
   it('every event can turn up, and options change the cap', () => {
