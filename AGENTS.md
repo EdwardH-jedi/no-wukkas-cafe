@@ -46,6 +46,7 @@ npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-ti
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices -- --segments # macOS only: generated-order segment clips → voice-cache/segments/ (dev only; manifest untouched)
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks)
+npm run voices:estimate # licensed voice pass: characters + AUD per TTS speaker of the release cast (CAST), the actors' share; refuses over the AU$20 cap (-- --segments, -- --cap N)
 npm run voices:audition # casting auditions → voice-auditions/ + index.json (dry run by default; see docs/VOICE_CASTING.md)
 npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
 ```
