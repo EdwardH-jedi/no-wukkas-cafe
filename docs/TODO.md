@@ -260,24 +260,24 @@ Owns `scripts/voices*`, `scripts/tts-*.ts`, `src/audio/**`, `src/data/voice/**` 
   - Mistake: 6428542 was committed with a lint error (`no-regex-spaces`); my check printed only lint's last line. Fixed in
     d0616d6; every later commit ran `typecheck && lint && test` chained to the commit.
 
-## Phase 4 — Independent review  `[~]` review, fuzz and grep done; fixes 4.F1–4.F7 below
+## Phase 4 — Independent review  `[x]`
 Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tests/**` only.
 - [x] Codex (or a fresh Claude subagent that has not seen the diffs) reviews main against the bible §20 scenarios and writes regression tests for: pause → title → new game audio; audio 404 / 10 s / 25 s never skips an order; no speech after a customer leaves; wrong milk hand-back and remake; BGM ducking and 4 sliders independent; ibis/events deterministic and never interrupt an order line; latte scored from the foam field; build with unlicensed audio fails.
 - [x] Seed fuzz: week progression, generator, scheduler over 500 seeds; invariant violations reported with the seed.
 - [x] Determinism grep: Math.random / Date.now / setTimeout under src/sim and src/core = 0 hits.
 - [x] Verdict per area: MERGE / FIX (list) / BLOCK; fixes become ordinary tasks appended here.
-- [ ] 4.F1 (S2) An order clip that loads in 25 s is never voiced: the hold releases at 6 s, Gaz's nag is said,
+- [x] 4.F1 (S2) An order clip that loads in 25 s is never voiced: the hold releases at 6 s, Gaz's nag is said,
       the late clip is dropped (`src/app/boot.ts` hold, `src/audio/manager.ts` no load timeout / newer-line drop).
-- [ ] 4.F2 (S3) A slow or failing reaction/walk-out clip starts after the customer has left (`manager.ts` gates
+- [x] 4.F2 (S3) A slow or failing reaction/walk-out clip starts after the customer has left (`manager.ts` gates
       only on `gen`; `core/rush/customers.ts` drops queued lines on `gone`, not the one in flight).
-- [ ] 4.F3 (S1) After pause → title, R / "Replay last line" replays the old customer's order (`stopVoice` keeps
+- [x] 4.F3 (S1) After pause → title, R / "Replay last line" replays the old customer's order (`stopVoice` keeps
       `lastLine`).
-- [ ] 4.F4 (S1) After a Hard shift the café murmur stays at the shift's level (0.034, default 0.012) on the title
+- [x] 4.F4 (S1) After a Hard shift the café murmur stays at the shift's level (0.034, default 0.012) on the title
       and the next Day 1 (`toTitle` never resets `setNoise`).
-- [ ] 4.F5 (S6) The bin chicken walks in (and honks) while a customer is mid-order on 4 of 8 bird seeds of
+- [x] 4.F5 (S6) The bin chicken walks in (and honks) while a customer is mid-order on 4 of 8 bird seeds of
       Wednesday (`core/rushIbis.ts` `doorOpen` isn't gated; `sim/events/defs.ts` says "only while nobody is mid-order").
-- [ ] 4.F6 (S8) An unlicensed `.aiff`/`.aif`/`.caf` in `public/` builds: `scripts/audio-gate.ts` `AUDIO_FILE` lacks them.
-- [ ] 4.F7 (S8, latent) An mp3 imported from JS is inlined as `data:audio/…` and never reaches the gate
+- [x] 4.F6 (S8) An unlicensed `.aiff`/`.aif`/`.caf` in `public/` builds: `scripts/audio-gate.ts` `AUDIO_FILE` lacks them.
+- [x] 4.F7 (S8, latent) An mp3 imported from JS is inlined as `data:audio/…` and never reaches the gate
       (`scripts/vite-voice.ts` scans emitted files only). Nothing imports audio today.
 - Evidence:
   - The "bible §20" isn't in the repo or on the Desktop; the eight scenarios listed in the item are the spec.
@@ -321,6 +321,25 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
     MERGE. S1 pause→title MERGE with two low fixes (4.F3, 4.F4). S2 slow audio FIX (4.F1). S3 after leaving FIX
     (4.F2). S6 events FIX, low-medium (4.F5; determinism and the shift-event order window hold). S8 build FIX
     (4.F6, 4.F7). No BLOCK: no unlicensed audio is in the repo today.
+  - Fixes (two more fresh subagents, worktrees `fix/p4-audio`, `fix/p4-gate`, each starting from the reviewer's failing
+    tests; merged 068c55a, 933e633). 4.F1 d2cd928: a clip still loading after `LOAD_TIMEOUT` 12 s (audio clock, so
+    paused time doesn't count) goes to the browser voice like a 404 and the late clip is dropped (the 10 s case
+    still plays its clip; the nag comes at ~24 s). 4.F2 a3e0bdb: core emits `gone` as a customer leaves, rushView
+    calls `audio.stopSpeaker(id)` (stops their line only if it's current); rushTrace re-recorded — with `gone` filtered
+    out the old hashes reproduce, so no behaviour moved. 4.F3 2c7f23d: `stopVoice({ forget: true })` from `toTitle`.
+    4.F4 f5fb955: `toTitle` restores `DEFAULT_NOISE`. 4.F5 1497280: `IbisInput.midOrder` from `orderLineDue(r)`
+    (an order or answer being said or queued) keeps the bird outside; on the instant bot some entrances move later
+    (≤ 17 s, 30.6 → 47.8 s); the balance sim never steps the bird, so `reports/balance.csv` is byte-identical to
+    `docs/balance/2026-10-16.csv` (first-try pass unchanged: novice 90 63 37 0 0, average 100 100 100 80 60,
+    expert 100 ×5). 4.F6 323b1e5: `AUDIO_FILE` adds `aif|aiff|aifc|caf`. 4.F7 497e2ee: the gate plugin never inlines
+    audio (an audio import becomes a file the gate checks; a hashed name has no licence entry, so audio imported
+    from code is rejected and shippable audio lives in `public/`) and fails the build on `?inline`/`?raw` audio.
+    All `.failing` tests merged into their passing files. On 933e633: `Test Files  82 passed (82)` ·
+    `Tests  686 passed (686)`. Lane e2e (audio/rush/ibis/week specs) failed under load averages 22–50 from four
+    parallel lanes (frame-rate and time-limit failures, "Dazza never reached the register" in 15 s); the full e2e
+    run on an idle machine is recorded at the end of this file's run (see Phase 5 Evidence / git log).
+  - Left: while foraging, the bird's honk every 5 s can still land over an order line (the reviewer's test covers the
+    entrance only). With the test-only `timeScale` above ~2×, the 12 s audio fallback can come after Gaz's nag.
   - Not failures, noted by the fuzz: THE_USUAL can never fire from a fresh save (only THE_USUAL raises affinity,
     and `RegularMemory.visits` is never written; see 1.5.5); WRONG_MILK fired 0 times in 12 novice seeds; in week 2+
     `shiftRows` reports the playable shift as `done` (cosmetic: `shiftCells` uses `canPlay`).
