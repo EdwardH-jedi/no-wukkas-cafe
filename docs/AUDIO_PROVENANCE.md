@@ -10,6 +10,7 @@ itself, not by people remembering.
 | Procedural SFX and music (`src/audio/sfx.ts`, `src/audio/music.ts`) | generated in code at runtime: original to this repo, no files | yes (no files to check) |
 | Placeholder voice clips (`voice-cache/`, `source.placeholder: true`) | macOS `say`, development only (docs/VOICE_ASSETS.md) | **no**: removed from `dist/` by the build |
 | Release voice clips (`public/assets/voice/`, `source.placeholder: false` + `source.licence`) | licensed recordings/TTS | yes |
+| Release segment clips (`public/assets/voice/segments/`, listed in `src/data/voice/segments.manifest.json`) | licensed recordings/TTS of generated-order segments (none yet) | yes, only when listed |
 | Any other audio file (music, ambience, SFX recordings…) | must be listed in `src/data/audio/provenance.json` with a verified licence | only when listed and verified |
 | Anything else | unknown | **no**: the build fails |
 
@@ -19,10 +20,11 @@ itself, not by people remembering.
 every audio file in `dist/`:
 - **placeholder voice clip:** deleted, with a warning;
 - **licensed release voice clip (`placeholder: false`, a licence, and provenance `licensed_tts` or
-  `recorded`), or a provenance entry with all of `source`, `licence`, `verifiedBy` and
-  `verifiedOn`:** kept;
+  `recorded`) in the line manifest or the segment manifest, or a provenance entry with all of
+  `source`, `licence`, `verifiedBy` and `verifiedOn`:** kept;
 - **anything else:** **the build fails** and lists the files. For example, renders left in the
-  old `public/assets/voice/` location that aren't in the manifest fail it.
+  old `public/assets/voice/` location that aren't in the manifest fail it, and so does a segment
+  clip the segment manifest doesn't list.
 
 `npm run release:check` adds the release-only rule: every voice clip must be release audio
 (`voices:check --release`). It fails today, because all 499 clips are placeholders.

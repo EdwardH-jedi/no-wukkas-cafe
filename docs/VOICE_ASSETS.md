@@ -1,8 +1,9 @@
 # Voice assets: sources, licence status, workflow
 
-**Status (2026-10-16): every voice clip is still a PLACEHOLDER**; the licensed pass below is built
+**Status (2026-10-17): every voice clip is still a PLACEHOLDER**; the licensed pass below is built
 and waits for Edward's paid render, the listen-through and the actors' recordings. The manifest says so
-(`status: "placeholder"`, `source.placeholder: true` on every clip). Nothing here is cleared
+(`status: "placeholder"`, `source.placeholder: true` on every clip), and the segment manifest
+(`src/data/voice/segments.manifest.json`) lists **0 segment clips**. Nothing here is cleared
 for distribution.
 
 ## Placeholder vs release audio
@@ -67,7 +68,7 @@ npm run voices:check -- --release         # what a release build would need (fai
 
 | Check | Covers |
 |---|---|
-| `npm run voices:check` | the manifest checks below, plus every file exists where it should, its measured duration is within 30 ms of the manifest, and no cached file is orphaned |
+| `npm run voices:check` | the manifest checks below, plus every file exists where it should, its measured duration is within 30 ms of the manifest, and no cached file is orphaned; then the segment manifest (below), in both modes |
 | Manifest checks (`src/data/voice/validate.ts`) | schema, duplicate ids and files, id/path consistency with speaker + transcript + delivery, voice profile, accent and locale, duration, pace, loudness, placeholder and licence flags, coverage of every line the game can say |
 | Unit tests (`tests/data/voiceValidate.test.ts`, `tests/data/voice.test.ts`) | the manifest checks, run on every `npm test` |
 
@@ -87,8 +88,8 @@ npm run voices:estimate -- --segments  # characters and AU$ per TTS speaker; ref
 npm run voices:render                  # dry run: what would render
 npm run voices:render -- --allow-paid  # paid (Edward): → voice-cache/licensed/ + index.json
 npm run voices:sheet                   # voice-auditions/review-sheet.{json,md}: listen-through + recording script
-npm run voices:render -- --promote     # offline: approved staging → public/assets/voice/ + manifest
-npm run voices:render -- --import <dir> # actors' takes (<hash>.wav, source.json {licence, performer})
+npm run voices:render -- --promote     # offline: approved staging → public/assets/voice/ + manifest (segments → segment manifest)
+npm run voices:render -- --import <dir> # actors' takes (<hash>.wav, segments/<id>.wav, source.json {licence, performer})
 npm run release:check                  # passes only with 0 placeholders
 ```
 
@@ -102,8 +103,33 @@ npm run release:check                  # passes only with 0 placeholders
   build gate refuse anything else.
 - **Never commit audio.** Release clips live in `public/assets/voice/` (gitignored); commit the
   manifest only. Each machine that builds a release needs the clips there (render or copy them).
-- Generated-order segments are rendered and staged, but **don't ship yet**: that needs a committed
-  segment manifest the gate and the game read (docs/TODO.md Phase 3).
+- Generated-order segments ship through their own committed manifest (next section).
+
+## Segment clips (generated orders)
+
+Generated orders are said as segment clips joined back to back (`src/data/voice/segments.ts`), one
+file per segment id at `assets/voice/segments/<speaker>/<id>.mp3`.
+
+- **Development:** `npm run voices -- --segments` renders placeholder segment clips into
+  `voice-cache/segments/`. The dev server serves them, and the game tries every segment.
+- **Release:** `src/data/voice/segments.manifest.json` (`{ "version": 1, "clips": [] }`, committed)
+  lists each segment clip that ships, with the line clips' `source` fields (`placeholder: false`,
+  `licence`, `provenance` `licensed_tts` or `recorded`). It is a separate file, so the line
+  manifest's shape and version don't change.
+  - `voices:render -- --promote` writes the staged licensed segments into it, and
+    `-- --import <dir>` writes the actors' segment takes (`<speaker>/segments/<segment id>.wav`).
+    The files go to `public/assets/voice/segments/`.
+  - The build gate keeps a segment clip only when this manifest lists it as release audio, and
+    rejects any other segment clip in the build.
+  - A production build asks for a segment clip only when it is listed here. A generated line with
+    any unlisted segment uses the browser voice, whole.
+  - `voices:check` validates it in both modes: the segment exists with the same words, the file
+    path, a licence and provenance, and no placeholders. With file checks, each listed file must be
+    in `public/assets/voice/segments/` at its duration, and no unlisted segment file may be there.
+- **0 segment clips ship today:** in builds, generated orders use the browser voice until the paid
+  render or the actors' segment takes are promoted or imported.
+- A slow repeat ("could you repeat that?") of a generated line is always the browser voice: segments
+  are rendered at normal pace only.
 
 ## Moving to release audio
 
