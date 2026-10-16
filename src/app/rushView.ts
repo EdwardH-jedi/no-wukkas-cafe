@@ -78,7 +78,10 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
         // left never starts in an empty doorway.
         const c = customerByKey(r, ev.customer);
         if (c) audio.stopSpeaker(c.def.id);
-      } else if (ev.type === 'summary') onShiftSummary(app, r, ev);
+      } else if (ev.type === 'summary') {
+        onShiftSummary(app, r, ev);
+        app.telemetry.end('finished');
+      }
     }
     r.events.length = 0;
 

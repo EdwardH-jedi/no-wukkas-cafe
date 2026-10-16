@@ -71,6 +71,7 @@ function newCustomer(v: Visit): RushCustomer {
     stateTime: 0,
     patience: v.maxPatience,
     registerAt: null,
+    takenAt: null,
     orderedAt: null,
     ticket: null,
     rejected: 0,

@@ -14,10 +14,12 @@ import type { App } from '../../src/app/context';
 import { clearEdges } from '../../src/app/input';
 import { createRushLoop, startDay2, startRush } from '../../src/app/rushWiring';
 import { makeIbis } from '../../src/app/shared';
+import { createTelemetry } from '../../src/app/telemetry';
 import { toTitle } from '../../src/app/title';
 import { trialFrame } from '../../src/app/trialWiring';
 import { consumeFrame, createClock, STEP, tickStep } from '../../src/core/clock';
 import type { Utterance } from '../../src/core/speech';
+import { createTelemetryStore } from '../../src/core/save/telemetry';
 import { createTrial, emptyInput, stepTrial } from '../../src/core/trial';
 import { VOICE_MANIFEST } from '../../src/data/voice';
 import type { VoiceClip } from '../../src/data/voice/manifest';
@@ -402,6 +404,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     audio.setPaused(false);
   };
 
+  let appRef: App | null = null;
   const partial = {
     params: new URLSearchParams(o.query ?? 'ibis=0'),
     seed,
@@ -428,6 +431,11 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     store: {},
     cooldowns: {},
     lastEvent: null,
+    // As boot.ts, with the log kept in memory (no localStorage in node).
+    telemetry: createTelemetry(
+      { rush: (): App['rush'] => appRef?.rush ?? null, trial: () => trial },
+      createTelemetryStore(null),
+    ),
     audio,
     sfx,
     music,
@@ -481,6 +489,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     replay: () => void audio.replay(),
   };
   const app = partial as unknown as App;
+  appRef = app;
   app.ibis = makeIbis(app);
   const rushLoop = createRushLoop(app);
 

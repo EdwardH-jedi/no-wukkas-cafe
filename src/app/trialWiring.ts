@@ -16,6 +16,8 @@ export function act(app: App, a: TrialAction): void {
     app.sfx.play('click');
     prefetchDay(app.audio, 1);
   }
+  // Logged before the restart wipes the attempts (after the verdict it's already closed).
+  if (a === 'restart') app.telemetry.end('restarted');
   app.input.action = a;
 }
 
@@ -73,7 +75,9 @@ export function trialFrame(app: App, dt: number): void {
       hud.onPhase(ev.phase, trial);
       app.canvas.classList.toggle('aim', ev.phase === 'pour');
       if (ev.phase === 'title') audio.stopVoice();
+      if (ev.phase === 'intro') app.telemetry.startTrial();
     } else if (ev.type === 'sfx') sfx.play(ev.id);
+    else if (ev.type === 'verdict') app.telemetry.end('finished');
   }
   trial.events.length = 0;
 

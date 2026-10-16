@@ -98,6 +98,10 @@ export function createDebugHandle(app: App) {
         live: audio.voices.live - audio.voices.fading,
       };
     },
+    /** The playtest log as stored (nwc.telemetry.v1), read-only. */
+    get telemetry() {
+      return app.telemetry.store.read();
+    },
     /** The week's save as stored (shift, menu, receipts, tips). */
     get save() {
       return { ...store.load(), memoryOnly: store.memoryOnly };

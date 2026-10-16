@@ -27,6 +27,7 @@ export function takeOrder(r: Rush): void {
   const c = atRegister(r);
   if (c && r.shiftEvents.current?.customer !== c) {
     setState(c, 'ordering');
+    c.takenAt = r.time;
     c.orderLine = customerListen(r, c, c.line.id, c.line.text, 'normal', c.line.voice);
   }
 }
