@@ -98,6 +98,7 @@ export function stepCustomers(r: Rush, dt: number, voiceHold = false): void {
         if (c.stateTime >= LEAVE_TIME) {
           setState(c, 'gone');
           forgetCustomer(r, c, false); // gone means silent
+          r.events.push({ type: 'gone', customer: c.key }); // the line already in flight too
         }
         break;
       case 'gone':

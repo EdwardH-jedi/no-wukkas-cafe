@@ -1,6 +1,6 @@
-// The audio manager playing a generated line as its segment clips, and a clip slow to load, against
-// a fake AudioContext whose clock only runs while the context is running (as a suspended
-// context's does).
+// The audio manager playing a generated line as its segment clips, a clip slow to load, and a line
+// whose speaker has left, against a fake AudioContext whose clock only runs while the context is
+// running (as a suspended context's does).
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -235,18 +235,18 @@ describe('a clip slow to load', () => {
     (c) => c.characterId === 'dazza' && c.delivery === 'normal',
   )!;
   const ORDER: VoiceRequest = { speaker: clip.characterId, text: clip.transcript, listen: true };
-  /** Answers the clip's request (held until the test calls it). */
-  let land: () => void;
+  /** Answers the clip's request with `status` (held until the test calls it). */
+  let land: (status?: number) => void;
   beforeEach(() => {
     land = () => undefined;
     vi.stubGlobal(
       'fetch',
       () =>
         new Promise((ok) => {
-          land = () =>
+          land = (status = 200) =>
             ok({
-              ok: true,
-              status: 200,
+              ok: status === 200,
+              status,
               headers: { get: () => 'audio/mpeg' },
               arrayBuffer: () => Promise.resolve(new Float32Array([1.2]).buffer),
             });
@@ -301,5 +301,44 @@ describe('a clip slow to load', () => {
     wait(m, ctx, 0.2);
     expect(m.loading).toBe(false);
     expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: ORDER.text });
+  });
+
+  it.each([200, 404])(
+    'once its speaker has left, the line never starts: not the clip, nor the browser voice (%i)',
+    async (status) => {
+      const { m, ctx } = await started();
+      m.say(ORDER);
+      wait(m, ctx, 5);
+      m.stopSpeaker(ORDER.speaker);
+      expect(m.loading).toBe(false);
+      land(status);
+      await flush();
+      wait(m, ctx, LOAD_TIMEOUT);
+      expect(ctx.started).toHaveLength(0);
+      expect(m.history.some((h) => h.text === ORDER.text)).toBe(false);
+    },
+  );
+
+  it("someone else leaving doesn't touch the line", async () => {
+    const { m, ctx } = await started();
+    m.say(ORDER);
+    m.stopSpeaker('gaz');
+    expect(m.loading).toBe(true);
+    land();
+    await flush();
+    expect(m.history.at(-1)).toMatchObject({ via: 'clip', text: ORDER.text });
+    expect(ctx.started).toHaveLength(1);
+  });
+
+  it('a line of theirs already playing stops when they leave', async () => {
+    const { m, ctx } = await started();
+    m.say(ORDER);
+    land();
+    await flush();
+    ctx.advance(0.3);
+    m.stopSpeaker(ORDER.speaker);
+    ctx.advance(0.2);
+    expect(m.history.at(-1)).toMatchObject({ via: 'clip', interrupted: true });
+    expect(m.speaking).toBe(false);
   });
 });

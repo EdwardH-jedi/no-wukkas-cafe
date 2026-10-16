@@ -73,7 +73,12 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
         );
       else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
       else if (ev.type === 'walkout' || ev.type === 'refused') crowd.react(ev.customer, 'huff');
-      else if (ev.type === 'summary') onShiftSummary(app, r, ev);
+      else if (ev.type === 'gone') {
+        // A line of theirs whose clip lands (or fails over to the browser voice) after they've
+        // left never starts in an empty doorway.
+        const c = customerByKey(r, ev.customer);
+        if (c) audio.stopSpeaker(c.def.id);
+      } else if (ev.type === 'summary') onShiftSummary(app, r, ev);
     }
     r.events.length = 0;
 

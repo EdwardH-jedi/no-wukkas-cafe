@@ -140,6 +140,8 @@ export type RushEvent =
   | { type: 'served'; customer: string; result: ServeResult }
   | { type: 'rejected'; customer: string }
   | { type: 'walkout'; customer: string }
+  /** Out the door: nothing of theirs may be heard now, a line still loading or playing included. */
+  | { type: 'gone'; customer: string }
   | { type: 'summary'; summary: ShiftSummary }
   /** Week mode only (never on Day 2): a shift event wants the player's choice, it was answered
    *  (or dropped, choice null, when its customer left), and an event ended someone's service. */

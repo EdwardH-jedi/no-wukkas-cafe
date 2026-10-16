@@ -75,6 +75,9 @@ export interface AudioManager {
   replay(): VoiceRequest | null;
   readonly lastLine: VoiceRequest | null;
   stopVoice(): void;
+  /** `speaker` has left: if the current line is theirs (still loading, or playing) it stops, so a
+   *  late clip or browser-voice stand-in never starts. Anyone else's line plays on. */
+  stopSpeaker(speaker: string): void;
   setPaused(p: boolean): void;
   readonly paused: boolean;
   /** Download clips ahead of time (not decoded until played). */
@@ -636,6 +639,9 @@ export function createAudioManager(
       pendingTts = null;
       stopSource();
       tts.stop();
+    },
+    stopSpeaker(speaker) {
+      if (lastLine?.speaker === speaker) m.stopVoice();
     },
     setPaused(p) {
       paused = p;

@@ -432,6 +432,18 @@ describe('Day 2 rush, played headless', () => {
     expect(s.tipsCents).toBe(r.records.reduce((t, x) => t + x.tipCents, 0));
   });
 
+  it('each customer is announced gone once, as they go, and says nothing after', () => {
+    // The app stops a line of theirs still in flight on this event (late audio, review S3).
+    const { r, events } = play({ delay: 10 });
+    for (const c of r.customers) {
+      const i = events.findIndex((e) => e.type === 'gone' && e.customer === c.key);
+      expect(i, `${c.key} gone`).toBeGreaterThanOrEqual(0);
+      const after = events.slice(i + 1);
+      expect(after.some((e) => e.type === 'gone' && e.customer === c.key)).toBe(false);
+      expect(after.some((e) => e.type === 'say' && e.line.speaker === c.def.id)).toBe(false);
+    }
+  });
+
   it('is deterministic for a seed', () => {
     const a = play({ delay: 5 }, 11);
     const b = play({ delay: 5 }, 11);
