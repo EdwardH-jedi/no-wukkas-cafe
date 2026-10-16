@@ -29,6 +29,7 @@ import { clearEdges, installInput } from './input';
 import { createPracticeLoop, createPracticeView, startPractice } from './practiceWiring';
 import { createRushLoop, createRushView, rushAct, startDay2, startRush } from './rushWiring';
 import { makeIbis } from './shared';
+import { createTelemetry, downloadLog, watchPageHide } from './telemetry';
 import { titleCallbacks, toTitle } from './title';
 import { createTrialHud, trialFrame } from './trialWiring';
 import { openShifts, startEndless, startShift } from './weekWiring';
@@ -168,6 +169,7 @@ export async function boot(): Promise<void> {
     store,
     cooldowns: {},
     lastEvent: null,
+    telemetry: createTelemetry({ rush: () => app.rush, trial: () => trial }),
     audio,
     sfx,
     music,
@@ -186,7 +188,10 @@ export async function boot(): Promise<void> {
     hud2Root,
     hud3Root,
     nav: {
-      toTitle: () => toTitle(app),
+      toTitle: () => {
+        app.telemetry.end('title');
+        toTitle(app);
+      },
       startRush: (week, rushSeed) => startRush(app, week, rushSeed),
       startDay2: () => startDay2(app),
       startShift: () => startShift(app),
@@ -216,6 +221,15 @@ export async function boot(): Promise<void> {
         saveListenSettings(s);
       },
     },
+    log: {
+      counts: () => {
+        const rs = app.telemetry.store.read().records;
+        const trials = rs.filter((x) => x.kind === 'trial').length;
+        return { shifts: rs.length - trials, trials };
+      },
+      export: () => downloadLog(app.telemetry.store),
+      clear: () => app.telemetry.store.clear(),
+    },
   });
   app.rushHud = createRushView(app);
   app.practiceHud = createPracticeView(app);
@@ -234,6 +248,7 @@ export async function boot(): Promise<void> {
   resize();
 
   installDebugHandle(app);
+  watchPageHide(app.telemetry);
 
   // ---------------------------------------------------------------- loop
   let last = performance.now();

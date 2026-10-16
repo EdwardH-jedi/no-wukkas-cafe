@@ -41,6 +41,7 @@ export function startRush(app: App, week: RushWeek | null, rushSeed: number): vo
   app.crowd.clear();
   const rush = createRush(rushSeed, app.listen.difficulty, {}, week);
   app.rush = rush;
+  app.telemetry.startShift();
   app.ibis = makeIbis(app);
   sfx.setNoise(DIFFICULTY[app.listen.difficulty].noise);
   app.mode = 'rush';
@@ -62,6 +63,9 @@ export function createRushView(app: App): RushHud {
     // A restart picks up a difficulty changed mid-shift.
     if (app.rush) app.rush.difficulty = app.listen.difficulty;
     app.sfx.setNoise(DIFFICULTY[app.listen.difficulty].noise);
+    // Logged before the restart wipes the shift (a finished one is already closed).
+    app.telemetry.end('restarted');
+    app.telemetry.startShift();
     rushAct(app, { type: 'restart' });
   };
   return createRushHud(app.hud2Root, {

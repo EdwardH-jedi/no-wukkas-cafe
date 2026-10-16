@@ -73,7 +73,10 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
         );
       else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
       else if (ev.type === 'walkout' || ev.type === 'refused') crowd.react(ev.customer, 'huff');
-      else if (ev.type === 'summary') onShiftSummary(app, r, ev);
+      else if (ev.type === 'summary') {
+        onShiftSummary(app, r, ev);
+        app.telemetry.end('finished');
+      }
     }
     r.events.length = 0;
 

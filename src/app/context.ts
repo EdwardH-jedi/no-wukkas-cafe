@@ -24,6 +24,7 @@ import type { Crowd } from '../world/crowd';
 import type { IbisView } from '../world/ibis';
 import type { OwnerView } from '../world/owner';
 import type { Station } from '../world/station';
+import type { Telemetry } from './telemetry';
 
 /** Which day is running. Day 1's trial owns the title screen; practice is latte art on its own. */
 export type Mode = 'trial' | 'rush' | 'practice';
@@ -81,6 +82,8 @@ export interface App {
    *  2026-10-15). */
   cooldowns: Cooldowns;
   lastEvent: ShiftEventId | null;
+  /** The playtest log (local only): records open and close with shifts and the trial. */
+  readonly telemetry: Telemetry;
 
   // Audio.
   readonly audio: AudioManager;

@@ -5,6 +5,7 @@
 
 import type { AudioManager, AudioStatus, Bus } from '../audio/manager';
 import type { Difficulty } from '../sim/listening';
+import { bindLogSection, LOG_SECTION_HTML, type LogCallbacks } from './logSection';
 import { focusQuietly, menuKeys } from './screens/keys';
 import {
   POUR_SENSITIVITY,
@@ -17,6 +18,8 @@ export interface AudioPanelCallbacks {
   replay(): void;
   test(): void;
   listen: { get(): ListenSettings; set(s: ListenSettings): void };
+  /** The playtest log's Export / Clear (left out, the section isn't shown). */
+  log?: LogCallbacks;
 }
 
 export interface AudioPanel {
@@ -78,6 +81,7 @@ export function createAudioPanel(
     <h4>Latte art</h4>
     <label class="slider"><span>Pour sensitivity</span><input type="range" min="${POUR_SENSITIVITY.min}" max="${POUR_SENSITIVITY.max}" step="${POUR_SENSITIVITY.step}" data-l="pour" aria-label="Pour sensitivity"><output data-out="pour"></output></label>
     <p class="fine">How strongly the jug answers your hand: lower for a gentler pour, higher for a quicker one. 1.0× is as tuned.</p>
+    ${cb.log ? LOG_SECTION_HTML : ''}
     <div class="titleBtns">
       <button class="btn small" data-a="test">Test voice</button>
       <button class="btn small ghost" data-a="replay">Replay last line</button>
@@ -121,6 +125,7 @@ export function createAudioPanel(
     });
   };
   diffSel.onchange = subChk.onchange = learnChk.onchange = setListen;
+  const log = cb.log ? bindLogSection(panel, cb.log) : null;
   pourIn.oninput = () => {
     const v = roundPourSensitivity(Number(pourIn.value));
     pourOut.textContent = pourSensitivityLabel(v);
@@ -210,6 +215,7 @@ export function createAudioPanel(
     open() {
       sync();
       syncListen();
+      log?.sync();
       if (panel.classList.contains('hide')) opener = document.activeElement;
       panel.classList.remove('hide');
       panel.scrollTop = 0;
