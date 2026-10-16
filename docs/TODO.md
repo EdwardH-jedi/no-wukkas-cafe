@@ -141,15 +141,61 @@ Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split 
     pull-through only thins at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`, Edward's
     call). (7) `src/app/input.ts` Space handler `preventDefault`s on focused buttons (worked around by `menuKeys`).
 
-## Phase 2 — Balance  `[ ]`
+## Phase 2 — Balance  `[x]`
 Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,upgrades,events}.ts` (numbers only), `scripts/balance.ts`, `tests/helpers/{rushBot,pace}.ts`, `reports/` (gitignored).
-- [ ] `scripts/balance.ts`: week 1 × {novice, average, expert} × 30 seeds headless → `reports/balance.csv` (grade, tips, walk-outs, serve time, events fired, misheard rate per field).
-- [ ] Targets: average passes Mon–Wed first try, Thu ≈ 70 %, Fri ≈ 50 %; expert never fails; novice fails Fri. Tune patience/arrivals/prices; one commit per change with before/after rows in the body.
-- [ ] Event rates: no event twice in a row across 1,000 seeds; THE_USUAL only with affinity.
-- [ ] Unit test guards the targets with wide tolerances.
-- [ ] If a target needs a core change, write it to `docs/integration/balance-hook.md` and stop that item.
-- Exit: CSV committed as `docs/balance/<date>.csv`; test guards in place.
+- [x] `scripts/balance.ts`: week 1 × {novice, average, expert} × 30 seeds headless → `reports/balance.csv` (grade, tips, walk-outs, serve time, events fired, misheard rate per field).
+- [x] Targets: average passes Mon–Wed first try, Thu ≈ 70 %, Fri ≈ 50 %; expert never fails; novice fails Fri. Tune patience/arrivals/prices; one commit per change with before/after rows in the body.
+- [x] Event rates: no event twice in a row across 1,000 seeds; THE_USUAL only with affinity.
+- [x] Unit test guards the targets with wide tolerances.
+- [x] If a target needs a core change, write it to `docs/integration/balance-hook.md` and stop that item.
+- Exit: [x] CSV committed as `docs/balance/<date>.csv`; test guards in place.
 - Evidence:
+  - Branch `balance/week1`, 10 commits: f668628 harness · ef903a5 JUST_COFFEE cooldown · cfaeabe Thursday ·
+    52ae6e0 Friday · 2b323a0 prices · fab2636 curve guards · 6af8048 CSV + hook doc · 2ae2cbf e2e shop spec at
+    the new prices · 692c380 scheduler remembers the last event (hook §1) · dd40dba hook doc + CSV on HEAD.
+  - `npm run balance` (f668628): `playWeek` in `tests/helpers/pace.ts` plays week 1 from a fresh save the way the game
+    does (weekFor → rush → finishShift, cooldowns carried, a failed shift replayed up to 3 times, the cheapest
+    affordable upgrade bought between shifts) for `SKILLS` in `tests/helpers/rushBot.ts`: novice = the measured
+    first-timer latency, no two hands, mishear 0.12; average = 3 s / 0.8 s, two hands, mishear 0.06; expert =
+    1 s / 0.3 s, mishear 0.02 (average/expert are guesses until Phase 5). Mishear scales with the order's
+    difficulty score; noticing → clarify; a missed heart pours `BOT_POUR_BLOB` (art 0.16). ~3 min, 3 workers.
+    CSV columns: profile, seed, shift, day, attempt, customers, served, walkouts, refused, grade, pass,
+    satisfaction, tips_cents, avg_serve_s, wasted, events, orders, misheard_drink/milk/temp/heart, cents_after,
+    upgrades. Determinism: two runs → `cmp reports/balance.csv docs/balance/2026-10-16.csv` → identical (650 rows).
+  - First-try pass, 30 seeds (Mon Tue Wed Thu Fri), baseline → final:
+    novice 90 63 37 0 0 → 90 63 37 0 0 · average 100 100 100 97 87 → 100 100 100 80 60 · expert 100 ×5 → 100 ×5.
+    Final rows (`docs/balance/2026-10-16.csv`): average Thu walk-outs 1.8 / worst 5, satisfaction 65, tips $8.33;
+    Fri 2.1 / 6, 63, $8.80, tries to pass 1.6; expert Fri 0.1 / 1, 82, $12.33. Misheard (average): drink 1–4 %,
+    milk 0–2 %, temp 0–1 %, heart 0–1 %. Thu 80 % = 24/30 (one standard error at 30 seeds is ~8 %); nine
+    customers can't go lower without the expert failing (15→10 s: expert 97 %). Friday is steep: 15→10 s = 23 %.
+  - Changes, each with before/after rows in its body: Thursday gaps 20→14 to 16→10 s (cfaeabe), Friday 18→12 to
+    16→10 s (52ae6e0), prices (2b323a0): docket rail $150 → $15 (average buys it after Tue 26/30), grinder $450 →
+    $30 (after Fri 27/30), steam wand $600 → $50, second group head $1,200 → $100 (inert: one group head).
+    Patience (`PATIENCE_SCALE`) untouched; Monday–Wednesday rows untouched (Phase 1 e2e + the HUMAN playtest sit on them).
+  - Events (ef903a5): JUST_COFFEE `cooldownShifts` 0 → 1 (every event ≥ 1 now). Baseline CSV had 20 back-to-back
+    repeats in 577 pairs, all JUST_COFFEE in adjacent shifts; final CSV 0 in 509. `tests/sim/events/scheduler.test.ts`
+    (1,000 seeds): no repeat in one shift or the next, every cooldown ≥ 1, THE_USUAL never without affinity and only
+    for the regular who has it; failed before the fix (`seed 2, shift 4: expected 'JUST_COFFEE' not to be
+    'JUST_COFFEE'`). After a shift with no events it still happened (1 week in 1,000: seed 275, QUEUE_JUMP Wed →
+    none Thu → QUEUE_JUMP Fri), so with Edward's go-ahead 692c380 adds `EventLog.lastId` (carried by
+    `startShiftLog`, left out of the next pick; `RushWeek.lastEvent`, `weekFor(save, cooldowns, lastEvent)`,
+    `App.lastEvent` beside the page-only cooldowns). Now strict: `never fires the same event twice in a row, even
+    across a quiet shift (1000 seeds)` passes (failed on seed 275 before), plus "a week shift never opens with the
+    last event of the one before" (16 seeds). Balance after it: summary table unchanged (one novice run reordered).
+  - Guards (fab2636): `tests/core/week/curve-{expert,average,novice}.test.ts`, seeds 1–10, first tries, ~40 s side by side:
+    expert 100 ×5; average Mon–Wed ≥ 90 %, Thu 50–90 %, Fri 20–80 % and ≤ Thu; novice Fri ≤ 30 %. Today:
+    expert 100 100 100 100 100 · average 100 100 100 80 50 · novice 90 70 20 0 0.
+  - Exit on dd40dba: `npm run typecheck && npm run lint && npm test` exit 0: `Test Files  64 passed (64)` ·
+    `Tests  544 passed (544)`. `E2E_PORT=5179 npm run test:e2e` on 6af8048: `1 failed · 27 passed (29.2m)`, the
+    shop spec still buying at $450/$150 (`week.spec.ts:210`), fixed in 2ae2cbf. On dd40dba: `28 passed (24.1m)`, exit 0.
+  - Findings, not done: (1) QUEUE_JUMP fired 0 times in 509 events. Not the cap (an extra poll slot was tried
+    and changed nothing, so it wasn't shipped): the bots press "Take order" the moment someone steps up, so no
+    line forms (`queue` ≥ 2 at 0 of 347 polls). A bot that doesn't take orders mid-drink sees it in ~10–15 % of
+    events. Edward's call, balance-hook.md §2: bot register reaction time + retune, or wait for playtest numbers
+    (recommended). Until then the balance runs never exercise a line at the register. (2) A failed shift still pays its tips, so a novice who retries has
+    more in the till by Friday ($67) than an average player ($52). (3) The novice curve drops fast (Wed 37 %,
+    Thu 0 %); with the HUMAN playtest that tells whether the novice guess or the week is off. (4) WRONG_MILK fired 2
+    times: hand-backs for milk are rare when the bots hear milk 98 % right.
 
 ## Phase 3 — Voice (licensed)  `[ ]`
 Goal: the day auditions are approved, a full pass renders with one command.
@@ -199,5 +245,5 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
 
 ## Open questions for the human
 - Event cooldowns across sessions: currently page-only (decision 2-A). Revisit after Phase 5.
-- Upgrade prices are TODO(balance) until Phase 2.
+- Upgrade prices: set in Phase 2 from an average player's tips (rule in `src/data/upgrades.ts`). Revisit with Phase 5 numbers.
 - Segment clips: generated orders fall back to browser speech until Phase 3 renders them.
