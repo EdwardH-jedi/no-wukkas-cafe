@@ -1,6 +1,7 @@
 // The title screen: its buttons (Day 2, the week, Endless Rush, practice, settings) and the way
 // back to it.
 
+import { DEFAULT_NOISE } from '../audio/sfx';
 import { createTrial } from '../core/trial';
 import { focusQuietly } from '../ui/screens/keys';
 import { endlessReason } from '../ui/screens/labels';
@@ -26,7 +27,10 @@ export function titleCallbacks(app: App): Omit<TitleCallbacks, 'start'> {
 
 /** Back to the title screen (fresh Day 1 trial). */
 export function toTitle(app: App): void {
-  app.audio.stopVoice();
+  // Replay (R, "Replay last line") on the title must not say the quit game's last line.
+  app.audio.stopVoice({ forget: true });
+  // Nor keep a shift's crowd (a Hard shift's packed café) through the title and the next Day 1.
+  app.sfx.setNoise(DEFAULT_NOISE);
   app.resumeAll();
   app.crowd.clear();
   app.rush = null;

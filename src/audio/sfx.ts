@@ -33,6 +33,9 @@ export interface Sfx {
   play(id: SfxId | 'click' | 'tick' | 'honk' | 'binRattle' | 'clap'): void;
 }
 
+/** The crowd level outside a shift (the title, Day 1, practice): what a fresh page starts with. */
+export const DEFAULT_NOISE = 0.6;
+
 export function createSfx(audio: AudioManager): Sfx {
   let ctx: AudioContext | null = null;
   let master: GainNode | null = null;
@@ -43,7 +46,7 @@ export function createSfx(audio: AudioManager): Sfx {
   let screech: GainNode | null = null;
   let motor: GainNode | null = null;
   let muted = false;
-  let noise_ = 0.6;
+  let noise_ = DEFAULT_NOISE;
   let murmur: GainNode | null = null;
 
   const loopNoise = (

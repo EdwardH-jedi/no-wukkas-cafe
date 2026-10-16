@@ -58,7 +58,8 @@ export interface AudioManager {
   /** Where SFX and room tone connect. Null before unlock. */
   /** Where SFX, room tone and music connect. Null before unlock. Music goes through the duck. */
   output(bus: 'sfx' | 'ambience' | 'music'): AudioNode | null;
-  /** Call every frame: ducks the music under speech. */
+  /** Call every frame: ducks the music under speech, and hands a clip still loading after
+   *  LOAD_TIMEOUT to the browser voice. */
   update(): void;
   /** Current music duck gain (1 = full), for tests. */
   readonly musicDuck: number;
@@ -73,7 +74,12 @@ export interface AudioManager {
   /** Say the last line again. Returns it, or null if nothing has been said. */
   replay(): VoiceRequest | null;
   readonly lastLine: VoiceRequest | null;
-  stopVoice(): void;
+  /** Stop the line loading or playing. `forget`: forget it as well, so Replay has nothing to say
+   *  (back to the title: nothing from the quit game). */
+  stopVoice(opts?: { forget?: boolean }): void;
+  /** `speaker` has left: if the current line is theirs (still loading, or playing) it stops, so a
+   *  late clip or browser-voice stand-in never starts. Anyone else's line plays on. */
+  stopSpeaker(speaker: string): void;
   setPaused(p: boolean): void;
   readonly paused: boolean;
   /** Download clips ahead of time (not decoded until played). */
@@ -116,6 +122,12 @@ const STORE = 'nwc.audio.v1';
 const shipped = (c: VoiceClip): boolean => import.meta.env.DEV || c.source.placeholder === false;
 const NOT_SHIPPED = 'Recorded voices are development-only placeholders and are not in this build.';
 const DECODED_CACHE = 16;
+/** A clip still loading after this long (s, on the audio clock, which stops while paused) is given
+ *  up and the browser voice says the line instead, as for a missing clip. The game holds a line
+ *  for at most 6 s (boot.ts MAX_VOICE_HOLD) and then moves on; a clip landing a few seconds after
+ *  that still plays, but past this a newer line (Gaz's nag) would drop it and the order would never
+ *  be heard. */
+export const LOAD_TIMEOUT = 12;
 /** Segment clips exist only as dev placeholders so far (voice-cache/segments/, served by the dev
  *  server); a build has none, so generated lines go straight to the browser voice there. */
 const SEGMENTS_SERVED = import.meta.env.DEV;
@@ -205,8 +217,10 @@ export function createAudioManager(
   let gen = 0;
   let paused = false;
   let lastLine: VoiceRequest | null = null;
-  /** Generation whose clip is loading, or -1. */
+  /** Generation whose clip is loading, or -1; the line and when it was asked for (audio clock). */
   let loadingGen = -1;
+  let loadingReq: VoiceRequest | null = null;
+  let loadingAt = 0;
   /** A browser-voice fallback that became due while paused: spoken on resume if still current. */
   let pendingTts: { req: VoiceRequest; why: string | null; my: number } | null = null;
   let current: PlayRecord | null = null;
@@ -393,6 +407,13 @@ export function createAudioManager(
     });
   };
 
+  /** Line `my` waits for its clip(s) to load (given up after LOAD_TIMEOUT, in update()). */
+  const startLoading = (req: VoiceRequest, my: number): void => {
+    loadingGen = my;
+    loadingReq = req;
+    loadingAt = ctx?.currentTime ?? 0;
+  };
+
   /** A generated line: its segment clips back to back, as one line (one record, one fade, one
    *  hold while loading). Every part is fetched and decoded before the first plays, so the line
    *  never stalls halfway; if any part is missing the WHOLE line goes to the browser voice. Each
@@ -405,7 +426,7 @@ export function createAudioManager(
       return;
     }
     const asked = performance.now();
-    loadingGen = my;
+    startLoading(req, my);
     const load = (f: string): Promise<AudioBuffer> =>
       bufferFor(f).catch((e: unknown) => {
         missingSegments.add(f);
@@ -477,6 +498,14 @@ export function createAudioManager(
       return bus[b] ?? null;
     },
     update() {
+      // A clip taking too long: the browser voice says its line now, under a new generation so
+      // the clip is dropped when it does land (never said twice).
+      if (ctx && loadingReq && loadingGen === gen && ctx.currentTime - loadingAt > LOAD_TIMEOUT) {
+        const req = loadingReq;
+        loadingGen = -1;
+        loadingReq = null;
+        viaTts(req, 'A voice clip is taking too long to load.', ++gen);
+      }
       if (!ctx || !duck) return;
       const speaking = source !== null || tts.speaking;
       const want = duckLevel(speaking, currentListen);
@@ -545,7 +574,7 @@ export function createAudioManager(
         return;
       }
       const asked = performance.now();
-      loadingGen = my;
+      startLoading(req, my);
       bufferFor(clip.file).then(
         (buf) => {
           if (loadingGen === my) loadingGen = -1;
@@ -606,12 +635,16 @@ export function createAudioManager(
     get lastLine() {
       return lastLine;
     },
-    stopVoice() {
+    stopVoice(opts) {
       gen++;
       loadingGen = -1;
       pendingTts = null;
+      if (opts?.forget) lastLine = null;
       stopSource();
       tts.stop();
+    },
+    stopSpeaker(speaker) {
+      if (lastLine?.speaker === speaker) m.stopVoice();
     },
     setPaused(p) {
       paused = p;
