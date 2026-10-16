@@ -71,7 +71,7 @@ const speakers = Object.entries(CAST).map(([speaker, cast]) => {
     brief: CAST_BRIEFS[speaker] ?? null,
     cast,
     lines: jobs.filter((j) => j.kind === 'line').map(line),
-    // Generated-order segments: rendered or recorded now, shipped once segments have a manifest.
+    // Generated-order segments: they ship once promoted or imported into the segment manifest.
     segments: jobs.filter((j) => j.kind === 'segment').map(line),
     review: { ...REVIEW },
   };
@@ -136,7 +136,7 @@ for (const s of speakers) {
     md.push('');
   };
   table(s.lines, 'Lines');
-  table(s.segments, 'Generated-order segments (not shipped yet)');
+  table(s.segments, 'Generated-order segments');
 }
 writeFileSync(join(OUT, 'review-sheet.md'), `${md.join('\n')}\n`);
 console.log(

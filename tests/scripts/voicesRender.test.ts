@@ -17,10 +17,12 @@ import { basename, dirname, join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { voicePlan } from '../../scripts/voices-plan';
 import { CAST } from '../../src/data/voice/casting';
-import type { VoiceManifest } from '../../src/data/voice/manifest';
+import type { SegmentManifest, VoiceManifest } from '../../src/data/voice/manifest';
 import { VOICE_PROFILES } from '../../src/data/voice/profiles';
 import { voiceScript } from '../../src/data/voice/script';
+import { SEGMENT_INVENTORY } from '../../src/data/voice/segments';
 import { validateManifest } from '../../src/data/voice/validate';
+import { validateSegmentManifest } from '../../src/data/voice/validateSegments';
 
 const root = join(import.meta.dirname, '..', '..');
 const script = voiceScript();
@@ -29,9 +31,12 @@ function sandbox() {
   const dir = mkdtempSync(join(tmpdir(), 'nwc-render-test-'));
   const manifest = join(dir, 'manifest.json');
   copyFileSync(join(root, 'src/data/voice/manifest.json'), manifest);
+  const segments = join(dir, 'segments.manifest.json');
+  copyFileSync(join(root, 'src/data/voice/segments.manifest.json'), segments);
   const env = {
     ...process.env,
     VOICES_MANIFEST: manifest,
+    VOICES_SEGMENT_MANIFEST: segments,
     VOICES_CACHE: join(dir, 'cache'),
     VOICES_PUBLIC: join(dir, 'public'),
     GOOGLE_TTS_ACCESS_TOKEN: '',
@@ -46,9 +51,20 @@ function sandbox() {
       timeout: 120_000,
     });
   const read = (): VoiceManifest => JSON.parse(readFileSync(manifest, 'utf8')) as VoiceManifest;
+  const readSegments = (): SegmentManifest =>
+    JSON.parse(readFileSync(segments, 'utf8')) as SegmentManifest;
   const staged = (file: string): string =>
     join(dir, 'cache', 'licensed', file.slice('assets/voice/'.length));
-  return { dir, manifest, run, read, staged, index: join(dir, 'cache', 'licensed', 'index.json') };
+  return {
+    dir,
+    manifest,
+    segments,
+    run,
+    read,
+    readSegments,
+    staged,
+    index: join(dir, 'cache', 'licensed', 'index.json'),
+  };
 }
 
 /** A tone as long as the words would take to say, encoded to `file` (mp3 or wav by extension). */
@@ -187,5 +203,93 @@ describe('npm run voices:render', () => {
       });
       expect(existsSync(join(s.dir, 'public', j.file))).toBe(true);
     }
+  }, 180_000);
+
+  it('promotes licensed staged segments into the segment manifest, never the stand-in', () => {
+    const s = sandbox();
+    const segs = voicePlan(script, CAST, SEGMENT_INVENTORY)
+      .tts.filter((j) => j.kind === 'segment' && j.speaker === 'karen')
+      .slice(0, 3);
+    expect(segs).toHaveLength(3);
+    const stage = (engine: string, provenance: string) =>
+      segs.map((j) => ({
+        ...j,
+        engine,
+        provenance,
+        voice: CAST.karen?.voice,
+        licence: CAST.karen?.licence,
+        renderedOn: '2026-10-17',
+        duration: tone(s.staged(j.file), j.text),
+        meanDb: -20,
+      }));
+    const before = readFileSync(s.segments, 'utf8');
+    writeFileSync(s.index, JSON.stringify({ clips: stage('fake-tts', 'placeholder') }));
+    const refused = s.run(['--promote']);
+    expect(refused.status).toBe(1);
+    expect(refused.stderr).toMatch(/refused: 3 staged clip\(s\) aren't licensed TTS \(fake-tts\)/);
+    expect(readFileSync(s.segments, 'utf8')).toBe(before);
+    for (const j of segs) expect(existsSync(join(s.dir, 'public', j.file))).toBe(false);
+
+    writeFileSync(s.index, JSON.stringify({ clips: stage('google-tts', 'licensed_tts') }));
+    const r = s.run(['--promote']);
+    expect(r.status, r.stderr).toBe(0);
+    expect(r.stdout).toMatch(/promote: 3 segment clip\(s\) now ship; the segment manifest lists 3/);
+    const sm = s.readSegments();
+    expect(sm.clips.map((c) => c.id)).toEqual(segs.map((j) => j.id).sort());
+    for (const j of segs) {
+      const c = sm.clips.find((x) => x.id === j.id);
+      expect(c).toMatchObject({ characterId: 'karen', transcript: j.text, file: j.file });
+      expect(c?.source).toMatchObject({
+        engine: 'google-tts',
+        provenance: 'licensed_tts',
+        placeholder: false,
+        licence: CAST.karen?.licence,
+      });
+      expect(j.file).toMatch(/^assets\/voice\/segments\/karen\//);
+      expect(existsSync(join(s.dir, 'public', j.file))).toBe(true);
+    }
+    expect(
+      validateSegmentManifest(sm, { inventory: SEGMENT_INVENTORY, profiles: VOICE_PROFILES }),
+    ).toEqual([]);
+    // The line manifest gained nothing: segments are not lines.
+    expect(s.read().clips.some((c) => c.file.includes('/segments/'))).toBe(false);
+  }, 180_000);
+
+  it("imports an actor's segment takes (<speaker>/segments/<id>.wav) as recorded segment clips", () => {
+    const s = sandbox();
+    const segs = voicePlan(script, CAST, SEGMENT_INVENTORY)
+      .recorded.filter((j) => j.kind === 'segment' && j.speaker === 'jiwoo')
+      .slice(0, 2);
+    expect(segs).toHaveLength(2);
+    const takes = join(s.dir, 'takes', 'jiwoo');
+    for (const j of segs) tone(join(takes, 'segments', `${j.id}.wav`), j.text);
+    tone(join(takes, 'segments', 'jiwoo.greet.99.wav'), 'Hello'); // not a segment of hers
+    tone(join(takes, `${segs[0]!.id}.wav`), segs[0]!.text); // a segment take outside segments/
+    writeFileSync(
+      join(takes, 'source.json'),
+      JSON.stringify({ licence: 'Buyout, signed 2026-11-01', performer: 'Actor B' }),
+    );
+    const lines = readFileSync(s.manifest, 'utf8');
+    const r = s.run(['--import', join(s.dir, 'takes')]);
+    expect(r.status, r.stderr).toBe(0);
+    expect(r.stderr).toMatch(/jiwoo\/segments\/jiwoo\.greet\.99\.wav: not a segment/);
+    expect(r.stdout).toMatch(/import: 2 segment clip\(s\) now ship; the segment manifest lists 2/);
+    const sm = s.readSegments();
+    expect(sm.clips.map((c) => c.id)).toEqual(segs.map((j) => j.id).sort());
+    for (const c of sm.clips) {
+      expect(c.source).toMatchObject({
+        engine: 'recording',
+        provenance: 'recorded',
+        voice: 'Actor B',
+        licence: 'Buyout, signed 2026-11-01',
+        placeholder: false,
+      });
+      expect(existsSync(join(s.dir, 'public', c.file))).toBe(true);
+    }
+    expect(
+      validateSegmentManifest(sm, { inventory: SEGMENT_INVENTORY, profiles: VOICE_PROFILES }),
+    ).toEqual([]);
+    // No line clip came from the stray segment take.
+    expect(s.read().clips).toEqual((JSON.parse(lines) as VoiceManifest).clips);
   }, 180_000);
 });

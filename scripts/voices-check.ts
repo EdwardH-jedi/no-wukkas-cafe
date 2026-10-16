@@ -9,7 +9,12 @@
 // loudness, placeholder/licence flags, coverage of every line the game can say.
 // File checks: every clip exists where it should (placeholders in voice-cache/, release clips in
 // public/assets/voice/), its measured duration matches the manifest (±30 ms), and no cached file
-// is orphaned. Exit code 1 on any error.
+// is orphaned.
+// The segment manifest (src/data/voice/segments.manifest.json), in both modes: every entry is
+// release audio (src/data/voice/validateSegments.ts: a segment the game says, with its current
+// words, a licence and provenance licensed_tts or recorded, no placeholders); with file checks,
+// each listed clip is in public/assets/voice/segments/ at its measured duration, and no segment
+// clip there is unlisted (the build gate would reject it). Exit code 1 on any error.
 
 import { existsSync, readFileSync } from 'node:fs';
 import {
@@ -18,14 +23,19 @@ import {
   listClips,
   MANIFEST,
   measure,
+  ownIndex,
   pool,
   publicPath,
+  readSegmentManifest,
   ROOT,
+  SEGMENT_MANIFEST,
 } from './voice-node.ts';
 
 const { voiceScript } = await import('../src/data/voice/script.ts');
 const { VOICE_PROFILES } = await import('../src/data/voice/profiles.ts');
 const { summarise, validateManifest } = await import('../src/data/voice/validate.ts');
+const { SEGMENT_INVENTORY } = await import('../src/data/voice/segments.ts');
+const { validateSegmentManifest } = await import('../src/data/voice/validateSegments.ts');
 type Manifest = import('../src/data/voice/manifest.ts').VoiceManifest;
 type Issue = import('../src/data/voice/validate.ts').Issue;
 
@@ -36,10 +46,19 @@ const args = process.argv.slice(2);
 const release = args.includes('--release');
 const manifestOnly = args.includes('--manifest-only');
 
+type Found = Issue | { level: 'error' | 'warn'; code: string; id?: string; message: string };
 const m = JSON.parse(readFileSync(MANIFEST, 'utf8')) as Manifest;
-const issues: Array<
-  Issue | { level: 'error' | 'warn'; code: string; id?: string; message: string }
-> = validateManifest(m, { script: voiceScript(), profiles: VOICE_PROFILES, release });
+const issues: Found[] = validateManifest(m, {
+  script: voiceScript(),
+  profiles: VOICE_PROFILES,
+  release,
+});
+const sm = readSegmentManifest();
+const segIssues: Found[] = validateSegmentManifest(sm, {
+  inventory: SEGMENT_INVENTORY,
+  profiles: VOICE_PROFILES,
+});
+const rel = (p: string): string => p.replace(`${ROOT}/`, '');
 
 if (!manifestOnly) {
   const seen = new Set<string>();
@@ -78,23 +97,70 @@ if (!manifestOnly) {
       });
   });
   for (const f of listClips(CACHE_DIR))
-    if (!m.clips.some((c) => c.file === f))
+    if (!ownIndex(f) && !m.clips.some((c) => c.file === f))
       issues.push({
         level: 'warn',
         code: 'orphan-file',
         message: `voice-cache/${f.slice('assets/voice/'.length)} is not in the manifest (npm run voices -- --prune)`,
       });
+
+  // Segment clips ship from public/assets/voice/segments/, listed in the segment manifest.
+  await pool(sm.clips, 8, async (c) => {
+    const where = publicPath(c.file);
+    if (!existsSync(where)) {
+      segIssues.push({
+        level: 'error',
+        code: 'missing-audio',
+        id: c.id,
+        message: `no file at ${rel(where)}`,
+      });
+      return;
+    }
+    const got = await measure(where, false);
+    if (Math.abs(got.duration - c.duration) > DRIFT)
+      segIssues.push({
+        level: 'error',
+        code: 'duration-drift',
+        id: c.id,
+        message: `file is ${got.duration} s, segment manifest says ${c.duration} s`,
+      });
+  });
+  const listed = new Set(sm.clips.map((c) => c.file));
+  for (const f of listClips(publicPath('assets/voice')))
+    if (f.startsWith('assets/voice/segments/') && !listed.has(f))
+      segIssues.push({
+        level: 'error',
+        code: 'unlisted-segment',
+        message: `${rel(publicPath(f))} is not in the segment manifest: the build gate rejects it`,
+      });
 }
 
-const s = summarise(issues as Issue[]);
-const byCode = new Map<string, number>();
-for (const i of issues)
-  byCode.set(`${i.level} ${i.code}`, (byCode.get(`${i.level} ${i.code}`) ?? 0) + 1);
-for (const i of issues.filter((x) => x.level === 'error').slice(0, 25))
-  console.error(`  ${i.code}: ${i.id ?? ''} ${i.message}`);
-console.log(
-  `voices:check (${release ? 'release' : 'development'}${manifestOnly ? ', manifest only' : ''}): ` +
-    `${m.clips.length} clips, status "${m.status}", ${s.errors} error(s), ${s.warnings} warning(s)`,
+function report(
+  found: readonly Found[],
+  summary: (s: ReturnType<typeof summarise>) => string,
+): void {
+  const s = summarise(found as Issue[]);
+  const byCode = new Map<string, number>();
+  for (const i of found)
+    byCode.set(`${i.level} ${i.code}`, (byCode.get(`${i.level} ${i.code}`) ?? 0) + 1);
+  for (const i of found.filter((x) => x.level === 'error').slice(0, 25))
+    console.error(`  ${i.code}: ${i.id ?? ''} ${i.message}`);
+  console.log(`${summary(s)}, ${s.errors} error(s), ${s.warnings} warning(s)`);
+  for (const [k, n] of [...byCode].sort()) console.log(`  ${k}: ${n}`);
+  if (s.errors) process.exitCode = 1;
+}
+
+report(
+  issues,
+  () =>
+    `voices:check (${release ? 'release' : 'development'}${manifestOnly ? ', manifest only' : ''}): ` +
+    `${m.clips.length} clips, status "${m.status}"`,
 );
-for (const [k, n] of [...byCode].sort()) console.log(`  ${k}: ${n}`);
-if (s.errors) process.exitCode = 1;
+// A generated line plays its segment clips in a build only when every one of its segments is listed.
+const segmentCount = Object.values(SEGMENT_INVENTORY).flat().length;
+const listedIds = new Set(sm.clips.map((c) => c.id)).size;
+report(
+  segIssues,
+  () =>
+    `voices:check segments: ${listedIds}/${segmentCount} segments have a release clip in ${rel(SEGMENT_MANIFEST)}`,
+);

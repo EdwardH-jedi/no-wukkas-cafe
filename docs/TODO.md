@@ -255,7 +255,7 @@ Owns `scripts/voices*`, `scripts/tts-*.ts`, `src/audio/**`, `src/data/voice/**` 
 - [x] Review sheet export (JSON + md) to voice-auditions/.
 - [!] (HUMAN-only, not done by Claude: needs the paid render first, then reviewers; sheet from `npm run voices:sheet`) **HUMAN**: listen-through with Korean / Mandarin / Indian-English speakers; caricature check; approve or re-cast.
 - [!] (HUMAN-only, not done by Claude: Edward's Google credentials and spend; release:check also needs the actors' recordings for Gaz, Jiwoo and Mei, imported with `voices:render -- --import`) **HUMAN**: run the paid render once; commit the manifest only (never audio); `npm run release:check` passes.
-- [ ] Ship segments: a committed segment manifest (provenance + licence per segment clip) that the build gate (`scripts/audio-gate.ts`) keeps, `src/audio/manager.ts` `SEGMENTS_SERVED` reads in production, `voices:check` covers, and `voices:render --promote` / `--import` write. Until then licensed segments stay staged and generated orders use the browser voice in builds; slow repeats of generated lines stay browser voice either way (`manager.ts:538`).
+- [x] Ship segments: a committed segment manifest (`src/data/voice/segments.manifest.json`, provenance + licence per segment clip) that the build gate (`scripts/audio-gate.ts` via `scripts/vite-voice.ts`) keeps, `src/audio/manager.ts` (`segmentServed`, was `SEGMENTS_SERVED`) reads in production, `voices:check` covers, and `voices:render --promote` / `--import` write. It lists 0 clips today, so generated orders still use the browser voice in builds until the HUMAN steps above land; slow repeats of generated lines stay browser voice either way.
 - Exit: [!] (HUMAN-only part not done by Claude: paid render, listen-through, recordings; today `voices:check --release` = 1026 errors, all placeholders) release:check green with 0 placeholders.
 - Evidence:
   - Branch `voice/phase3`, 11 commits: 4cdb399 provenance (validator + build gate) · fdda4a6 CAST + TTS_BUDGET ·
@@ -290,6 +290,31 @@ Owns `scripts/voices*`, `scripts/tts-*.ts`, `src/audio/**`, `src/data/voice/**` 
     (563)`). `E2E_PORT=5179 npm run test:e2e`: `28 passed (24.0m)`, exit 0.
   - Mistake: 6428542 was committed with a lint error (`no-regex-spaces`); my check printed only lint's last line. Fixed in
     d0616d6; every later commit ran `typecheck && lint && test` chained to the commit.
+  - Ship segments (branch `feat/ship-segments`): ecc0d4d manifest + validator · 9e7123b build gate · 20d5c54 manager ·
+    61e37f2 voices:check · 05c81e7 promote/import · 3293034 `voices --prune` fix · docs.
+  - Format: `{ "version": 1, "clips": [] }`; a clip is `SegmentClip` (`src/data/voice/manifest.ts`): id, characterId,
+    voiceId, transcript (the segment's trimmed words), file = `segmentFile(id)`, duration, meanDb, and the line clips'
+    `source`. A separate file: the line manifest's version and shape are unchanged. Validator:
+    `src/data/voice/validateSegments.ts` (segment exists with the same words, file path, release-only source, no pitch
+    shift or shared voice, > 0.05 s, not silent). Production serves `releaseSegmentIds()` only; development tries every
+    segment. The gate change (`gateManifests()` in `scripts/vite-voice.ts`, lines ∪ segments into the unchanged
+    `classifyAudio`) is outside the owned paths, needed by this item.
+  - Tests (temp dirs and the ffmpeg stand-in; no audio committed): validator and serving set
+    (`tests/data/segmentManifest.test.ts`); gate keeps a listed licensed segment, rejects an unlisted or unlicensed one,
+    still strips only placeholders, and the build plugin on a temp project (`tests/scripts/audioGate.test.ts`); manager
+    with `DEV` false: listed release segments are fetched and played, an unlisted or unlicensed one sends the whole line
+    to the browser voice without a fetch, slow repeats stay browser voice; with `DEV` every segment is tried
+    (`tests/audio/manager.test.ts`, the two rejection tests fail on the old manager); `voices:check` catches changed
+    words, no licence, a placeholder, a missing or drifting file and an unlisted file (`tests/scripts/voicesCheck.test.ts`);
+    `--promote` refuses fake-tts segments and writes licensed ones, `--import` writes Jiwoo's segment takes as recorded
+    (`tests/scripts/voicesRender.test.ts`).
+  - Checks: `Test Files  72 passed (72)` · `Tests  596 passed (596)`. `npm run voices:check -- --manifest-only`:
+    `voices:check segments: 0/181 segments have a release clip in src/data/voice/segments.manifest.json, 0 error(s),
+    0 warning(s)` (plain `voices:check` in this worktree: 596 missing-audio, as it has no voice-cache/). `npm run build`:
+    `[audio-gate] ok: 0 licensed audio file(s) in the build`. e2e: not run by Claude (the maintainer runs it).
+  - Found on the way: `npm run voices -- --prune` deleted voice-cache/segments/ and the paid staging in
+    voice-cache/licensed/ (both look like orphans of the line manifest); fixed in 3293034. The prune pass needs macOS
+    voices and has no automated test; its rule (`ownIndex`) is tested through `voices:check`.
 
 ## Phase 4 — Independent review  `[x]`
 Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tests/**` only.
@@ -404,5 +429,5 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
 - Register reaction time for the balance bots (QUEUE_JUMP never fires while they take orders instantly): decided (b),
   wait for Phase 5 numbers (balance-hook.md §2). Phase 5 should log how long players leave someone at the register.
 - Upgrade prices: set in Phase 2 from an average player's tips (rule in `src/data/upgrades.ts`). Revisit with Phase 5 numbers.
-- Segment clips: rendered (TTS) or scripted for the actors in Phase 3, but generated orders use the browser voice in builds until the "Ship segments" item lands.
+- Segment clips: rendered (TTS) or scripted for the actors in Phase 3. They ship once promoted or imported into `src/data/voice/segments.manifest.json`; it lists 0 today, so generated orders use the browser voice in builds.
 - Google's Service Terms §20(d) (Generative AI Services, under-18 restriction): does it cover Chirp 3 HD? Edward to check before shipping TTS clips (docs/VOICE_PROVIDERS.md).

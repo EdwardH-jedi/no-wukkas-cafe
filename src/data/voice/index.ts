@@ -2,10 +2,22 @@
 // rendered locally by `npm run voices`, so timing stays deterministic even where clips are missing.
 
 import manifestJson from './manifest.json';
+import segmentsJson from './segments.manifest.json';
 import { dialogueId, type Delivery } from './ids';
-import type { VoiceClip, VoiceManifest } from './manifest';
+import {
+  releaseSegmentIds,
+  type SegmentManifest,
+  type VoiceClip,
+  type VoiceManifest,
+} from './manifest';
 
 export const VOICE_MANIFEST = manifestJson as VoiceManifest;
+
+/** The generated-order segment clips that ship (release audio only; none yet). The scripts read
+ *  the JSON from disk instead of importing it here. */
+export const SEGMENT_MANIFEST = segmentsJson as SegmentManifest;
+/** Segment ids a production build may ask the server for (data/voice/manifest.ts). */
+export const RELEASE_SEGMENTS: ReadonlySet<string> = releaseSegmentIds(SEGMENT_MANIFEST);
 
 const byId = new Map<string, VoiceClip>(VOICE_MANIFEST.clips.map((c) => [c.dialogueId, c]));
 

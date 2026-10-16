@@ -1,11 +1,12 @@
 // Node-only helpers shared by the voice scripts (render + check). Not bundled into the game.
 
 import { execFile } from 'node:child_process';
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { registerHooks } from 'node:module';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import type { SegmentManifest } from '../src/data/voice/manifest.ts';
 
 // src/ uses bundler-style extensionless imports; teach Node to try `.ts`.
 registerHooks({
@@ -24,6 +25,16 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** Overridable for tests (VOICES_MANIFEST / VOICES_CACHE / VOICES_PUBLIC) so they never touch the
  *  real files. */
 export const MANIFEST = process.env.VOICES_MANIFEST ?? join(ROOT, 'src/data/voice/manifest.json');
+/** The committed segment manifest (src/data/voice/segments.manifest.json). VOICES_SEGMENT_MANIFEST
+ *  overrides it; otherwise it sits beside MANIFEST, so a test that moves the line manifest never
+ *  touches the real one. */
+export const SEGMENT_MANIFEST =
+  process.env.VOICES_SEGMENT_MANIFEST ?? join(dirname(MANIFEST), 'segments.manifest.json');
+/** The segment manifest, or an empty one where the file doesn't exist yet. */
+export const readSegmentManifest = (): SegmentManifest =>
+  existsSync(SEGMENT_MANIFEST)
+    ? (JSON.parse(readFileSync(SEGMENT_MANIFEST, 'utf8')) as SegmentManifest)
+    : { version: 1, clips: [] };
 const CACHE = process.env.VOICES_CACHE ?? join(ROOT, 'voice-cache');
 const PUBLIC = process.env.VOICES_PUBLIC ?? join(ROOT, 'public');
 
@@ -80,6 +91,12 @@ export async function pool<T>(
     }),
   );
 }
+
+/** Cached clips with an index of their own rather than the line manifest: the placeholder segment
+ *  clips (voice-cache/segments/, `npm run voices -- --segments`) and the licensed staging
+ *  (voice-cache/licensed/, `npm run voices:render`). Never orphans of the line manifest. */
+export const ownIndex = (file: string): boolean =>
+  file.startsWith(`${URL_PREFIX}segments/`) || file.startsWith(`${URL_PREFIX}licensed/`);
 
 /** Every .mp3 under `dir`, as URL paths ("assets/voice/<speaker>/<file>"). */
 export function listClips(dir: string): string[] {

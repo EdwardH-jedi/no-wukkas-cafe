@@ -28,6 +28,7 @@ import {
   listClips,
   MANIFEST,
   measure,
+  ownIndex,
   pool,
   ROOT,
   run,
@@ -486,8 +487,9 @@ async function main(): Promise<void> {
   if (prune && !failures.length) {
     const listed = new Set(manifest.clips.map((c) => c.file));
     let removed = 0;
+    // Never the segment placeholders or the licensed (paid) staging: they have their own index.
     for (const f of listClips(CACHE_DIR))
-      if (!listed.has(f)) {
+      if (!listed.has(f) && !ownIndex(f)) {
         rmSync(cachePath(f), { force: true });
         removed++;
       }

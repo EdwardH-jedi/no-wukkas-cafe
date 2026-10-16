@@ -6,7 +6,7 @@
 // fades the old one out. When a clip is missing or fails to load, the line falls back to browser
 // speech (audio/voice.ts) and the status says so instead of failing silently.
 
-import { clipFor, VOICE_MANIFEST } from '../data/voice';
+import { clipFor, RELEASE_SEGMENTS, VOICE_MANIFEST } from '../data/voice';
 import type { Delivery } from '../data/voice/ids';
 import { segmentFile, type VoiceClip } from '../data/voice/manifest';
 import { VOICE_PROFILES } from '../data/voice/profiles';
@@ -128,9 +128,11 @@ const DECODED_CACHE = 16;
  *  that still plays, but past this a newer line (Gaz's nag) would drop it and the order would never
  *  be heard. */
 export const LOAD_TIMEOUT = 12;
-/** Segment clips exist only as dev placeholders so far (voice-cache/segments/, served by the dev
- *  server); a build has none, so generated lines go straight to the browser voice there. */
-const SEGMENTS_SERVED = import.meta.env.DEV;
+/** Which segment clips to ask the server for. Development: every one (placeholders from
+ *  voice-cache/segments/, served by the dev server). Production: only release clips the committed
+ *  segment manifest lists (data/voice/segments.manifest.json), the ones the build gate keeps; a line
+ *  with any other segment goes to the browser voice whole. None are listed yet. */
+const segmentServed = (id: string): boolean => import.meta.env.DEV || RELEASE_SEGMENTS.has(id);
 
 interface Saved {
   voice: number;
@@ -421,7 +423,7 @@ export function createAudioManager(
    *  context) freezes the list, and a newer line or stopVoice drops the parts not yet played. */
   const saySegments = (req: VoiceRequest, ids: readonly string[], my: number): void => {
     const files = ids.map(segmentFile);
-    if (!ctx || !SEGMENTS_SERVED || files.some((f) => missingSegments.has(f))) {
+    if (!ctx || !ids.every(segmentServed) || files.some((f) => missingSegments.has(f))) {
       viaTts(req, ctx ? 'No recording for part of this line.' : null, my);
       return;
     }

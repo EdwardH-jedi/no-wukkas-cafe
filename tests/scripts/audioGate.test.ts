@@ -1,11 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { describe, expect, it, vi } from 'vitest';
 import {
   audioInCode,
   classifyAudio,
   neverInlineAudio,
   type ProvenanceEntry,
 } from '../../scripts/audio-gate';
+import { gateManifests, voiceAssets } from '../../scripts/vite-voice';
 import { VOICE_MANIFEST } from '../../src/data/voice';
+import { segmentFile } from '../../src/data/voice/manifest';
 
 const entry = (file: string, over: Partial<ProvenanceEntry> = {}): ProvenanceEntry => ({
   file,
@@ -136,5 +141,99 @@ describe('audio never ships inside the code', () => {
       '/p/notes.txt?raw',
     ];
     expect(audioInCode(ids)).toEqual(['/p/a.flac?inline', '/p/b.ogg?raw', '/p/c.WAV?url&inline']);
+  });
+});
+
+describe('the build gate with the segment manifest (scripts/vite-voice.ts)', () => {
+  const placeholder = VOICE_MANIFEST.clips[0]!.file;
+  const licensed = segmentFile('dazza.greet.1');
+  const unlisted = segmentFile('dazza.hot.1');
+  const release = (file: string) => ({
+    file,
+    source: {
+      placeholder: false,
+      licence: 'Google Cloud TTS terms',
+      provenance: 'licensed_tts',
+    },
+  });
+
+  /** A project root with the line manifest (one placeholder, one release clip), a segment
+   *  manifest listing one licensed segment, an empty provenance list and the given dist/ files. */
+  function project(segments: object | null, dist: string[]) {
+    const root = mkdtempSync(join(tmpdir(), 'nwc-gate-test-'));
+    const json = (rel: string, data: object): void => {
+      mkdirSync(dirname(join(root, rel)), { recursive: true });
+      writeFileSync(join(root, rel), JSON.stringify(data));
+    };
+    json('src/data/voice/manifest.json', {
+      clips: [VOICE_MANIFEST.clips[0], release('assets/voice/gaz/0000beef.mp3')],
+    });
+    if (segments) json('src/data/voice/segments.manifest.json', segments);
+    json('src/data/audio/provenance.json', { files: [] });
+    for (const f of dist) {
+      mkdirSync(dirname(join(root, 'dist', f)), { recursive: true });
+      writeFileSync(join(root, 'dist', f), 'mp3');
+    }
+    return root;
+  }
+  const listed = { version: 1, clips: [release(licensed)] };
+
+  it('keeps a licensed segment the segment manifest lists, rejects an unlisted one', () => {
+    const { voice, provenance } = gateManifests(project(listed, []));
+    const r = classifyAudio(
+      [placeholder, 'assets/voice/gaz/0000beef.mp3', licensed, unlisted],
+      voice,
+      provenance,
+    );
+    // Strips nothing it shouldn't: only the placeholder line clip goes; both release clips stay.
+    expect(r).toEqual({
+      keep: ['assets/voice/gaz/0000beef.mp3', licensed],
+      strip: [placeholder],
+      reject: [{ file: unlisted, why: expect.stringMatching(/segment manifest/) }],
+    });
+  });
+
+  it('a segment listed without a licence or a release provenance fails the build', () => {
+    const bad = {
+      version: 1,
+      clips: [
+        { file: licensed, source: { placeholder: false, provenance: 'licensed_tts' } },
+        { file: unlisted, source: { placeholder: false, licence: 'x', provenance: 'placeholder' } },
+      ],
+    };
+    const { voice, provenance } = gateManifests(project(bad, []));
+    expect(
+      classifyAudio([licensed, unlisted], voice, provenance).reject.map((x) => x.file),
+    ).toEqual([licensed, unlisted]);
+  });
+
+  it('the committed manifests: no segment clip ships yet, so any segment file fails the build', () => {
+    const { voice, provenance } = gateManifests(join(import.meta.dirname, '..', '..'));
+    const r = classifyAudio([placeholder, licensed], voice, provenance);
+    expect(r.strip).toEqual([placeholder]);
+    expect(r.reject.map((x) => x.file)).toEqual([licensed]);
+  });
+
+  it('the build plugin keeps the listed segment in dist/ and fails on an unlisted one', () => {
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const build = (root: string): void => {
+      const plugin = voiceAssets(root).find((p) => p.name === 'nwc-audio-release-gate')!;
+      (plugin.configResolved as unknown as (c: object) => void)({
+        root,
+        build: { outDir: 'dist' },
+      });
+      (plugin.closeBundle as unknown as () => void)();
+    };
+    const ok = project(listed, [placeholder, licensed]);
+    build(ok);
+    expect(existsSync(join(ok, 'dist', licensed))).toBe(true);
+    expect(existsSync(join(ok, 'dist', placeholder))).toBe(false);
+    expect(() => build(project(listed, [licensed, unlisted]))).toThrow(
+      /1 audio file\(s\).*\n.*dazza\.hot\.1\.mp3: no provenance/,
+    );
+    // Without a segment manifest file, no segment clip is accounted for.
+    expect(() => build(project(null, [licensed]))).toThrow(/dazza\.greet\.1\.mp3/);
+    vi.restoreAllMocks();
   });
 });
