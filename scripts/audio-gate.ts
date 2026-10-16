@@ -6,7 +6,10 @@
 //   strip   placeholder voice clips (development audio that must never ship)
 //   reject  anything else: unknown provenance fails the build instead of shipping silently
 
-export const AUDIO_FILE = /\.(mp3|ogg|oga|wav|m4a|aac|flac|opus|weba|webm|mid|midi)$/i;
+/** Every audio format the gate checks: what browsers play, plus the formats takes arrive in
+ *  (AIFF and CAF from macOS; scripts/voices-render.ts and voices-audition.ts import AIFF). */
+export const AUDIO_FILE =
+  /\.(mp3|ogg|oga|wav|m4a|aac|flac|opus|weba|webm|mid|midi|aif|aiff|aifc|caf)$/i;
 
 export interface VoiceManifestLike {
   clips: Array<{

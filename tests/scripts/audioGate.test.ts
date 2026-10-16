@@ -36,6 +36,12 @@ describe('audio release gate', () => {
     ]);
   });
 
+  it('checks the formats takes arrive in as well (AIFF, CAF), in any case', () => {
+    const takes = ['takes/a.aiff', 'takes/b.AIF', 'takes/c.aifc', 'takes/d.caf'];
+    const r = classifyAudio([...takes, 'takes/notes.txt'], VOICE_MANIFEST, { files: [] });
+    expect(r.reject.map((x) => x.file)).toEqual(takes);
+  });
+
   it('keeps files with a verified licence; unverified entries are rejected', () => {
     const r = classifyAudio(['assets/music/a.ogg', 'assets/music/b.ogg'], VOICE_MANIFEST, {
       files: [entry('assets/music/a.ogg'), entry('assets/music/b.ogg', { verifiedBy: '' })],

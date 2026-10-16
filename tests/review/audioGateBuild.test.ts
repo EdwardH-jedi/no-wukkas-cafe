@@ -1,7 +1,7 @@
 // Scenario 8: a production build containing an audio file with no verified licence fails. The
 // classifier itself is unit-tested in tests/scripts/audioGate.test.ts; this runs the real Vite
 // build hook (scripts/vite-voice.ts) on throwaway projects, and checks the game's own build
-// config installs it. (Audio formats and paths the gate does not see: the .failing file.)
+// config installs it. (Audio inlined into the code, out of the gate's sight: the .failing file.)
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -42,10 +42,21 @@ describe('S8: unlicensed audio fails the build', () => {
 
   it('every listed audio extension fails the same way, upper case included', async () => {
     const p = fresh();
-    const files = ['a.mp3', 'b.WAV', 'c.m4a', 'd.flac', 'e.opus', 'f.webm'].map((f) => `sfx/${f}`);
+    const files = ['a.mp3', 'b.WAV', 'c.m4a', 'd.flac', 'e.opus', 'f.webm', 'g.aiff', 'h.caf'].map(
+      (f) => `sfx/${f}`,
+    );
     for (const f of files) p.put(`public/${f}`);
     const err = await buildWithGate(p);
     for (const f of files) expect(err?.message).toContain(f);
+  });
+
+  it('an unlicensed AIFF in public/ fails the build', async () => {
+    // The format the repo's own take importers accept (voices-render.ts, voices-audition.ts).
+    const p = fresh();
+    p.put('public/assets/voice/takes/dazza-1.aiff', 'FORM....AIFF');
+    p.put('public/assets/voice/takes/dazza-2.AIF', 'FORM....AIFF');
+    const err = await buildWithGate(p);
+    expect(err?.message ?? 'the build passed', 'unlicensed AIFF shipped').toMatch(/audio-gate/);
   });
 
   it('a placeholder voice clip is stripped from the build, not shipped (and the build passes)', async () => {
