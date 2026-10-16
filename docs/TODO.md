@@ -260,13 +260,70 @@ Owns `scripts/voices*`, `scripts/tts-*.ts`, `src/audio/**`, `src/data/voice/**` 
   - Mistake: 6428542 was committed with a lint error (`no-regex-spaces`); my check printed only lint's last line. Fixed in
     d0616d6; every later commit ran `typecheck && lint && test` chained to the commit.
 
-## Phase 4 — Independent review  `[ ]`
+## Phase 4 — Independent review  `[~]` review, fuzz and grep done; fixes 4.F1–4.F7 below
 Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tests/**` only.
-- [ ] Codex (or a fresh Claude subagent that has not seen the diffs) reviews main against the bible §20 scenarios and writes regression tests for: pause → title → new game audio; audio 404 / 10 s / 25 s never skips an order; no speech after a customer leaves; wrong milk hand-back and remake; BGM ducking and 4 sliders independent; ibis/events deterministic and never interrupt an order line; latte scored from the foam field; build with unlicensed audio fails.
-- [ ] Seed fuzz: week progression, generator, scheduler over 500 seeds; invariant violations reported with the seed.
-- [ ] Determinism grep: Math.random / Date.now / setTimeout under src/sim and src/core = 0 hits.
-- [ ] Verdict per area: MERGE / FIX (list) / BLOCK; fixes become ordinary tasks appended here.
+- [x] Codex (or a fresh Claude subagent that has not seen the diffs) reviews main against the bible §20 scenarios and writes regression tests for: pause → title → new game audio; audio 404 / 10 s / 25 s never skips an order; no speech after a customer leaves; wrong milk hand-back and remake; BGM ducking and 4 sliders independent; ibis/events deterministic and never interrupt an order line; latte scored from the foam field; build with unlicensed audio fails.
+- [x] Seed fuzz: week progression, generator, scheduler over 500 seeds; invariant violations reported with the seed.
+- [x] Determinism grep: Math.random / Date.now / setTimeout under src/sim and src/core = 0 hits.
+- [x] Verdict per area: MERGE / FIX (list) / BLOCK; fixes become ordinary tasks appended here.
+- [ ] 4.F1 (S2) An order clip that loads in 25 s is never voiced: the hold releases at 6 s, Gaz's nag is said,
+      the late clip is dropped (`src/app/boot.ts` hold, `src/audio/manager.ts` no load timeout / newer-line drop).
+- [ ] 4.F2 (S3) A slow or failing reaction/walk-out clip starts after the customer has left (`manager.ts` gates
+      only on `gen`; `core/rush/customers.ts` drops queued lines on `gone`, not the one in flight).
+- [ ] 4.F3 (S1) After pause → title, R / "Replay last line" replays the old customer's order (`stopVoice` keeps
+      `lastLine`).
+- [ ] 4.F4 (S1) After a Hard shift the café murmur stays at the shift's level (0.034, default 0.012) on the title
+      and the next Day 1 (`toTitle` never resets `setNoise`).
+- [ ] 4.F5 (S6) The bin chicken walks in (and honks) while a customer is mid-order on 4 of 8 bird seeds of
+      Wednesday (`core/rushIbis.ts` `doorOpen` isn't gated; `sim/events/defs.ts` says "only while nobody is mid-order").
+- [ ] 4.F6 (S8) An unlicensed `.aiff`/`.aif`/`.caf` in `public/` builds: `scripts/audio-gate.ts` `AUDIO_FILE` lacks them.
+- [ ] 4.F7 (S8, latent) An mp3 imported from JS is inlined as `data:audio/…` and never reaches the gate
+      (`scripts/vite-voice.ts` scans emitted files only). Nothing imports audio today.
 - Evidence:
+  - The "bible §20" isn't in the repo or on the Desktop; the eight scenarios listed in the item are the spec.
+  - Reviewers: two fresh Claude subagents (general-purpose, own worktrees, told not to read git history, diffs or
+    this file's Evidence), `tests/**` only. Both hit a network drop mid-run and were resumed with their context.
+  - Scenarios (599c84f, `tests/review/`, 8 test files + 5 helpers): `harness.ts` runs the real startRush / toTitle /
+    createRushLoop / rushView, audio manager, music and sfx on a recording fake AudioContext with test-controlled
+    fetch timing; it copies boot.ts's frame body (voice hold, `MAX_VOICE_HOLD = 6`), so a change there must follow.
+    Table — already covered → new: (1) pause→title→new game: e2e/audioState.spec.ts:89 (skips without clips) →
+    pauseTitleAudio PASS (context runs, stale clip never plays, one voice, one mood, no doubled loops) + 2 FAIL
+    (4.F3, 4.F4). (2) 404/10 s/25 s: audioContract.test.ts:47 (sim hold only), e2e/audioSmoke.spec.ts:237 → slowOrderAudio
+    PASS for 404, 10 s, 404-after-10 s; 25 s FAIL (4.F1). (3) after leaving: audioContract.test.ts:172/:200 (sim
+    only) → leftCustomerSilent PASS on time, 3 FAIL slow/failing (4.F2). (4) wrong milk: rush.test.ts:446,
+    rushListening.test.ts:134 → wrongMilkRemake PASS (adds the making-mistake path). (5) ducking + 4 buses:
+    e2e/music.spec.ts:25 (duck only; bus independence untested anywhere) → busesAndDuck PASS (5 tests).
+    (6) events: scheduler.test.ts:59/:83, rushEvents.test.ts:76 (seed 1) → eventsDeterministic PASS + bird
+    entrance FAIL (4.F5). (7) latte from the field: sim/latte.test.ts:104/:188 → latteFieldScore PASS (practice,
+    Day 1, Day 2, source guard). (8) build gate: audioGate.test.ts (classifier only) → audioGateBuild PASS (real Vite
+    build with the gate plugin) + 2 FAIL (4.F6, 4.F7). Failing tests were left out of the commit and handed to the
+    fixes. Lane run: `Test Files 76 passed (76)` · `Tests 591 passed (591)`.
+  - Fuzz (b7c2fdc, `tests/fuzz/` + `tests/helpers/fuzzRules.ts`, ~22 s): every violation collected with its seed.
+    Week progression in four layers (full bot play is ~3 s per seed-week): 500 seeds × 15–25 synthetic reports
+    through finishShift/nextShift/the store; 500 seeds × 5 shifts with an idle player (weeks 1–2, 3 difficulties,
+    Endless every 5th); 500 seeds × 1 shift expert bot on a long-black menu (+160 Thu/Fri for CALL_MANAGER→refuse);
+    12 seeds novice on the real menu. Invariants: save never mutated, one report per step; till += tips, whole
+    cents, ≥ 0; pass moves one shift, disaster stays; menu only grows; only the current shift playable; served +
+    walk-outs + refused = the table's count; report = what happened; events ≤ cap, ≥ 45 s apart, cooldowns, none
+    while an order is said; deterministic re-runs. Generator: 500 seeds over the u32 range × 3 difficulties ×
+    shifts 0–9: valid playable recipes, segments from the speaker's own phrasebook, text = joined segments, segment
+    order, a/an, change-of-mind consistency, no repeat transcript in a week shift. Scheduler (new rules beside the
+    1,000-seed test): each event only under its own rule (written from data/events.ts, checked against
+    canTrigger), log = picks, caps over two weeks, every choice resolves to a sound outcome, bird booking never on
+    Monday/Endless. Result: 0 violations.
+  - Determinism (f5ebe60): `grep -rn "Math\.random\|Date\.now\|setTimeout\|setInterval\|performance\.now\|new
+    Date" src/sim src/core` → no output, exit 1 (0 hits). `tests/lint/corePurity.test.ts`: 54 lint probes over 9
+    locations in src/sim and src/core, plus a TypeScript-AST scan of every file (comments can't hide a call; also
+    catches `Date['now']`, `performance.now`, `new Date()`, `globalThis.setTimeout`, `requestAnimationFrame`,
+    `queueMicrotask`, `crypto.getRandomValues`, which lint alone misses) with a planted-hit self-test: 0 hits.
+  - Integrated on test/phase4-review: `Test Files  82 passed (82)` · `Tests  663 passed (663)` (62.8 s).
+  - Verdicts: week progression, generator, scheduler, determinism MERGE. S4 wrong milk, S5 buses/ducking, S7 latte
+    MERGE. S1 pause→title MERGE with two low fixes (4.F3, 4.F4). S2 slow audio FIX (4.F1). S3 after leaving FIX
+    (4.F2). S6 events FIX, low-medium (4.F5; determinism and the shift-event order window hold). S8 build FIX
+    (4.F6, 4.F7). No BLOCK: no unlicensed audio is in the repo today.
+  - Not failures, noted by the fuzz: THE_USUAL can never fire from a fresh save (only THE_USUAL raises affinity,
+    and `RegularMemory.visits` is never written; see 1.5.5); WRONG_MILK fired 0 times in 12 novice seeds; in week 2+
+    `shiftRows` reports the playable shift as `done` (cosmetic: `shiftCells` uses `canPlay`).
 
 ## Phase 5 — Playtest #1  `[ ]`
 - [ ] **HUMAN**: 3–5 people (working-holiday makers / international students ideal), Trial + Mon–Wed, 30 min each. Notes in `docs/playtests/<date>.md`: where they got stuck, pardons per order, walk-outs, "one more shift?" yes/no.
