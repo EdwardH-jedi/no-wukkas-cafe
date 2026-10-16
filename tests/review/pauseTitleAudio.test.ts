@@ -3,7 +3,7 @@
 // is still downloading when the player pauses and quits; it must never play in the new game, and
 // the new game's audio must run normally (context running, one voice at a time, one music mood,
 // the SFX loops built once). And nothing from the quit game carries over: Replay on the title has
-// nothing of it to say.
+// nothing of it to say, and the café murmur is back to a fresh page's.
 
 import { afterEach, describe, expect, it } from 'vitest';
 import { act } from '../../src/app/trialWiring';
@@ -72,6 +72,18 @@ async function quitMidOrder(h: Harness): Promise<{ id: string; text: string }> {
 }
 const reg = (h: Harness): boolean =>
   h.app.rush?.customers.some((c) => c.state === 'register') ?? false;
+
+/** The café murmur's gain (the SFX's crowd loop: speech-band noise into the ambience bus). */
+function murmur(h: Harness): number {
+  const ctx = h.ctx();
+  const band = ctx.nodes.find(
+    (n) =>
+      n.kind === 'biquad' &&
+      (n as FakeNode & { frequency: { value: number } }).frequency.value === 520,
+  );
+  const g = band?.outs[0] as (FakeNode & { gain: { value: number } }) | undefined;
+  return g?.gain.value ?? NaN;
+}
 
 describe('S1: pause mid-shift, quit to the title, start a new game', () => {
   it('the quit game never speaks again; the new one has running audio, one voice, one mood, no doubled loops', async () => {
@@ -150,5 +162,23 @@ describe('S1: nothing from the quit game carries into the next one', () => {
       after.filter((s) => s.speaker === quit.id),
       `on the title screen, Replay says "${quit.text}"`,
     ).toEqual([]);
+  });
+
+  it("the café ambience on the title (and the Day 1 trial after it) is back to a fresh page's", async () => {
+    const fresh = createHarness({ plan: () => FAST });
+    await fresh.run(0.5);
+    act(fresh.app, 'start'); // a fresh page: Day 1 straight from the title
+    await fresh.run(1);
+    const day1Murmur = murmur(fresh);
+    vi.unstubAllGlobals();
+
+    const h = createHarness({ plan: () => FAST, listen: { difficulty: 'hard' } });
+    await quitMidOrder(h);
+    act(h.app, 'start');
+    await h.run(1);
+    expect(murmur(h), 'Day 1 after a Hard shift keeps the packed-café murmur').toBeCloseTo(
+      day1Murmur,
+      6,
+    );
   });
 });
