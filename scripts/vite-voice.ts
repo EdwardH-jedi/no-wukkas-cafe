@@ -3,12 +3,20 @@
 //    clips in public/assets/voice/ are served by Vite as usual);
 //  - production build: every audio file in dist/ goes through the release gate
 //    (scripts/audio-gate.ts). Placeholder voice clips are removed; audio with unknown or
-//    unverified provenance FAILS the build, so nothing unlicensed ships silently.
+//    unverified provenance FAILS the build, so nothing unlicensed ships silently. Audio is never
+//    inlined into the code (no file for the gate to see): imports are emitted as files, and an
+//    import that asks for the bytes in the code (?inline, ?raw) fails the build.
 
 import { createReadStream, existsSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, normalize, relative, resolve } from 'node:path';
 import type { Plugin } from 'vite';
-import { classifyAudio, type ProvenanceLike, type VoiceManifestLike } from './audio-gate.ts';
+import {
+  audioInCode,
+  classifyAudio,
+  neverInlineAudio,
+  type ProvenanceLike,
+  type VoiceManifestLike,
+} from './audio-gate.ts';
 
 const URL_PREFIX = '/assets/voice/';
 
@@ -31,6 +39,7 @@ function listFiles(dir: string): string[] {
 export function voiceAssets(root: string): Plugin[] {
   const cache = resolve(root, 'voice-cache');
   let outDir = resolve(root, 'dist');
+  let buildRoot = root;
   return [
     {
       name: 'nwc-voice-cache',
@@ -54,8 +63,23 @@ export function voiceAssets(root: string): Plugin[] {
     {
       name: 'nwc-audio-release-gate',
       apply: 'build',
+      config(user) {
+        return { build: { assetsInlineLimit: neverInlineAudio(user.build?.assetsInlineLimit) } };
+      },
       configResolved(config) {
         outDir = resolve(config.root, config.build.outDir);
+        buildRoot = config.root;
+      },
+      generateBundle(_, bundle) {
+        const ids = Object.values(bundle).flatMap((o) => (o.type === 'chunk' ? o.moduleIds : []));
+        const inCode = audioInCode(ids);
+        if (inCode.length) {
+          const list = inCode.map((id) => `  ${relative(buildRoot, id)}`).join('\n');
+          throw new Error(
+            `[audio-gate] ${inCode.length} audio import(s) would ship inside the code, where no licence is checked:\n${list}\n` +
+              'Import audio as a file (no ?inline or ?raw), or put it in public/ (docs/AUDIO_PROVENANCE.md).',
+          );
+        }
       },
       closeBundle() {
         const voice = readJson<VoiceManifestLike>(resolve(root, 'src/data/voice/manifest.json'), {
@@ -82,7 +106,7 @@ export function voiceAssets(root: string): Plugin[] {
           const list = gate.reject.map((r) => `  ${r.file}: ${r.why}`).join('\n');
           throw new Error(
             `[audio-gate] ${gate.reject.length} audio file(s) in the build have no verified licence:\n${list}\n` +
-              'Remove them from public/, or record their licence (docs/AUDIO_PROVENANCE.md).',
+              'Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).',
           );
         }
         console.log(`[audio-gate] ok: ${gate.keep.length} licensed audio file(s) in the build`);

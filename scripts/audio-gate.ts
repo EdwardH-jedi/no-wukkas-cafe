@@ -87,3 +87,27 @@ export function classifyAudio(
   }
   return out;
 }
+
+/** Vite's `build.assetsInlineLimit`, never inlining audio: audio imported from code is emitted as
+ *  a file, so the gate sees it. Anything else keeps the project's own limit (or Vite's default). */
+export function neverInlineAudio(
+  limit?: number | ((file: string, content: Buffer) => boolean | undefined),
+): (file: string, content: Buffer) => boolean | undefined {
+  return (file, content) => {
+    if (AUDIO_FILE.test(file)) return false;
+    if (typeof limit === 'function') return limit(file, content);
+    return limit === undefined ? undefined : content.length < limit;
+  };
+}
+
+/** Audio modules a build would ship inside its code, with no file emitted for the gate to see:
+ *  imported with `?inline` (a data: URL, whatever the limit) or `?raw` (the bytes as a string).
+ *  `moduleIds` as the bundler reports them (paths with their query). */
+export function audioInCode(moduleIds: readonly string[]): string[] {
+  return moduleIds.filter((id) => {
+    const q = id.indexOf('?');
+    if (q < 0 || !AUDIO_FILE.test(id.slice(0, q))) return false;
+    const query = new URLSearchParams(id.slice(q + 1));
+    return query.has('inline') || query.has('raw');
+  });
+}
