@@ -69,6 +69,8 @@ export interface RushCustomer {
   /** Seconds of patience left. */
   patience: number;
   registerAt: number | null;
+  /** Game time the player pressed "Take order" (telemetry: how long they stood at the register). */
+  takenAt: number | null;
   orderedAt: number | null;
   /** Ticket number once the order is taken (1, 2, ...). */
   ticket: number | null;
