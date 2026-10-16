@@ -1,7 +1,8 @@
 // The licensed voice pass (docs/TODO.md Phase 3): render the TTS half of the release cast
 // (src/data/voice/casting.ts CAST) into a staging folder, promote what was approved into the
 // release clips, and import the actors' recordings. Never commits audio: release clips live in
-// public/assets/voice/ (gitignored); only src/data/voice/manifest.json changes.
+// public/assets/voice/ (gitignored); only src/data/voice/manifest.json (lines) and
+// src/data/voice/segments.manifest.json (generated-order segments) change.
 //
 //   npm run voices:render                         dry run: what would render, characters, AU$, cap
 //   npm run voices:render -- --allow-paid         render → voice-cache/licensed/ (paid: needs
@@ -9,14 +10,19 @@
 //   npm run voices:render -- --segments …         the TTS speakers' generated-order segments too
 //   npm run voices:render -- --only dazza,karen   some speakers
 //   npm run voices:render -- --promote            offline: staged licensed clips → public/assets/
-//                                                 voice/ + the manifest (release, licensed_tts)
+//                                                 voice/ + the manifest (release, licensed_tts);
+//                                                 staged segments → public/assets/voice/segments/
+//                                                 + the segment manifest
 //   npm run voices:render -- --import <dir>       actors' takes → public/assets/voice/ + the
-//                                                 manifest (release, recorded); see the review sheet
+//                                                 manifest (release, recorded); segment takes
+//                                                 (<speaker>/segments/<id>.wav) → the segment
+//                                                 manifest; see the review sheet
 //
 // Staging: voice-cache/licensed/<the clip's path> plus index.json (provider, voice, licence,
 // characters, date per clip), written after every clip so a stopped run loses nothing paid for
-// and a re-run only renders what's missing. Segments stay staged: shipping them needs a segment
-// manifest the build gate and the game read (docs/TODO.md Phase 3).
+// and a re-run only renders what's missing. Each manifest is written only when it still
+// validates. A segment ships once the segment manifest lists it (the build gate keeps it and the
+// game asks for it in production); none are listed yet.
 
 import {
   copyFileSync,
@@ -30,7 +36,17 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join } from 'node:path';
-import { argValue, CACHE_DIR, MANIFEST, measure, pool, publicPath, run } from './voice-node.ts';
+import {
+  argValue,
+  CACHE_DIR,
+  MANIFEST,
+  measure,
+  pool,
+  publicPath,
+  readSegmentManifest,
+  run,
+  SEGMENT_MANIFEST,
+} from './voice-node.ts';
 
 const { voiceScript } = await import('../src/data/voice/script.ts');
 const { CAST, TTS_BUDGET } = await import('../src/data/voice/casting.ts');
@@ -38,6 +54,7 @@ const { SEGMENT_INVENTORY } = await import('../src/data/voice/segments.ts');
 const { VOICE_PROFILES } = await import('../src/data/voice/profiles.ts');
 const { DURATION_RANGE, PACE_RANGE, QUIET_DB, summarise, validateManifest } =
   await import('../src/data/voice/validate.ts');
+const { validateSegmentManifest } = await import('../src/data/voice/validateSegments.ts');
 const { voicePlan } = await import('./voices-plan.ts');
 const { estimateCost, paidAccess } = await import('./tts-provider.ts');
 const { GOOGLE_NEEDS, googleAuthFrom, googleProvider } = await import('./tts-google.ts');
@@ -46,6 +63,15 @@ type PlanJob = import('./voices-plan.ts').PlanJob;
 type TtsProvider = import('./tts-provider.ts').TtsProvider;
 type Manifest = import('../src/data/voice/manifest.ts').VoiceManifest;
 type Clip = import('../src/data/voice/manifest.ts').VoiceClip;
+type SegmentManifest = import('../src/data/voice/manifest.ts').SegmentManifest;
+type SegmentClip = import('../src/data/voice/manifest.ts').SegmentClip;
+type ReleaseSource = {
+  engine: string;
+  voice: string;
+  rate: number;
+  licence: string;
+  provenance: 'licensed_tts' | 'recorded';
+};
 
 export interface StagedClip {
   id: string;
@@ -269,13 +295,7 @@ function loadManifest(): Manifest {
 function releaseClip(
   old: Clip | undefined,
   j: Pick<PlanJob, 'id' | 'speaker' | 'key' | 'text' | 'delivery' | 'file'>,
-  src: {
-    engine: string;
-    voice: string;
-    rate: number;
-    licence: string;
-    provenance: 'licensed_tts' | 'recorded';
-  },
+  src: ReleaseSource,
   m: { duration: number; meanDb: number },
 ): Clip | null {
   const p = VOICE_PROFILES[j.speaker];
@@ -327,10 +347,58 @@ function saveManifest(m: Manifest, changed: number, what: string): void {
   );
 }
 
+/** The segment manifest entry for a release segment clip (`text` is the trimmed segment). */
+function segmentClip(
+  j: Pick<PlanJob, 'id' | 'speaker' | 'text' | 'file'>,
+  src: ReleaseSource,
+  m: { duration: number; meanDb: number },
+): SegmentClip {
+  return {
+    id: j.id,
+    characterId: j.speaker,
+    voiceId: `${src.engine}:${src.voice}`,
+    transcript: j.text,
+    file: j.file,
+    duration: m.duration,
+    meanDb: m.meanDb,
+    source: {
+      engine: src.engine,
+      voice: src.voice,
+      rate: src.rate,
+      pitch: 1,
+      placeholder: false,
+      deterministic: false,
+      licence: src.licence,
+      provenance: src.provenance,
+    },
+  };
+}
+
+/** Write the segment manifest when segment clips changed and it still validates, atomically. */
+function saveSegments(sm: SegmentManifest, changed: number, what: string): void {
+  if (!changed) return;
+  sm.clips.sort((a, b) => (a.id < b.id ? -1 : 1));
+  const issues = validateSegmentManifest(sm, {
+    inventory: SEGMENT_INVENTORY,
+    profiles: VOICE_PROFILES,
+  });
+  if (issues.length) {
+    for (const i of issues.slice(0, 20)) console.error(`  ${i.code}: ${i.id ?? ''} ${i.message}`);
+    console.error(`segment manifest NOT updated: ${issues.length} error(s) after ${what}`);
+    process.exitCode = 1;
+    return;
+  }
+  writeAtomic(SEGMENT_MANIFEST, `${JSON.stringify(sm, null, 2)}\n`);
+  console.log(
+    `${what}: ${changed} segment clip(s) now ship; the segment manifest lists ${sm.clips.length}`,
+  );
+}
+
 async function promote(): Promise<void> {
   const index = readIndex();
-  const lines = index.clips.filter((c) => c.kind === 'line' && (!only || only.has(c.speaker)));
-  const notLicensed = lines.filter((c) => c.provenance !== 'licensed_tts');
+  const picked = index.clips.filter((c) => !only || only.has(c.speaker));
+  const lines = picked.filter((c) => c.kind === 'line');
+  const notLicensed = picked.filter((c) => c.provenance !== 'licensed_tts');
   if (notLicensed.length) {
     console.error(
       `refused: ${notLicensed.length} staged clip(s) aren't licensed TTS (${[...new Set(notLicensed.map((c) => c.engine))].join(', ')}); only licensed_tts is promoted. Nothing changed.`,
@@ -354,21 +422,35 @@ async function promote(): Promise<void> {
     changed++;
   }
   m.clips = [...byId.values()];
-  const segments = index.clips.filter((c) => c.kind === 'segment').length;
-  if (segments)
-    console.log(
-      `${segments} staged segment clip(s) stay in ${STAGE}: segments don't ship yet (docs/TODO.md Phase 3).`,
-    );
   saveManifest(m, changed, 'promote');
+
+  // Generated-order segments: public/assets/voice/segments/ + the segment manifest.
+  const sm = readSegmentManifest();
+  const segById = new Map(sm.clips.map((c) => [c.id, c]));
+  let segChanged = 0;
+  for (const s of picked.filter((c) => c.kind === 'segment')) {
+    const from = stagedPath(s.file);
+    if (!existsSync(from)) continue;
+    const to = publicPath(s.file);
+    mkdirSync(dirname(to), { recursive: true });
+    copyFileSync(from, to);
+    segById.set(s.id, segmentClip(s, { ...s, provenance: 'licensed_tts' }, await measure(to)));
+    segChanged++;
+  }
+  sm.clips = [...segById.values()];
+  saveSegments(sm, segChanged, 'promote');
 }
 
 const TAKE = /\.(wav|mp3|flac|aif|aiff|m4a)$/i;
 
 async function importTakes(dir: string): Promise<void> {
-  const plan = voicePlan(voiceScript(), CAST);
+  const plan = voicePlan(voiceScript(), CAST, SEGMENT_INVENTORY);
   const m = loadManifest();
   const byId = new Map(m.clips.map((c) => [c.dialogueId, c]));
+  const sm = readSegmentManifest();
+  const segById = new Map(sm.clips.map((c) => [c.id, c]));
   let changed = 0;
+  let segChanged = 0;
   let unknown = 0;
   for (const speaker of readdirSync(dir)) {
     const cast = CAST[speaker];
@@ -387,7 +469,9 @@ async function importTakes(dir: string): Promise<void> {
     }
     // Takes are named after the clip's file: <hash>.wav, <hash>-slow.wav (the review sheet lists them).
     const jobsByName = new Map(
-      plan.recorded.filter((j) => j.speaker === speaker).map((j) => [basename(j.file, '.mp3'), j]),
+      plan.recorded
+        .filter((j) => j.speaker === speaker && j.kind === 'line')
+        .map((j) => [basename(j.file, '.mp3'), j]),
     );
     for (const name of readdirSync(folder).filter((f) => TAKE.test(f))) {
       const j = jobsByName.get(basename(name, extname(name)));
@@ -415,10 +499,40 @@ async function importTakes(dir: string): Promise<void> {
       byId.set(j.id, clip);
       changed++;
     }
+    // Segment takes: <speaker>/segments/<segment id>.wav (the review sheet's "deliver as").
+    const segFolder = join(folder, 'segments');
+    const segJobs = new Map(
+      plan.recorded
+        .filter((j) => j.speaker === speaker && j.kind === 'segment')
+        .map((j) => [j.id, j]),
+    );
+    for (const name of existsSync(segFolder)
+      ? readdirSync(segFolder).filter((f) => TAKE.test(f))
+      : []) {
+      const j = segJobs.get(basename(name, extname(name)));
+      if (!j) {
+        unknown++;
+        console.warn(`  ${speaker}/segments/${name}: not a segment of ${speaker}'s orders`);
+        continue;
+      }
+      const to = publicPath(j.file);
+      await encode(join(segFolder, name), to);
+      const rec: ReleaseSource = {
+        engine: 'recording',
+        voice: src.performer.trim(),
+        rate: 1,
+        licence: src.licence.trim(),
+        provenance: 'recorded',
+      };
+      segById.set(j.id, segmentClip(j, rec, await measure(to)));
+      segChanged++;
+    }
   }
   m.clips = [...byId.values()];
-  if (unknown) console.warn(`${unknown} take(s) didn't match a line and were skipped.`);
+  if (unknown) console.warn(`${unknown} take(s) didn't match a line or segment and were skipped.`);
   saveManifest(m, changed, 'import');
+  sm.clips = [...segById.values()];
+  saveSegments(sm, segChanged, 'import');
 }
 
 if (args.includes('--promote')) await promote();
