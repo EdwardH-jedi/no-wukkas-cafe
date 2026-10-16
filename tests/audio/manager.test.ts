@@ -5,6 +5,42 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createAudioManager, type AudioManager, type VoiceRequest } from '../../src/audio/manager';
 import { segmentFile } from '../../src/data/voice/manifest';
 
+// The committed segment manifest is empty until licensed segment clips exist. Here it lists the
+// three segments of LINE as licensed TTS, and one more without a licence (which never ships).
+vi.mock('../../src/data/voice/segments.manifest.json', () => {
+  const source = (licence: string) => ({
+    engine: 'google-tts',
+    voice: 'en-AU-Chirp3-HD-Fenrir',
+    rate: 1.1,
+    pitch: 1,
+    placeholder: false,
+    deterministic: false,
+    licence,
+    provenance: 'licensed_tts',
+  });
+  const clip = (id: string, licence = 'Google Cloud TTS terms') => ({
+    id,
+    characterId: 'dazza',
+    voiceId: 'google-tts:en-AU-Chirp3-HD-Fenrir',
+    transcript: id,
+    file: `assets/voice/segments/dazza/${id}.mp3`,
+    duration: 0.5,
+    meanDb: -20,
+    source: source(licence),
+  });
+  return {
+    default: {
+      version: 1,
+      clips: [
+        clip('dazza.greet.1'),
+        clip('dazza.core.flatWhite.full.1'),
+        clip('dazza.closeSay.2'),
+        clip('dazza.heart.1', ''),
+      ],
+    },
+  };
+});
+
 class Param {
   value = 1;
   setTargetAtTime(v: number): void {
@@ -220,5 +256,59 @@ describe('segmented lines', () => {
     expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: LINE.text });
     expect(ctx.started).toHaveLength(0);
     expect(fetched).toHaveLength(0);
+  });
+});
+
+describe('segment clips in a production build: only what the segment manifest ships', () => {
+  beforeEach(() => vi.stubEnv('DEV', false));
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('a line whose segments are all listed as release audio plays its clips', async () => {
+    const { m, ctx } = await started();
+    m.say(LINE);
+    await flush();
+    expect(fetched).toEqual(IDS.map(segmentFile));
+    expect(m.history.at(-1)).toMatchObject({ via: 'clip', text: LINE.text, segments: 1 });
+    ctx.advance(2);
+    expect(ctx.started).toHaveLength(3);
+  });
+
+  it('a line with an unlisted segment is the browser voice, whole; nothing is fetched', async () => {
+    files.set(segmentFile('dazza.hot.1'), 0.4); // even if the server had the file
+    const { m, ctx } = await started();
+    m.say({ ...LINE, segments: [IDS[0]!, 'dazza.hot.1', IDS[2]!] });
+    await flush();
+    expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: LINE.text });
+    expect(fetched).toEqual([]);
+    expect(ctx.started).toHaveLength(0);
+  });
+
+  it('a listed segment without a licence is not served either', async () => {
+    files.set(segmentFile('dazza.heart.1'), 0.4);
+    const { m } = await started();
+    m.say({ ...LINE, segments: [...IDS, 'dazza.heart.1'] });
+    await flush();
+    expect(m.history.at(-1)).toMatchObject({ via: 'tts' });
+    expect(fetched).toEqual([]);
+  });
+
+  it('a slow repeat stays the browser voice even when every segment ships', async () => {
+    const { m, ctx } = await started();
+    m.say({ ...LINE, delivery: 'slow' });
+    await flush();
+    expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: LINE.text });
+    expect(fetched).toEqual([]);
+    expect(ctx.started).toHaveLength(0);
+  });
+});
+
+describe('segment clips in development', () => {
+  it('every segment is tried, listed or not (placeholders from voice-cache/segments/)', async () => {
+    files.set(segmentFile('dazza.hot.1'), 0.4);
+    const { m } = await started();
+    m.say({ ...LINE, segments: [IDS[0]!, 'dazza.hot.1'] });
+    await flush();
+    expect(fetched).toEqual([segmentFile(IDS[0]!), segmentFile('dazza.hot.1')]);
+    expect(m.history.at(-1)).toMatchObject({ via: 'clip', segments: 1 });
   });
 });
