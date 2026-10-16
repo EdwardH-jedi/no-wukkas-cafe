@@ -74,7 +74,9 @@ export interface AudioManager {
   /** Say the last line again. Returns it, or null if nothing has been said. */
   replay(): VoiceRequest | null;
   readonly lastLine: VoiceRequest | null;
-  stopVoice(): void;
+  /** Stop the line loading or playing. `forget`: forget it as well, so Replay has nothing to say
+   *  (back to the title: nothing from the quit game). */
+  stopVoice(opts?: { forget?: boolean }): void;
   /** `speaker` has left: if the current line is theirs (still loading, or playing) it stops, so a
    *  late clip or browser-voice stand-in never starts. Anyone else's line plays on. */
   stopSpeaker(speaker: string): void;
@@ -633,10 +635,11 @@ export function createAudioManager(
     get lastLine() {
       return lastLine;
     },
-    stopVoice() {
+    stopVoice(opts) {
       gen++;
       loadingGen = -1;
       pendingTts = null;
+      if (opts?.forget) lastLine = null;
       stopSource();
       tts.stop();
     },

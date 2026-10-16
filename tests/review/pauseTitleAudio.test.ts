@@ -2,7 +2,8 @@
 // rush loop and views) on the real audio stack, over a fake AudioContext. The customer's order clip
 // is still downloading when the player pauses and quits; it must never play in the new game, and
 // the new game's audio must run normally (context running, one voice at a time, one music mood,
-// the SFX loops built once).
+// the SFX loops built once). And nothing from the quit game carries over: Replay on the title has
+// nothing of it to say.
 
 import { afterEach, describe, expect, it } from 'vitest';
 import { act } from '../../src/app/trialWiring';
@@ -53,6 +54,24 @@ async function toRegister(h: Harness, id: string): Promise<void> {
   );
   expect(ok, `${id} reached the register`).toBe(true);
 }
+
+async function quitMidOrder(h: Harness): Promise<{ id: string; text: string }> {
+  const first = [...createRush(h.app.seed).customers].sort((a, b) => a.arriveAt - b.arriveAt)[0]!;
+  await h.run(0.5);
+  h.app.nav.startDay2();
+  const step = { n: 0 };
+  h.beforeStep = (app) => clickThroughIntro(app, step);
+  expect(await h.until(() => reg(h), 120)).toBe(true);
+  h.app.rushAction = { type: 'takeOrder' };
+  await h.run(4); // they say their order
+  h.app.setPaused(true);
+  await h.run(0.5);
+  h.app.nav.toTitle();
+  await h.run(1);
+  return { id: first.def.id, text: first.line.text };
+}
+const reg = (h: Harness): boolean =>
+  h.app.rush?.customers.some((c) => c.state === 'register') ?? false;
 
 describe('S1: pause mid-shift, quit to the title, start a new game', () => {
   it('the quit game never speaks again; the new one has running audio, one voice, one mood, no doubled loops', async () => {
@@ -116,4 +135,20 @@ describe('S1: pause mid-shift, quit to the title, start a new game', () => {
     await h.frame();
     expect(h.audio.musicDuck).toBe(1);
   }, 20_000);
+});
+
+describe('S1: nothing from the quit game carries into the next one', () => {
+  it('Replay (R / "Replay last line") on the title does not say the quit customer\'s order', async () => {
+    const h = createHarness({ plan: () => FAST });
+    const quit = await quitMidOrder(h);
+    expect(h.app.trial.phase).toBe('title');
+    const before = h.starts.length;
+    h.replay(); // boot.ts replay(): what R and the settings' "Replay last line" call on the title
+    await h.run(2);
+    const after = h.starts.slice(before);
+    expect(
+      after.filter((s) => s.speaker === quit.id),
+      `on the title screen, Replay says "${quit.text}"`,
+    ).toEqual([]);
+  });
 });

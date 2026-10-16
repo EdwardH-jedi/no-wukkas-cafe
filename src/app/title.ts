@@ -26,7 +26,8 @@ export function titleCallbacks(app: App): Omit<TitleCallbacks, 'start'> {
 
 /** Back to the title screen (fresh Day 1 trial). */
 export function toTitle(app: App): void {
-  app.audio.stopVoice();
+  // Replay (R, "Replay last line") on the title must not say the quit game's last line.
+  app.audio.stopVoice({ forget: true });
   app.resumeAll();
   app.crowd.clear();
   app.rush = null;

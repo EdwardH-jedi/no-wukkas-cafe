@@ -342,3 +342,15 @@ describe('a clip slow to load', () => {
     expect(m.speaking).toBe(false);
   });
 });
+
+describe('stopping the voice', () => {
+  it('keeps the last line for Replay, unless told to forget it (back to the title)', async () => {
+    const { m } = await started();
+    m.say(LINE);
+    m.stopVoice();
+    expect(m.lastLine).toBe(LINE);
+    m.stopVoice({ forget: true });
+    expect(m.lastLine).toBeNull();
+    expect(m.replay()).toBeNull();
+  });
+});
