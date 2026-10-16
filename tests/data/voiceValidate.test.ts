@@ -149,6 +149,7 @@ describe('validation catches broken manifests', () => {
         engine: 'studio',
         placeholder: false,
         licence: 'Buyout from the voice actor, 2027',
+        provenance: 'recorded',
       };
     }
     licensed.status = 'release';
@@ -161,6 +162,32 @@ describe('validation catches broken manifests', () => {
     for (const c of licensed.clips)
       c.source = { ...c.source, voice: `cast-${c.characterId}`, pitch: 1 };
     expect(settled(validateManifest(licensed, { ...opts, release: true }))).toEqual([]);
+  });
+
+  it('provenance: release clips are licensed TTS or recorded, placeholders never claim either', () => {
+    const release = (provenance?: VoiceClip['source']['provenance'], engine = 'google-tts') => {
+      const m = base();
+      first(m).source = {
+        ...first(m).source,
+        engine,
+        placeholder: false,
+        licence: 'Google Cloud terms, 2026-10-16',
+        ...(provenance ? { provenance } : {}),
+      };
+      return codes(m).filter((c) => c === 'provenance' || c === 'placeholder-flag');
+    };
+    expect(release('licensed_tts')).toEqual([]);
+    expect(release('recorded')).toEqual([]);
+    expect(release()).toEqual(['provenance']);
+    expect(release('placeholder')).toEqual(['provenance']);
+    // Test and macOS engines are stand-ins whatever they claim.
+    expect(release('licensed_tts', 'fake-tts')).toEqual(['placeholder-flag']);
+    expect(release('licensed_tts', 'macos-say')).toEqual(['placeholder-flag']);
+    const m = base();
+    first(m).source.provenance = 'licensed_tts'; // still placeholder: true
+    expect(codes(m)).toContain('provenance');
+    // The committed placeholders carry no provenance at all, which means placeholder.
+    expect(VOICE_MANIFEST.clips.every((c) => c.source.provenance === undefined)).toBe(true);
   });
 
   it('manifest version and status', () => {

@@ -3,7 +3,13 @@
 // scripts/voices-check.ts on top of this.
 
 import { dialogueId } from './ids';
-import { VOICE_URL_PREFIX, type VoiceClip, type VoiceManifest } from './manifest';
+import {
+  PLACEHOLDER_ENGINES,
+  RELEASE_PROVENANCE,
+  VOICE_URL_PREFIX,
+  type VoiceClip,
+  type VoiceManifest,
+} from './manifest';
 import type { VoiceProfile } from './profiles';
 import type { ScriptLine } from './script';
 
@@ -25,6 +31,7 @@ export type IssueCode =
   | 'placeholder-flag'
   | 'placeholder-in-release'
   | 'no-licence'
+  | 'provenance'
   | 'missing-clip'
   | 'stale-clip'
   | 'shared-voice'
@@ -132,10 +139,21 @@ export function validateManifest(m: VoiceManifest, o: ValidateOptions): Issue[] 
     if (!(c.playback.gain > 0) || !(c.playback.rate > 0))
       err('playback', 'playback gain and rate must be positive', id);
 
-    if (c.source.engine === 'macos-say' && c.source.placeholder !== true)
-      err('placeholder-flag', 'macOS system voices can only ever be placeholders', id);
+    if (PLACEHOLDER_ENGINES.includes(c.source.engine) && c.source.placeholder !== true)
+      err('placeholder-flag', `${c.source.engine} voices can only ever be placeholders`, id);
     if (c.source.placeholder === false && !(c.source.licence && c.source.licence.trim()))
       err('no-licence', 'release clip without a licence statement', id);
+    // A release clip says where it came from (licensed TTS or a recording); a placeholder never
+    // claims to be either.
+    const prov = c.source.provenance;
+    if (c.source.placeholder === false && !(prov && RELEASE_PROVENANCE.includes(prov)))
+      err(
+        'provenance',
+        `release clip provenance must be licensed_tts or recorded, not ${prov ?? 'missing'}`,
+        id,
+      );
+    if (c.source.placeholder !== false && prov !== undefined && prov !== 'placeholder')
+      err('provenance', `placeholder clip claims provenance ${prov}`, id);
     if (o.release && c.source.placeholder !== false)
       err('placeholder-in-release', 'placeholder audio cannot ship', id);
     // A character identity can't be another voice pitched up or down (docs/VOICE_CASTING.md).

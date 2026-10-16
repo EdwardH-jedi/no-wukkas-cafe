@@ -4,11 +4,19 @@
 //  - placeholder clips (source.placeholder = true) are rendered locally for development, live in
 //    the gitignored voice-cache/ folder, are served by the dev server only, and are stripped from
 //    production builds;
-//  - release clips (source.placeholder = false) must name their licence (source.licence), live in
-//    public/assets/voice/ and ship with the game.
+//  - release clips (source.placeholder = false) must name their licence (source.licence) and their
+//    provenance (source.provenance: licensed TTS or a recording), live in public/assets/voice/ and
+//    ship with the game.
 
 import type { Accent } from './profiles';
 import type { Delivery } from './ids';
+
+/** Where a clip's audio comes from. Only licensed TTS output and recordings may ship; a clip
+ *  without a provenance is a placeholder (every development render). */
+export type Provenance = 'placeholder' | 'licensed_tts' | 'recorded';
+export const RELEASE_PROVENANCE: readonly Provenance[] = ['licensed_tts', 'recorded'];
+/** Engines that only ever make development stand-ins, whatever a clip claims. */
+export const PLACEHOLDER_ENGINES: readonly string[] = ['macos-say', 'fake-tts'];
 
 export interface VoiceClip {
   dialogueId: string;
@@ -40,6 +48,8 @@ export interface VoiceClip {
     deterministic: boolean;
     /** Required for release clips: who holds the rights and under what terms. */
     licence?: string;
+    /** Required for release clips (licensed_tts or recorded); absent means placeholder. */
+    provenance?: Provenance;
   };
 }
 

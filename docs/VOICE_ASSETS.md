@@ -13,11 +13,12 @@ for distribution.
 | Lives in | `voice-cache/` (gitignored) | `public/assets/voice/` (bundled; remove its `.gitignore` line first) |
 | Served by | the Vite dev server only (`scripts/vite-voice.ts`) | dev server and production builds |
 | In a production build | **never**: the build strips any placeholder clip that reached `dist/`, and the game doesn't request placeholders in production (it uses the browser voice and says so) | yes |
-| Manifest | `source.placeholder: true`, `engine: "macos-say"` | `source.placeholder: false`, `source.licence: "…"` |
+| Manifest | `source.placeholder: true`, `engine: "macos-say"`, no `provenance` | `source.placeholder: false`, `source.licence: "…"`, `source.provenance: "licensed_tts"` or `"recorded"` |
 
 The validator enforces the rules:
-- a `macos-say` clip can never be marked release;
-- a release clip needs a licence statement;
+- a `macos-say` (or test `fake-tts`) clip can never be marked release;
+- a release clip needs a licence statement and a provenance of `licensed_tts` or `recorded`;
+- a placeholder clip never claims a release provenance;
 - `npm run voices:check -- --release` fails while any placeholder remains.
 
 ## Sources in use
@@ -85,6 +86,7 @@ npm run voices:check -- --release         # what a release build would need (fai
    - `source.placeholder: false`;
    - `source.engine`;
    - `source.licence` (rights holder and terms);
+   - `source.provenance` (`licensed_tts` or `recorded`);
    - `voiceId`;
    - the measured `duration` and `meanDb`.
 4. When no placeholder is left, set `status: "release"`.

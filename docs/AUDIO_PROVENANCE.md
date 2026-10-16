@@ -18,8 +18,9 @@ itself, not by people remembering.
 `scripts/vite-voice.ts` runs after every `vite build`, using `scripts/audio-gate.ts`. It scans
 every audio file in `dist/`:
 - **placeholder voice clip:** deleted, with a warning;
-- **licensed release voice clip, or a provenance entry with all of `source`, `licence`,
-  `verifiedBy` and `verifiedOn`:** kept;
+- **licensed release voice clip (`placeholder: false`, a licence, and provenance `licensed_tts` or
+  `recorded`), or a provenance entry with all of `source`, `licence`, `verifiedBy` and
+  `verifiedOn`:** kept;
 - **anything else:** **the build fails** and lists the files. For example, renders left in the
   old `public/assets/voice/` location that aren't in the manifest fail it.
 

@@ -51,14 +51,39 @@ describe('audio release gate', () => {
       clips: [
         {
           file: 'assets/voice/a.mp3',
-          source: { placeholder: false, licence: 'Actor buyout 2027' },
+          source: { placeholder: false, licence: 'Actor buyout 2027', provenance: 'recorded' },
         },
-        { file: 'assets/voice/b.mp3', source: { placeholder: false } },
+        { file: 'assets/voice/b.mp3', source: { placeholder: false, provenance: 'recorded' } },
       ],
     };
     const r = classifyAudio(['assets/voice/a.mp3', 'assets/voice/b.mp3'], m, { files: [] });
     expect(r.keep).toEqual(['assets/voice/a.mp3']);
     expect(r.reject.map((x) => x.file)).toEqual(['assets/voice/b.mp3']);
+  });
+
+  it('ships only licensed TTS and recordings: any other provenance fails the build', () => {
+    const clip = (file: string, provenance?: string) => ({
+      file,
+      source: { placeholder: false, licence: 'Some terms', ...(provenance ? { provenance } : {}) },
+    });
+    const m = {
+      clips: [
+        clip('assets/voice/tts.mp3', 'licensed_tts'),
+        clip('assets/voice/rec.mp3', 'recorded'),
+        clip('assets/voice/none.mp3'),
+        clip('assets/voice/ph.mp3', 'placeholder'),
+      ],
+    };
+    const r = classifyAudio(
+      m.clips.map((c) => c.file),
+      m,
+      { files: [] },
+    );
+    expect(r.keep).toEqual(['assets/voice/tts.mp3', 'assets/voice/rec.mp3']);
+    expect(r.reject).toEqual([
+      { file: 'assets/voice/none.mp3', why: expect.stringMatching(/provenance is missing/) },
+      { file: 'assets/voice/ph.mp3', why: expect.stringMatching(/provenance is placeholder/) },
+    ]);
   });
 
   it('the committed provenance list is valid (every entry verified)', async () => {

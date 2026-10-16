@@ -1,16 +1,22 @@
 // Release gate for audio files (Codex A4/A6): decides, for every audio file in a build, whether it
 // may ship. Pure; used by the Vite build plugin (scripts/vite-voice.ts) and the unit tests.
 //
-//   keep    release voice clips (licensed, in the voice manifest) and files listed in
-//           src/data/audio/provenance.json with a verified licence
+//   keep    release voice clips (in the voice manifest, licensed, provenance licensed_tts or
+//           recorded) and files listed in src/data/audio/provenance.json with a verified licence
 //   strip   placeholder voice clips (development audio that must never ship)
 //   reject  anything else: unknown provenance fails the build instead of shipping silently
 
 export const AUDIO_FILE = /\.(mp3|ogg|oga|wav|m4a|aac|flac|opus|weba|webm|mid|midi)$/i;
 
 export interface VoiceManifestLike {
-  clips: Array<{ file: string; source?: { placeholder?: boolean; licence?: string } }>;
+  clips: Array<{
+    file: string;
+    source?: { placeholder?: boolean; licence?: string; provenance?: string };
+  }>;
 }
+
+/** The only provenances a shipped voice clip may have (src/data/voice/manifest.ts). */
+const SHIPPABLE = new Set(['licensed_tts', 'recorded']);
 
 export interface ProvenanceEntry {
   file: string;
@@ -51,10 +57,16 @@ export function classifyAudio(
     if (!AUDIO_FILE.test(f)) continue;
     const v = voiceBy.get(f);
     if (v) {
-      if (v.source?.placeholder === false && v.source.licence?.trim()) out.keep.push(f);
-      else if (v.source?.placeholder === false)
+      const s = v.source;
+      if (s?.placeholder !== false) out.strip.push(f);
+      else if (!s.licence?.trim())
         out.reject.push({ file: f, why: 'release voice clip without a licence' });
-      else out.strip.push(f);
+      else if (!SHIPPABLE.has(s.provenance ?? ''))
+        out.reject.push({
+          file: f,
+          why: `release voice clip provenance is ${s.provenance ?? 'missing'}, not licensed_tts or recorded`,
+        });
+      else out.keep.push(f);
       continue;
     }
     const p = provBy.get(f);
