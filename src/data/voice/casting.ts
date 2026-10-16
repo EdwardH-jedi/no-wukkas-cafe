@@ -198,3 +198,68 @@ export const PROVIDER_INFO: Record<Provider, ProviderInfo> = {
       'Output is customer data under the Google Cloud terms; no disclosure rule found, but credit AI voices anyway.',
   },
 };
+
+/** One voice per speaker for the release pass (docs/TODO.md Phase 3; Edward, 2026-10-16: Google
+ *  Cloud TTS, Gaz, Jiwoo and Mei recorded by actors, AU$20 cap). The TTS picks come from the
+ *  auditioned candidates above and stand until the listen-through approves or re-casts them. */
+export interface CastEntry {
+  provenance: 'licensed_tts' | 'recorded';
+  provider: 'google' | 'files';
+  /** Google voice name, or the folder an actor's takes are delivered in. */
+  voice: string;
+  /** Google: the voice's language code (its name starts with it). */
+  languageCode?: string;
+  /** Google `speakingRate` (0.25–2; Chirp 3 HD takes pace, not pitch). Each line's own rate
+   *  (order pace, slow repeats) multiplies it. */
+  rate?: number;
+  /** The terms the audio is used under: the provider's, or the actor's signed licence. Empty
+   *  until it exists. */
+  licence: string;
+  /** What is still missing before these clips may ship, if anything. */
+  pending?: string;
+}
+
+const GOOGLE_TERMS =
+  'Google Cloud Text-to-Speech (Chirp 3 HD) output, used under the Google Cloud Platform Terms ' +
+  'of Service: output is customer data, usable to power applications (cloud.google.com/terms, ' +
+  'docs.cloud.google.com/text-to-speech/docs/basics; checked 2026-10-16). See ' +
+  'docs/VOICE_PROVIDERS.md for the open question on the generative-AI service terms.';
+const ACTOR_PENDING =
+  'A signed buyout or written licence from the actor (docs/VOICE_CASTING.md licence checklist), ' +
+  "delivered with the takes in source.json; until then their clips can't ship.";
+
+const google = (voice: string, rate?: number): CastEntry => ({
+  provenance: 'licensed_tts',
+  provider: 'google',
+  voice,
+  languageCode: voice.split('-').slice(0, 2).join('-'),
+  ...(rate === undefined ? {} : { rate }),
+  licence: GOOGLE_TERMS,
+});
+const actor = (folder: string): CastEntry => ({
+  provenance: 'recorded',
+  provider: 'files',
+  voice: folder,
+  licence: '',
+  pending: ACTOR_PENDING,
+});
+
+export const CAST: Record<string, CastEntry> = {
+  gaz: actor('gaz-actor'),
+  dazza: google('en-AU-Chirp3-HD-Fenrir', 1.1),
+  beryl: google('en-AU-Chirp3-HD-Gacrux', 0.9),
+  karen: google('en-AU-Chirp3-HD-Kore'),
+  priya: google('en-IN-Chirp3-HD-Leda', 0.95),
+  jiwoo: actor('jiwoo-actor'),
+  mei: actor('mei-actor'),
+};
+
+/** What a licensed TTS pass may cost. Chirp 3 HD: US$30 per million characters (spaces count), the
+ *  first million each month free (ignored here: estimates assume every character is paid). The
+ *  exchange rate is rounded up on purpose; re-check both before a large render. */
+export const TTS_BUDGET = {
+  capAud: 20,
+  usdPerMillionChars: 30,
+  audPerUsd: 1.6,
+  checkedOn: '2026-10-16',
+} as const;

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { azureSsml } from '../../scripts/tts-azure';
 import { CUSTOMERS } from '../../src/data/customers';
 import { AUDITIONS } from '../../src/data/voice/auditions';
-import { CASTING, PIPELINE_TEST } from '../../src/data/voice/casting';
+import { CAST, CASTING, PIPELINE_TEST, TTS_BUDGET } from '../../src/data/voice/casting';
+import { VOICE_PROFILES } from '../../src/data/voice/profiles';
 import { voiceScript } from '../../src/data/voice/script';
 
 const cast = ['gaz', ...CUSTOMERS.map((c) => c.id)];
@@ -50,5 +51,36 @@ describe('Azure SSML', () => {
     expect(azureSsml('Hi.', { voice: 'en-AU-DuncanNeural', style: 'cheerful' })).toContain(
       '<mstts:express-as style="cheerful">',
     );
+  });
+
+  it('the release cast: one voice per speaker, licensed TTS or an actor, every TTS pick auditioned', () => {
+    expect(Object.keys(CAST).sort()).toEqual(Object.keys(VOICE_PROFILES).sort());
+    const voices = Object.values(CAST).map((c) => `${c.provider}:${c.voice}`);
+    expect(new Set(voices).size).toBe(voices.length);
+    for (const [who, c] of Object.entries(CAST)) {
+      if (c.provenance === 'licensed_tts') {
+        expect(c.provider, who).toBe('google');
+        expect(c.voice.startsWith(`${c.languageCode}-Chirp3-HD-`), who).toBe(true);
+        expect(c.licence, who).toMatch(/Google Cloud/);
+        expect(c.pending, who).toBeUndefined();
+        expect(
+          CASTING[who]?.some((x) => x.provider === 'google' && x.voice === c.voice),
+          `${who} ${c.voice} was never an audition candidate`,
+        ).toBe(true);
+        if (c.rate !== undefined) expect(c.rate).toBeGreaterThanOrEqual(0.25);
+      } else {
+        expect(c.provider, who).toBe('files');
+        expect(c.licence, who).toBe('');
+        expect(c.pending, who).toMatch(/signed/);
+      }
+    }
+    // Edward, 2026-10-16: Gaz, Jiwoo and Mei are recorded by actors.
+    expect(
+      Object.entries(CAST)
+        .filter(([, c]) => c.provenance === 'recorded')
+        .map(([who]) => who)
+        .sort(),
+    ).toEqual(['gaz', 'jiwoo', 'mei']);
+    expect(TTS_BUDGET.capAud).toBe(20);
   });
 });
