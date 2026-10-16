@@ -56,12 +56,13 @@ describe('week session', () => {
       unlockedDrinks: ['flatWhite', 'longBlack', 'cappuccino'],
       regulars: { dazza: { visits: 4, affinity: 2 } },
     });
-    const w = weekFor(save, { THE_NAME: 7 });
+    const w = weekFor(save, { THE_NAME: 7 }, 'THE_NAME');
     expect(w).toEqual({
       week: 2,
       shiftIndex: 3,
       unlockedDrinks: ['flatWhite', 'longBlack', 'cappuccino'],
       eventCooldowns: { THE_NAME: 7 },
+      lastEvent: 'THE_NAME',
       affinity: { dazza: 2 },
       station: BASE_STATION, // no upgrades bought
     });

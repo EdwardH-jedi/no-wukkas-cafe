@@ -189,6 +189,22 @@ describe('shift events in the service loop', () => {
     expect(createShiftEvents(1, null).bird).toBe(false);
   });
 
+  it("the last event of earlier shifts is never this shift's first", () => {
+    expect(createShiftEvents(1, week(2, { lastEvent: 'THE_NAME' })).log.lastId).toBe('THE_NAME');
+    expect(createShiftEvents(1, week(2)).log.lastId).toBeNull();
+    const first = (seed: number, lastEvent: ShiftEventId | null): ShiftEventId | undefined => {
+      const { r } = playRush({ seed, week: week(2, { lastEvent }), maxSeconds: 240 });
+      return r.shiftEvents.log.fired[0]?.id;
+    };
+    const seeds = Array.from({ length: 16 }, (_, i) => i + 1);
+    const usual = seeds.map((s) => first(s, null));
+    const common = (['JUST_COFFEE', 'THE_NAME', 'CHANGE_MIND'] as const).find(
+      (id) => usual.filter((x) => x === id).length >= 3,
+    );
+    if (!common) throw new Error('no event opens these shifts often enough to test');
+    for (const s of seeds) expect(first(s, common), `seed ${s}`).not.toBe(common);
+  }, 60_000);
+
   it("the bird's visit applies RARE_BIRD's outcome", () => {
     const r = createRush(1, 'normal', {}, week(1));
     r.shiftEvents.bird = true;

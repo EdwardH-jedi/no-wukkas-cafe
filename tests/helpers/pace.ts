@@ -151,6 +151,7 @@ export function playWeek(
 ): WeekRow[] {
   const store = createSaveStore(null, { seed });
   let cooldowns: Cooldowns = {};
+  let lastEvent: ShiftEventId | null = null;
   const rows: WeekRow[] = [];
   for (let shift = 0; shift < SHIFTS_PER_WEEK; shift++)
     for (let attempt = 1; attempt <= tries; attempt++) {
@@ -160,11 +161,12 @@ export function playWeek(
         ...bot,
         seed: save.seed,
         difficulty,
-        week: weekFor(save, cooldowns),
+        week: weekFor(save, cooldowns, lastEvent),
       });
       const report = r.summary;
       if (!report) throw new Error(`${profile} seed ${seed} shift ${shift}: no report`);
       cooldowns = { ...r.shiftEvents.log.lastShift };
+      lastEvent = r.shiftEvents.log.lastId;
       const pass = passFail(report) === 'pass';
       // After the last try the run moves on as if it had scraped through (tips counted once).
       const last = !pass && attempt === tries;

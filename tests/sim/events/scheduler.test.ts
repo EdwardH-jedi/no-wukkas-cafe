@@ -94,23 +94,39 @@ describe('event scheduler', () => {
     }
   });
 
-  // Every cooldown is at least one shift, so an event never comes straight back: not in the same
-  // shift, not in the next. After a shift with no events at all it can (1 week in 1000 here, none
-  // in `npm run balance`); ruling that out needs the scheduler to remember the last event
-  // (docs/integration/balance-hook.md).
-  it('never fires the same event twice in a row in one shift or the next (1000 seeds)', () => {
+  // Cooldowns (every one at least a shift) keep an event out of the same shift and the next; the
+  // log's last event keeps it from coming straight back after a shift with no events at all
+  // (seed 275 did: QUEUE_JUMP, a quiet shift, QUEUE_JUMP).
+  it('never fires the same event twice in a row, even across a quiet shift (1000 seeds)', () => {
     for (const s of SEEDS) {
       const fired = playWeek(s).filter((c) => c.id !== null);
       for (let i = 1; i < fired.length; i++) {
         const [a, b] = [fired[i - 1] as Check, fired[i] as Check];
-        if (a.id === b.id)
-          expect(
-            b.shift - a.shift,
-            `seed ${s}: ${b.id} in shifts ${a.shift} and ${b.shift}`,
-          ).toBeGreaterThan(1);
+        expect(b.id, `seed ${s}: ${b.id} in shifts ${a.shift} and ${b.shift}`).not.toBe(a.id);
       }
     }
     for (const e of SHIFT_EVENTS) expect(e.cooldownShifts, e.id).toBeGreaterThanOrEqual(1);
+  });
+
+  it('the last event carries into the next shift, and is left out of the next pick', () => {
+    const log = startShiftLog(3, { shiftIndex: 2, lastShift: {}, fired: [], lastId: 'THE_NAME' });
+    expect(log.lastId).toBe('THE_NAME');
+    const ctx: EventContext = {
+      shiftIndex: 3,
+      secondsIntoService: 100,
+      queueLength: 0,
+      customer: 'dazza',
+      affinity: {},
+      playerMistake: false,
+      rng: createRng(1),
+    };
+    const name = [eventDef('THE_NAME')];
+    expect(pickEvents(ctx, name, log, false, { chance: 1 })).toBeNull();
+    const both = [eventDef('THE_NAME'), eventDef('JUST_COFFEE')];
+    expect(pickEvents(ctx, both, log, false, { chance: 1 })?.id).toBe('JUST_COFFEE');
+    expect(log.lastId).toBe('JUST_COFFEE');
+    expect(startShiftLog(4, log).lastId).toBe('JUST_COFFEE');
+    expect(startShiftLog(0).lastId).toBeNull();
   });
 
   it('THE_USUAL only for a regular who knows the player (1000 seeds)', () => {

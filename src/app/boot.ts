@@ -167,6 +167,7 @@ export async function boot(): Promise<void> {
     listen,
     store,
     cooldowns: {},
+    lastEvent: null,
     audio,
     sfx,
     music,

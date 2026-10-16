@@ -1,7 +1,8 @@
 // Picks shift events at the moments the service loop asks (e.g. each time a customer reaches the
 // register): by weight, from the shift each event unlocks in, with cooldowns across shifts, a
-// per-shift cap (none on the first shift), a minimum gap between events, and never while a
-// customer's order is being said. Deterministic: ctx.rng is the only randomness.
+// per-shift cap (none on the first shift), a minimum gap between events, never the event that came
+// last (even shifts ago), and never while a customer's order is being said. Deterministic:
+// ctx.rng is the only randomness.
 
 import type { EventContext, ShiftEventDef, ShiftEventId } from '../contracts/events';
 
@@ -22,11 +23,19 @@ export interface EventLog {
   lastShift: Partial<Record<ShiftEventId, number>>;
   /** This shift's events so far, in order. */
   fired: Array<{ id: ShiftEventId; at: number }>;
+  /** The last event fired, this shift or an earlier one: it is never picked twice in a row, not
+   *  even after a shift with no events (cooldowns only count shifts). */
+  lastId: ShiftEventId | null;
 }
 
-/** A fresh log for a shift, keeping the cooldown memory of the previous one. */
+/** A fresh log for a shift, keeping the cooldown memory and the last event of the previous one. */
 export function startShiftLog(shiftIndex: number, prev?: EventLog): EventLog {
-  return { shiftIndex, lastShift: { ...(prev?.lastShift ?? {}) }, fired: [] };
+  return {
+    shiftIndex,
+    lastShift: { ...(prev?.lastShift ?? {}) },
+    fired: [],
+    lastId: prev?.lastId ?? null,
+  };
 }
 
 export function capFor(shiftIndex: number, cap = SCHEDULER_DEFAULTS.cap): number {
@@ -57,7 +66,7 @@ export function pickEvents(
   if (log.fired.length >= capFor(ctx.shiftIndex, o.cap)) return null;
   const lastAt = log.fired[log.fired.length - 1]?.at;
   if (lastAt !== undefined && ctx.secondsIntoService - lastAt < o.minGapSeconds) return null;
-  const pool = defs.filter((d) => eligible(d, ctx, log));
+  const pool = defs.filter((d) => d.id !== log.lastId && eligible(d, ctx, log));
   if (pool.length === 0 || ctx.rng.next() >= o.chance) return null;
   let roll = ctx.rng.next() * pool.reduce((s, d) => s + d.weight, 0);
   let pick = pool[pool.length - 1] as ShiftEventDef;
@@ -70,5 +79,6 @@ export function pickEvents(
   }
   log.fired.push({ id: pick.id, at: ctx.secondsIntoService });
   log.lastShift[pick.id] = ctx.shiftIndex;
+  log.lastId = pick.id;
   return pick;
 }

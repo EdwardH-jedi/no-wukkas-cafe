@@ -26,13 +26,19 @@ function affinityOf(save: SaveV2): Partial<Record<CustomerId, number>> {
   return out;
 }
 
-/** The rush's week context for the shift the save is on. */
-export function weekFor(save: SaveV2, cooldowns: Cooldowns = {}): RushWeek {
+/** The rush's week context for the shift the save is on. `cooldowns` and `lastEvent` come from
+ *  the shifts played since the page opened. */
+export function weekFor(
+  save: SaveV2,
+  cooldowns: Cooldowns = {},
+  lastEvent: ShiftEventId | null = null,
+): RushWeek {
   return {
     week: save.week,
     shiftIndex: save.shift,
     unlockedDrinks: [...save.unlockedDrinks],
     eventCooldowns: { ...cooldowns },
+    lastEvent,
     affinity: affinityOf(save),
     station: stationParams(save.upgrades),
   };

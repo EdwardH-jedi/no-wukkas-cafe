@@ -47,6 +47,7 @@ export function createShiftEvents(seed: number, week: RushWeek | null): ShiftEve
       shiftIndex: shiftIndex - 1,
       lastShift: { ...(week?.eventCooldowns ?? {}) },
       fired: [],
+      lastId: week?.lastEvent ?? null,
     }),
     rng: createRng((seed ^ EVENT_SALT) >>> 0),
     current: null,

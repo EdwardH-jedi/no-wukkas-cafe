@@ -22,7 +22,7 @@ export function startShift(app: App): void {
     save = { ...save, difficulty: listen.difficulty };
     store.save(save);
   }
-  app.nav.startRush(weekFor(save, app.cooldowns), save.seed);
+  app.nav.startRush(weekFor(save, app.cooldowns, app.lastEvent), save.seed);
 }
 
 export function startEndless(app: App): void {
@@ -103,6 +103,7 @@ export function onShiftSummary(
   // Autosave: the receipt and tips, the next shift on a pass. Endless isn't a week shift.
   finishShift(app.store, ev.summary, r.shiftEvents.affinity);
   app.cooldowns = { ...r.shiftEvents.log.lastShift };
+  app.lastEvent = r.shiftEvents.log.lastId;
 }
 
 /** The shift report's buttons: `again` replays Day 2 or Endless, `next` moves the week on. */

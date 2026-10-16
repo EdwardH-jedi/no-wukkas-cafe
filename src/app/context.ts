@@ -12,6 +12,7 @@ import type { Rush, RushAction, RushWeek } from '../core/rush';
 import type { SaveStore } from '../core/save/storage';
 import type { Trial, TrialInput } from '../core/trial';
 import type { Cooldowns } from '../core/week/session';
+import type { ShiftEventId } from '../sim/contracts/events';
 import type { Ibis } from '../sim/ibis';
 import type { AudioPanel } from '../ui/audioPanel';
 import type { Hud } from '../ui/hud';
@@ -76,8 +77,10 @@ export interface App {
   // The week's save and the listening settings.
   listen: ListenSettings;
   readonly store: SaveStore;
-  /** Shift-event cooldowns, kept while the page is open (not saved: Edward, 2026-10-15). */
+  /** Shift-event cooldowns and the last event, kept while the page is open (not saved: Edward,
+   *  2026-10-15). */
   cooldowns: Cooldowns;
+  lastEvent: ShiftEventId | null;
 
   // Audio.
   readonly audio: AudioManager;

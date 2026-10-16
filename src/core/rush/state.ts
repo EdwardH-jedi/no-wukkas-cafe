@@ -160,6 +160,8 @@ export interface RushWeek {
   unlockedDrinks: readonly DrinkId[];
   /** Shift each event last fired in, from earlier shifts (cooldowns; absolute shift numbers). */
   eventCooldowns?: Partial<Record<ShiftEventId, number>>;
+  /** The event that came last in earlier shifts: never the first one again. */
+  lastEvent?: ShiftEventId | null;
   /** How well each regular knows the player (SaveV2.regulars). */
   affinity?: Partial<Record<CustomerId, number>>;
   /** The station the café's upgrades give (SaveV2.upgrades); today's station without. */
