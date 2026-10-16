@@ -14,6 +14,8 @@ export default tseslint.config(
       'test-results',
       'playwright-report',
       '.remember',
+      // Agent worktrees (Claude Code subagents): other checkouts, linted there.
+      '.claude',
     ],
   },
   js.configs.recommended,
