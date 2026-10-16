@@ -196,31 +196,31 @@ test.describe('the week', () => {
   test('the shop sells what the till covers and says why it refuses the rest', async ({ page }) => {
     await page.addInitScript(
       (s) => localStorage.setItem('nwc.save.v2', s),
-      JSON.stringify({ ...wednesday, cents: 20_000 }),
+      JSON.stringify({ ...wednesday, cents: 2_000 }),
     );
     await page.goto('/?voice=0&seed=7&ibis=0');
     await page.getByRole('button', { name: 'The week: shifts' }).click();
     const door = page.locator('.shift-select-shop');
-    await expect(door).toContainText('In the till: $200.00 · 0 of 4 owned');
+    await expect(door).toContainText('In the till: $20.00 · 0 of 4 owned');
     await door.click();
     const shop = page.getByRole('dialog', { name: 'Café upgrades' });
     await expect(shop).toBeVisible();
     await expect(page.locator('.shift-select')).toHaveCount(0);
 
-    await shop.getByRole('button', { name: 'Buy Better grinder for $450.00' }).click();
+    await shop.getByRole('button', { name: 'Buy Better grinder for $30.00' }).click();
     await expect(shop.locator('.shop-msg')).toHaveText(
-      'Not enough in the till: Better grinder costs $450.00, you have $200.00.',
+      'Not enough in the till: Better grinder costs $30.00, you have $20.00.',
     );
-    expect((await dbg(page)).save.cents).toBe(20_000);
+    expect((await dbg(page)).save.cents).toBe(2_000);
 
-    await shop.getByRole('button', { name: 'Buy Docket rail for $150.00' }).click();
+    await shop.getByRole('button', { name: 'Buy Docket rail for $15.00' }).click();
     await expect(shop.locator('.shop-msg')).toHaveText(
-      'Docket rail bought. $50.00 left in the till.',
+      'Docket rail bought. $5.00 left in the till.',
     );
-    await expect(shop.locator('.shop-till')).toHaveText('In the till: $50.00');
+    await expect(shop.locator('.shop-till')).toHaveText('In the till: $5.00');
     await expect(shop.getByRole('button', { name: 'Docket rail: owned' })).toBeFocused();
     const saved = (await dbg(page)).save;
-    expect([saved.cents, saved.upgrades]).toEqual([5_000, ['docketRail']]);
+    expect([saved.cents, saved.upgrades]).toEqual([500, ['docketRail']]);
     await snap(page, '05-shop');
 
     await page.keyboard.press('Escape');
