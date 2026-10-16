@@ -61,7 +61,7 @@ describe('npm run voices:estimate', () => {
     for (const who of ['dazza', 'beryl', 'karen', 'priya'])
       expect(r.stdout).toMatch(new RegExp(`${who} .* chars  US\\$[\\d.]+  AU\\$[\\d.]+`));
     expect(r.stdout).toMatch(/total .* \(cap AU\$20\.00\)/);
-    expect(r.stdout).toMatch(/gaz .* words  licence pending/);
+    expect(r.stdout).toMatch(/gaz .* words {2}licence pending/);
   });
 
   it('refuses above the cap, and a cap can only be lowered', () => {
