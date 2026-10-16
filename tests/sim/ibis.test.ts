@@ -14,6 +14,7 @@ import {
 const input = (o: Partial<IbisInput> = {}): IbisInput => ({
   serviceTime: 100,
   doorOpen: false,
+  midOrder: false,
   shoo: false,
   noticed: false,
   ...o,
@@ -61,6 +62,17 @@ describe('when a bin chicken turns up', () => {
     const ev = run(b, 0.1, () => ({ doorOpen: true }));
     expect(b.state).toBe('entering');
     expect(ev).toContainEqual({ type: 'enter' });
+  });
+
+  it('waits outside while someone is mid-order, and comes in at the next open door', () => {
+    const b = createIbis(1, true);
+    expect(run(b, 5, () => ({ doorOpen: true, midOrder: true }))).toEqual([]);
+    expect(b.state).toBe('absent');
+    run(b, 5); // the order is rung up; the door shuts again
+    expect(b.state).toBe('absent');
+    const ev = run(b, 0.1, () => ({ doorOpen: true }));
+    expect(b.state).toBe('entering');
+    expect(ev).toEqual([{ type: 'enter' }]);
   });
 });
 

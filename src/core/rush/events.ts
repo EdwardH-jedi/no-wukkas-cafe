@@ -14,7 +14,7 @@ import type { EventContext, EventOutcome, ShiftEventDef } from '../../sim/contra
 import { SHIFT_EVENTS } from '../../sim/events/defs';
 import { pickEvents, startShiftLog } from '../../sim/events/scheduler';
 import { atCounter } from './register';
-import { forgetCustomer, gaz, varsFor } from './speech';
+import { forgetCustomer, gaz, orderLineDue, varsFor } from './speech';
 import {
   absoluteShift,
   atRegister,
@@ -88,11 +88,7 @@ function context(r: Rush, c: RushCustomer | null, playerMistake: boolean): Event
 
 /** An order is being said or rung up, or a listening line is still to be heard. */
 function orderWindow(r: Rush): boolean {
-  return (
-    atCounter(r) !== null ||
-    r.speech.current?.listen === true ||
-    r.speech.queue.some((q) => q.listen === true)
-  );
+  return atCounter(r) !== null || orderLineDue(r);
 }
 
 function ask(

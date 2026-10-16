@@ -1,7 +1,7 @@
 // Scenario 6: the bin chicken and the shift events are deterministic (same seed, same inputs →
 // the same events at the same times), a shift event never starts while a customer's order is
-// being said or rung up, and neither the bird's lines nor an event's ever cut an order line off.
-// (The bird walking in mid-order: the .failing file.)
+// being said or rung up, the bird never walks in (honking) over an order line, and neither the
+// bird's lines nor an event's ever cut an order line off.
 
 import { describe, expect, it } from 'vitest';
 import type { RushWeek } from '../../src/core/rush';
@@ -60,5 +60,18 @@ describe('S6: events never interrupt an order', () => {
       s.trace.filter((t) => / say ibis\./.test(t)),
     );
     expect(ibisLines.length).toBeGreaterThan(0); // Gaz did talk about the bird
+  }, 20_000);
+});
+
+describe('S6: the bird never walks in on an order', () => {
+  it('week shift 2 with RARE_BIRD booked: no ibis entrance during an order line', () => {
+    // RARE_BIRD's rule (sim/events/defs.ts): it comes in through the door "only while nobody is
+    // mid-order". It used to walk in whenever the door opened, honking over the order being said.
+    // (A scan of 49 shifts found it on week shift 2, seeds 2, 8, 13 and 16, at ~31 s.)
+    const found: string[] = [];
+    for (const seed of birdSeeds(2, 2))
+      for (const e of shiftWithBird(seed, week(2)).birdInOrder)
+        if (e.event === 'enter') found.push(`seed ${seed}: t=${e.at.toFixed(2)} over ${e.line}`);
+    expect(found).toEqual([]);
   }, 20_000);
 });

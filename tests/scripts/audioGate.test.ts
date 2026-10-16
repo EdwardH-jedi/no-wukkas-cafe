@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { classifyAudio, type ProvenanceEntry } from '../../scripts/audio-gate';
+import {
+  audioInCode,
+  classifyAudio,
+  neverInlineAudio,
+  type ProvenanceEntry,
+} from '../../scripts/audio-gate';
 import { VOICE_MANIFEST } from '../../src/data/voice';
 
 const entry = (file: string, over: Partial<ProvenanceEntry> = {}): ProvenanceEntry => ({
@@ -34,6 +39,12 @@ describe('audio release gate', () => {
       'assets/music/track.ogg',
       'sfx/door.wav',
     ]);
+  });
+
+  it('checks the formats takes arrive in as well (AIFF, CAF), in any case', () => {
+    const takes = ['takes/a.aiff', 'takes/b.AIF', 'takes/c.aifc', 'takes/d.caf'];
+    const r = classifyAudio([...takes, 'takes/notes.txt'], VOICE_MANIFEST, { files: [] });
+    expect(r.reject.map((x) => x.file)).toEqual(takes);
   });
 
   it('keeps files with a verified licence; unverified entries are rejected', () => {
@@ -96,5 +107,34 @@ describe('audio release gate', () => {
       p,
     );
     expect(r.reject).toEqual([]);
+  });
+});
+
+describe('audio never ships inside the code', () => {
+  const bytes = (n: number): Buffer => Buffer.alloc(n);
+
+  it('audio is never inlined; anything else keeps the limit it had', () => {
+    expect(neverInlineAudio()('/p/beep.mp3', bytes(10))).toBe(false);
+    expect(neverInlineAudio()('/p/take.AIFF', bytes(10))).toBe(false);
+    expect(neverInlineAudio()('/p/icon.png', bytes(10))).toBeUndefined(); // Vite's default
+    expect(neverInlineAudio(100)('/p/icon.png', bytes(10))).toBe(true);
+    expect(neverInlineAudio(100)('/p/icon.png', bytes(200))).toBe(false);
+    expect(neverInlineAudio(100)('/p/beep.wav', bytes(10))).toBe(false);
+    expect(neverInlineAudio(() => true)('/p/font.woff2', bytes(10))).toBe(true);
+    expect(neverInlineAudio(() => true)('/p/beep.ogg', bytes(10))).toBe(false);
+  });
+
+  it('finds audio imported with ?inline or ?raw, and nothing else', () => {
+    const ids = [
+      '/p/main.js',
+      '/p/beep.mp3',
+      '/p/beep.mp3?url',
+      '/p/a.flac?inline',
+      '/p/b.ogg?raw',
+      '/p/c.WAV?url&inline',
+      '/p/icon.png?inline',
+      '/p/notes.txt?raw',
+    ];
+    expect(audioInCode(ids)).toEqual(['/p/a.flac?inline', '/p/b.ogg?raw', '/p/c.WAV?url&inline']);
   });
 });
