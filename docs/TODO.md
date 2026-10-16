@@ -197,19 +197,52 @@ Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,u
     Thu 0 %); with the HUMAN playtest that tells whether the novice guess or the week is off. (4) WRONG_MILK fired 2
     times: hand-backs for milk are rare when the bots hear milk 98 % right.
 
-## Phase 3 — Voice (licensed)  `[ ]`
+## Phase 3 — Voice (licensed)  `[!]` agent work done; HUMAN-gated: listen-through, paid render, actors' recordings
 Goal: the day auditions are approved, a full pass renders with one command.
-**HUMAN first (blocks this phase):** PROVIDER = ____ · BUDGET_CAP_AUD = ____ · GAZ = recorded | licensed_tts.
+**HUMAN first (blocks this phase):** PROVIDER = Google Cloud TTS (Chirp 3 HD) · BUDGET_CAP_AUD = 20 · GAZ = recorded (Jiwoo and Mei recorded too, by native-speaker actors). Edward, 2026-10-16.
 Owns `scripts/voices*`, `scripts/tts-*.ts`, `src/audio/**`, `src/data/voice/**` (not segments.ts), `src/dev/**`, `docs/VOICE_*.md`, `docs/AUDIO_PROVENANCE.md`.
-- [ ] Provider adapter: listVoices / render / estimateCost; dry-run default; refuses without `--allow-paid` + env creds.
-- [ ] casting.ts: one candidate per speaker, provenance `licensed_tts`, licence reference.
-- [ ] `npm run voices:estimate`: chars + AUD per speaker; refuses above cap.
-- [ ] `npm run voices:render --segments`: segments.ts + gazEvents keys → voice-cache/ (gitignored); manifest carries provenance + licence; gate accepts only licensed_tts|recorded.
-- [ ] Review sheet export (JSON + md) to voice-auditions/.
-- [ ] **HUMAN**: listen-through with Korean / Mandarin / Indian-English speakers; caricature check; approve or re-cast.
-- [ ] **HUMAN**: run the paid render once; commit the manifest only (never audio); `npm run release:check` passes.
-- Exit: release:check green with 0 placeholders.
+- [x] Provider adapter: listVoices / render / estimateCost; dry-run default; refuses without `--allow-paid` + env creds.
+- [x] casting.ts: one candidate per speaker, provenance `licensed_tts`, licence reference.
+- [x] `npm run voices:estimate`: chars + AUD per speaker; refuses above cap.
+- [x] `npm run voices:render --segments`: segments.ts + gazEvents keys → voice-cache/ (gitignored); manifest carries provenance + licence; gate accepts only licensed_tts|recorded.
+- [x] Review sheet export (JSON + md) to voice-auditions/.
+- [!] (HUMAN-only, not done by Claude: needs the paid render first, then reviewers; sheet from `npm run voices:sheet`) **HUMAN**: listen-through with Korean / Mandarin / Indian-English speakers; caricature check; approve or re-cast.
+- [!] (HUMAN-only, not done by Claude: Edward's Google credentials and spend; release:check also needs the actors' recordings for Gaz, Jiwoo and Mei, imported with `voices:render -- --import`) **HUMAN**: run the paid render once; commit the manifest only (never audio); `npm run release:check` passes.
+- [ ] Ship segments: a committed segment manifest (provenance + licence per segment clip) that the build gate (`scripts/audio-gate.ts`) keeps, `src/audio/manager.ts` `SEGMENTS_SERVED` reads in production, `voices:check` covers, and `voices:render --promote` / `--import` write. Until then licensed segments stay staged and generated orders use the browser voice in builds; slow repeats of generated lines stay browser voice either way (`manager.ts:538`).
+- Exit: [!] (HUMAN-only part not done by Claude: paid render, listen-through, recordings; today `voices:check --release` = 1026 errors, all placeholders) release:check green with 0 placeholders.
 - Evidence:
+  - Branch `voice/phase3`, 11 commits: 4cdb399 provenance (validator + build gate) · fdda4a6 CAST + TTS_BUDGET ·
+    6d26a90 Google adapter + guard · 6428542 voices:estimate (+ d0616d6 lint fix) · 230d7de voices:render ·
+    e9d9c67 voices:sheet · 84425bd Gaz event lines in the script · 043a2f7 docs · TODO.
+  - Provenance (4cdb399): `source.provenance` 'placeholder' | 'licensed_tts' | 'recorded' (absent = placeholder, so the
+    committed clips needed no rewrite). Validator: release needs licensed_tts|recorded + licence; `fake-tts`/`macos-say`
+    can never be release. Gate (`scripts/audio-gate.ts`, outside the owned paths, needed by this item): keeps a release
+    clip only with a licence AND provenance licensed_tts|recorded. Both new tests failed on the old code.
+  - Cast (fdda4a6): Dazza en-AU-Chirp3-HD-Fenrir 1.1×, Beryl en-AU-Chirp3-HD-Gacrux 0.9×, Karen en-AU-Chirp3-HD-Kore,
+    Priya en-IN-Chirp3-HD-Leda 0.95× (licensed_tts, Google Cloud terms, provisional until the listen-through); Gaz, Jiwoo,
+    Mei recorded (licence pending a signed buyout). TTS_BUDGET: AU$20, US$30/1M chars, AUD/USD 1.6, free tier ignored.
+  - Adapter (6d26a90): request/response shapes checked on Google's public docs 2026-10-16 (no account, no call):
+    text:synthesize {input.text, voice, audioConfig MP3 + speakingRate}, no pitch (Chirp 3 HD), 5000-byte input; auth =
+    OAuth token + x-goog-user-project (API key accepted but unverified). Guard: `--allow-paid` AND credentials, else a dry
+    run. `voices:audition --provider google` uses it. Untested against the live service.
+  - `npm run voices:estimate -- --segments`: TTS dazza 1,579 · priya 2,218 · beryl 2,464 · karen 1,338 chars →
+    `total  7,599 chars  US$0.23  AU$0.36 (cap AU$20.00)`; actors: gaz 379 lines (3,262 words), mei 39 + 23 segments,
+    jiwoo 35 + 31. `--cap 0.05` → `refused: AU$0.27 is over the AU$0.05 cap`, exit 1.
+  - `npm run voices:render` (dry run): `131 TTS clip(s) wanted, 0 already staged, 131 to render: 5536 characters,
+    ~AU$0.27 (cap AU$20.00)` / `Not rendering: dry run: add --allow-paid…`. Tests with the ffmpeg stand-in (temp manifest,
+    cache, public): paid refusal writes nothing; staging + resume; promote refuses fake-tts; licensed staging promoted and
+    accepted by the validator; import refused without licence + performer, recorded with them.
+  - `npm run voices:sheet` → voice-auditions/review-sheet.{json,md}: 7 speakers, 258 TTS and 432 recorded lines and
+    segments; actors get a file per line (`7aa0d65c.wav`, `…-slow.wav`) that `--import` accepts.
+  - gazEvents (84425bd): the 75 event lines join `voiceScript()`; `npm run voices -- --only gaz` rendered 76/76
+    placeholders; manifest +76 Gaz, −1 (demo.pull's old words), nothing else; `voices:check`: 584 clips, 0 errors.
+    AWAITING_RENDER emptied (every line has a clip).
+  - `npm run voices:check -- --release --manifest-only`: `1026 error(s)` (placeholder-in-release 584, pitch-shift 441,
+    shared-voice 1): the release rules bite until the HUMAN steps land.
+  - Exit checks on the TODO commit: typecheck, lint, test exit 0 (`Test Files  68 passed (68)` · `Tests  563 passed
+    (563)`). `E2E_PORT=5179 npm run test:e2e`: `28 passed (24.0m)`, exit 0.
+  - Mistake: 6428542 was committed with a lint error (`no-regex-spaces`); my check printed only lint's last line. Fixed in
+    d0616d6; every later commit ran `typecheck && lint && test` chained to the commit.
 
 ## Phase 4 — Independent review  `[ ]`
 Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tests/**` only.
@@ -248,4 +281,5 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
 - Register reaction time for the balance bots (QUEUE_JUMP never fires while they take orders instantly): decided (b),
   wait for Phase 5 numbers (balance-hook.md §2). Phase 5 should log how long players leave someone at the register.
 - Upgrade prices: set in Phase 2 from an average player's tips (rule in `src/data/upgrades.ts`). Revisit with Phase 5 numbers.
-- Segment clips: generated orders fall back to browser speech until Phase 3 renders them.
+- Segment clips: rendered (TTS) or scripted for the actors in Phase 3, but generated orders use the browser voice in builds until the "Ship segments" item lands.
+- Google's Service Terms §20(d) (Generative AI Services, under-18 restriction): does it cover Chirp 3 HD? Edward to check before shipping TTS clips (docs/VOICE_PROVIDERS.md).
