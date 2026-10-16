@@ -2,8 +2,9 @@
 //  - dev server: serves placeholder voice clips from voice-cache/ at /assets/voice/… (release
 //    clips in public/assets/voice/ are served by Vite as usual);
 //  - production build: every audio file in dist/ goes through the release gate
-//    (scripts/audio-gate.ts). Placeholder voice clips are removed; audio with unknown or
-//    unverified provenance FAILS the build, so nothing unlicensed ships silently.
+//    (scripts/audio-gate.ts), against the line manifest and the segment manifest together.
+//    Placeholder voice clips are removed; audio with unknown or unverified provenance FAILS the
+//    build, so nothing unlicensed ships silently.
 
 import { createReadStream, existsSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, normalize, relative, resolve } from 'node:path';
@@ -26,6 +27,28 @@ function listFiles(dir: string): string[] {
   };
   if (existsSync(dir)) walk(dir);
   return out;
+}
+
+/** What the release gate checks a build's audio against: the line manifest and the segment
+ *  manifest as one list of voice clips (a generated-order segment clip ships only when the segment
+ *  manifest lists it as release audio), and src/data/audio/provenance.json for any other audio. */
+export function gateManifests(root: string): {
+  voice: VoiceManifestLike;
+  provenance: ProvenanceLike;
+} {
+  const lines = readJson<VoiceManifestLike>(resolve(root, 'src/data/voice/manifest.json'), {
+    clips: [],
+  });
+  const segments = readJson<VoiceManifestLike>(
+    resolve(root, 'src/data/voice/segments.manifest.json'),
+    { clips: [] },
+  );
+  return {
+    voice: { clips: [...lines.clips, ...segments.clips] },
+    provenance: readJson<ProvenanceLike>(resolve(root, 'src/data/audio/provenance.json'), {
+      files: [],
+    }),
+  };
 }
 
 export function voiceAssets(root: string): Plugin[] {
@@ -58,13 +81,7 @@ export function voiceAssets(root: string): Plugin[] {
         outDir = resolve(config.root, config.build.outDir);
       },
       closeBundle() {
-        const voice = readJson<VoiceManifestLike>(resolve(root, 'src/data/voice/manifest.json'), {
-          clips: [],
-        });
-        const provenance = readJson<ProvenanceLike>(
-          resolve(root, 'src/data/audio/provenance.json'),
-          { files: [] },
-        );
+        const { voice, provenance } = gateManifests(root);
         const gate = classifyAudio(listFiles(outDir), voice, provenance);
         for (const f of gate.strip) {
           const p = join(outDir, f);

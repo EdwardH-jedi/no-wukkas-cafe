@@ -1,8 +1,9 @@
 // Release gate for audio files (Codex A4/A6): decides, for every audio file in a build, whether it
 // may ship. Pure; used by the Vite build plugin (scripts/vite-voice.ts) and the unit tests.
 //
-//   keep    release voice clips (in the voice manifest, licensed, provenance licensed_tts or
-//           recorded) and files listed in src/data/audio/provenance.json with a verified licence
+//   keep    release voice clips (in the voice manifest or the segment manifest, licensed,
+//           provenance licensed_tts or recorded) and files listed in src/data/audio/provenance.json
+//           with a verified licence
 //   strip   placeholder voice clips (development audio that must never ship)
 //   reject  anything else: unknown provenance fails the build instead of shipping silently
 
@@ -79,7 +80,7 @@ export function classifyAudio(
     else
       out.reject.push({
         file: f,
-        why: 'no provenance: not in the voice manifest or provenance.json',
+        why: 'no provenance: not in the voice manifest, the segment manifest or provenance.json',
       });
   }
   return out;
