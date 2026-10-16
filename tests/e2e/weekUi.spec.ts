@@ -103,10 +103,10 @@ test.describe('the week UI', () => {
     await expect(shop).toBeVisible();
     await expect(shop.locator('.shop-till')).toHaveText('In the till: $0.00');
     const prices: Record<string, [string, string]> = {
-      grinder: ['Better grinder', '$450.00'],
-      secondGroup: ['Second group head', '$1,200.00'],
-      steamWand: ['Better steam wand', '$600.00'],
-      docketRail: ['Docket rail', '$150.00'],
+      grinder: ['Better grinder', '$30.00'],
+      secondGroup: ['Second group head', '$100.00'],
+      steamWand: ['Better steam wand', '$50.00'],
+      docketRail: ['Docket rail', '$15.00'],
     };
     for (const [id, [name, price]] of Object.entries(prices)) {
       const li = shop.locator(`li[data-upgrade="${id}"]`);
@@ -117,9 +117,9 @@ test.describe('the week UI', () => {
         'short',
       );
     }
-    await shop.getByRole('button', { name: 'Buy Docket rail for $150.00' }).click();
+    await shop.getByRole('button', { name: 'Buy Docket rail for $15.00' }).click();
     await expect(shop.locator('.shop-msg')).toHaveText(
-      'Not enough in the till: Docket rail costs $150.00, you have $0.00.',
+      'Not enough in the till: Docket rail costs $15.00, you have $0.00.',
     );
     await expect(shop.locator('.shop-till')).toHaveText('In the till: $0.00');
     const refused = await readSave(page);

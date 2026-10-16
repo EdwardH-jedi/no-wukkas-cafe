@@ -1,6 +1,6 @@
 // The café upgrade shop: what the player's upgrades make the station do, and buying one out of the
-// save's till. Pure: no DOM, no randomness, integer cents. The catalogue and its (placeholder,
-// TODO(balance)) prices are data/upgrades.ts.
+// save's till. Pure: no DOM, no randomness, integer cents. The catalogue and its prices are
+// data/upgrades.ts.
 
 import { UPGRADES, type Upgrade } from '../data/upgrades';
 import type { SaveV2 } from './contracts/save';

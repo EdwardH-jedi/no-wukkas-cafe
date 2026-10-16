@@ -3,6 +3,8 @@ import { UPGRADES } from '../../src/data/upgrades';
 import { migrate, type SaveV2 } from '../../src/sim/contracts/save';
 import { formatCents, type ShiftSummary } from '../../src/sim/rush';
 import { buyUpgrade } from '../../src/sim/shop';
+
+const price = (id: string): number => UPGRADES.find((u) => u.id === id)?.costCents ?? NaN;
 import {
   buyMessage,
   endlessReason,
@@ -98,11 +100,11 @@ describe('shift select: the Monday–Friday grid', () => {
 
 describe('the shop', () => {
   it('lists every upgrade with its price in cents, one-line effect and state', () => {
-    const lines = shopLines(save({ cents: 50_000, upgrades: ['docketRail'] }));
+    const lines = shopLines(save({ cents: price('grinder'), upgrades: ['docketRail'] }));
     expect(lines.map((l) => l.id)).toEqual(UPGRADES.map((u) => u.id));
     const by = Object.fromEntries(lines.map((l) => [l.id, l]));
     expect(by.docketRail?.state).toBe('owned');
-    expect(by.grinder).toMatchObject({ state: 'buy', price: formatCents(45_000) });
+    expect(by.grinder).toMatchObject({ state: 'buy', price: formatCents(price('grinder')) });
     expect(by.secondGroup?.state).toBe('short');
     for (const l of lines) expect(l.effect).toBe(UPGRADES.find((u) => u.id === l.id)?.description);
   });
@@ -111,7 +113,7 @@ describe('the shop', () => {
     const before = save({ cents: 50_000 });
     const r = buyUpgrade(before, 'grinder');
     expect(buyMessage(r, 'grinder', before)).toBe(
-      `Better grinder bought. ${formatCents(5_000)} left in the till.`,
+      `Better grinder bought. ${formatCents(50_000 - price('grinder'))} left in the till.`,
     );
   });
 
@@ -120,7 +122,7 @@ describe('the shop', () => {
     const r = buyUpgrade(before, 'secondGroup');
     expect(r.ok).toBe(false);
     expect(buyMessage(r, 'secondGroup', before)).toBe(
-      `Not enough in the till: Second group head costs ${formatCents(120_000)}, you have ${formatCents(900)}.`,
+      `Not enough in the till: Second group head costs ${formatCents(price('secondGroup'))}, you have ${formatCents(900)}.`,
     );
   });
 

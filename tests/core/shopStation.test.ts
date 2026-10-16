@@ -103,7 +103,8 @@ describe('upgrades at the station', () => {
     if (bought.ok) store.save(bought.save);
     const again = createSaveStore(disk, { seed: 9 }).load();
     expect(again.upgrades).toEqual(['secondGroup']);
-    expect(again.cents).toBe(10_000);
+    const price = UPGRADES.find((u) => u.id === 'secondGroup')?.costCents ?? NaN;
+    expect(again.cents).toBe(130_000 - price);
     expect(weekFor(again).station?.groupHeads).toBe(2);
   });
 });
