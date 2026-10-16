@@ -141,6 +141,22 @@ Goal: Trial + 5 shifts + shop + Endless feel like one game. Parallel-safe split 
     pull-through only thins at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`, Edward's
     call). (7) `src/app/input.ts` Space handler `preventDefault`s on focused buttons (worked around by `menuKeys`).
 
+## Phase 1.5 — Polish  `[ ]`
+Goal: the seven follow-ups found in Phase 1 (Evidence above), each fixed or marked `[!]` with the reason.
+Owns `src/ui/styles/{hud,rush}.css`, `src/ui/{rushHud,pos}.ts`, `src/data/ownerLines.ts` + `src/sim/owner.ts`
+(copy and line keys), `src/app/input.ts`, `src/data/voice/manifest.json` (placeholder re-render, never audio).
+- [ ] 1.5.1 Day 2 HUD on a phone (390×844): `#rinstr` off the rail, the gauge column never clips the cup during a
+      flat white's shot, `#ractions` visible beside the gauges. Screenshots before/after.
+- [ ] 1.5.2 "Bin it" never sits under the register's "Ring it up" (drink on the pass + a customer ordering).
+- [ ] 1.5.3 Week shifts after the first don't replay `RUSH_INTRO` ("your first paid shift", `src/data/ownerLines.ts:38`).
+- [ ] 1.5.4 `rush.end.excellent` doesn't say "Five for five" after 6/6 (or 9/9, 10/10): count-agnostic copy; Gaz
+      placeholder clips re-rendered, manifest only committed.
+- [ ] 1.5.5 Saved regulars fire: something besides THE_USUAL (affinity ≥ 2, ROADMAP 3.1) writes `regulars`.
+- [ ] 1.5.6 Pull-through thins only at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`).
+- [ ] 1.5.7 `src/app/input.ts` Space handler no longer `preventDefault`s on focused buttons (today worked around by `menuKeys`).
+- Exit: typecheck, lint, test exit 0; rush + weekUi e2e green; main pushed.
+- Evidence:
+
 ## Phase 2 — Balance  `[x]`
 Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,upgrades,events}.ts` (numbers only), `scripts/balance.ts`, `tests/helpers/{rushBot,pace}.ts`, `reports/` (gitignored).
 - [x] `scripts/balance.ts`: week 1 × {novice, average, expert} × 30 seeds headless → `reports/balance.csv` (grade, tips, walk-outs, serve time, events fired, misheard rate per field).
