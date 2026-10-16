@@ -156,6 +156,8 @@ Owns `src/ui/styles/{hud,rush}.css`, `src/ui/{rushHud,pos}.ts`, `src/data/ownerL
 - [x] 1.5.7 `src/app/input.ts` Space handler no longer `preventDefault`s on focused buttons (today worked around by `menuKeys`).
 - Exit: typecheck, lint, test exit 0; rush + weekUi e2e green; main pushed.
 - Evidence:
+  - Exit: on 44de38b (Phase 4 + 1.5 merged) `E2E_PORT=5179 npx playwright test tests/e2e/rush.spec.ts
+    tests/e2e/weekUi.spec.ts` → `4 passed (12.7m)`, exit 0; full e2e on 4c08363 `28 passed (24.5m)`; main pushed.
   - 1.5.3 + 1.5.4 (47c51f4, 7312c5a): `WEEK_INTRO` (one per row of `data/week.ts`; its Monday is for week 2 on)
     and `ENDLESS_INTRO` in `src/data/ownerLines.ts`, picked by `introLines()` in `core/rush/machine.ts`; Day 2 and the
     first Monday keep `RUSH_INTRO`. Intros name no drink the station can't make (cappuccino, latte, piccolo and iced
@@ -392,19 +394,51 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
     from code is rejected and shippable audio lives in `public/`) and fails the build on `?inline`/`?raw` audio.
     All `.failing` tests merged into their passing files. On 933e633: `Test Files  82 passed (82)` ·
     `Tests  686 passed (686)`. Lane e2e (audio/rush/ibis/week specs) failed under load averages 22–50 from four
-    parallel lanes (frame-rate and time-limit failures, "Dazza never reached the register" in 15 s); the full e2e
-    run on an idle machine is recorded at the end of this file's run (see Phase 5 Evidence / git log).
+    parallel lanes (frame-rate and time-limit failures, "Dazza never reached the register" in 15 s). Run alone on
+    main 4c08363 (all four lanes merged): `E2E_PORT=5179 npm run test:e2e` → `28 passed (24.5m)`, exit 0.
   - Left: while foraging, the bird's honk every 5 s can still land over an order line (the reviewer's test covers the
     entrance only). With the test-only `timeScale` above ~2×, the 12 s audio fallback can come after Gaz's nag.
   - Not failures, noted by the fuzz: THE_USUAL can never fire from a fresh save (only THE_USUAL raises affinity,
     and `RegularMemory.visits` is never written; see 1.5.5); WRONG_MILK fired 0 times in 12 novice seeds; in week 2+
     `shiftRows` reports the playable shift as `done` (cosmetic: `shiftCells` uses `canPlay`).
 
-## Phase 5 — Playtest #1  `[ ]`
+## Phase 5 — Playtest #1  `[~]` local telemetry done; HUMAN playtest next
 - [ ] **HUMAN**: 3–5 people (working-holiday makers / international students ideal), Trial + Mon–Wed, 30 min each. Notes in `docs/playtests/<date>.md`: where they got stuck, pardons per order, walk-outs, "one more shift?" yes/no.
-- [ ] Local telemetry (ROADMAP 0.8): served, accuracy per field, pardons, walk-outs, time-to-serve, quit point; "Export log" in settings. No network.
+- [x] Local telemetry (ROADMAP 0.8): served, accuracy per field, pardons, walk-outs, time-to-serve, quit point; "Export log" in settings. No network.
 - [ ] Fix list from the notes becomes Phase 6 tasks.
 - Evidence:
+  - Telemetry (branch `feat/telemetry`, a fresh subagent; merged 4c08363): cc443b7 `takenAt` on each rush customer
+    (`core/rush/register.ts`, the only core change; trace hashes unchanged) · f0f6eb4 pure records
+    (`src/sim/telemetry.ts`) · e552167 store · de68a89 recorder + Settings · d9c8b35 docs.
+  - Record (`{version: 1, records}`, one list): every record has `id`, `session` (page load), `startedAt`/`endedAt`
+    (ISO, passed in from `src/app`), `ending` finished | restarted | title | closed. Shift: mode (day2 | week |
+    endless), week, shiftIndex, seed, difficulty, customers, served, walk-outs (and where: queue / register /
+    ordering / ticket), refused, hand-backs, accuracy per field (drink, milk, temp, heart: total/correct, from what
+    was rung up), pardons (replays, repeats, questions), time-to-serve and register wait (each value + mean, median,
+    max; game seconds), events (id, at), grade, satisfaction, tips (integer cents), quit point (phase, service time,
+    served, walk-outs, in the café, station) and one row per visit. Trial: attempts (art, valid, band, fault),
+    verdict, score, seconds, quit point (phase, attempt). Register wait answers the open question on QUEUE_JUMP.
+  - Storage: `nwc.telemetry.v1` (`src/core/save/telemetry.ts`), outside SaveV2 (no migration), capped at 200,
+    corrupt JSON → empty log, memory-only if storage is blocked. Recorder `src/app/telemetry.ts`: opens on shift /
+    trial start, closes on summary, restart, "Title screen", and `pagehide` / hidden (written as `closed`, replaced if
+    the player comes back). Settings → "Playtest log": "Saved on this device only; nothing is sent anywhere.", a
+    count, Export log (Blob download `no-wukkas-log-YYYY-MM-DD.json`), Clear log (asks twice). No network call in any
+    telemetry file. Dev handle `window.__trial.telemetry`.
+  - Tests: `tests/sim/telemetry.test.ts` (19: misheard milk counts against milk only, pardons of a walk-out,
+    time-to-serve, register wait, walk-outs by stage, quit point, week + events, Endless, trial, log cap/corrupt/
+    version; headless rushBot shifts whose totals equal `r.summary`), `tests/core/save/telemetry.test.ts` (6),
+    `tests/app/telemetry.test.ts` (7), `tests/core/rushRegisterWait.test.ts` (1). Lane: `Tests  607 passed (607)`.
+    The subagent checked it in a browser (quit to title and page close wrote the right records; 390 px no
+    horizontal scroll; export saved the file; Tab order). Not checked: iOS Safari's download (some versions open the
+    JSON in a tab). One log per browser: Clear between testers, or one device each. A customer who walks out at the
+    register is counted, but their wait isn't in the register-wait numbers.
+  - Run checks on main 4c08363 (Phase 4 fixes, 1.5, ship segments, telemetry merged): `npm run typecheck && npm run
+    lint && npm test` exit 0, `Test Files  90 passed (90)` · `Tests  752 passed (752)`. `E2E_PORT=5179 npm run
+    test:e2e` → `28 passed (24.5m)`, exit 0. `npm run build` from a clean `git checkout-index` copy: exit 0,
+    `[audio-gate] ok: 0 licensed audio file(s) in the build`. `npm run voices:check -- --manifest-only`: 596 clips,
+    0 errors; segments 0/181 with a release clip, 0 errors. Merge notes: the review harness builds `App` by hand, so
+    it gained the telemetry (memory store) at the merge; rushTrace re-recorded once at the 1.5 merge (hashes with
+    `gone` filtered out equal the 1.5 branch's).
 
 ## Phase 6 — Fixes from playtest  `[ ]`
 - [ ] (filled from Phase 5)
