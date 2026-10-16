@@ -61,7 +61,8 @@ committed): the line forms (`queue` ≥ 2 at 298 of 796 polls, average) and QUEU
 events (average) and 17 of 113 (novice) under the game's rules as they are. With the extra poll
 slot the numbers were identical, so it was **not shipped**: it changes nothing.
 
-**Decision for Edward:**
+**Decision (Edward, 2026-10-16): (b).** The bots keep their instant "Take order" for now; the
+Phase 5 playtest decides the register reaction time. The options were:
 
 - (a) Give the balance bots a register reaction time (how long a player leaves someone at the
   register while their hands are busy). That changes every profile and moves the whole curve, so it

@@ -245,5 +245,7 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
 
 ## Open questions for the human
 - Event cooldowns across sessions: currently page-only (decision 2-A). Revisit after Phase 5.
+- Register reaction time for the balance bots (QUEUE_JUMP never fires while they take orders instantly): decided (b),
+  wait for Phase 5 numbers (balance-hook.md §2). Phase 5 should log how long players leave someone at the register.
 - Upgrade prices: set in Phase 2 from an average player's tips (rule in `src/data/upgrades.ts`). Revisit with Phase 5 numbers.
 - Segment clips: generated orders fall back to browser speech until Phase 3 renders them.
