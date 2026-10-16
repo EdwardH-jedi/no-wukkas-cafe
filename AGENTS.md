@@ -61,7 +61,9 @@ Voice clips are **placeholders** (Apple system voices, personal-use only): they 
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
-Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `mode`, `project(x, y)`, `projectAnchor('groupHead' | 'jug')`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
+Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `telemetry`, `mode`, `project(x, y)`, `projectAnchor('groupHead' | 'jug')`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
+
+Playtest log (ROADMAP 0.8): one record per shift and per Day 1 trial (served, walk-outs, accuracy per field, pardons, time-to-serve, register wait, events, quit point) in localStorage under its own key, `nwc.telemetry.v1` (versioned, last 200 records, outside the save so no migration). Settings → Playtest log → **Export log** downloads it as `no-wukkas-log-YYYY-MM-DD.json`; **Clear log** empties it. Nothing is sent anywhere. Built by `sim/telemetry.ts`, stored by `core/save/telemetry.ts`, wired in `app/telemetry.ts`.
 
 ## 4. Architecture and hard boundaries
 
@@ -72,7 +74,7 @@ src/
                      context.ts (the shared App state), input.ts, title.ts, trialWiring.ts,
                      rushWiring.ts + rushView.ts, practiceWiring.ts, weekWiring.ts (shift select, shop,
                      report buttons, autosave),
-                     debug.ts (window.__trial), shared.ts
+                     debug.ts (window.__trial), telemetry.ts (playtest log), shared.ts
   core/              state machines (Day 1 trial.ts, Day 2 rush/ + barista.ts + speech.ts),
                      week progression and shift select glue (week/), the save store (save/),
                      latte-art practice.ts, fixed-step game clock with pause, seeded RNG; later: event bus
