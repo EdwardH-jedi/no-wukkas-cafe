@@ -446,9 +446,47 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
     it gained the telemetry (memory store) at the merge; rushTrace re-recorded once at the 1.5 merge (hashes with
     `gone` filtered out equal the 1.5 branch's).
 
-## Phase 6 — Fixes from playtest  `[ ]`
-- [ ] (filled from Phase 5)
+## Phase 6 — Fixes: review 2026-10-17, then playtest  `[~]` review fixes done (overnight run #3); playtest fixes wait for Phase 5
+Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the acceptance criteria; merged into main as
+8333240) and `docs/QA_SCENARIOS.md`. Decisions (Edward, 2026-10-18): AFFINITY_RULE = yes, SEGMENT_GATE = yes.
+- [x] 6.1 (a3ff4e5) P1 `voices --prune` never follows symlinks out of the cache: `listClips` uses lstat, skips links, and
+      lists only files whose real path is inside the cache's real path (review §10).
+- [x] 6.2 (a16fde9, ef9071d) P2 subtitles start when the voice does (a clip's first sample, the browser voice's start
+      event, or at once when nothing will be heard) and stop with it; voices off mid-line keeps the words (review §2).
+- [x] 6.3 (66283fe) P2 one deadline on the AUDIO clock for a loading line: sim hold = `audio.loading` (LOAD_TIMEOUT 12 s
+      of AudioContext time); the 6 s game-clock cap is gone, in boot.ts and its review-harness copy (review §2).
+- [x] 6.4 (14827e0) P2 ibis: honks and look-ups wait while an order or answer could start (someone entering, queueing,
+      at the register or counter, or a listening line due); the week books the bird at `IBIS.chance` 0.30 (review §6).
+- [x] 6.5 (7586668) THE_USUAL reachable: +1 affinity per correct serve to a regular in a week shift (1.5.5; review §7).
+      The review's "THE_USUAL remains unreachable" test asserted the defect; Edward approved inverting it in place.
+- [x] 6.6 (cd28b37) a placeholder in the segment manifest fails the build instead of being stripped (review §5).
+- [x] 6.7 (59b1c47) "telemetry has no transport; the game fetches its own static assets", not "no network" (review §8).
+- [x] 6.8 (1e34e0c) Phase 1.5 evidence: all five items at exact 390×844 / 1024×640 with JSON sidecars (review §9).
+- [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
+  - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
+    `Tests  787 passed (787)` (baseline on 8333240: 95 files, 10 failed / 765 passed). Never piped through grep.
+  - Review acceptance, each green: independentPrune 2/2; independentSlowAudio 8/8 (25 s load heard at 1×/2×/3× via the
+    browser voice at 18.05 s; 10 s clip and its caption both at 16.05 s); independentFuzz ibis 3/3 (Day 2 134/500 =
+    26.8 %, week shift 3 and index 3 both 159/500 = 31.8 %, 0 overlaps, honks 634 / 427 / 408), PROPOSED RULE green,
+    THE_USUAL 888 in 1,000 seeds × 5 saved shifts (4,112 shifts wrote affinity without it); independentGate 5/5.
+  - Browser probes `E2E_PORT=5201 npx playwright test --config tests/review/playwright.probes.config.ts` (66283fe):
+    3 passed; the caption follows the clip's start by 0.011 s (1×), 0.048 s (2×), 0.027 s (3×) (was 10.02 s ahead).
+  - Balance (30 seeds): A4 moved events/shift by −0.1 in three rows and one satisfaction by −1; A5 raised Wed–Fri
+    events/shift (e.g. average Thursday 1.3 → 1.8, THE_USUAL now fires). First-try pass, walk-outs and tries
+    unchanged in every row. Full rows in the 14827e0 and 7586668 commit bodies.
+  - rushTrace (`node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts`) at ef9071d:
+    all seven SHA-1s equal the review's 1a54a00 values (normal c565b78d…, hard 884d6e21…, easy f4065c58…, aids
+    dbbb5640…, misheard 9cb0c129…, hurry d975462d…, idle 90a50992…).
+  - Build: clean `git archive ef9071d` export (node_modules linked), `npm run build` exit 0, `[audio-gate] ok: 0
+    licensed audio file(s) in the build`. The in-checkout build fails on nine old untracked placeholder renders in
+    the gitignored `public/assets/voice/` (no provenance): the gate doing its job on local files, left for Edward.
+  - E2E at ef9071d: `E2E_PORT=5202 npx playwright test --config tests/review/playwright.ipv6.config.ts` → exit 0,
+    `28 passed (30.5m)`, `7 skipped` (tests/e2e/polishEvidence.spec.ts, which runs only with POLISH_SHOTS set).
+    Serial, nothing else running beside it; the unrelated server on 127.0.0.1:5196 and the dev server on [::1]:5183
+    were left alone.
+  - Seen, not fixed: the milk gauge's target card reads 55–65 °C even for an extra-hot order (68–74 °C,
+    `ui/gauges.ts` TARGET_TEMP); the register panel on a 390-px phone covers the instruction line behind it.
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
