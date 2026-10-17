@@ -4,8 +4,9 @@
 //   keep    release voice clips (in the voice manifest or the segment manifest, licensed,
 //           provenance licensed_tts or recorded) and files listed in src/data/audio/provenance.json
 //           with a verified licence
-//   strip   placeholder voice clips (development audio that must never ship)
-//   reject  anything else: unknown provenance fails the build instead of shipping silently
+//   strip   placeholder line clips (development audio that must never ship)
+//   reject  anything else: unknown provenance fails the build instead of shipping silently, and so
+//           does a placeholder in the segment manifest (it lists release audio only)
 
 /** Every audio format the gate checks: what browsers play, plus the formats takes arrive in
  *  (AIFF and CAF from macOS; scripts/voices-render.ts and voices-audition.ts import AIFF). */
@@ -16,6 +17,9 @@ export interface VoiceManifestLike {
   clips: Array<{
     file: string;
     source?: { placeholder?: boolean; licence?: string; provenance?: string };
+    /** Listed in the segment manifest, which lists release audio only: a placeholder there fails
+     *  the build instead of being stripped (SEGMENT_GATE, Edward 2026-10-18). */
+    segment?: boolean;
   }>;
 }
 
@@ -62,7 +66,12 @@ export function classifyAudio(
     const v = voiceBy.get(f);
     if (v) {
       const s = v.source;
-      if (s?.placeholder !== false) out.strip.push(f);
+      if (v.segment && (s?.placeholder !== false || s.provenance === 'placeholder'))
+        out.reject.push({
+          file: f,
+          why: 'segment clip is a placeholder: the segment manifest lists release audio only',
+        });
+      else if (s?.placeholder !== false) out.strip.push(f);
       else if (!s.licence?.trim())
         out.reject.push({ file: f, why: 'release voice clip without a licence' });
       else if (!SHIPPABLE.has(s.provenance ?? ''))

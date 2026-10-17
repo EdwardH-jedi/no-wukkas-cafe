@@ -18,13 +18,15 @@ itself, not by people remembering.
 
 `scripts/vite-voice.ts` runs after every `vite build`, using `scripts/audio-gate.ts`. It scans
 every audio file in `dist/`:
-- **placeholder voice clip:** deleted, with a warning;
+- **placeholder line clip** (in `src/data/voice/manifest.json`): deleted, with a warning;
 - **licensed release voice clip (`placeholder: false`, a licence, and provenance `licensed_tts` or
   `recorded`) in the line manifest or the segment manifest, or a provenance entry with all of
   `source`, `licence`, `verifiedBy` and `verifiedOn`:** kept;
 - **anything else:** **the build fails** and lists the files. For example, renders left in the
   old `public/assets/voice/` location that aren't in the manifest fail it, and so does a segment
-  clip the segment manifest doesn't list.
+  clip the segment manifest doesn't list. A segment-manifest entry that is a placeholder
+  (`placeholder: true` or provenance `placeholder`) also fails the build instead of being deleted:
+  that manifest lists release audio only (SEGMENT_GATE, Edward 2026-10-18).
 
 `npm run release:check` adds the release-only rule: every voice clip must be release audio
 (`voices:check --release`). It fails today, because all 499 clips are placeholders.

@@ -120,7 +120,8 @@ file per segment id at `assets/voice/segments/<speaker>/<id>.mp3`.
     `-- --import <dir>` writes the actors' segment takes (`<speaker>/segments/<segment id>.wav`).
     The files go to `public/assets/voice/segments/`.
   - The build gate keeps a segment clip only when this manifest lists it as release audio, and
-    rejects any other segment clip in the build.
+    rejects any other segment clip in the build. A placeholder entry here (`placeholder: true` or
+    provenance `placeholder`) fails the build; it is never quietly stripped.
   - A production build asks for a segment clip only when it is listed here. A generated line with
     any unlisted segment uses the browser voice, whole.
   - `voices:check` validates it in both modes: the segment exists with the same words, the file

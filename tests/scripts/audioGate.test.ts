@@ -207,6 +207,25 @@ describe('the build gate with the segment manifest (scripts/vite-voice.ts)', () 
     ).toEqual([licensed, unlisted]);
   });
 
+  it('SEGMENT_GATE: a placeholder in the segment manifest fails the build, flag or not; a line placeholder is still stripped', () => {
+    for (const flag of [true, false]) {
+      const ph = {
+        version: 1,
+        clips: [
+          {
+            file: licensed,
+            source: { placeholder: flag, licence: 'placeholder only', provenance: 'placeholder' },
+          },
+        ],
+      };
+      const { voice, provenance } = gateManifests(project(ph, []));
+      const r = classifyAudio([placeholder, licensed], voice, provenance);
+      expect(r.strip).toEqual([placeholder]);
+      expect(r.keep).toEqual([]);
+      expect(r.reject.map((x) => x.file)).toEqual([licensed]);
+    }
+  });
+
   it('the committed manifests: no segment clip ships yet, so any segment file fails the build', () => {
     const { voice, provenance } = gateManifests(join(import.meta.dirname, '..', '..'));
     const r = classifyAudio([placeholder, licensed], voice, provenance);

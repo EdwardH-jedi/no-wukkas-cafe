@@ -52,7 +52,8 @@ export function gateManifests(root: string): {
     { clips: [] },
   );
   return {
-    voice: { clips: [...lines.clips, ...segments.clips] },
+    // Segment clips are tagged: a placeholder there fails the build (never stripped).
+    voice: { clips: [...lines.clips, ...segments.clips.map((c) => ({ ...c, segment: true }))] },
     provenance: readJson<ProvenanceLike>(resolve(root, 'src/data/audio/provenance.json'), {
       files: [],
     }),
