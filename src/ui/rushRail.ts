@@ -38,7 +38,7 @@ export function ticketsBehind(r: Rush, shown: number): number {
 }
 
 /** The café has history with them: they're back for another visit this shift (`dazza#2`), or the
- *  save remembers them (SaveV2.regulars, which the week passes in as affinity). On Day 2 everyone
+ *  save remembers them (Save.regulars, which the week passes in as affinity). On Day 2 everyone
  *  is new to the player. */
 export function isRegular(r: Rush, c: RushCustomer): boolean {
   return c.key !== c.def.id || r.week?.affinity?.[c.def.id] !== undefined;

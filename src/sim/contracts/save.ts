@@ -1,14 +1,65 @@
-// Shared contract for the week-1 lanes: the save. Version 2 is the first game save (no v1 ever
-// shipped: roadmap 0.2 is unchecked and only listening settings are stored). migrate() is the only
-// way to read stored data: it never throws, and anything that isn't a valid v2 save becomes a
-// fresh one. Pure: no clock (createdAt comes from the caller), no storage (core/save does that).
+// Shared contract for the week-1 lanes: the save. Version 2 was the first game save (no v1 ever
+// shipped: roadmap 0.2 is unchecked and only listening settings are stored); version 3 adds the
+// player's keys (Phase 7). migrate() is the only way to read stored data: it never throws, a v2
+// save becomes v3 with the default keys, and anything else that isn't a valid save becomes a fresh
+// one. Pure: no clock (createdAt comes from the caller), no storage (core/save does that).
 
 import type { CustomerId } from '../../data/customers';
 import type { Difficulty } from '../listening';
 import type { ShiftGrade, ShiftSummary } from '../rush';
 import { isDrinkId, type DrinkId, type Ticket } from './ticket';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
+
+/** The player's own keys for three actions (Phase 7 accessibility). Each works as well as its
+ *  default (Space, R, 1), which keeps working too, so every key hint in the game stays true. */
+export interface KeyMap {
+  /** The station's main action (default Space). */
+  action: string;
+  /** Replay the last line (default R). */
+  replay: string;
+  /** Serve the first ticket on the rail (default 1). */
+  serve: string;
+}
+
+export const DEFAULT_KEYS: Readonly<KeyMap> = { action: ' ', replay: 'r', serve: '1' };
+
+/** Keys the game already uses (app/input.ts, rushWiring.ts, practiceWiring.ts, trialWiring.ts):
+ *  never another action's key. */
+export const RESERVED_KEYS: readonly string[] = [
+  ' ',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  'arrowup',
+  'arrowdown',
+  'enter',
+  'escape',
+  'tab',
+  'b',
+  'd',
+  'f',
+  'g',
+  'i',
+  'l',
+  'm',
+  'p',
+  'r',
+  's',
+  't',
+  'v',
+  'w',
+];
+
+/** May `key` (KeyboardEvent.key, lower case) be `action`'s key? Its own default, or a letter or
+ *  digit the game doesn't use for anything else. */
+export function keyAllowed(action: keyof KeyMap, key: string): boolean {
+  if (key === DEFAULT_KEYS[action]) return true;
+  return /^[a-z0-9]$/.test(key) && !RESERVED_KEYS.includes(key);
+}
 
 export interface RegularMemory {
   visits: number;
@@ -23,8 +74,9 @@ export interface SavedReport {
   summary: ShiftSummary;
 }
 
-export interface SaveV2 {
-  version: 2;
+/** The save (version 3). */
+export interface Save {
+  version: 3;
   /** ISO time the save was started. */
   createdAt: string;
   seed: number;
@@ -41,7 +93,13 @@ export interface SaveV2 {
   reports: SavedReport[];
   /** Integer AUD cents. */
   cents: number;
+  /** The player's keys (v3). */
+  keys: KeyMap;
 }
+
+/** The current save's old name, still the v3 shape: the review's fuzz tests (tests/fuzz, not
+ *  edited by this run) import it. New code says Save. */
+export type SaveV2 = Save;
 
 export interface SaveDefaults {
   seed?: number;
@@ -77,9 +135,9 @@ const SUMMARY_NUMBERS = [
   'wasted',
 ] as const;
 
-export function newSave(d: SaveDefaults = {}): SaveV2 {
+export function newSave(d: SaveDefaults = {}): Save {
   return {
-    version: 2,
+    version: 3,
     createdAt: d.createdAt ?? UNKNOWN_TIME,
     seed: d.seed === undefined ? DEFAULT_SEED : d.seed >>> 0,
     difficulty: d.difficulty ?? 'normal',
@@ -90,6 +148,7 @@ export function newSave(d: SaveDefaults = {}): SaveV2 {
     regulars: {},
     reports: [],
     cents: 0,
+    keys: { ...DEFAULT_KEYS },
   };
 }
 
@@ -119,8 +178,8 @@ function isSummary(x: unknown): x is ShiftSummary {
   );
 }
 
-function readRegulars(x: unknown): SaveV2['regulars'] {
-  const out: SaveV2['regulars'] = {};
+function readRegulars(x: unknown): Save['regulars'] {
+  const out: Save['regulars'] = {};
   if (!isObj(x)) return out;
   for (const id of REGULAR_IDS) {
     const r = x[id];
@@ -146,14 +205,29 @@ function readReports(x: unknown): SavedReport[] {
     }));
 }
 
-function readV2(o: Obj, d: SaveDefaults): SaveV2 {
+/** The player's keys from a stored save: each one allowed and not already taken, else that
+ *  action's default (a v2 save has none: all defaults). */
+function readKeys(x: unknown): KeyMap {
+  const out: KeyMap = { ...DEFAULT_KEYS };
+  if (!isObj(x)) return out;
+  const used = new Set<string>();
+  for (const a of ['action', 'replay', 'serve'] as const) {
+    const k = x[a];
+    if (typeof k === 'string' && keyAllowed(a, k) && !used.has(k)) out[a] = k;
+    used.add(out[a]);
+  }
+  return out;
+}
+
+/** A v2 or v3 save, field by field (a v2 one gets the default keys). */
+function readSave(o: Obj, d: SaveDefaults): Save {
   const base = newSave(d);
   const drinks = Array.isArray(o.unlockedDrinks) ? o.unlockedDrinks.filter(isDrinkId) : [];
   const upgrades = Array.isArray(o.upgrades)
     ? o.upgrades.filter((u): u is string => typeof u === 'string' && u.length > 0)
     : [];
   return {
-    version: 2,
+    version: 3,
     createdAt: typeof o.createdAt === 'string' && o.createdAt ? o.createdAt : base.createdAt,
     seed: typeof o.seed === 'number' && Number.isFinite(o.seed) ? o.seed >>> 0 : base.seed,
     difficulty: isDifficulty(o.difficulty) ? o.difficulty : base.difficulty,
@@ -164,11 +238,12 @@ function readV2(o: Obj, d: SaveDefaults): SaveV2 {
     regulars: readRegulars(o.regulars),
     reports: readReports(o.reports),
     cents: typeof o.cents === 'number' && Number.isFinite(o.cents) ? Math.round(o.cents) : 0,
+    keys: readKeys(o.keys),
   };
 }
 
-/** Stored data (parsed or still a JSON string) → a valid SaveV2. Never throws. */
-export function migrate(raw: unknown, d: SaveDefaults = {}): SaveV2 {
+/** Stored data (parsed or still a JSON string) → a valid Save (v3). Never throws. */
+export function migrate(raw: unknown, d: SaveDefaults = {}): Save {
   let value = raw;
   if (typeof value === 'string') {
     try {
@@ -177,8 +252,10 @@ export function migrate(raw: unknown, d: SaveDefaults = {}): SaveV2 {
       value = undefined;
     }
   }
-  if (isObj(value) && value.version === SAVE_VERSION) return readV2(value, d);
-  // Not a v2 save (empty, corrupt, or a shape from before saves existed): start fresh, keeping
+  // v2 → v3: the same fields, plus the default keys.
+  if (isObj(value) && (value.version === SAVE_VERSION || value.version === 2))
+    return readSave(value, d);
+  // Not a v2 or v3 save (empty, corrupt, or a shape from before saves existed): start fresh, keeping
   // only a difficulty and seed that are clearly valid.
   const keep: SaveDefaults = { ...d };
   if (isObj(value)) {

@@ -3,14 +3,14 @@
 // line; a buy that goes through updates the till and the row in place (focus stays put). Built
 // with textContent only.
 
-import type { SaveV2 } from '../../sim/contracts/save';
+import type { Save } from '../../sim/contracts/save';
 import { focusQuietly, menuKeys } from './keys';
 import { shopLines, tillLine, type ShopLine } from './labels';
 
 export interface ShopActions {
   /** Try to buy upgrade `id`: the save afterwards (unchanged when refused) and one line on what
    *  happened. */
-  buy(id: string): { save: SaveV2; message: string };
+  buy(id: string): { save: Save; message: string };
   /** Back to shift select. */
   back(): void;
 }
@@ -32,7 +32,7 @@ function paintRow(b: HTMLButtonElement, line: ShopLine): void {
 /** Shows the shop in `root`; returns a function that removes it. */
 export function renderShop(
   root: HTMLElement,
-  save: SaveV2,
+  save: Save,
   on: ShopActions,
   /** A line under the title, e.g. that progress won't be saved in this browser. */
   note = '',
@@ -62,7 +62,7 @@ export function renderShop(
   const msg = document.createElement('p');
   msg.className = 'shop-msg';
   msg.setAttribute('role', 'status');
-  const repaint = (s: SaveV2): void => {
+  const repaint = (s: Save): void => {
     till.textContent = tillLine(s);
     for (const line of shopLines(s)) {
       const b = buttons.get(line.id);

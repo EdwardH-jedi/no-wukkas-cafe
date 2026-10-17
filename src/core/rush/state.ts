@@ -166,9 +166,9 @@ export interface RushWeek {
   eventCooldowns?: Partial<Record<ShiftEventId, number>>;
   /** The event that came last in earlier shifts: never the first one again. */
   lastEvent?: ShiftEventId | null;
-  /** How well each regular knows the player (SaveV2.regulars). */
+  /** How well each regular knows the player (Save.regulars). */
   affinity?: Partial<Record<CustomerId, number>>;
-  /** The station the café's upgrades give (SaveV2.upgrades); today's station without. */
+  /** The station the café's upgrades give (Save.upgrades); today's station without. */
   station?: StationParams;
 }
 

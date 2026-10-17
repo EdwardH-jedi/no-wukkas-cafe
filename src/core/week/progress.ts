@@ -3,7 +3,7 @@
 // and the tips are kept either way.
 
 import { FIRST_ARRIVAL, WEEK, type ShiftDef } from '../../data/week';
-import { migrate, type SaveV2 } from '../../sim/contracts/save';
+import { migrate, type Save } from '../../sim/contracts/save';
 import type { DrinkId } from '../../sim/contracts/ticket';
 import type { ShiftGrade, ShiftSummary } from '../../sim/rush';
 
@@ -27,7 +27,7 @@ export function passFail(report: ShiftSummary): ShiftResult {
 }
 
 /** The save after a shift report. Never changes `save`. */
-export function nextShift(save: SaveV2, report: ShiftSummary): SaveV2 {
+export function nextShift(save: Save, report: ShiftSummary): Save {
   const s = migrate(save);
   s.reports.push({ week: s.week, shift: s.shift, summary: { ...report } });
   s.cents += Math.round(report.tipsCents);
@@ -49,7 +49,7 @@ const GRADE_RANK: Record<ShiftGrade, number> = {
 };
 
 /** Best grade ever reported for this shift of the week, or null if never played. */
-export function bestGrade(save: SaveV2, shift: number): ShiftGrade | null {
+export function bestGrade(save: Save, shift: number): ShiftGrade | null {
   let best: ShiftGrade | null = null;
   for (const r of save.reports)
     if (r.shift === shift && (best === null || GRADE_RANK[r.summary.grade] > GRADE_RANK[best]))
@@ -69,7 +69,7 @@ export interface ShiftRow {
 }
 
 /** What the shift-select screen lists. */
-export function shiftRows(save: SaveV2): ShiftRow[] {
+export function shiftRows(save: Save): ShiftRow[] {
   return WEEK.map((d) => {
     const best = bestGrade(save, d.index);
     const reached = save.week > 1 || d.index <= save.shift;
@@ -86,7 +86,7 @@ export function shiftRows(save: SaveV2): ShiftRow[] {
 }
 
 /** Endless Rush opens once the first shift has been passed. */
-export const endlessUnlocked = (save: SaveV2): boolean => save.week > 1 || save.shift > 0;
+export const endlessUnlocked = (save: Save): boolean => save.week > 1 || save.shift > 0;
 
 /** When each customer walks in (service seconds); the gap shrinks from gap.first to gap.last. */
 export function arrivalTimes(d: ShiftDef): number[] {

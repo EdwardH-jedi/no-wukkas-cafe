@@ -316,5 +316,66 @@ test.describe('Phase 7 accessibility evidence', () => {
       ).toBe(true);
       await ctx.close();
     });
+
+    test(`e: remap the main action key, saved in the v3 save, at ${vp}`, async ({ browser }) => {
+      test.setTimeout(180_000);
+      const { ctx, page } = await open(browser, vp);
+      await page.goto('/?voice=0&seed=7&ibis=0');
+      await page
+        .getByRole('button', { name: /^Settings/ })
+        .first()
+        .click();
+      const action = page.locator('button[data-key="action"]');
+      await action.scrollIntoViewIfNeeded();
+      await expect(action).toHaveText('Space');
+      await action.click();
+      await expect(action).toHaveText('Press a key…');
+      await page.keyboard.press('f'); // refused: F makes a drink
+      const refused = await page.locator('.keymsg').textContent();
+      await action.click();
+      await page.keyboard.press('j');
+      await expect(action).toHaveText('J');
+      const saved = await page.evaluate(() =>
+        JSON.parse(localStorage.getItem('nwc.save.v2') ?? 'null'),
+      );
+      await capture(page, 'e-keys', vp, 'settings', {
+        claim: 'Settings → Keys: the main action rebound to J through the panel; the save is v3',
+        refusedMessage: refused,
+        saved: { version: saved?.version, keys: saved?.keys },
+      });
+      await page.getByRole('button', { name: 'Done' }).click();
+      // In play: J does what Space does (here: hurries Gaz's intro line along).
+      await page.getByRole('button', { name: /Day 2: The morning rush/ }).click();
+      const first = await until(
+        () => rush(page),
+        (s) => s.phase === 'intro' && s.line !== null,
+      );
+      // Control: K is nobody's key, so the line stays.
+      await page.keyboard.press('k');
+      await page.waitForTimeout(800);
+      const afterK = (await rush(page))?.line ?? null;
+      const t0 = Date.now();
+      await page.keyboard.press('j');
+      const next = await until(
+        () => rush(page),
+        (s) => s.line?.key !== first.line?.key,
+        800,
+      ).catch(() => null);
+      const ms = Date.now() - t0;
+      await page.waitForTimeout(600);
+      await capture(page, 'e-keys', vp, 'j-skips-intro-line', {
+        claim: 'In play the chosen key (J) does what Space does: it hurries the intro line along',
+        before: first.line,
+        afterUnmappedK: afterK,
+        after: next?.line ?? null,
+        msFromJToNextLine: ms,
+      });
+      expect(refused).toMatch(/already does something/);
+      expect(saved?.version).toBe(3);
+      expect(saved?.keys?.action).toBe('j');
+      expect(afterK?.key).toBe(first.line?.key);
+      expect(next?.line?.key).not.toBe(first.line?.key);
+      await ctx.close();
+    });
   }
 });

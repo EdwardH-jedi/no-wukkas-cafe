@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { STEP } from '../core/clock';
 import { ibisPresent } from '../sim/ibis';
-import { controlOwnsSpace } from '../ui/screens/keys';
+import { aliasKey, controlOwnsSpace } from '../ui/screens/keys';
 import { RIM } from '../world/station';
 import type { App } from './context';
 import { practiceAct, practiceKey } from './practiceWiring';
@@ -71,7 +71,8 @@ export function installInput(app: App): () => void {
   );
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const k = e.key.toLowerCase();
+    // The player's own keys (Settings → Keys) stand for Space, R and 1; the defaults still work.
+    const k = aliasKey(app.store.load().keys, e.key.toLowerCase());
     if (k === 'escape' || k === 'p') {
       app.setPaused(!clock.paused);
       return;
@@ -95,7 +96,7 @@ export function installInput(app: App): () => void {
   });
 
   window.addEventListener('keyup', (e) => {
-    const k = e.key.toLowerCase();
+    const k = aliasKey(app.store.load().keys, e.key.toLowerCase());
     if (k === ' ') app.spaceHeld = false;
     if ((k === 'w' || k === 'arrowup') && app.keyHeight > 0) app.keyHeight = 0;
     if ((k === 's' || k === 'arrowdown') && app.keyHeight < 0) app.keyHeight = 0;

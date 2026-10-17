@@ -4,9 +4,10 @@
 // buttons. Also owns the toast that pops up when audio fails.
 
 import type { AudioManager, AudioStatus, Bus } from '../audio/manager';
+import { DEFAULT_KEYS, keyAllowed, type KeyMap } from '../sim/contracts/save';
 import type { Difficulty } from '../sim/listening';
 import { bindLogSection, LOG_SECTION_HTML, type LogCallbacks } from './logSection';
-import { focusQuietly, menuKeys } from './screens/keys';
+import { focusQuietly, keyLabel, menuKeys } from './screens/keys';
 import {
   POUR_SENSITIVITY,
   pourSensitivityLabel,
@@ -21,7 +22,23 @@ export interface AudioPanelCallbacks {
   listen: { get(): ListenSettings; set(s: ListenSettings): void };
   /** The playtest log's Export / Clear (left out, the section isn't shown). */
   log?: LogCallbacks;
+  /** The player's keys, kept in the save (left out, the section isn't shown). */
+  keys?: { get(): KeyMap; set(k: KeyMap): void };
 }
+
+const KEY_ROWS: ReadonlyArray<[keyof KeyMap, string]> = [
+  ['action', 'Main action'],
+  ['replay', 'Replay the last line'],
+  ['serve', 'Serve the first ticket (and answer 1)'],
+];
+
+const KEYS_HTML = `<h4>Keys</h4>
+    ${KEY_ROWS.map(
+      ([a, label]) =>
+        `<label class="sel keyrow"><span>${label}</span><button type="button" class="btn small ghost" data-key="${a}"></button></label>`,
+    ).join('')}
+    <p class="fine keymsg">Your key works as well as the usual one. Letters and digits the game doesn't already use.</p>
+    <div class="titleBtns"><button type="button" class="btn small ghost" data-a="keysReset">Usual keys</button></div>`;
 
 export interface AudioPanel {
   /** Markup for the Replay + Sound buttons a HUD puts in its top bar. */
@@ -87,6 +104,7 @@ export function createAudioPanel(
     <h4>Latte art</h4>
     <label class="slider"><span>Pour sensitivity</span><input type="range" min="${POUR_SENSITIVITY.min}" max="${POUR_SENSITIVITY.max}" step="${POUR_SENSITIVITY.step}" data-l="pour" aria-label="Pour sensitivity"><output data-out="pour"></output></label>
     <p class="fine">How strongly the jug answers your hand: lower for a gentler pour, higher for a quicker one. 1.0× is as tuned.</p>
+    ${cb.keys ? KEYS_HTML : ''}
     ${cb.log ? LOG_SECTION_HTML : ''}
     <div class="titleBtns">
       <button class="btn small" data-a="test">Test voice</button>
@@ -143,6 +161,7 @@ export function createAudioPanel(
     learnChk.onchange =
       setListen;
   const log = cb.log ? bindLogSection(panel, cb.log) : null;
+  if (cb.keys) bindKeys(panel, cb.keys);
   pourIn.oninput = () => {
     const v = roundPourSensitivity(Number(pourIn.value));
     pourOut.textContent = pourSensitivityLabel(v);
@@ -261,4 +280,61 @@ export function createAudioPanel(
   };
   sync();
   return p;
+}
+
+/** Settings → Keys: click an action's key, press the new one (Escape keeps the old). A key the game
+ *  already uses, or another action's, is refused with the reason. */
+function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): void {
+  const msg = panel.querySelector('.keymsg') as HTMLElement;
+  const usual = msg.textContent ?? '';
+  const buttons = panel.querySelectorAll<HTMLButtonElement>('button[data-key]');
+  const show = (): void => {
+    const k = keys.get();
+    buttons.forEach((b) => {
+      const a = b.dataset.key as keyof KeyMap;
+      b.textContent = keyLabel(k[a]);
+      b.setAttribute(
+        'aria-label',
+        `${a === 'action' ? 'Main action' : a === 'replay' ? 'Replay' : 'Serve'} key: ${keyLabel(k[a])}. Change`,
+      );
+    });
+  };
+  let stop: (() => void) | null = null;
+  buttons.forEach((b) => {
+    b.onclick = () => {
+      stop?.();
+      const a = b.dataset.key as keyof KeyMap;
+      b.textContent = 'Press a key…';
+      msg.textContent = 'Press the new key, or Escape to keep this one.';
+      const take = (e: KeyboardEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const k = e.key.toLowerCase();
+        const done = (text: string): void => {
+          stop?.();
+          msg.textContent = text;
+          show();
+        };
+        if (k === 'escape') return done(usual);
+        const now = keys.get();
+        const other = KEY_ROWS.find(([o]) => o !== a && now[o] === k);
+        if (other) return done(`${keyLabel(k)} is already the key for ${other[1].toLowerCase()}.`);
+        if (!keyAllowed(a, k)) return done(`${keyLabel(k)} already does something in the game.`);
+        keys.set({ ...now, [a]: k });
+        done(usual);
+      };
+      window.addEventListener('keydown', take, { capture: true });
+      stop = () => {
+        window.removeEventListener('keydown', take, { capture: true });
+        stop = null;
+      };
+    };
+  });
+  (panel.querySelector('[data-a="keysReset"]') as HTMLButtonElement).onclick = () => {
+    stop?.();
+    keys.set({ ...DEFAULT_KEYS });
+    msg.textContent = usual;
+    show();
+  };
+  show();
 }

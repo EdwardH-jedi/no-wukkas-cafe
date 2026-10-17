@@ -6,7 +6,7 @@ import {
   SAVE_KEY,
   type KeyValueStorage,
 } from '../../../src/core/save/storage';
-import { newSave, type SaveV2 } from '../../../src/sim/contracts/save';
+import { DEFAULT_KEYS, newSave, type SaveV2 } from '../../../src/sim/contracts/save';
 import type { ShiftSummary } from '../../../src/sim/rush';
 
 class FakeStorage implements KeyValueStorage {
@@ -57,11 +57,26 @@ describe('save storage', () => {
     for (const raw of ['', '{', 'null', '[]', JSON.stringify({ version: 1, difficulty: 'hard' })]) {
       const fs = new FakeStorage();
       fs.data.set(SAVE_KEY, raw);
-      expect(createSaveStore(fs, D).load().version).toBe(2);
+      expect(createSaveStore(fs, D).load().version).toBe(3);
     }
     const fs = new FakeStorage();
     fs.data.set(SAVE_KEY, JSON.stringify({ version: 1, difficulty: 'hard' }));
     expect(createSaveStore(fs, D).load().difficulty).toBe('hard');
+  });
+
+  it('a v2 save in storage loads as v3 with the default keys, and saves back as v3', () => {
+    const fs = new FakeStorage();
+    const old = { ...createSaveStore(null, D).load(), version: 2, cents: 4321 } as Record<
+      string,
+      unknown
+    >;
+    delete old.keys;
+    fs.data.set(SAVE_KEY, JSON.stringify(old));
+    const st = createSaveStore(fs, D);
+    const s = st.load();
+    expect([s.version, s.cents, s.keys]).toEqual([3, 4321, DEFAULT_KEYS]);
+    st.save(s);
+    expect(JSON.parse(fs.data.get(SAVE_KEY) ?? 'null').version).toBe(3);
   });
 
   it('falls back to memory when storage is blocked', () => {

@@ -1,0 +1,31 @@
+{
+  "item": "e-keys",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "a163a66+e",
+  "timestamp": "2026-10-17T15:14:46.962Z",
+  "claim": "In play the chosen key (J) does what Space does: it hurries the intro line along",
+  "before": {
+    "speaker": "gaz",
+    "key": "rush.intro.0",
+    "text": "Righto, you're on the books. Welcome to your first paid shift.",
+    "delivery": "normal"
+  },
+  "afterUnmappedK": {
+    "speaker": "gaz",
+    "key": "rush.intro.0",
+    "text": "Righto, you're on the books. Welcome to your first paid shift.",
+    "delivery": "normal"
+  },
+  "after": {
+    "speaker": "gaz",
+    "key": "rush.intro.1",
+    "text": "Seven o'clock rush. Tradies, nurses, Nan Beryl, the lot. Keep the line moving.",
+    "delivery": "normal"
+  },
+  "msFromJToNextLine": 194
+}

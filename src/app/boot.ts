@@ -231,6 +231,10 @@ export async function boot(): Promise<void> {
         applyA11y(s);
       },
     },
+    keys: {
+      get: () => app.store.load().keys,
+      set: (keys) => app.store.save({ ...app.store.load(), keys }),
+    },
     log: {
       counts: () => {
         const rs = app.telemetry.store.read().records;
