@@ -11,3 +11,4 @@ package-lock.json
 *.md
 src/data/voice/manifest.json
 .claude
+tests/review/.e2e-results
