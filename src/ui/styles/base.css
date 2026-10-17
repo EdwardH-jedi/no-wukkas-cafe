@@ -121,3 +121,16 @@ kbd {
 .hide-root.hide {
   display: none !important;
 }
+
+/* Reduced motion (the OS setting, Phase 7): no slides, fades or pulses; state changes land at
+   once. The 3D café does the same for the bird and the steam (src/world/motion.ts). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

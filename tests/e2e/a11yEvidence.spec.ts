@@ -1,0 +1,150 @@
+// Phase 7 accessibility evidence (overnight run #3 B3): each setting captured at exactly 390×844
+// and 1024×640 (deviceScaleFactor 1), one JSON sidecar per capture ({item, viewport, commit,
+// timestamp} plus what was measured). Skipped unless A11Y_SHOTS names the output directory:
+//
+//   A11Y_SHOTS=docs/verification/2026-10-18-a11y A11Y_COMMIT=$(git rev-parse --short HEAD) \
+//     E2E_PORT=5202 npx playwright test --config tests/review/playwright.ipv6.config.ts a11yEvidence
+
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import {
+  expect,
+  test,
+  type Browser,
+  type BrowserContextOptions,
+  type Page,
+} from '@playwright/test';
+import type { RushState } from './helpers/weekBot';
+
+const DIR = process.env.A11Y_SHOTS ?? '';
+const COMMIT = process.env.A11Y_COMMIT ?? 'unknown';
+
+const VIEWPORTS: Record<string, BrowserContextOptions> = {
+  '390x844': {
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 1,
+    isMobile: true,
+    hasTouch: true,
+  },
+  '1024x640': { viewport: { width: 1024, height: 640 }, deviceScaleFactor: 1 },
+};
+
+/** A PNG and its sidecar: `<item>-<name>-<viewport>.{png,json}`. */
+async function capture(
+  page: Page,
+  item: string,
+  vp: string,
+  name: string,
+  facts: Record<string, unknown> = {},
+): Promise<void> {
+  mkdirSync(DIR, { recursive: true });
+  const base = join(DIR, `${item}-${name}-${vp}`);
+  await page.screenshot({ path: `${base}.png` });
+  const sidecar = {
+    item,
+    viewport: vp,
+    css: page.viewportSize(),
+    devicePixelRatio: await page.evaluate(() => window.devicePixelRatio),
+    commit: COMMIT,
+    timestamp: new Date().toISOString(),
+    ...facts,
+  };
+  writeFileSync(`${base}.json`, `${JSON.stringify(sidecar, null, 2)}\n`);
+}
+
+type Debug = { rush: RushState | null };
+const rush = (page: Page): Promise<RushState | null> =>
+  page.evaluate(() => (window as unknown as { __trial: Debug }).__trial.rush);
+
+async function until<T>(
+  read: () => Promise<T | null>,
+  pred: (s: T) => boolean,
+  ms = 60_000,
+): Promise<T> {
+  const end = Date.now() + ms;
+  for (;;) {
+    const s = await read();
+    if (s && pred(s)) return s;
+    if (Date.now() > end) throw new Error(`timed out; last ${JSON.stringify(s)}`);
+    await new Promise((ok) => setTimeout(ok, 30));
+  }
+}
+
+async function open(
+  browser: Browser,
+  vp: string,
+  extra: BrowserContextOptions = {},
+  init?: (page: Page) => Promise<unknown>,
+) {
+  const ctx = await browser.newContext({
+    ...VIEWPORTS[vp],
+    ...extra,
+    baseURL: test.info().project.use.baseURL,
+  });
+  const page = await ctx.newPage();
+  if (init) await init(page);
+  return { ctx, page };
+}
+
+/** Day 2 from the title, to Gaz's first intro line on screen. */
+async function day2Intro(page: Page): Promise<RushState> {
+  await page.goto('/?voice=0&seed=7&ibis=0');
+  await page.getByRole('button', { name: /Day 2: The morning rush/ }).click();
+  const s = await until(
+    () => rush(page),
+    (x) => x.phase === 'intro' && x.line !== null,
+  );
+  await page.waitForTimeout(1500); // the subtitle types out
+  return s;
+}
+
+/** Longest computed transition and animation duration (s) of a few HUD elements. */
+const durations = (page: Page) =>
+  page.evaluate(() => {
+    const secs = (v: string): number =>
+      Math.max(
+        0,
+        ...v.split(',').map((x) => parseFloat(x) * (x.trim().endsWith('ms') ? 0.001 : 1)),
+      );
+    return ['#rsubs', '#rtopbar', '#rsubs .text', 'button'].map((sel) => {
+      const el = document.querySelector(sel);
+      const cs = el ? getComputedStyle(el) : null;
+      return {
+        sel,
+        transition: cs ? secs(cs.transitionDuration) : null,
+        animation: cs ? secs(cs.animationDuration) : null,
+      };
+    });
+  });
+
+test.describe('Phase 7 accessibility evidence', () => {
+  test.skip(!DIR, 'evidence capture only: set A11Y_SHOTS');
+
+  for (const vp of Object.keys(VIEWPORTS)) {
+    test(`d: reduced motion is respected at ${vp}`, async ({ browser }) => {
+      test.setTimeout(120_000);
+      const measured: Record<string, { matches: boolean; durations: unknown }> = {};
+      for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+        const { ctx, page } = await open(browser, vp, { reducedMotion });
+        await day2Intro(page);
+        measured[reducedMotion] = {
+          matches: await page.evaluate(
+            () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          ),
+          durations: await durations(page),
+        };
+        if (reducedMotion === 'reduce')
+          await capture(page, 'd-reduced-motion', vp, 'day2-intro', {
+            claim:
+              'prefers-reduced-motion: UI transitions and animations collapse to 0.01 ms; the bird ' +
+              'and the steam calm down (src/world/motion.ts; checked in code, a still cannot show it)',
+            measured,
+          });
+        await ctx.close();
+      }
+      expect(measured.reduce?.matches).toBe(true);
+      const reduced = measured.reduce?.durations as Array<{ transition: number | null }>;
+      for (const d of reduced) if (d.transition !== null) expect(d.transition).toBeLessThan(0.001);
+    });
+  }
+});
