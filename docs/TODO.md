@@ -487,6 +487,12 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     were left alone.
   - Seen, not fixed: the milk gauge's target card reads 55–65 °C even for an extra-hot order (68–74 °C,
     `ui/gauges.ts` TARGET_TEMP); the register panel on a 390-px phone covers the instruction line behind it.
+  - Not done (overnight run #3; full list and questions in `docs/integration/RUN3_REPORT.md`): Day 1 trial and
+    practice subtitles still start on request, not with the voice (A2 covered the rush and Replay); the review harness
+    still copies boot's setPaused/resumeAll/replay (B1 shared the frame); the in-checkout build stops on nine old
+    untracked renders in `public/assets/voice/`; `RegularMemory.visits` is never written; the subtitle box at Medium
+    on a 390-px phone is 1 px over each side. One reviewer test was edited, with Edward's in-session approval: the
+    THE_USUAL "remains unreachable" test, inverted in 7586668.
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
@@ -503,6 +509,13 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       Architecture drafted in `docs/DEVLOG.md` with one Mermaid diagram (overnight run #3 B5); playtest learnings wait
       for Phase 5.
 - Evidence:
+  - Overnight run #3 (Part B): B1 frame driver 9f05502 · B3 accessibility c1b6f17 · B2 audio manager split 2dd94b1 ·
+    B4 docs/STEAM.md cbd465b · B5 docs/DEVLOG.md e2c9c94 · B6 housekeeping 89e4214. Unit 97 files / 797 tests, 0
+    failed; rushTrace's seven hashes unchanged through B1 and B2; final E2E and the report:
+    `docs/integration/RUN3_REPORT.md`.
+  - Not done: nothing on a device (iPhone Safari, Android, Steam Deck); Steam is research only (no `cargo`, no
+    scaffold, no decision); the devlog has no playtest learnings; no branch was deleted in B6 (this file's "never
+    delete branches" rule; the 21 merged branches are listed in the report); performance pass and deploy untouched.
 
 ---
 
