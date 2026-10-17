@@ -57,6 +57,8 @@ export function createDebugHandle(app: App) {
         speaking: audio.speaking,
         clipCount: audio.clipCount,
         history: audio.history.map((h) => ({ ...h })),
+        /** What Replay would say: the last line asked for (it may still be loading). */
+        lastLine: audio.lastLine?.text ?? null,
         voices: audio.voices,
         output: audio.outputInfo,
         music: { mood: music.mood, duck: audio.musicDuck, scheduled: music.scheduled },
