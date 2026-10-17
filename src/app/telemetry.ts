@@ -3,7 +3,8 @@
 // or closed, the open record is written as 'closed' and stays open: if the player comes back and
 // carries on, its real ending replaces it (same id). Records are built from the live state only at
 // those moments, never per frame. Wall-clock ISO times are read here; sim/ and core/ only see game
-// seconds. Saved on this device only: nothing is sent anywhere.
+// seconds. Saved on this device only: telemetry has no transport; the game fetches its own static
+// assets (voice clips, audio/manager.ts), nothing else.
 
 import type { Rush } from '../core/rush';
 import { browserStorage } from '../core/save/storage';

@@ -407,7 +407,7 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
 
 ## Phase 5 — Playtest #1  `[~]` local telemetry done; HUMAN playtest next
 - [ ] **HUMAN**: 3–5 people (working-holiday makers / international students ideal), Trial + Mon–Wed, 30 min each. Notes in `docs/playtests/<date>.md`: where they got stuck, pardons per order, walk-outs, "one more shift?" yes/no.
-- [x] Local telemetry (ROADMAP 0.8): served, accuracy per field, pardons, walk-outs, time-to-serve, quit point; "Export log" in settings. No network.
+- [x] Local telemetry (ROADMAP 0.8): served, accuracy per field, pardons, walk-outs, time-to-serve, quit point; "Export log" in settings. Telemetry has no transport; the game fetches its own static assets.
 - [ ] Fix list from the notes becomes Phase 6 tasks.
 - Evidence:
   - Telemetry (branch `feat/telemetry`, a fresh subagent; merged 4c08363): cc443b7 `takenAt` on each rush customer
@@ -425,8 +425,9 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
     corrupt JSON → empty log, memory-only if storage is blocked. Recorder `src/app/telemetry.ts`: opens on shift /
     trial start, closes on summary, restart, "Title screen", and `pagehide` / hidden (written as `closed`, replaced if
     the player comes back). Settings → "Playtest log": "Saved on this device only; nothing is sent anywhere.", a
-    count, Export log (Blob download `no-wukkas-log-YYYY-MM-DD.json`), Clear log (asks twice). No network call in any
-    telemetry file. Dev handle `window.__trial.telemetry`.
+    count, Export log (Blob download `no-wukkas-log-YYYY-MM-DD.json`), Clear log (asks twice). Telemetry has no transport (no fetch,
+    XMLHttpRequest, sendBeacon or WebSocket in any telemetry file); the game fetches its own static assets
+    (voice clips in `audio/manager.ts`; the dev-only review pages fetch their own files). Dev handle `window.__trial.telemetry`.
   - Tests: `tests/sim/telemetry.test.ts` (19: misheard milk counts against milk only, pardons of a walk-out,
     time-to-serve, register wait, walk-outs by stage, quit point, week + events, Endless, trial, log cap/corrupt/
     version; headless rushBot shifts whose totals equal `r.summary`), `tests/core/save/telemetry.test.ts` (6),

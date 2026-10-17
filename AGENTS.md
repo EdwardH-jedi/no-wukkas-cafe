@@ -57,13 +57,13 @@ Voice clips are **placeholders** (Apple system voices, personal-use only): they 
 
 **Audio review pages (dev server only, never built):** `/dev/casting.html` (voice casting: auditions side by side, ratings, decisions → JSON; docs/VOICE_CASTING.md) and `/dev/listening.html` (café sound lab: the three music moods on the real engine, bus volumes, ducking under real dialogue, loudness/true-peak/clipping/DC measurement, listening notes → `reports/listening-notes.json`; docs/AUDIO_PROVENANCE.md).
 
-**Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder voice clips are removed. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
+**Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder line clips are removed, while a placeholder listed in the segment manifest fails the build. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 
 Dev builds expose a read-only debug handle, `window.__trial` (`state`, `tick`, `rush`, `practice`, `save`, `telemetry`, `mode`, `project(x, y)`, `projectAnchor('groupHead' | 'jug')`), plus a `timeScale` test hook (0.05–4×). The e2e test uses it to read state and aim the mouse; gameplay never depends on it. Add `?seed=N` for a specific seed and `?voice=0` to turn voices off for that page (not saved). `window.__trial.audio` shows what played (decoded length, start/end, peak RMS) for audio tests.
 
-Playtest log (ROADMAP 0.8): one record per shift and per Day 1 trial (served, walk-outs, accuracy per field, pardons, time-to-serve, register wait, events, quit point) in localStorage under its own key, `nwc.telemetry.v1` (versioned, last 200 records, outside the save so no migration). Settings → Playtest log → **Export log** downloads it as `no-wukkas-log-YYYY-MM-DD.json`; **Clear log** empties it. Nothing is sent anywhere. Built by `sim/telemetry.ts`, stored by `core/save/telemetry.ts`, wired in `app/telemetry.ts`.
+Playtest log (ROADMAP 0.8): one record per shift and per Day 1 trial (served, walk-outs, accuracy per field, pardons, time-to-serve, register wait, events, quit point) in localStorage under its own key, `nwc.telemetry.v1` (versioned, last 200 records, outside the save so no migration). Settings → Playtest log → **Export log** downloads it as `no-wukkas-log-YYYY-MM-DD.json`; **Clear log** empties it. Telemetry has no transport; the game fetches its own static assets. Built by `sim/telemetry.ts`, stored by `core/save/telemetry.ts`, wired in `app/telemetry.ts`.
 
 ## 4. Architecture and hard boundaries
 
