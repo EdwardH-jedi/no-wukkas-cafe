@@ -10,14 +10,14 @@ import {
 } from '../../core/week/progress';
 import { canPlay } from '../../core/week/session';
 import { UPGRADES } from '../../data/upgrades';
-import type { SaveV2 } from '../../sim/contracts/save';
+import type { Save } from '../../sim/contracts/save';
 import { DRINKS } from '../../sim/contracts/ticket';
 import { formatCents, type ShiftGrade, type ShiftSummary } from '../../sim/rush';
 import type { BuyResult } from '../../sim/shop';
 
 /** Why Endless Rush is still locked (one line for the title and shift select), or null once it's
  *  open: it opens when the week's first shift has been passed. */
-export function endlessReason(save: SaveV2): string | null {
+export function endlessReason(save: Save): string | null {
   return endlessUnlocked(save) ? null : `Pass ${shiftDef(0).day} in the week to unlock it.`;
 }
 
@@ -47,7 +47,7 @@ export interface ShiftCell {
 }
 
 /** The Monday–Friday grid on shift select. */
-export function shiftCells(save: SaveV2): ShiftCell[] {
+export function shiftCells(save: Save): ShiftCell[] {
   return shiftRows(save).map((row) => {
     const playable = canPlay(save, row.index);
     const detail = [`${row.customers} customers`];
@@ -76,7 +76,7 @@ export const shiftLabel = (c: ShiftCell): string =>
   [`${c.day}: ${c.state}`, c.detail, c.best].filter((x) => x !== null).join('. ') + '.';
 
 /** The line under the shop button on shift select: the till, and how much is already bought. */
-export function shopEntryLine(save: SaveV2): string {
+export function shopEntryLine(save: Save): string {
   const owned = UPGRADES.filter((u) => save.upgrades.includes(u.id)).length;
   return `${tillLine(save)} · ${owned} of ${UPGRADES.length} owned`;
 }
@@ -97,7 +97,7 @@ export interface ShopLine {
 }
 
 /** Every upgrade on sale, in catalogue order, with what the till says about it. */
-export function shopLines(save: SaveV2): ShopLine[] {
+export function shopLines(save: Save): ShopLine[] {
   return UPGRADES.map((u) => ({
     id: u.id,
     name: u.name,
@@ -108,11 +108,11 @@ export function shopLines(save: SaveV2): ShopLine[] {
 }
 
 /** The till line over the shop. */
-export const tillLine = (save: SaveV2): string => `In the till: ${formatCents(save.cents)}`;
+export const tillLine = (save: Save): string => `In the till: ${formatCents(save.cents)}`;
 
 /** One line on what a buy did: bought, or why it was refused (never silent). `before` is the save
  *  the buy was tried on. */
-export function buyMessage(result: BuyResult, id: string, before: SaveV2): string {
+export function buyMessage(result: BuyResult, id: string, before: Save): string {
   if (result.ok)
     return `${result.upgrade.name} bought. ${formatCents(result.save.cents)} left in the till.`;
   const u = UPGRADES.find((x) => x.id === id);

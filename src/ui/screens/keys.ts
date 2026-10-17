@@ -3,7 +3,20 @@
 // (on the title, that starts the trial). Keys pressed on a control inside a menu belong to that
 // control, so they are stopped here, before they bubble up to the window.
 
+import { DEFAULT_KEYS, type KeyMap } from '../../sim/contracts/save';
+
 const CONTROL = 'button, input, select, textarea, a[href]';
+
+/** The key the game should see for `k` (KeyboardEvent.key, lower case) under the player's key map
+ *  (Settings → Keys, Phase 7): a key they chose for an action stands for that action's default
+ *  (Space, R or 1); every other key, the defaults included, is itself. */
+export function aliasKey(keys: KeyMap, k: string): string {
+  for (const a of ['action', 'replay', 'serve'] as const) if (keys[a] === k) return DEFAULT_KEYS[a];
+  return k;
+}
+
+/** How a key reads in Settings: "Space", "J", "1". */
+export const keyLabel = (k: string): string => (k === ' ' ? 'Space' : k.toUpperCase());
 
 /** Containers whose controls are clicked mid-play (action bar, register, tickets, top bar, jug
  *  buttons): a click leaves them focused, and Space there stays the game's "hold to pour". */

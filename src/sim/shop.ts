@@ -3,7 +3,7 @@
 // data/upgrades.ts.
 
 import { UPGRADES, type Upgrade } from '../data/upgrades';
-import type { SaveV2 } from './contracts/save';
+import type { Save } from './contracts/save';
 
 export type StationParams = Record<Upgrade['param'], number>;
 
@@ -23,11 +23,10 @@ export function stationParams(owned: readonly string[]): StationParams {
 }
 
 export type BuyResult =
-  | { ok: true; save: SaveV2; upgrade: Upgrade }
-  | { ok: false; reason: 'unknown' | 'owned' | 'short' };
+  { ok: true; save: Save; upgrade: Upgrade } | { ok: false; reason: 'unknown' | 'owned' | 'short' };
 
 /** Buy an upgrade with the save's cents. Returns a new save; the one passed in is untouched. */
-export function buyUpgrade(save: SaveV2, id: string): BuyResult {
+export function buyUpgrade(save: Save, id: string): BuyResult {
   const u = UPGRADES.find((x) => x.id === id);
   if (!u) return { ok: false, reason: 'unknown' };
   if (save.upgrades.includes(id)) return { ok: false, reason: 'owned' };

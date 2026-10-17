@@ -14,6 +14,7 @@ import { browserStorage, createSaveStore } from '../core/save/storage';
 import { createTrial, emptyInput } from '../core/trial';
 import { GREETING } from '../data/ownerLines';
 import { spokenDuration } from '../data/voice';
+import { applyA11y } from '../ui/a11y';
 import { createAudioPanel } from '../ui/audioPanel';
 import { loadListenSettings, saveListenSettings } from '../ui/settings';
 import { buildCafe } from '../world/cafe';
@@ -80,6 +81,7 @@ export async function boot(): Promise<void> {
   const trial = createTrial(seed);
   const clock = createClock();
   const listen = loadListenSettings();
+  applyA11y(listen);
   // The week's save (shift, menu, receipts, tips). src/app may read the clock; core/ and sim/ don't.
   const store = createSaveStore(browserStorage(), {
     seed,
@@ -226,7 +228,12 @@ export async function boot(): Promise<void> {
       set: (s) => {
         app.listen = s;
         saveListenSettings(s);
+        applyA11y(s);
       },
+    },
+    keys: {
+      get: () => app.store.load().keys,
+      set: (keys) => app.store.save({ ...app.store.load(), keys }),
     },
     log: {
       counts: () => {

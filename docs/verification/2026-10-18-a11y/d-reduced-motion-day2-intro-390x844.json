@@ -1,0 +1,64 @@
+{
+  "item": "d-reduced-motion",
+  "viewport": "390x844",
+  "css": {
+    "width": 390,
+    "height": 844
+  },
+  "devicePixelRatio": 1,
+  "commit": "9f05502+d",
+  "timestamp": "2026-10-17T14:50:46.722Z",
+  "claim": "prefers-reduced-motion: UI transitions and animations collapse to 0.01 ms; the bird and the steam calm down (src/world/motion.ts; checked in code, a still cannot show it)",
+  "measured": {
+    "no-preference": {
+      "matches": false,
+      "durations": [
+        {
+          "sel": "#rsubs",
+          "transition": 0.25,
+          "animation": 0
+        },
+        {
+          "sel": "#rtopbar",
+          "transition": 0,
+          "animation": 0
+        },
+        {
+          "sel": "#rsubs .text",
+          "transition": 0,
+          "animation": 0
+        },
+        {
+          "sel": "button",
+          "transition": 0.12,
+          "animation": 0
+        }
+      ]
+    },
+    "reduce": {
+      "matches": true,
+      "durations": [
+        {
+          "sel": "#rsubs",
+          "transition": 0.00001,
+          "animation": 0.00001
+        },
+        {
+          "sel": "#rtopbar",
+          "transition": 0.00001,
+          "animation": 0.00001
+        },
+        {
+          "sel": "#rsubs .text",
+          "transition": 0.00001,
+          "animation": 0.00001
+        },
+        {
+          "sel": "button",
+          "transition": 0.00001,
+          "animation": 0.00001
+        }
+      ]
+    }
+  }
+}

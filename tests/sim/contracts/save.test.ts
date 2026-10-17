@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { CUSTOMERS } from '../../../src/data/customers';
 import {
+  DEFAULT_KEYS,
   DEFAULT_SEED,
   migrate,
   newSave,
   REGULAR_IDS,
+  SAVE_VERSION,
   STARTING_DRINKS,
   UNKNOWN_TIME,
-  type SaveV2,
+  type Save,
 } from '../../../src/sim/contracts/save';
 import type { ShiftSummary } from '../../../src/sim/rush';
 
@@ -23,7 +25,8 @@ const summary: ShiftSummary = {
   grade: 'good',
 };
 
-const v2: SaveV2 = {
+/** A save as v2 stored it (before the key map). */
+const v2: Omit<Save, 'version' | 'keys'> & { version: 2 } = {
   version: 2,
   createdAt: '2026-10-15T04:00:00.000Z',
   seed: 7,
@@ -43,13 +46,16 @@ const v2: SaveV2 = {
   reports: [{ week: 1, shift: 0, summary }],
   cents: 12345,
 };
+/** The same save today: v3 adds the player's keys. */
+const v3: Save = { ...v2, version: 3, keys: { action: ' ', replay: 'r', serve: '1' } };
 
 describe('migrate', () => {
   it('turns empty or missing data into a fresh save without throwing', () => {
     for (const raw of [undefined, null, '', '   ', 0, [], {}, 'not json', '{"version":', true]) {
       const s = migrate(raw);
       expect(s).toEqual(newSave());
-      expect(s.version).toBe(2);
+      expect(s.version).toBe(3);
+      expect(SAVE_VERSION).toBe(3);
     }
   });
 
@@ -75,10 +81,34 @@ describe('migrate', () => {
     expect(migrate({ version: 1, difficulty: 'insane' }).difficulty).toBe('normal');
   });
 
-  it('round-trips a v2 save, parsed or as JSON', () => {
-    expect(migrate(v2)).toEqual(v2);
-    expect(migrate(JSON.stringify(v2))).toEqual(v2);
-    expect(migrate(migrate(v2))).toEqual(v2);
+  it('loads a v2 save (the previous version) as v3: every field kept, the default keys added', () => {
+    expect(migrate(v2)).toEqual(v3);
+    expect(migrate(JSON.stringify(v2))).toEqual(v3);
+    expect(migrate(v2).keys).toEqual(DEFAULT_KEYS);
+  });
+
+  it('round-trips a v3 save, parsed or as JSON', () => {
+    const mine: Save = { ...v3, keys: { action: 'j', replay: 'k', serve: 'n' } };
+    expect(migrate(mine)).toEqual(mine);
+    expect(migrate(JSON.stringify(mine))).toEqual(mine);
+    expect(migrate(migrate(mine))).toEqual(mine);
+  });
+
+  it("repairs a v3 key map: a key the game already uses, a duplicate or junk falls back to that key's default", () => {
+    const keys = (k: unknown) => migrate({ ...v3, keys: k }).keys;
+    expect(keys({ action: 'f', replay: 'r', serve: '1' })).toEqual(DEFAULT_KEYS); // f = make
+    expect(keys({ action: 'j', replay: 'j', serve: 'k' })).toEqual({
+      action: 'j',
+      replay: 'r',
+      serve: 'k',
+    });
+    expect(keys({ action: 'J', replay: 7, serve: 'enter' })).toEqual({
+      action: ' ',
+      replay: 'r',
+      serve: '1',
+    });
+    expect(keys(undefined)).toEqual(DEFAULT_KEYS);
+    expect(keys({ action: '1', replay: ' ', serve: 'r' })).toEqual(DEFAULT_KEYS); // others' defaults
   });
 
   it('repairs a damaged v2 save field by field', () => {

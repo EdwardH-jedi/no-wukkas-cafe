@@ -490,7 +490,11 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
-- [ ] Accessibility: subtitle toggle, text size, colour-blind-safe milk labels, reduced motion, remappable keys.
+- [x] Accessibility: subtitle toggle, text size, colour-blind-safe milk labels, reduced motion, remappable keys
+      (overnight run #3 B3, branch `feat/a11y`: dfc294c reduced motion, e94f7ff subtitles switch, b09615f text size,
+      a163a66 milk shape + name, then the keys commit: save v3 with a v2 → v3 migration test). Evidence:
+      `docs/verification/2026-10-18-a11y/` (exact 390×844 and 1024×640, a JSON sidecar per capture,
+      `tests/e2e/a11yEvidence.spec.ts`, opt-in with A11Y_SHOTS). Not on a device: iPhone Safari is untested.
 - [ ] Steam wrapper spike (Tauri): Windows build, save path, controller/Steam Deck input map; go/no-go note in `docs/STEAM.md`.
 - [ ] Deploy: static host + custom domain, OG image, privacy-friendly analytics.
 - [ ] Devlog: architecture (pure sim + seeded RNG + headless balance) and playtest learnings.

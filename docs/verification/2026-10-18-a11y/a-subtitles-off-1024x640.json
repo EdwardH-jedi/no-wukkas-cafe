@@ -1,0 +1,26 @@
+{
+  "item": "a-subtitles",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "dfc294c+a",
+  "timestamp": "2026-10-17T14:54:52.201Z",
+  "claim": "Show subtitles off: no caption box, orders included",
+  "setting": {
+    "captions": false
+  },
+  "line": {
+    "speaker": "gaz",
+    "key": "rush.intro.0",
+    "text": "Righto, you're on the books. Welcome to your first paid shift.",
+    "delivery": "normal"
+  },
+  "seen": {
+    "attr": "off",
+    "display": "none",
+    "text": "Righto, you're on the books. Welcome to your first paid shift."
+  }
+}

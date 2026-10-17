@@ -1,0 +1,22 @@
+{
+  "item": "c-milk-labels",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "b09615f+c",
+  "timestamp": "2026-10-17T15:07:00.239Z",
+  "claim": "a flat white's ticket names its carton with a shape and a word (full cream too); the pass says the carton and its name (rushHud); no milk is told by colour alone",
+  "tickets": [
+    {
+      "order": "long black",
+      "carton": null
+    },
+    {
+      "order": "almond flat white · extra hot (68–74 °C)",
+      "carton": "🌰 Almond"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "item": "e-keys",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "a163a66+e",
+  "timestamp": "2026-10-17T15:14:44.782Z",
+  "claim": "Settings → Keys: the main action rebound to J through the panel; the save is v3",
+  "refusedMessage": "F already does something in the game.",
+  "saved": {
+    "version": 3,
+    "keys": {
+      "action": "j",
+      "replay": "r",
+      "serve": "1"
+    }
+  }
+}

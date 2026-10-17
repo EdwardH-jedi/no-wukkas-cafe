@@ -3,7 +3,8 @@
 // now keeps its Space; controls in the play HUD (clicked mid-pour) never take it from the game.
 
 import { describe, expect, it } from 'vitest';
-import { controlOwnsSpace, PLAY_AREA } from '../../src/ui/screens/keys';
+import { DEFAULT_KEYS } from '../../src/sim/contracts/save';
+import { aliasKey, controlOwnsSpace, keyLabel, PLAY_AREA } from '../../src/ui/screens/keys';
 
 /** Just enough of an Element: which selectors `closest` matches, and whether it's laid out. */
 function el(matches: string[], visible = true) {
@@ -31,5 +32,24 @@ describe('controlOwnsSpace', () => {
     expect(controlOwnsSpace(el([]) as unknown as EventTarget)).toBe(false);
     expect(controlOwnsSpace(null)).toBe(false);
     expect(controlOwnsSpace({} as EventTarget)).toBe(false);
+  });
+});
+
+describe('aliasKey (Settings → Keys)', () => {
+  it("a chosen key stands for its action's default; the defaults and other keys stay themselves", () => {
+    const mine = { action: 'j', replay: 'k', serve: 'n' };
+    expect(['j', 'k', 'n'].map((k) => aliasKey(mine, k))).toEqual([' ', 'r', '1']);
+    expect([' ', 'r', '1', 'f', 'escape'].map((k) => aliasKey(mine, k))).toEqual([
+      ' ',
+      'r',
+      '1',
+      'f',
+      'escape',
+    ]);
+    expect(['j', ' '].map((k) => aliasKey(DEFAULT_KEYS, k))).toEqual(['j', ' ']);
+  });
+
+  it('labels keys as the settings show them', () => {
+    expect([keyLabel(' '), keyLabel('j'), keyLabel('1')]).toEqual(['Space', 'J', '1']);
   });
 });

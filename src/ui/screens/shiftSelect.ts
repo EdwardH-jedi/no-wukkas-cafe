@@ -2,7 +2,7 @@
 // Rush (or why it's locked), the way into the café upgrade shop, and back. Opened from the title
 // screen ("The week"). Only the shift the week is on can be played. Built with textContent only.
 
-import type { SaveV2 } from '../../sim/contracts/save';
+import type { Save } from '../../sim/contracts/save';
 import { focusQuietly, menuKeys } from './keys';
 import { endlessReason, shiftCells, shiftLabel, shopEntryLine } from './labels';
 
@@ -45,7 +45,7 @@ function wide(
 /** Shows the screen in `root`; returns a function that removes it. */
 export function renderShiftSelect(
   root: HTMLElement,
-  save: SaveV2,
+  save: Save,
   on: ShiftSelectActions,
   /** A line under the title, e.g. that progress won't be saved in this browser. */
   note = '',

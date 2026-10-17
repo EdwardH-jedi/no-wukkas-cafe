@@ -30,6 +30,8 @@ describe('listening settings (localStorage)', () => {
       subtitles: 'auto',
       learning: false,
       pourSensitivity: 1,
+      captions: true,
+      textSize: 'm',
     });
   });
 
@@ -44,6 +46,8 @@ describe('listening settings (localStorage)', () => {
       subtitles: 'auto',
       learning: false,
       pourSensitivity: 1,
+      captions: true,
+      textSize: 'm',
     });
   });
 
@@ -61,6 +65,8 @@ describe('listening settings (localStorage)', () => {
       subtitles: 'always',
       learning: true,
       pourSensitivity: 1.4,
+      captions: true,
+      textSize: 'm',
     });
   });
 
@@ -75,7 +81,32 @@ describe('listening settings (localStorage)', () => {
       subtitles: 'off',
       learning: true,
       pourSensitivity: POUR_SENSITIVITY.default,
+      captions: true,
+      textSize: 'm',
     });
+  });
+
+  it('text size is s, m or l; anything else (or nothing) is m', () => {
+    const load = (v: unknown) => {
+      store.set(KEY, JSON.stringify({ version: 2, textSize: v }));
+      return loadListenSettings().textSize;
+    };
+    expect([load('s'), load('m'), load('l'), load('xl'), load(undefined)]).toEqual([
+      's',
+      'm',
+      'l',
+      'm',
+      'm',
+    ]);
+  });
+
+  it('subtitles (captions) are on unless saved off; a blob from before them gets them on', () => {
+    store.set(KEY, JSON.stringify({ version: 2, captions: false }));
+    expect(loadListenSettings().captions).toBe(false);
+    store.set(KEY, JSON.stringify({ version: 2, captions: 'no' }));
+    expect(loadListenSettings().captions).toBe(true);
+    store.set(KEY, JSON.stringify({ version: 2, difficulty: 'easy' }));
+    expect(loadListenSettings().captions).toBe(true);
   });
 
   it('pour sensitivity is clamped to the slider range; junk gives the default', () => {

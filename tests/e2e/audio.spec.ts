@@ -73,12 +73,16 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
   await page.keyboard.press('Escape');
   await expect.poll(async () => (await audio(page)).contextState).toBe('running');
 
-  // Replay says the last line again.
-  const before = (await audio(page)).history.length;
+  // Replay says the last line again. Gaz's next greeting can start right after the click, so look
+  // for the replay among the new records rather than at the very last one (that raced: 2 in 5
+  // failed on 8333240, before overnight run #3).
+  const was = await audio(page);
+  const before = was.history.length;
+  const last = was.history.at(-1)!.text;
   await page.getByRole('button', { name: 'Replay the last line' }).click();
-  await expect.poll(async () => (await audio(page)).history.length).toBeGreaterThan(before);
-  const after = await audio(page);
-  expect(after.history.at(-1)!.text).toBe(after.history.at(-2)!.text);
+  await expect
+    .poll(async () => (await audio(page)).history.slice(before).some((r) => r.text === last))
+    .toBe(true);
 
   // Sound panel: voice volume slider is live.
   await page.getByRole('button', { name: 'Sound settings' }).click();

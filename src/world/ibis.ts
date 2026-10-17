@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { Ibis } from '../sim/ibis';
+import { reducedMotion } from './motion';
 
 export interface IbisView {
   update(b: Ibis, dt: number, now: number): void;
@@ -204,7 +205,10 @@ export function createIbisView(scene: THREE.Scene): IbisView {
       mess.visible = b.binRaided;
       // The lid gets nudged while it rummages.
       const rummaging = b.state === 'foraging';
-      lidTilt += ((rummaging ? 0.35 + Math.sin(now * 5) * 0.1 : 0) - lidTilt) * Math.min(1, dt * 6);
+      // Reduced motion: no wobble, bob, peck or flap (it still walks in, and the lid still lifts).
+      const m = reducedMotion() ? 0 : 1;
+      lidTilt +=
+        ((rummaging ? 0.35 + Math.sin(now * 5) * 0.1 * m : 0) - lidTilt) * Math.min(1, dt * 6);
       lid.rotation.set(0, 0, lidTilt);
       lid.position.set(BIN.x - lidTilt * 0.15, 0.64 + lidTilt * 0.08, BIN.z);
       if (!present) {
@@ -233,18 +237,18 @@ export function createIbisView(scene: THREE.Scene): IbisView {
       // Legs and head bob while walking; peck while foraging; look up and flap when bothered.
       if (moving) {
         walkT += dt * (b.state === 'entering' ? 9 : 13);
-        legs[0]!.rotation.x = Math.sin(walkT) * 0.45;
-        legs[1]!.rotation.x = -Math.sin(walkT) * 0.45;
-        body.position.y = Math.abs(Math.sin(walkT)) * 0.012;
-        neck.rotation.x = 0.15 + Math.sin(walkT * 2) * 0.12;
+        legs[0]!.rotation.x = Math.sin(walkT) * 0.45 * m;
+        legs[1]!.rotation.x = -Math.sin(walkT) * 0.45 * m;
+        body.position.y = Math.abs(Math.sin(walkT)) * 0.012 * m;
+        neck.rotation.x = 0.15 + Math.sin(walkT * 2) * 0.12 * m;
       } else {
         for (const l of legs) l.rotation.x *= 0.8;
         body.position.y = 0;
-        neck.rotation.x = rummaging ? 1.05 + Math.max(0, Math.sin(now * 9)) * 0.35 : 0.05;
+        neck.rotation.x = rummaging ? 1.05 + Math.max(0, Math.sin(now * 9)) * 0.35 * m : 0.05;
       }
       if (b.state === 'herded' || b.state === 'leaving' || (b.alerted && b.stateTime < 1.2))
         flapUntil = Math.max(flapUntil, now + 0.6);
-      const flap = now < flapUntil ? Math.abs(Math.sin(now * 16)) * 0.9 : 0;
+      const flap = now < flapUntil ? Math.abs(Math.sin(now * 16)) * 0.9 * m : 0;
       wings[0]!.rotation.z = -flap;
       wings[1]!.rotation.z = flap;
       if (flap > 0) neck.rotation.x = -0.2;

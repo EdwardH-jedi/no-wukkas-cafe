@@ -9,6 +9,7 @@ import { clamp, lerp, smoothstep } from '../sim/math';
 import { milkVolume, tipDepth, type SteamState } from '../sim/steam';
 import { createCoffeeSurface } from './coffeeSurface';
 import { CT, CUP, LAYOUT, liquidDrop } from './layout';
+import { reducedMotion } from './motion';
 import { canvasTexture, disposeTree, StaticBuilder, std } from './util';
 
 /** Inner rim radius: the pour sim's unit disc. */
@@ -830,28 +831,32 @@ transformed.xz += bend * sFall * sFall;`,
       puddle.scale.set(s, s * 0.8, 1);
     }
 
-    // --- steam puffs from the wand and the hot cup
+    // --- steam puffs from the wand and the hot cup. Reduced motion: a few slow puffs that rise
+    // straight up (the wand still shows it's open), none swirling off sideways.
+    const calm = reducedMotion();
+    const rate = calm ? 0.25 : 1;
+    const drift = calm ? 0 : 1;
     if (steaming && t.steam.valveOpen) {
       const z = t.steam.zone;
-      puffAcc += dt * (z === 'screech' ? 40 : z === 'chirp' ? 22 : 14);
+      puffAcc += dt * (z === 'screech' ? 40 : z === 'chirp' ? 22 : 14) * rate;
       while (puffAcc >= 1) {
         puffAcc -= 1;
         spawnPuff(
           WAND_TIP.x + 0.02,
           WAND_TIP.y + 0.03,
           WAND_TIP.z + 0.01,
-          0.16,
+          calm ? 0.06 : 0.16,
           0.035,
-          0.05,
+          0.05 * drift,
           now * 7 + puffAcc,
         );
       }
     }
     if ((pourView || phase === 'steam' || phase === 'ready') && !held && fill > 0.5) {
-      cupSteamAcc += dt * 2.2;
+      cupSteamAcc += dt * 2.2 * rate;
       while (cupSteamAcc >= 1) {
         cupSteamAcc -= 1;
-        spawnPuff(cupPos.x, surfaceY + 0.01, cupPos.z, 0.05, 0.03, 0.012, now * 3.1);
+        spawnPuff(cupPos.x, surfaceY + 0.01, cupPos.z, 0.05, 0.03, 0.012 * drift, now * 3.1);
       }
     }
     for (const p of puffs) {

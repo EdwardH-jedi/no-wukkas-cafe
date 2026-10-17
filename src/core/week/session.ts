@@ -5,7 +5,7 @@
 
 import type { CustomerId } from '../../data/customers';
 import type { ShiftEventId } from '../../sim/contracts/events';
-import { REGULAR_IDS, type SaveV2 } from '../../sim/contracts/save';
+import { REGULAR_IDS, type Save } from '../../sim/contracts/save';
 import type { ShiftSummary } from '../../sim/rush';
 import { stationParams } from '../../sim/shop';
 import type { RushWeek } from '../rush';
@@ -15,9 +15,9 @@ import { nextShift, SHIFTS_PER_WEEK } from './progress';
 export type Cooldowns = Partial<Record<ShiftEventId, number>>;
 
 /** Only the shift the week is on can be played; a passed shift isn't replayed. */
-export const canPlay = (save: SaveV2, shift: number): boolean => shift === save.shift;
+export const canPlay = (save: Save, shift: number): boolean => shift === save.shift;
 
-function affinityOf(save: SaveV2): Partial<Record<CustomerId, number>> {
+function affinityOf(save: Save): Partial<Record<CustomerId, number>> {
   const out: Partial<Record<CustomerId, number>> = {};
   for (const id of REGULAR_IDS) {
     const m = save.regulars[id];
@@ -29,7 +29,7 @@ function affinityOf(save: SaveV2): Partial<Record<CustomerId, number>> {
 /** The rush's week context for the shift the save is on. `cooldowns` and `lastEvent` come from
  *  the shifts played since the page opened. */
 export function weekFor(
-  save: SaveV2,
+  save: Save,
   cooldowns: Cooldowns = {},
   lastEvent: ShiftEventId | null = null,
 ): RushWeek {
@@ -45,7 +45,7 @@ export function weekFor(
 }
 
 /** Endless Rush: everything on the menu so far, the last shift's table row, no events. */
-export function endlessFor(save: SaveV2): RushWeek {
+export function endlessFor(save: Save): RushWeek {
   return {
     week: save.week,
     shiftIndex: SHIFTS_PER_WEEK - 1,
@@ -61,7 +61,7 @@ export function finishShift(
   store: SaveStore,
   report: ShiftSummary,
   affinity: Partial<Record<CustomerId, number>> = {},
-): SaveV2 {
+): Save {
   const s = nextShift(store.load(), report);
   for (const id of REGULAR_IDS) {
     const d = affinity[id];

@@ -18,7 +18,17 @@ export interface ListenSettings {
    *  The settings slider writes it; the pour input reads it. A v2 blob saved before it existed
    *  just gets the default. */
   pourSensitivity: number;
+  /** Subtitles at all (accessibility, Phase 7): off hides every caption, orders included; the
+   *  game is then by ear alone. Missing (saved before it existed) = on. */
+  captions?: boolean;
+  /** HUD and subtitle text size (accessibility, Phase 7). Missing = 'm', the size as designed. */
+  textSize?: TextSize;
 }
+
+export type TextSize = 's' | 'm' | 'l';
+/** How much each text size scales the HUD's text blocks (`--text-scale`, ui/a11y.ts). */
+export const TEXT_SCALE: Readonly<Record<TextSize, number>> = { s: 0.9, m: 1, l: 1.2 };
+const textSizeOf = (v: unknown): TextSize => (v === 's' || v === 'l' ? v : 'm');
 
 /** The pour-sensitivity slider's range. */
 export const POUR_SENSITIVITY = { min: 0.5, max: 2, step: 0.1, default: 1 } as const;
@@ -48,6 +58,8 @@ export function loadListenSettings(): ListenSettings {
     subtitles: 'auto',
     learning: false,
     pourSensitivity: POUR_SENSITIVITY.default,
+    captions: true,
+    textSize: 'm',
   };
   try {
     const raw = localStorage.getItem(KEY);
@@ -67,6 +79,8 @@ export function loadListenSettings(): ListenSettings {
           : d.subtitles,
       learning: typeof s.learning === 'boolean' ? s.learning : d.learning,
       pourSensitivity: pourSensitivityOf(s.pourSensitivity),
+      captions: s.captions !== false,
+      textSize: textSizeOf(s.textSize),
     };
   } catch {
     return d;

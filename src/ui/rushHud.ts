@@ -307,7 +307,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           pass.classList.toggle('cold', cold);
           const m = b.ready.milkType;
           const icon = m ? `<i aria-hidden="true">${MILK_ICON[m]}</i> ` : '';
-          const milk = m && m !== 'full' ? `${MILK_NAME[m]} ` : '';
+          // The carton's shape and its name, full cream too (Phase 7: never colour or absence alone).
+          const milk = m ? `${MILK_NAME[m]} ` : '';
           pass.innerHTML = `<span class="k">On the pass</span> ${icon}<b>${milk}${DRINK_NAME[b.ready.type]}</b> · ${deg} °C${cold ? ' · going cold!' : ''}`;
         } else pass.classList.add('hide');
       }

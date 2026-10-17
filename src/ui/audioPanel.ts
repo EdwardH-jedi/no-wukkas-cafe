@@ -4,14 +4,16 @@
 // buttons. Also owns the toast that pops up when audio fails.
 
 import type { AudioManager, AudioStatus, Bus } from '../audio/manager';
+import { DEFAULT_KEYS, keyAllowed, type KeyMap } from '../sim/contracts/save';
 import type { Difficulty } from '../sim/listening';
 import { bindLogSection, LOG_SECTION_HTML, type LogCallbacks } from './logSection';
-import { focusQuietly, menuKeys } from './screens/keys';
+import { focusQuietly, keyLabel, menuKeys } from './screens/keys';
 import {
   POUR_SENSITIVITY,
   pourSensitivityLabel,
   roundPourSensitivity,
   type ListenSettings,
+  type TextSize,
 } from './settings';
 
 export interface AudioPanelCallbacks {
@@ -20,7 +22,23 @@ export interface AudioPanelCallbacks {
   listen: { get(): ListenSettings; set(s: ListenSettings): void };
   /** The playtest log's Export / Clear (left out, the section isn't shown). */
   log?: LogCallbacks;
+  /** The player's keys, kept in the save (left out, the section isn't shown). */
+  keys?: { get(): KeyMap; set(k: KeyMap): void };
 }
+
+const KEY_ROWS: ReadonlyArray<[keyof KeyMap, string]> = [
+  ['action', 'Main action'],
+  ['replay', 'Replay the last line'],
+  ['serve', 'Serve the first ticket (and answer 1)'],
+];
+
+const KEYS_HTML = `<h4>Keys</h4>
+    ${KEY_ROWS.map(
+      ([a, label]) =>
+        `<label class="sel keyrow"><span>${label}</span><button type="button" class="btn small ghost" data-key="${a}"></button></label>`,
+    ).join('')}
+    <p class="fine keymsg">Your key works as well as the usual one. Letters and digits the game doesn't already use.</p>
+    <div class="titleBtns"><button type="button" class="btn small ghost" data-a="keysReset">Usual keys</button></div>`;
 
 export interface AudioPanel {
   /** Markup for the Replay + Sound buttons a HUD puts in its top bar. */
@@ -75,12 +93,18 @@ export function createAudioPanel(
       <option value="easy">Easy: clear orders, quiet café</option>
       <option value="normal">Normal</option>
       <option value="hard">Hard: fast, slangy, noisy</option></select></label>
+    <label class="chk"><input type="checkbox" data-l="captions"> Show subtitles</label>
+    <label class="sel"><span>Text size</span><select data-l="text" aria-label="Text size">
+      <option value="s">Small</option>
+      <option value="m">Medium</option>
+      <option value="l">Large</option></select></label>
     <label class="chk"><input type="checkbox" data-l="subtitles"> Subtitles: always (accessibility)</label>
     <label class="chk"><input type="checkbox" data-l="learning"> Learning mode: show what they said once you ring it up</label>
     <p class="fine">Difficulty changes start with the next shift.</p>
     <h4>Latte art</h4>
     <label class="slider"><span>Pour sensitivity</span><input type="range" min="${POUR_SENSITIVITY.min}" max="${POUR_SENSITIVITY.max}" step="${POUR_SENSITIVITY.step}" data-l="pour" aria-label="Pour sensitivity"><output data-out="pour"></output></label>
     <p class="fine">How strongly the jug answers your hand: lower for a gentler pour, higher for a quicker one. 1.0× is as tuned.</p>
+    ${cb.keys ? KEYS_HTML : ''}
     ${cb.log ? LOG_SECTION_HTML : ''}
     <div class="titleBtns">
       <button class="btn small" data-a="test">Test voice</button>
@@ -100,6 +124,8 @@ export function createAudioPanel(
   const voiceOn = panel.querySelector('[data-voice-on]') as HTMLInputElement;
   const sliders = panel.querySelectorAll<HTMLInputElement>('input[data-bus]');
   const diffSel = panel.querySelector('[data-l="difficulty"]') as HTMLSelectElement;
+  const capChk = panel.querySelector('[data-l="captions"]') as HTMLInputElement;
+  const textSel = panel.querySelector('[data-l="text"]') as HTMLSelectElement;
   const subChk = panel.querySelector('[data-l="subtitles"]') as HTMLInputElement;
   const learnChk = panel.querySelector('[data-l="learning"]') as HTMLInputElement;
   const pourIn = panel.querySelector('[data-l="pour"]') as HTMLInputElement;
@@ -107,6 +133,8 @@ export function createAudioPanel(
   const syncListen = (): void => {
     const l = cb.listen.get();
     diffSel.value = l.difficulty;
+    capChk.checked = l.captions !== false;
+    textSel.value = l.textSize ?? 'm';
     subChk.checked = l.subtitles === 'always';
     learnChk.checked = l.learning;
     pourIn.value = String(roundPourSensitivity(l.pourSensitivity));
@@ -122,10 +150,18 @@ export function createAudioPanel(
       // Unticked: back to following the difficulty (an older saved choice is kept).
       subtitles: subChk.checked ? 'always' : was === 'always' ? 'auto' : was,
       learning: learnChk.checked,
+      captions: capChk.checked,
+      textSize: textSel.value as TextSize,
     });
   };
-  diffSel.onchange = subChk.onchange = learnChk.onchange = setListen;
+  diffSel.onchange =
+    capChk.onchange =
+    textSel.onchange =
+    subChk.onchange =
+    learnChk.onchange =
+      setListen;
   const log = cb.log ? bindLogSection(panel, cb.log) : null;
+  if (cb.keys) bindKeys(panel, cb.keys);
   pourIn.oninput = () => {
     const v = roundPourSensitivity(Number(pourIn.value));
     pourOut.textContent = pourSensitivityLabel(v);
@@ -244,4 +280,61 @@ export function createAudioPanel(
   };
   sync();
   return p;
+}
+
+/** Settings → Keys: click an action's key, press the new one (Escape keeps the old). A key the game
+ *  already uses, or another action's, is refused with the reason. */
+function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): void {
+  const msg = panel.querySelector('.keymsg') as HTMLElement;
+  const usual = msg.textContent ?? '';
+  const buttons = panel.querySelectorAll<HTMLButtonElement>('button[data-key]');
+  const show = (): void => {
+    const k = keys.get();
+    buttons.forEach((b) => {
+      const a = b.dataset.key as keyof KeyMap;
+      b.textContent = keyLabel(k[a]);
+      b.setAttribute(
+        'aria-label',
+        `${a === 'action' ? 'Main action' : a === 'replay' ? 'Replay' : 'Serve'} key: ${keyLabel(k[a])}. Change`,
+      );
+    });
+  };
+  let stop: (() => void) | null = null;
+  buttons.forEach((b) => {
+    b.onclick = () => {
+      stop?.();
+      const a = b.dataset.key as keyof KeyMap;
+      b.textContent = 'Press a key…';
+      msg.textContent = 'Press the new key, or Escape to keep this one.';
+      const take = (e: KeyboardEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const k = e.key.toLowerCase();
+        const done = (text: string): void => {
+          stop?.();
+          msg.textContent = text;
+          show();
+        };
+        if (k === 'escape') return done(usual);
+        const now = keys.get();
+        const other = KEY_ROWS.find(([o]) => o !== a && now[o] === k);
+        if (other) return done(`${keyLabel(k)} is already the key for ${other[1].toLowerCase()}.`);
+        if (!keyAllowed(a, k)) return done(`${keyLabel(k)} already does something in the game.`);
+        keys.set({ ...now, [a]: k });
+        done(usual);
+      };
+      window.addEventListener('keydown', take, { capture: true });
+      stop = () => {
+        window.removeEventListener('keydown', take, { capture: true });
+        stop = null;
+      };
+    };
+  });
+  (panel.querySelector('[data-a="keysReset"]') as HTMLButtonElement).onclick = () => {
+    stop?.();
+    keys.set({ ...DEFAULT_KEYS });
+    msg.textContent = usual;
+    show();
+  };
+  show();
 }

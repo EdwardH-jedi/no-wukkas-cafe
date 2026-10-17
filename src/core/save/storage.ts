@@ -1,9 +1,9 @@
-// The save on disk: SaveV2 behind a small interface. Every read goes through migrate(), which never
+// The save on disk: Save behind a small interface. Every read goes through migrate(), which never
 // throws (empty, corrupt or old data becomes a valid save). Browser storage can be missing, blocked
 // or full (private mode, quota), so each access is wrapped and the store falls back to memory for
 // the rest of the session.
 
-import { migrate, type SaveDefaults, type SaveV2 } from '../../sim/contracts/save';
+import { migrate, type SaveDefaults, type Save } from '../../sim/contracts/save';
 import type { ShiftSummary } from '../../sim/rush';
 import { nextShift } from '../week/progress';
 
@@ -16,8 +16,8 @@ export interface KeyValueStorage {
 }
 
 export interface SaveStore {
-  load(): SaveV2;
-  save(s: SaveV2): void;
+  load(): Save;
+  save(s: Save): void;
   /** Storage is missing or failed: saves last only until the page closes. */
   readonly memoryOnly: boolean;
 }
@@ -26,7 +26,7 @@ export function createSaveStore(
   storage: KeyValueStorage | null,
   defaults: SaveDefaults = {},
 ): SaveStore {
-  let mem: SaveV2 | null = null;
+  let mem: Save | null = null;
   let broken = storage === null;
   return {
     load() {
@@ -65,7 +65,7 @@ export function browserStorage(): KeyValueStorage | null {
 }
 
 /** Autosave after a shift report: the receipt is appended and the week moves on (or not). */
-export function recordShift(store: SaveStore, report: ShiftSummary): SaveV2 {
+export function recordShift(store: SaveStore, report: ShiftSummary): Save {
   const next = nextShift(store.load(), report);
   store.save(next);
   return next;
