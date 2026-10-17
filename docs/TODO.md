@@ -151,7 +151,10 @@ Owns `src/ui/styles/{hud,rush}.css`, `src/ui/{rushHud,pos}.ts`, `src/data/ownerL
 - [x] 1.5.3 Week shifts after the first don't replay `RUSH_INTRO` ("your first paid shift", `src/data/ownerLines.ts:38`).
 - [x] 1.5.4 `rush.end.excellent` doesn't say "Five for five" after 6/6 (or 9/9, 10/10): count-agnostic copy; Gaz
       placeholder clips re-rendered, manifest only committed.
-- [!] (design call for Edward: how affinity accrues is ROADMAP 3.1, and turning THE_USUAL on moves the Phase 2 week curve) 1.5.5 Saved regulars fire: something besides THE_USUAL (affinity ≥ 2, ROADMAP 3.1) writes `regulars`.
+- [x] 1.5.5 Saved regulars fire: something besides THE_USUAL (affinity ≥ 2, ROADMAP 3.1) writes `regulars`. Edward
+      decided AFFINITY_RULE = yes (2026-10-18): a correct serve to a regular in a week shift adds +1 affinity
+      (`core/rush/events.ts` `regularServed`, from `serve.ts`); THE_USUAL fires 888 times in 1,000 seeds × 5 saved
+      shifts (overnight run #3 A5, balance diff in its commit). `RegularMemory.visits` is still never written.
 - [!] (Edward's call, as Phase 1 said: it changes pour physics, which 1C says not to touch without his feel-test) 1.5.6 Pull-through thins only at ≥ 3.0 cm, so a wheel stop at 2.99 cm sweeps at full flow (`pitcher.ts`).
 - [x] 1.5.7 `src/app/input.ts` Space handler no longer `preventDefault`s on focused buttons (today worked around by `menuKeys`).
 - Exit: typecheck, lint, test exit 0; rush + weekUi e2e green; main pushed.

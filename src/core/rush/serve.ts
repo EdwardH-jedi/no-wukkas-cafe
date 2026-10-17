@@ -6,7 +6,7 @@ import { answerFor, wrongFields } from '../../sim/listening';
 import { addFrustration } from '../../sim/owner';
 import { evaluateServe, reactionFor, REJECT_PENALTY, type MadeDrink } from '../../sim/rush';
 import { returnReady, takeReady } from '../barista';
-import { eventHandedBack } from './events';
+import { eventHandedBack, regularServed } from './events';
 import { customerSay, forgetCustomer, gaz, varsFor } from './speech';
 import { customerByKey, setState, type Rush, type RushCustomer } from './state';
 
@@ -90,6 +90,7 @@ export function serve(r: Rush, key: string): void {
   }
   c.outcome = 'served';
   c.result = result;
+  if (result.correct) regularServed(r, c);
   setState(c, 'leaving');
   forgetCustomer(r, c, true);
   r.records.push({

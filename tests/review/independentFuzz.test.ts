@@ -67,25 +67,33 @@ describe('independent ibis fuzz: 500 seeds per mode', () => {
   }
 });
 
-it('THE_USUAL remains unreachable across 1000 seeds and five consecutive saved shifts', () => {
+// Inverted 2026-10-18 with Edward's approval (AFFINITY_RULE = yes, overnight run #3 A5): the
+// review's version asserted the defect itself (regulars stay {} and THE_USUAL never fires), which
+// the approved rule makes false by construction. Same seeds, same saved five-shift loop.
+it('THE_USUAL becomes reachable across 1000 seeds and five consecutive saved shifts', () => {
   let usual = 0;
   let served = 0;
   let affinityWrites = 0;
+  /** Shifts that wrote affinity without THE_USUAL firing: it is not the only source. */
+  let withoutUsual = 0;
   for (let seed = 1; seed <= 1000; seed++) {
     const store = createSaveStore(null, { seed });
     for (let shift = 0; shift < 5; shift++) {
       const { r } = lifecycleShift(seed + shift * 1009, weekFor(store.load()));
       expect(r.summary, `seed ${seed}, iteration ${shift}`).not.toBeNull();
-      usual += r.shiftEvents.log.fired.filter((f) => f.id === 'THE_USUAL').length;
+      const fired = r.shiftEvents.log.fired.filter((f) => f.id === 'THE_USUAL').length;
+      usual += fired;
       served += r.records.filter((x) => x.accepted).length;
-      affinityWrites += Object.keys(r.shiftEvents.affinity).length;
+      const writes = Object.keys(r.shiftEvents.affinity).length;
+      affinityWrites += writes;
+      if (writes > 0 && fired === 0) withoutUsual++;
       finishShift(store, r.summary!, r.shiftEvents.affinity);
     }
-    expect(store.load().regulars).toEqual({});
   }
-  evidence('the-usual', { seeds: 1000, shifts: 5000, served, usual, affinityWrites });
+  evidence('the-usual', { seeds: 1000, shifts: 5000, served, usual, affinityWrites, withoutUsual });
   expect(served).toBeGreaterThan(0);
-  expect(usual).toBe(0);
+  expect(withoutUsual).toBeGreaterThan(0);
+  expect(usual).toBeGreaterThan(0);
 }, 300_000);
 
 it('PROPOSED RULE awaiting Edward: serving a regular correctly raises affinity by 1', () => {

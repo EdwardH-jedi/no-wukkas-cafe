@@ -11,6 +11,7 @@
 import { createRng } from '../rng';
 import { shiftDef, SHIFTS_PER_WEEK } from '../week/progress';
 import type { EventContext, EventOutcome, ShiftEventDef } from '../../sim/contracts/events';
+import { REGULAR_IDS } from '../../sim/contracts/save';
 import { SHIFT_EVENTS } from '../../sim/events/defs';
 import { pickEvents, startShiftLog } from '../../sim/events/scheduler';
 import { IBIS } from '../../sim/ibis';
@@ -173,6 +174,15 @@ function apply(r: Rush, c: RushCustomer | null, o: EventOutcome, gazLine: boolea
     s.refused++;
     r.events.push({ type: 'refused', customer: c.key });
   }
+}
+
+/** A correct drink served to a regular in a week shift: they remember the player a bit better
+ *  (+1 affinity, saved by finishShift at the end of the shift). This is how affinity accrues, so
+ *  THE_USUAL (USUAL_AFFINITY) can come up from a fresh save; THE_USUAL itself adds one more. */
+export function regularServed(r: Rush, c: RushCustomer): void {
+  if (!r.week || !(REGULAR_IDS as readonly string[]).includes(c.def.id)) return;
+  const a = r.shiftEvents.affinity;
+  a[c.def.id] = (a[c.def.id] ?? 0) + 1;
 }
 
 /** The player answered the event on screen. */
