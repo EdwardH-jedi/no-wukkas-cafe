@@ -12,6 +12,7 @@ import {
   pourSensitivityLabel,
   roundPourSensitivity,
   type ListenSettings,
+  type TextSize,
 } from './settings';
 
 export interface AudioPanelCallbacks {
@@ -76,6 +77,10 @@ export function createAudioPanel(
       <option value="normal">Normal</option>
       <option value="hard">Hard: fast, slangy, noisy</option></select></label>
     <label class="chk"><input type="checkbox" data-l="captions"> Show subtitles</label>
+    <label class="sel"><span>Text size</span><select data-l="text" aria-label="Text size">
+      <option value="s">Small</option>
+      <option value="m">Medium</option>
+      <option value="l">Large</option></select></label>
     <label class="chk"><input type="checkbox" data-l="subtitles"> Subtitles: always (accessibility)</label>
     <label class="chk"><input type="checkbox" data-l="learning"> Learning mode: show what they said once you ring it up</label>
     <p class="fine">Difficulty changes start with the next shift.</p>
@@ -102,6 +107,7 @@ export function createAudioPanel(
   const sliders = panel.querySelectorAll<HTMLInputElement>('input[data-bus]');
   const diffSel = panel.querySelector('[data-l="difficulty"]') as HTMLSelectElement;
   const capChk = panel.querySelector('[data-l="captions"]') as HTMLInputElement;
+  const textSel = panel.querySelector('[data-l="text"]') as HTMLSelectElement;
   const subChk = panel.querySelector('[data-l="subtitles"]') as HTMLInputElement;
   const learnChk = panel.querySelector('[data-l="learning"]') as HTMLInputElement;
   const pourIn = panel.querySelector('[data-l="pour"]') as HTMLInputElement;
@@ -110,6 +116,7 @@ export function createAudioPanel(
     const l = cb.listen.get();
     diffSel.value = l.difficulty;
     capChk.checked = l.captions !== false;
+    textSel.value = l.textSize ?? 'm';
     subChk.checked = l.subtitles === 'always';
     learnChk.checked = l.learning;
     pourIn.value = String(roundPourSensitivity(l.pourSensitivity));
@@ -126,9 +133,15 @@ export function createAudioPanel(
       subtitles: subChk.checked ? 'always' : was === 'always' ? 'auto' : was,
       learning: learnChk.checked,
       captions: capChk.checked,
+      textSize: textSel.value as TextSize,
     });
   };
-  diffSel.onchange = capChk.onchange = subChk.onchange = learnChk.onchange = setListen;
+  diffSel.onchange =
+    capChk.onchange =
+    textSel.onchange =
+    subChk.onchange =
+    learnChk.onchange =
+      setListen;
   const log = cb.log ? bindLogSection(panel, cb.log) : null;
   pourIn.oninput = () => {
     const v = roundPourSensitivity(Number(pourIn.value));

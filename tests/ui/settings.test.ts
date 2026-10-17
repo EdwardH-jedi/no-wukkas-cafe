@@ -31,6 +31,7 @@ describe('listening settings (localStorage)', () => {
       learning: false,
       pourSensitivity: 1,
       captions: true,
+      textSize: 'm',
     });
   });
 
@@ -46,6 +47,7 @@ describe('listening settings (localStorage)', () => {
       learning: false,
       pourSensitivity: 1,
       captions: true,
+      textSize: 'm',
     });
   });
 
@@ -64,6 +66,7 @@ describe('listening settings (localStorage)', () => {
       learning: true,
       pourSensitivity: 1.4,
       captions: true,
+      textSize: 'm',
     });
   });
 
@@ -79,7 +82,22 @@ describe('listening settings (localStorage)', () => {
       learning: true,
       pourSensitivity: POUR_SENSITIVITY.default,
       captions: true,
+      textSize: 'm',
     });
+  });
+
+  it('text size is s, m or l; anything else (or nothing) is m', () => {
+    const load = (v: unknown) => {
+      store.set(KEY, JSON.stringify({ version: 2, textSize: v }));
+      return loadListenSettings().textSize;
+    };
+    expect([load('s'), load('m'), load('l'), load('xl'), load(undefined)]).toEqual([
+      's',
+      'm',
+      'l',
+      'm',
+      'm',
+    ]);
   });
 
   it('subtitles (captions) are on unless saved off; a blob from before them gets them on', () => {

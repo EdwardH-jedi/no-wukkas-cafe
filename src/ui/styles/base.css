@@ -139,3 +139,34 @@ kbd {
 html[data-captions='off'] :is(#subs, #psubs, #rsubs) {
   display: none !important;
 }
+
+/* Text size (Settings → Text size, Phase 7): the HUD's text blocks and the subtitles scale as one
+   (--text-scale from ui/a11y.ts: 0.9 / 1 / 1.2). Medium is 1, the layout as designed. */
+:root {
+  --text-scale: 1;
+}
+:is(
+  #subs,
+  #psubs,
+  #rsubs,
+  #instr,
+  #rinstr,
+  #rail,
+  #pos,
+  #gauges,
+  #pgauges,
+  #rgauges,
+  #ractions,
+  #pactions,
+  #revent,
+  #pass,
+  #card,
+  #pcard
+) {
+  zoom: var(--text-scale);
+}
+/* Large text: the subtitle box keeps to the screen (its width, padding and border are zoomed too;
+   34 px = 2 × 16 px padding + 2 × 1 px border, hud.css). */
+html[data-text='l'] :is(#subs, #psubs, #rsubs) {
+  width: min(720px, calc((100vw - 32px) / var(--text-scale) - 34px));
+}

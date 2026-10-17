@@ -187,5 +187,72 @@ test.describe('Phase 7 accessibility evidence', () => {
         await ctx.close();
       }
     });
+
+    test(`b: text size small, medium, large at ${vp}`, async ({ browser }) => {
+      test.setTimeout(240_000);
+      const W = VIEWPORTS[vp]!.viewport!.width;
+      const H = VIEWPORTS[vp]!.viewport!.height;
+      for (const textSize of ['s', 'm', 'l'] as const) {
+        const { ctx, page } = await open(browser, vp, {}, (p) =>
+          p.addInitScript(
+            (t) =>
+              localStorage.setItem(
+                'nwc.listen.v1',
+                JSON.stringify({
+                  version: 2,
+                  difficulty: 'normal',
+                  subtitles: 'always',
+                  textSize: t,
+                }),
+              ),
+            textSize,
+          ),
+        );
+        await day2Intro(page);
+        for (let i = 0; i < 60 && (await rush(page))?.phase === 'intro'; i++) {
+          await page.mouse.click(W / 2, H * 0.45);
+          await page.waitForTimeout(150);
+        }
+        await until(
+          () => rush(page),
+          (s) => s.customers.some((c) => c.state === 'register'),
+        );
+        await page.keyboard.press('t');
+        await until(
+          () => rush(page),
+          (s) => s.customers.some((c) => c.state === 'deciding'),
+        );
+        await page.waitForTimeout(1500);
+        const boxes = await page.evaluate(() =>
+          Object.fromEntries(
+            ['#rsubs', '#rinstr', '#rail', '#pos', '#ractions'].map((sel) => {
+              const el = document.querySelector(sel);
+              const b = el?.getBoundingClientRect();
+              const zoom = el ? getComputedStyle(el).zoom : null;
+              return [sel, b ? { x: b.x, y: b.y, w: b.width, h: b.height, zoom } : null];
+            }),
+          ),
+        );
+        const scale = await page.evaluate(() =>
+          getComputedStyle(document.documentElement).getPropertyValue('--text-scale').trim(),
+        );
+        const offscreen = Object.entries(boxes)
+          .filter(([, b]) => b && b.w > 0 && (b.x < -1 || b.x + b.w > W + 1))
+          .map(([k]) => k);
+        await capture(page, 'b-text-size', vp, textSize, {
+          claim:
+            'Text size scales the HUD text blocks and the subtitles together (S 0.9, M 1, L 1.2)',
+          setting: { textSize },
+          scale,
+          boxes,
+          offscreen,
+        });
+        expect(scale).toBe(String({ s: 0.9, m: 1, l: 1.2 }[textSize]));
+        for (const b of Object.values(boxes))
+          if (b) expect(Number(b.zoom)).toBeCloseTo(Number(scale));
+        expect(offscreen).toEqual([]);
+        await ctx.close();
+      }
+    });
   }
 });

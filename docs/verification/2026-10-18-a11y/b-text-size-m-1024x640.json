@@ -1,0 +1,54 @@
+{
+  "item": "b-text-size",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "e94f7ff+b",
+  "timestamp": "2026-10-17T15:02:06.182Z",
+  "claim": "Text size scales the HUD text blocks and the subtitles together (S 0.9, M 1, L 1.2)",
+  "setting": {
+    "textSize": "m"
+  },
+  "scale": "1",
+  "boxes": {
+    "#rsubs": {
+      "x": 135,
+      "y": 542,
+      "w": 754,
+      "h": 80,
+      "zoom": "1"
+    },
+    "#rinstr": {
+      "x": 16,
+      "y": 409.90625,
+      "w": 393,
+      "h": 80.09375,
+      "zoom": "1"
+    },
+    "#rail": {
+      "x": 16,
+      "y": 62,
+      "w": 0,
+      "h": 0,
+      "zoom": "1"
+    },
+    "#pos": {
+      "x": 662,
+      "y": 133.3046875,
+      "w": 346,
+      "h": 373.390625,
+      "zoom": "1"
+    },
+    "#ractions": {
+      "x": 512,
+      "y": 490,
+      "w": 0,
+      "h": 0,
+      "zoom": "1"
+    }
+  },
+  "offscreen": []
+}
