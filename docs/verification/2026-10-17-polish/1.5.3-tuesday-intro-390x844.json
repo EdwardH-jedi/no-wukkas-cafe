@@ -1,0 +1,23 @@
+{
+  "item": "1.5.3",
+  "viewport": "390x844",
+  "css": {
+    "width": 390,
+    "height": 844
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:41:44.636Z",
+  "claim": "a week shift after the first does not replay RUSH_INTRO (\"your first paid shift\")",
+  "week": {
+    "week": 1,
+    "shiftIndex": 1,
+    "endless": false
+  },
+  "line": {
+    "speaker": "gaz",
+    "key": "rush.intro.shift1.0",
+    "text": "Back again. Good. Didn't scare you off, then.",
+    "delivery": "normal"
+  }
+}

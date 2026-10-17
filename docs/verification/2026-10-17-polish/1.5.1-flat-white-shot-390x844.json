@@ -1,0 +1,53 @@
+{
+  "item": "1.5.1",
+  "viewport": "390x844",
+  "css": {
+    "width": 390,
+    "height": 844
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:50:16.144Z",
+  "claim": "the gauge column never clips the cup during a flat white's shot",
+  "order": {
+    "type": "flatWhite",
+    "milk": "almond",
+    "extraHot": true,
+    "heart": false
+  },
+  "boxes": {
+    "#rinstr": {
+      "x": 16,
+      "y": 221,
+      "width": 358,
+      "height": 73.1875
+    },
+    "#rail": {
+      "x": 16,
+      "y": 62,
+      "width": 152,
+      "height": 151
+    },
+    "#rgauges": {
+      "x": 16,
+      "y": 520,
+      "width": 358,
+      "height": 171
+    },
+    "#ractions": {
+      "x": 118.9375,
+      "y": 699,
+      "width": 152.125,
+      "height": 37
+    },
+    "#pos": null,
+    "#pos .ring": null
+  },
+  "cupCentre": {
+    "x": 195.00000000000023,
+    "y": 419.13064480444945
+  },
+  "gaugeText": "Shot running · steam the milk nowShot timer25–31 s5s · 2 g out\n        \n        FlowingStopMilk · 🌰 Almond55–65 °C\n        \n        5°C\n        Foamsilky\n        \n        Hold to steam",
+  "gaugesOverCup": false,
+  "actionsVisible": true
+}

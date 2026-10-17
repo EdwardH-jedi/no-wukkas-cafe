@@ -1,0 +1,52 @@
+{
+  "item": "1.5.2",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:51:11.605Z",
+  "claim": "\"Bin it\" never sits under the register's \"Ring it up\"",
+  "boxes": {
+    "#rinstr": {
+      "x": 16,
+      "y": 409.90625,
+      "width": 393,
+      "height": 80.09375
+    },
+    "#rail": {
+      "x": 16,
+      "y": 62,
+      "width": 176,
+      "height": 110
+    },
+    "#rgauges": null,
+    "#ractions": {
+      "x": 916.4375,
+      "y": 453,
+      "width": 91.5625,
+      "height": 37
+    },
+    "#pos": {
+      "x": 662,
+      "y": 64,
+      "width": 346,
+      "height": 373.390625
+    },
+    "#pos .ring": {
+      "x": 675,
+      "y": 389.390625,
+      "width": 320,
+      "height": 35
+    },
+    "#ractions button[data-a=\"bin\"]": {
+      "x": 916.4375,
+      "y": 453,
+      "width": 91.5625,
+      "height": 37
+    }
+  },
+  "binVsRingUp": false
+}

@@ -1,0 +1,14 @@
+{
+  "item": "1.5.7",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:43:23.917Z",
+  "claim": "Space on a focused control outside the play HUD activates it (no preventDefault)",
+  "focused": "Watch Gaz",
+  "phaseBefore": "review"
+}

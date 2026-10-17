@@ -1,0 +1,16 @@
+{
+  "item": "1.5.3",
+  "viewport": "390x844",
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:41:49.425Z",
+  "keys": [
+    "rush.intro.shift1.0",
+    "rush.intro.shift1.1"
+  ],
+  "texts": [
+    "Back again. Good. Didn't scare you off, then.",
+    "Bit busier today. Keep the line moving."
+  ],
+  "rushIntro": false,
+  "firstPaidShift": false
+}

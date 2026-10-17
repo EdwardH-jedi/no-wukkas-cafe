@@ -1,0 +1,36 @@
+{
+  "item": "1.5.1",
+  "viewport": "390x844",
+  "css": {
+    "width": 390,
+    "height": 844
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:49:30.094Z",
+  "claim": "#rinstr is clear of the ticket rail",
+  "boxes": {
+    "#rinstr": {
+      "x": 16,
+      "y": 70,
+      "width": 358,
+      "height": 73.1875
+    },
+    "#rail": null,
+    "#rgauges": null,
+    "#ractions": null,
+    "#pos": {
+      "x": 16,
+      "y": 60,
+      "width": 358,
+      "height": 373.390625
+    },
+    "#pos .ring": {
+      "x": 29,
+      "y": 385.390625,
+      "width": 332,
+      "height": 35
+    }
+  },
+  "instructionOverRail": false
+}

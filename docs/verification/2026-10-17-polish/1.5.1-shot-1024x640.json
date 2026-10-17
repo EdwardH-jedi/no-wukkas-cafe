@@ -1,0 +1,52 @@
+{
+  "item": "1.5.1",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:50:46.214Z",
+  "claim": "the gauge column never covers the cup; #ractions visible beside the gauges",
+  "order": {
+    "type": "longBlack",
+    "milk": null,
+    "extraHot": false,
+    "heart": false
+  },
+  "boxes": {
+    "#rinstr": {
+      "x": 16,
+      "y": 430.203125,
+      "width": 284.90625,
+      "height": 59.796875
+    },
+    "#rail": {
+      "x": 16,
+      "y": 62,
+      "width": 176,
+      "height": 110
+    },
+    "#rgauges": {
+      "x": 798,
+      "y": 64,
+      "width": 210,
+      "height": 96
+    },
+    "#ractions": {
+      "x": 423.703125,
+      "y": 453,
+      "width": 176.59375,
+      "height": 37
+    },
+    "#pos": null,
+    "#pos .ring": null
+  },
+  "cupCentre": {
+    "x": 512.0000000000002,
+    "y": 316.5478352456825
+  },
+  "gaugesOverCup": false,
+  "actionsVisible": true
+}

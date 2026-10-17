@@ -1,0 +1,32 @@
+{
+  "item": "1.5.4",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "59b1c47",
+  "timestamp": "2026-10-17T13:47:55.701Z",
+  "claim": "the closing line is count-agnostic: no \"Five for five\" after 6/6 (or 9/9, 10/10)",
+  "summary": {
+    "customers": 6,
+    "ordersCompleted": 6,
+    "correctOrders": 6,
+    "walkouts": 0,
+    "avgServeSeconds": 34.3,
+    "satisfaction": 93,
+    "tipsCents": 930,
+    "wasted": 0,
+    "grade": "excellent"
+  },
+  "endLines": [
+    {
+      "key": "rush.end.excellent",
+      "text": "Bloody oath. Not one walked out. You might actually be good at this."
+    }
+  ],
+  "excellentLines": 1,
+  "reportQuote": "“Bloody oath. Not one walked out. You might actually be good at this.”— Gaz, owner",
+  "saysFiveForFive": false
+}

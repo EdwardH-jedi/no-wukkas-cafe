@@ -185,7 +185,9 @@ Owns `src/ui/styles/{hud,rush}.css`, `src/ui/{rushHud,pos}.ts`, `src/data/ownerL
     the buttons in grind/shot/two-hands/pour, gauges over the cup in shot/pour; after: none in ticket/grind/shot/
     two-hands. 375×667 shot/two-hands: none (before: gauges over the cup by ~29 px). 1024×640 pass + register: "Bin it"
     vs "Ring it up" gone, every other overlap as before. Left: the pour close-up still has HUD over the cup's rim (the
-    cup fills the screen). Shots before/after: `docs/verification/2026-10-17-polish/`.
+    cup fills the screen). Shots: `docs/verification/2026-10-17-polish/`, replaced on 2026-10-18 by exact 390×844 /
+    1024×640 captures of all five items with JSON sidecars (`tests/e2e/polishEvidence.spec.ts`, Phase 6.8); the
+    earlier before/after JPGs are in git history at 59b1c47.
   - 1.5.5 not done: only THE_USUAL writes `regulars`, and it needs affinity ≥ 2 that only it can raise (the Phase 4
     fuzz confirms it never fires from a fresh save; `RegularMemory.visits` is never written). Proposal for Edward:
     count a visit and +1 affinity for each correct serve to a regular, so THE_USUAL can fire from about Wednesday;
