@@ -1,26 +1,25 @@
 // Review harness: the real audio stack (audio/manager, music, sfx) on a recording fake
 // AudioContext, the real app wiring (startRush, toTitle, act, the rush loop and its per-frame view,
-// the trial's frame) with no-op world/HUD objects, and a copy of boot.ts's frame body (boot()
-// itself needs WebGL). Network and browser speech are fakes whose timing the test controls in
-// harness seconds, so a clip can 404, or arrive 10 s or 25 s late, deterministically.
+// the trial's frame) with no-op world/HUD objects, driven by boot.ts's own frame function
+// (src/app/frame.ts createFrameDriver; boot() itself needs WebGL). Network and browser speech are
+// fakes whose timing the test controls in harness seconds, so a clip can 404, or arrive 10 s or
+// 25 s late, deterministically. Still copied, not shared: boot's setPaused/resumeAll/replay below.
 
 import * as THREE from 'three';
 import { vi } from 'vitest';
 import { createAudioManager, type AudioManager } from '../../src/audio/manager';
 import { createMusic, type Music } from '../../src/audio/music';
-import { moodFor } from '../../src/audio/musicPatterns';
 import { createSfx, type Sfx } from '../../src/audio/sfx';
 import type { App } from '../../src/app/context';
-import { clearEdges } from '../../src/app/input';
-import { createRushLoop, startDay2, startRush } from '../../src/app/rushWiring';
+import { createFrameDriver } from '../../src/app/frame';
+import { startDay2, startRush } from '../../src/app/rushWiring';
 import { makeIbis } from '../../src/app/shared';
 import { createTelemetry } from '../../src/app/telemetry';
 import { toTitle } from '../../src/app/title';
-import { trialFrame } from '../../src/app/trialWiring';
-import { consumeFrame, createClock, STEP, tickStep } from '../../src/core/clock';
+import { createClock } from '../../src/core/clock';
 import type { Utterance } from '../../src/core/speech';
 import { createTelemetryStore } from '../../src/core/save/telemetry';
-import { createTrial, emptyInput, stepTrial } from '../../src/core/trial';
+import { createTrial, emptyInput } from '../../src/core/trial';
 import { VOICE_MANIFEST } from '../../src/data/voice';
 import type { VoiceClip } from '../../src/data/voice/manifest';
 import type { ListenSettings } from '../../src/ui/settings';
@@ -491,7 +490,8 @@ export function createHarness(o: HarnessOptions = {}): Harness {
   const app = partial as unknown as App;
   appRef = app;
   app.ibis = makeIbis(app);
-  const rushLoop = createRushLoop(app);
+  // boot.ts's own frame; `beforeStep` stands in for its input sampling (boot's installInput).
+  const driver = createFrameDriver(app, () => h.beforeStep?.(app));
 
   let maxAudible = 0;
   let lastRecord: unknown = null;
@@ -538,32 +538,11 @@ export function createHarness(o: HarnessOptions = {}): Harness {
         activity = false;
         await settle();
       }
-      // ---- boot.ts frame(), minus rendering and practice.
+      // ---- boot.ts's frame: the production driver (src/app/frame.ts), minus rendering.
+      driver.frame(dt);
+      // ---- the audio clock runs on its own (frozen while suspended). The legacy mode scales it
+      // with the game, the original harness defect, kept for the differential test.
       const real = Math.min(0.1, Math.max(0, dt)) * app.timeScale;
-      // boot.ts: the hold lasts while the audio is loading; its deadline is the manager's
-      // LOAD_TIMEOUT on the audio clock (no second cap on the game clock).
-      app.input.voiceHold = audio.loading && !clock.paused;
-      const steps = consumeFrame(clock, real);
-      for (let i = 0; i < steps; i++) {
-        h.beforeStep?.(app);
-        if (app.mode === 'rush' && app.rush) rushLoop.step(app.rush);
-        else stepTrial(trial, app.input, STEP);
-        clearEdges(app);
-        tickStep(clock);
-      }
-      const vdt = clock.paused ? 0 : real;
-      app.viewTime += vdt;
-      app.voiceLevel = audio.voiceLevel();
-      audio.update();
-      music.setMood(
-        app.mode === 'practice'
-          ? moodFor('trial', 'pour')
-          : moodFor(app.mode, app.mode === 'rush' && app.rush ? app.rush.phase : trial.phase),
-      );
-      music.update();
-      if (app.mode === 'rush' && app.rush) rushLoop.frame(app.rush, vdt);
-      else trialFrame(app, vdt);
-      // ---- the audio clock runs on its own (frozen while suspended).
       FakeCtx.last?.advance(o.audioClock === 'legacy-scaled' ? real : Math.max(0, dt));
       await settle();
       const last = audio.history[audio.history.length - 1] ?? null;
