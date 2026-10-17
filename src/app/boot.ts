@@ -5,14 +5,13 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAudioManager } from '../audio/manager';
 import { createMusic } from '../audio/music';
-import { moodFor } from '../audio/musicPatterns';
 import { createSfx } from '../audio/sfx';
 import { cancelPress } from '../core/barista';
-import { consumeFrame, createClock, STEP, tickStep } from '../core/clock';
+import { createClock } from '../core/clock';
 import { parseSeed } from '../core/rng';
 import { atCounter } from '../core/rush';
 import { browserStorage, createSaveStore } from '../core/save/storage';
-import { createTrial, emptyInput, stepTrial } from '../core/trial';
+import { createTrial, emptyInput } from '../core/trial';
 import { GREETING } from '../data/ownerLines';
 import { spokenDuration } from '../data/voice';
 import { createAudioPanel } from '../ui/audioPanel';
@@ -25,13 +24,14 @@ import { buildOwner } from '../world/owner';
 import { buildStation } from '../world/station';
 import type { App, LateFields } from './context';
 import { installDebugHandle } from './debug';
-import { clearEdges, installInput } from './input';
-import { createPracticeLoop, createPracticeView, startPractice } from './practiceWiring';
-import { createRushLoop, createRushView, rushAct, startDay2, startRush } from './rushWiring';
+import { createFrameDriver } from './frame';
+import { installInput } from './input';
+import { createPracticeView, startPractice } from './practiceWiring';
+import { createRushView, rushAct, startDay2, startRush } from './rushWiring';
 import { makeIbis } from './shared';
 import { createTelemetry, downloadLog, watchPageHide } from './telemetry';
 import { titleCallbacks, toTitle } from './title';
-import { createTrialHud, trialFrame } from './trialWiring';
+import { createTrialHud } from './trialWiring';
 import { openShifts, startEndless, startShift } from './weekWiring';
 
 export async function boot(): Promise<void> {
@@ -214,7 +214,6 @@ export async function boot(): Promise<void> {
   // The HUDs (LateFields) are assigned right below: their callbacks need `app` to exist first, and
   // none of them can run (they're DOM events) before boot() returns.
   const app = core as App;
-  const { input } = app;
 
   app.audioPanel = createAudioPanel(uiRoot, audio, {
     replay: () => {
@@ -260,49 +259,12 @@ export async function boot(): Promise<void> {
 
   // ---------------------------------------------------------------- loop
   let last = performance.now();
-  const rushLoop = createRushLoop(app);
-  const practiceLoop = createPracticeLoop(app);
+  const driver = createFrameDriver(app, sampleInput);
 
   const frame = (ts: number): void => {
     requestAnimationFrame(frame);
-    const real = Math.min(0.1, Math.max(0, (ts - last) / 1000)) * app.timeScale;
+    driver.frame((ts - last) / 1000);
     last = ts;
-    // While the current line's clip is still downloading/decoding, hold that line's clock (A3).
-    // One deadline, on the audio clock: the manager gives a clip LOAD_TIMEOUT of AudioContext time
-    // (frozen while paused) and then hands the line to the browser voice, so `loading` ends exactly
-    // when the line is audible or handed on, and a stuck download still can't freeze the game. No
-    // second cap on the (scaled) game clock: one ran out first and let a newer line drop the order.
-    input.voiceHold = audio.loading && !clock.paused;
-    const steps = consumeFrame(clock, real);
-    for (let i = 0; i < steps; i++) {
-      sampleInput();
-      if (app.mode === 'rush' && app.rush) rushLoop.step(app.rush);
-      else if (app.mode === 'practice' && app.practice) practiceLoop.step(app.practice);
-      else stepTrial(trial, input, STEP);
-      clearEdges(app);
-      tickStep(clock);
-    }
-    const dt = clock.paused ? 0 : real;
-    app.viewTime += dt;
-    app.voiceLevel = audio.voiceLevel();
-    audio.update();
-    music.setMood(
-      app.mode === 'practice'
-        ? moodFor('trial', 'pour')
-        : moodFor(app.mode, app.mode === 'rush' && app.rush ? app.rush.phase : trial.phase),
-    );
-    music.update();
-    if (app.mode === 'rush' && app.rush) {
-      rushLoop.frame(app.rush, dt);
-      renderer.render(scene, camera);
-      return;
-    }
-    if (app.mode === 'practice' && app.practice) {
-      practiceLoop.frame(app.practice, dt);
-      renderer.render(scene, camera);
-      return;
-    }
-    trialFrame(app, dt);
     renderer.render(scene, camera);
   };
   app.hud.onPhase('title', trial);
