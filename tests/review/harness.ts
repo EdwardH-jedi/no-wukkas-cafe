@@ -272,9 +272,6 @@ export interface Harness {
   replay(): void;
 }
 
-/** boot.ts: `MAX_VOICE_HOLD` (private there). */
-export const MAX_VOICE_HOLD = 6;
-
 const classList = () => ({
   add: (): void => undefined,
   remove: (): void => undefined,
@@ -496,7 +493,6 @@ export function createHarness(o: HarnessOptions = {}): Harness {
   app.ibis = makeIbis(app);
   const rushLoop = createRushLoop(app);
 
-  let voiceHoldFor = 0;
   let maxAudible = 0;
   let lastRecord: unknown = null;
 
@@ -544,9 +540,9 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       }
       // ---- boot.ts frame(), minus rendering and practice.
       const real = Math.min(0.1, Math.max(0, dt)) * app.timeScale;
-      const loading = audio.loading && !clock.paused;
-      voiceHoldFor = loading ? voiceHoldFor + real : 0;
-      app.input.voiceHold = loading && voiceHoldFor < MAX_VOICE_HOLD;
+      // boot.ts: the hold lasts while the audio is loading; its deadline is the manager's
+      // LOAD_TIMEOUT on the audio clock (no second cap on the game clock).
+      app.input.voiceHold = audio.loading && !clock.paused;
       const steps = consumeFrame(clock, real);
       for (let i = 0; i < steps; i++) {
         h.beforeStep?.(app);

@@ -260,9 +260,6 @@ export async function boot(): Promise<void> {
 
   // ---------------------------------------------------------------- loop
   let last = performance.now();
-  /** Seconds the current line has been held waiting for its audio (see frame()). */
-  let voiceHoldFor = 0;
-  const MAX_VOICE_HOLD = 6;
   const rushLoop = createRushLoop(app);
   const practiceLoop = createPracticeLoop(app);
 
@@ -270,11 +267,12 @@ export async function boot(): Promise<void> {
     requestAnimationFrame(frame);
     const real = Math.min(0.1, Math.max(0, (ts - last) / 1000)) * app.timeScale;
     last = ts;
-    // While the current line's clip is still downloading/decoding, hold that line's clock (A3),
-    // but never for long: a stuck download mustn't freeze the game.
-    const loading = audio.loading && !clock.paused;
-    voiceHoldFor = loading ? voiceHoldFor + real : 0;
-    input.voiceHold = loading && voiceHoldFor < MAX_VOICE_HOLD;
+    // While the current line's clip is still downloading/decoding, hold that line's clock (A3).
+    // One deadline, on the audio clock: the manager gives a clip LOAD_TIMEOUT of AudioContext time
+    // (frozen while paused) and then hands the line to the browser voice, so `loading` ends exactly
+    // when the line is audible or handed on, and a stuck download still can't freeze the game. No
+    // second cap on the (scaled) game clock: one ran out first and let a newer line drop the order.
+    input.voiceHold = audio.loading && !clock.paused;
     const steps = consumeFrame(clock, real);
     for (let i = 0; i < steps; i++) {
       sampleInput();

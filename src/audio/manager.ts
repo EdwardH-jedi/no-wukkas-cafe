@@ -134,10 +134,9 @@ const shipped = (c: VoiceClip): boolean => import.meta.env.DEV || c.source.place
 const NOT_SHIPPED = 'Recorded voices are development-only placeholders and are not in this build.';
 const DECODED_CACHE = 16;
 /** A clip still loading after this long (s, on the audio clock, which stops while paused) is given
- *  up and the browser voice says the line instead, as for a missing clip. The game holds a line
- *  for at most 6 s (boot.ts MAX_VOICE_HOLD) and then moves on; a clip landing a few seconds after
- *  that still plays, but past this a newer line (Gaz's nag) would drop it and the order would never
- *  be heard. */
+ *  up and the browser voice says the line instead, as for a missing clip. This is the ONE deadline
+ *  for a loading line: the game holds that line (boot.ts, `input.voiceHold = audio.loading`) until
+ *  the clip plays or this hands it to the browser voice, so no newer line can drop it unheard. */
 export const LOAD_TIMEOUT = 12;
 /** Which segment clips to ask the server for. Development: every one (placeholders from
  *  voice-cache/segments/, served by the dev server). Production: only release clips the committed
