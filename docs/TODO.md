@@ -495,7 +495,9 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       a163a66 milk shape + name, then the keys commit: save v3 with a v2 → v3 migration test). Evidence:
       `docs/verification/2026-10-18-a11y/` (exact 390×844 and 1024×640, a JSON sidecar per capture,
       `tests/e2e/a11yEvidence.spec.ts`, opt-in with A11Y_SHOTS). Not on a device: iPhone Safari is untested.
-- [ ] Steam wrapper spike (Tauri): Windows build, save path, controller/Steam Deck input map; go/no-go note in `docs/STEAM.md`.
+- [~] Steam wrapper spike (Tauri): Windows build, save path, controller/Steam Deck input map; go/no-go note in `docs/STEAM.md`.
+      Research note written (overnight run #3 B4, sources cited, unverified points marked); no scaffold: `cargo`
+      isn't installed and no toolchain was installed. The go/no-go waits on Edward's three questions at its end.
 - [ ] Deploy: static host + custom domain, OG image, privacy-friendly analytics.
 - [ ] Devlog: architecture (pure sim + seeded RNG + headless balance) and playtest learnings.
 - Evidence:
