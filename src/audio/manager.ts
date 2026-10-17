@@ -736,7 +736,17 @@ export function createAudioManager(
     set voiceEnabled(on: boolean) {
       voiceEnabled = on;
       voicePref = on;
-      if (!on) m.stopVoice();
+      if (!on) {
+        // The sound stops, the line's words stay (they are all there is now): its subtitle is
+        // not stopped, and one still loading shows at once.
+        const h = hooks;
+        const shown = hooksStarted;
+        hooks = null;
+        m.stopVoice();
+        hooks = h;
+        hooksStarted = true;
+        if (h && !shown) h.onStart?.();
+      }
       const g = bus.voice;
       if (g && ctx) g.gain.setTargetAtTime(on ? vol.voice : 0, ctx.currentTime, 0.03);
       if (status !== 'locked' && status !== 'blocked')

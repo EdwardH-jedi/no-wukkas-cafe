@@ -427,6 +427,29 @@ describe('a clip slow to load', () => {
       expect(ctx.started).toHaveLength(1);
     });
 
+    it('turning voices off mid-line stops the sound but keeps the words', async () => {
+      const { m, ctx } = await started();
+      const a = hooks();
+      m.say(ORDER, a.h); // still loading
+      m.voiceEnabled = false;
+      expect(a.log).toEqual(['start']); // the words show now; nothing stopped them
+      land();
+      await flush();
+      expect(ctx.started).toHaveLength(0); // the late clip never plays
+      const b = hooks();
+      m.say({ speaker: 'gaz', text: 'next' }, b.h);
+      expect(a.log).toEqual(['start', 'stop']); // a newer line still takes its place
+      expect(b.log).toEqual(['start']);
+      m.voiceEnabled = true;
+      const c = hooks();
+      m.say(ORDER, c.h);
+      land();
+      await flush();
+      m.voiceEnabled = false; // while the clip plays
+      expect(c.log).toEqual(['start']);
+      expect(m.speaking).toBe(false);
+    });
+
     it('voices off: the subtitle is the line, so it starts at once', async () => {
       const { m } = await started();
       m.voiceEnabled = false;
