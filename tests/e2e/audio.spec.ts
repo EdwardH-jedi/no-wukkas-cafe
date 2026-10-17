@@ -24,6 +24,7 @@ interface AudioDebug {
   contextState: string;
   currentTime: number;
   history: PlayRecord[];
+  lastLine: string | null;
 }
 
 const manifest = JSON.parse(
@@ -75,14 +76,31 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
 
   // Replay says the last line again. Gaz's next greeting can start right after the click, so look
   // for the replay among the new records rather than at the very last one (that raced: 2 in 5
-  // failed on 8333240, before overnight run #3).
+  // failed on 8333240, before overnight run #3), and take the line Replay repeats from the manager
+  // (a line asked for but still loading isn't in the history yet).
   const was = await audio(page);
-  const before = was.history.length;
-  const last = was.history.at(-1)!.text;
+  const last = was.lastLine;
+  expect(last).not.toBeNull();
   await page.getByRole('button', { name: 'Replay the last line' }).click();
+  // A record of that line that started after the click (by the audio clock; the history is a
+  // ring of 40, so positions shift).
+  const replayed = async () =>
+    (await audio(page)).history.some((r) => r.text === last && r.startedAt >= was.currentTime);
   await expect
-    .poll(async () => (await audio(page)).history.slice(before).some((r) => r.text === last))
-    .toBe(true);
+    .poll(replayed)
+    .toBe(true)
+    .catch(async (e: unknown) => {
+      const now = await audio(page);
+      console.log(
+        JSON.stringify({
+          last,
+          at: was.currentTime,
+          lastLine: now.lastLine,
+          history: now.history.map((r) => [r.text.slice(0, 24), r.via, r.startedAt]),
+        }),
+      );
+      throw e;
+    });
 
   // Sound panel: voice volume slider is live.
   await page.getByRole('button', { name: 'Sound settings' }).click();
