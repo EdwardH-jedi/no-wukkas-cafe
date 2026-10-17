@@ -10,6 +10,7 @@ import {
   isRegular,
   misheardHtml,
   railOrder,
+  milkLine,
   ticketOrderHtml,
   ticketsBehind,
   ticketWho,
@@ -146,5 +147,16 @@ describe('misheard marks on a ticket', () => {
     expect(fieldText(fw({ heart: true }), 'heart')).toBe('heart');
     expect(fieldText(lb, 'drink')).toBe('long black');
     expect(fieldText(lb, 'milk')).toBe('none');
+  });
+});
+
+describe('the carton on a ticket (Phase 7: not colour alone)', () => {
+  it("a flat white's ticket names its carton, full cream included; a long black has none", () => {
+    expect(milkLine(fw())).toBe('<div class="tk"><i aria-hidden="true">🐄</i> Full cream</div>');
+    expect(milkLine(fw({ milk: 'oat' }))).toBe(
+      '<div class="tk"><i aria-hidden="true">🌾</i> Oat</div>',
+    );
+    expect(milkLine(fw({ milk: 'almond' }))).toContain('Almond');
+    expect(milkLine(lb)).toBe('');
   });
 });

@@ -5,6 +5,7 @@
 import type { Rush, RushCustomer } from '../core/rush';
 import { wrongFields, type OrderField } from '../sim/listening';
 import { DRINK_NAME, EXTRA_HOT, MILK_NAME, orderLabel, type Order } from '../sim/rush';
+import { MILK_ICON } from './gauges';
 import { esc } from './screens';
 
 const byTicket = (a: RushCustomer, b: RushCustomer): number => (a.ticket ?? 0) - (b.ticket ?? 0);
@@ -83,6 +84,15 @@ export function ticketOrderHtml(o: Order, marked: readonly OrderField[]): string
   return parts.join(' · ');
 }
 
+/** A flat white's carton on its ticket: the carton's shape and its name, full cream included, so
+ *  the milk never rests on colour or on a word left unsaid (Phase 7). '' for a long black. */
+export function milkLine(o: Order): string {
+  if (o.type !== 'flatWhite') return '';
+  const m = o.milk ?? 'full';
+  const name = MILK_NAME[m];
+  return `<div class="tk"><i aria-hidden="true">${MILK_ICON[m]}</i> ${esc(name.charAt(0).toUpperCase() + name.slice(1))}</div>`;
+}
+
 /** "↩ Misheard: soy → oat" for a ticket set straight at the pass: what was rung up, struck out,
  *  then what they actually said (text and strike-through, not colour alone). */
 export function misheardHtml(printed: Order, now: Order, fields: readonly OrderField[]): string {
@@ -141,7 +151,7 @@ export function createRail(el: HTMLElement, touch: boolean, cb: RailCallbacks): 
     // The ticket shows what was rung up, right or wrong: that's what gets made.
     return `<div class="tn">#${c.ticket} · ${esc(who.name)}</div>
       ${who.tag ? `<div class="tt">${esc(who.tag)}</div>` : ''}
-      <div class="to">${c.heard ? ticketOrderHtml(c.heard, marks) : ''}</div>${note}
+      <div class="to">${c.heard ? ticketOrderHtml(c.heard, marks) : ''}</div>${c.heard ? milkLine(c.heard) : ''}${note}
       <div class="tp" role="meter" aria-label="Patience" aria-valuemin="0" aria-valuemax="100"><i></i></div>
       <div class="tb"><button class="btn small ghost make" ${canMake ? '' : 'disabled'}>Make</button>
       <button class="btn small serve" ${ready ? '' : 'disabled'}>Serve${touch || !ready ? '' : ` <kbd>${i + 1}</kbd>`}</button></div>`;

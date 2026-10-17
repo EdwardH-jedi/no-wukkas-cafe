@@ -254,5 +254,67 @@ test.describe('Phase 7 accessibility evidence', () => {
         await ctx.close();
       }
     });
+
+    test(`c: milk on tickets and the pass, not colour alone, at ${vp}`, async ({ browser }) => {
+      test.setTimeout(240_000);
+      const W = VIEWPORTS[vp]!.viewport!.width;
+      const H = VIEWPORTS[vp]!.viewport!.height;
+      const { ctx, page } = await open(browser, vp);
+      await day2Intro(page);
+      for (let i = 0; i < 60 && (await rush(page))?.phase === 'intro'; i++) {
+        await page.mouse.click(W / 2, H * 0.45);
+        await page.waitForTimeout(150);
+      }
+      const pos = page.locator('#pos');
+      const click = (n: string) => pos.getByRole('button', { name: n, exact: true }).click();
+      // Ring up the first two customers as ordered (seed 7: a long black, then an almond flat white).
+      for (let n = 0; n < 2; n++) {
+        const at = await until(
+          () => rush(page),
+          (s) => s.customers.some((c) => c.state === 'register'),
+          120_000,
+        );
+        const key = at.customers.find((c) => c.state === 'register')!.key;
+        await page.keyboard.press('t');
+        const s = await until(
+          () => rush(page),
+          (x) => x.customers.find((c) => c.key === key)?.state === 'deciding',
+        );
+        const o = s.customers.find((c) => c.key === key)!.order;
+        await click(o.type === 'flatWhite' ? 'Flat white' : 'Long black');
+        if (o.type === 'flatWhite') {
+          await click(
+            { full: 'Full cream', oat: 'Oat', soy: 'Soy', almond: 'Almond' }[o.milk ?? 'full'],
+          );
+          await click(o.extraHot ? 'Extra hot' : 'Normal');
+          await click(o.heart ? 'Heart' : 'No heart');
+        }
+        await page.keyboard.press('Enter');
+        await until(
+          () => rush(page),
+          (x) => x.customers.find((c) => c.key === key)?.state === 'waiting',
+        );
+      }
+      await page.waitForTimeout(600);
+      const tickets = await page.evaluate(() =>
+        [...document.querySelectorAll('#rail .ticket')].map((t) => ({
+          order: t.querySelector('.to')?.textContent?.trim() ?? '',
+          carton: t.querySelector('.tk')?.textContent?.trim() ?? null,
+        })),
+      );
+      await capture(page, 'c-milk-labels', vp, 'tickets', {
+        claim:
+          "a flat white's ticket names its carton with a shape and a word (full cream too); " +
+          'the pass says the carton and its name (rushHud); no milk is told by colour alone',
+        tickets,
+      });
+      expect(
+        tickets.some((t) => t.carton !== null && /Almond|Oat|Soy|Full cream/.test(t.carton)),
+      ).toBe(true);
+      expect(
+        tickets.filter((t) => /long black/i.test(t.order)).every((t) => t.carton === null),
+      ).toBe(true);
+      await ctx.close();
+    });
   }
 });
