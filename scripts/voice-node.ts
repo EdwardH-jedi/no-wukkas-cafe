@@ -1,9 +1,9 @@
 // Node-only helpers shared by the voice scripts (render + check). Not bundled into the game.
 
 import { execFile } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { registerHooks } from 'node:module';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import type { SegmentManifest } from '../src/data/voice/manifest.ts';
@@ -98,15 +98,22 @@ export async function pool<T>(
 export const ownIndex = (file: string): boolean =>
   file.startsWith(`${URL_PREFIX}segments/`) || file.startsWith(`${URL_PREFIX}licensed/`);
 
-/** Every .mp3 under `dir`, as URL paths ("assets/voice/<speaker>/<file>"). */
+/** Every .mp3 under `dir`, as URL paths ("assets/voice/<speaker>/<file>"). Symbolic links are
+ *  never followed or listed, and every path listed resolves (realpath) inside `dir` itself: what
+ *  `voices --prune` deletes comes from here, so a speaker directory linked to somewhere else can't
+ *  lead it to delete files outside the cache. */
 export function listClips(dir: string): string[] {
   if (!existsSync(dir)) return [];
+  // `dir` itself may be a link (macOS tmpdir is /var → /private/var): compare real paths.
+  const root = realpathSync(dir) + sep;
   const out: string[] = [];
   const walk = (d: string): void => {
     for (const name of readdirSync(d)) {
       const p = join(d, name);
-      if (statSync(p).isDirectory()) walk(p);
-      else if (name.endsWith('.mp3'))
+      const st = lstatSync(p);
+      if (st.isSymbolicLink()) continue;
+      if (st.isDirectory()) walk(p);
+      else if (name.endsWith('.mp3') && realpathSync(p).startsWith(root))
         out.push(`${URL_PREFIX}${relative(dir, p).split('\\').join('/')}`);
     }
   };
