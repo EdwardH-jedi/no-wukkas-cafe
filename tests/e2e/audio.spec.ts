@@ -25,6 +25,7 @@ interface AudioDebug {
   currentTime: number;
   history: PlayRecord[];
   lastLine: string | null;
+  speaking: boolean;
 }
 
 const manifest = JSON.parse(
@@ -78,6 +79,16 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
   // for the replay among the new records rather than at the very last one (that raced: 2 in 5
   // failed on 8333240, before overnight run #3), and take the line Replay repeats from the manager
   // (a line asked for but still loading isn't in the history yet).
+  // Click while a line plays that started under a second and a half ago: Gaz's next line is
+  // seconds away, so the line Replay repeats can't change between this read and the click (it
+  // did when the click fell between two lines).
+  await expect
+    .poll(async () => {
+      const a = await audio(page);
+      const h = a.history.at(-1);
+      return a.speaking && !!h && h.text === a.lastLine && a.currentTime - h.startedAt < 1.5;
+    })
+    .toBe(true);
   const was = await audio(page);
   const last = was.lastLine;
   expect(last).not.toBeNull();
