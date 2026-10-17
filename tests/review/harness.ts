@@ -467,6 +467,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     rushHud: {
       onPhase: noop,
       onSay: (line: Utterance) => said.push({ line, at: now }),
+      onStop: noop,
       onTicket: noop,
       onTicketFixed: noop,
       onAsk: noop,

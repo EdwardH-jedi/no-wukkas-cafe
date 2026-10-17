@@ -40,15 +40,24 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
     for (const ev of r.events) {
       if (ev.type === 'say') {
         const u = ev.line;
-        rushHud.onSay(u);
-        if (u.speaker === 'gaz') owner.onSay(u, viewTime);
-        audio.say({
-          speaker: u.speaker,
-          text: u.text,
-          delivery: u.delivery ?? 'normal',
-          listen: u.listen === true,
-          ...(u.voice?.kind === 'segments' ? { segments: u.voice.ids } : {}),
-        });
+        // The words (and Gaz's gesture) start when the voice does, not when the line is asked
+        // for: a clip can take seconds to load. A line stopped first never shows.
+        audio.say(
+          {
+            speaker: u.speaker,
+            text: u.text,
+            delivery: u.delivery ?? 'normal',
+            listen: u.listen === true,
+            ...(u.voice?.kind === 'segments' ? { segments: u.voice.ids } : {}),
+          },
+          {
+            onStart: () => {
+              app.rushHud.onSay(u);
+              if (u.speaker === 'gaz') owner.onSay(u, app.viewTime);
+            },
+            onStop: () => app.rushHud.onStop(),
+          },
+        );
       } else if (ev.type === 'phase') {
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {

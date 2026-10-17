@@ -22,8 +22,14 @@ export interface Tts {
   readonly available: boolean;
   readonly speaking: boolean;
   unlock(): void;
-  /** onFail fires if the engine never starts the line. */
-  speak(text: string, style: TtsStyle, onFail?: (why: string) => void): void;
+  /** onFail fires if the engine never starts the line; onStarted when it does (the utterance's
+   *  start event), once, and not for a line already replaced or stopped. */
+  speak(
+    text: string,
+    style: TtsStyle,
+    onFail?: (why: string) => void,
+    onStarted?: () => void,
+  ): void;
   stop(): void;
   pause(): void;
   resume(): void;
@@ -100,7 +106,7 @@ export function createTts(): Tts {
         /* optional */
       }
     },
-    speak(text, style, onFail) {
+    speak(text, style, onFail, onStarted) {
       if (!synth) {
         onFail?.('This browser has no speech synthesis.');
         return;
@@ -131,7 +137,9 @@ export function createTts(): Tts {
           u.rate = style.rate;
           u.volume = Math.max(0, Math.min(1, style.volume ?? 1));
           u.onstart = () => {
-            if (my === gen) started = true;
+            if (my !== gen || started) return;
+            started = true;
+            onStarted?.();
           };
           u.onend = () => {
             if (my === gen) current = null;

@@ -46,7 +46,11 @@ export interface RushHudCallbacks {
 
 export interface RushHud {
   show(on: boolean): void;
+  /** `line` is audible now (its clip or browser voice started, or it never will be): its
+   *  subtitle starts. Not when the line is asked for: a clip can take seconds to load. */
   onSay(line: Utterance): void;
+  /** The line being said (or still loading) was stopped: its subtitle goes with it. */
+  onStop(): void;
   /** Show a replayed line for `seconds`. */
   onReplay(speaker: string, text: string, seconds: number): void;
   onPhase(phase: RushPhase, r: Rush): void;
@@ -199,6 +203,16 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       listenLine = line.listen ? line : null;
       listenShown = null;
       showLine(line.speaker, line.listen ? '' : line.text);
+    },
+    onStop() {
+      listenLine = null;
+      listenShown = null;
+      replayHold = 0;
+      subFull = '';
+      subShown = 0;
+      subHideIn = 0;
+      subsText.textContent = '';
+      subs.classList.add('gone');
     },
     onAsk(text) {
       pos.onAsk(text);

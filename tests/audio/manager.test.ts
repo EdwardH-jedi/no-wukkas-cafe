@@ -377,6 +377,102 @@ describe('a clip slow to load', () => {
     expect(m.history.at(-1)).toMatchObject({ via: 'clip', interrupted: true });
     expect(m.speaking).toBe(false);
   });
+
+  describe('subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s)', () => {
+    const hooks = () => {
+      const log: string[] = [];
+      return {
+        log,
+        h: { onStart: () => log.push('start'), onStop: () => log.push('stop') },
+      };
+    };
+
+    it('onStart fires at the clip’s first sample, not when the line is asked for; once', async () => {
+      const { m, ctx } = await started();
+      const { log, h } = hooks();
+      m.say(ORDER, h);
+      wait(m, ctx, 5);
+      expect(log).toEqual([]);
+      land();
+      await flush();
+      expect(ctx.started).toHaveLength(1);
+      expect(log).toEqual(['start']);
+      wait(m, ctx, 2); // the clip ends: no second start, and ending is not a stop
+      expect(log).toEqual(['start']);
+    });
+
+    it('a line stopped while loading never starts: onStop, and no onStart when the clip lands', async () => {
+      const { m, ctx } = await started();
+      const { log, h } = hooks();
+      m.say(ORDER, h);
+      wait(m, ctx, 3);
+      m.stopSpeaker(ORDER.speaker);
+      expect(log).toEqual(['stop']);
+      land();
+      await flush();
+      wait(m, ctx, LOAD_TIMEOUT);
+      expect(log).toEqual(['stop']);
+    });
+
+    it('a newer line stops the one before (playing or not), then starts on its own', async () => {
+      const { m, ctx } = await started();
+      const a = hooks();
+      const b = hooks();
+      m.say(ORDER, a.h);
+      land();
+      await flush();
+      m.say({ speaker: 'gaz', text: 'not in the manifest' }, b.h); // no clip: browser voice
+      expect(a.log).toEqual(['start', 'stop']);
+      expect(b.log).toEqual(['start']); // no speech engine in this test: subtitles only, at once
+      expect(ctx.started).toHaveLength(1);
+    });
+
+    it('voices off: the subtitle is the line, so it starts at once', async () => {
+      const { m } = await started();
+      m.voiceEnabled = false;
+      const { log, h } = hooks();
+      m.say(ORDER, h);
+      expect(log).toEqual(['start']);
+    });
+
+    it('past the timeout, onStart waits for the browser voice’s own start event', async () => {
+      const spoken: Array<{ onstart: (() => void) | null }> = [];
+      vi.stubGlobal(
+        'SpeechSynthesisUtterance',
+        class {
+          onstart: (() => void) | null = null;
+          onend: (() => void) | null = null;
+          onerror: (() => void) | null = null;
+          constructor(public text: string) {}
+        },
+      );
+      vi.stubGlobal('speechSynthesis', {
+        speaking: false,
+        pending: false,
+        getVoices: () => [],
+        addEventListener: () => undefined,
+        speak: (u: { text: string; onstart: (() => void) | null }) => {
+          if (u.text.trim()) spoken.push(u);
+        },
+        cancel: () => undefined,
+        pause: () => undefined,
+        resume: () => undefined,
+      });
+      const { m, ctx } = await started();
+      const { log, h } = hooks();
+      m.say(ORDER, h);
+      wait(m, ctx, LOAD_TIMEOUT + 0.1);
+      expect(m.history.at(-1)).toMatchObject({ via: 'tts', text: ORDER.text });
+      await new Promise((ok) => setTimeout(ok, 40)); // voice.ts speaks on the next task
+      expect(spoken).toHaveLength(1);
+      expect(log).toEqual([]); // asked for, not started
+      spoken[0]?.onstart?.();
+      expect(log).toEqual(['start']);
+      land(); // the late clip is dropped: no second start
+      await flush();
+      expect(log).toEqual(['start']);
+    });
+  });
 });
 
 describe('stopping the voice', () => {

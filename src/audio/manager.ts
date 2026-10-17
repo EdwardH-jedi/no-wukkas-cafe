@@ -29,6 +29,17 @@ export interface VoiceRequest {
   segments?: readonly string[];
 }
 
+/** What the caller (the subtitles) hears about one line. */
+export interface VoiceHooks {
+  /** The line is audible now: a clip's first sample, or the browser voice's start event. Also
+   *  when it never will be (voice off, no browser speech, the browser voice failed to start), so
+   *  its words still show. At most once per line, and never for a line already stopped. */
+  onStart?(): void;
+  /** The line was stopped: replaced by a newer line, or by stopVoice/stopSpeaker, whether it was
+   *  still loading, playing or already over. Its subtitle goes with it. */
+  onStop?(): void;
+}
+
 export interface PlayRecord {
   id: string;
   speaker: string;
@@ -70,9 +81,9 @@ export interface AudioManager {
   masterPeak(): number;
   /** Call from inside a user gesture. Safe to call often. */
   unlock(): void;
-  say(req: VoiceRequest): void;
+  say(req: VoiceRequest, hooks?: VoiceHooks): void;
   /** Say the last line again. Returns it, or null if nothing has been said. */
-  replay(): VoiceRequest | null;
+  replay(hooks?: VoiceHooks): VoiceRequest | null;
   readonly lastLine: VoiceRequest | null;
   /** Stop the line loading or playing. `forget`: forget it as well, so Replay has nothing to say
    *  (back to the title: nothing from the quit game). */
@@ -227,6 +238,10 @@ export function createAudioManager(
   let pendingTts: { req: VoiceRequest; why: string | null; my: number } | null = null;
   let current: PlayRecord | null = null;
   const history: PlayRecord[] = [];
+  /** The current line's hooks, and whether its onStart has fired. A load timeout moves the line
+   *  to a new generation (the browser voice); it is still the same line with the same hooks. */
+  let hooks: VoiceHooks | null = null;
+  let hooksStarted = false;
 
   const emit = (): void => {
     for (const l of listeners) l();
@@ -357,6 +372,20 @@ export function createAudioManager(
     current = r;
   };
 
+  /** Generation `my` of the current line is audible (or never will be): tell the caller, once. */
+  const started = (my: number): void => {
+    if (my !== gen || hooksStarted) return;
+    hooksStarted = true;
+    hooks?.onStart?.();
+  };
+  /** The current line stops (a newer line, stopVoice): tell the caller, and forget its hooks. */
+  const dropHooks = (): void => {
+    const h = hooks;
+    hooks = null;
+    hooksStarted = false;
+    h?.onStop?.();
+  };
+
   const ttsStyle = (speaker: string): TtsStyle => {
     const p = VOICE_PROFILES[speaker];
     return p
@@ -387,6 +416,7 @@ export function createAudioManager(
         'error',
         `${why ?? 'No recording'}, and this browser has no speech. Subtitles only.`,
       );
+      started(my);
       return;
     }
     if (why) setStatus('fallback', `${why} Using the browser voice for now.`);
@@ -402,11 +432,18 @@ export function createAudioManager(
     const style = ttsStyle(req.speaker);
     if (req.delivery === 'slow') style.rate *= 0.82;
     style.volume = voiceEnabled ? vol.voice : 0;
-    tts.speak(req.text, style, (fail) => {
-      if (my !== gen || paused) return;
-      r.error = fail;
-      setStatus('error', `${fail} Subtitles only.`);
-    });
+    tts.speak(
+      req.text,
+      style,
+      (fail) => {
+        if (my !== gen) return;
+        started(my); // it won't be heard: the words show instead
+        if (paused) return;
+        r.error = fail;
+        setStatus('error', `${fail} Subtitles only.`);
+      },
+      () => started(my),
+    );
   };
 
   /** Line `my` waits for its clip(s) to load (given up after LOAD_TIMEOUT, in update()). */
@@ -478,6 +515,7 @@ export function createAudioManager(
           maxLive = Math.max(maxLive, live.size);
           maxAudible = Math.max(maxAudible, live.size - fading.size);
           r.segments = i + 1;
+          started(my);
         };
         record(r);
         part(0);
@@ -557,14 +595,19 @@ export function createAudioManager(
         setStatus('error', `Sound failed to start: ${(e as Error).message}`);
       }
     },
-    say(req) {
+    say(req, h) {
       lastLine = req;
       currentListen = req.listen === true;
       const my = ++gen;
       pendingTts = null;
       stopSource();
       tts.stop();
-      if (!voiceEnabled) return;
+      dropHooks();
+      hooks = h ?? null;
+      if (!voiceEnabled) {
+        started(my); // voices off: the subtitle is the line
+        return;
+      }
       // Segments are rendered at normal pace only: a slow repeat is the browser voice, whole.
       if (req.segments?.length && req.delivery !== 'slow') {
         saySegments(req, req.segments, my);
@@ -620,6 +663,7 @@ export function createAudioManager(
           maxAudible = Math.max(maxAudible, live.size - fading.size);
           record(r);
           if (status === 'fallback' || status === 'error') setStatus('ok', okMessage());
+          started(my);
         },
         (e: unknown) => {
           if (loadingGen === my) loadingGen = -1;
@@ -628,10 +672,10 @@ export function createAudioManager(
         },
       );
     },
-    replay() {
+    replay(h) {
       if (!lastLine) return null;
       const l = lastLine;
-      m.say(l);
+      m.say(l, h);
       return l;
     },
     get lastLine() {
@@ -644,6 +688,7 @@ export function createAudioManager(
       if (opts?.forget) lastLine = null;
       stopSource();
       tts.stop();
+      dropHooks();
     },
     stopSpeaker(speaker) {
       if (lastLine?.speaker === speaker) m.stopVoice();

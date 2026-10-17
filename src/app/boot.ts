@@ -119,14 +119,22 @@ export async function boot(): Promise<void> {
     app.practiceHud.setPaused(false);
     audio.setPaused(false);
   };
-  /** Say the last line again, with its subtitle. */
+  /** Say the last line again, with its subtitle once the voice starts (as rushView does). */
   const replay = (): void => {
-    const l = audio.replay();
+    const l = audio.lastLine;
     if (!l) return;
     const secs = spokenDuration(l.speaker, l.text, l.delivery);
-    if (app.mode === 'rush') app.rushHud.onReplay(l.speaker, l.text, secs);
-    else if (app.mode === 'practice') app.practiceHud.onReplay(l.text, secs);
-    else app.hud.onReplay(l.text, secs);
+    const mode = app.mode;
+    audio.replay({
+      onStart: () => {
+        if (mode === 'rush') app.rushHud.onReplay(l.speaker, l.text, secs);
+        else if (mode === 'practice') app.practiceHud.onReplay(l.text, secs);
+        else app.hud.onReplay(l.text, secs);
+      },
+      onStop: () => {
+        if (mode === 'rush') app.rushHud.onStop();
+      },
+    });
   };
 
   const uiRoot = document.getElementById('ui') as HTMLElement;
