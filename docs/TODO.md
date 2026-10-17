@@ -499,7 +499,9 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       Research note written (overnight run #3 B4, sources cited, unverified points marked); no scaffold: `cargo`
       isn't installed and no toolchain was installed. The go/no-go waits on Edward's three questions at its end.
 - [ ] Deploy: static host + custom domain, OG image, privacy-friendly analytics.
-- [ ] Devlog: architecture (pure sim + seeded RNG + headless balance) and playtest learnings.
+- [~] Devlog: architecture (pure sim + seeded RNG + headless balance) and playtest learnings.
+      Architecture drafted in `docs/DEVLOG.md` with one Mermaid diagram (overnight run #3 B5); playtest learnings wait
+      for Phase 5.
 - Evidence:
 
 ---
