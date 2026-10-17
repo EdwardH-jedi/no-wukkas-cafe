@@ -40,7 +40,9 @@ npm run preview        # serve dist/ locally → http://localhost:4183
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
-npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, the week (+ weekUi: browser bot passes Monday), audio specs, dev review pages (~25 min); E2E_PORT=… to run beside another checkout; WEEK_UI_SHOTS=<dir> to write the week UI screenshots there
+npm run test:e2e       # playwright: Day 1 trial, Day 2 shift, the week (+ weekUi: browser bot passes Monday), audio specs, dev review pages (~30 min; 28 run + 17 skipped: the opt-in evidence specs below); E2E_PORT=… to run beside another checkout; WEEK_UI_SHOTS=<dir> to write the week UI screenshots there
+npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts   # the same suite on [::1] (an unrelated server holds 127.0.0.1:5196 here); tests/review/playwright.probes.config.ts runs the review's three caption probes
+POLISH_SHOTS=<dir> POLISH_COMMIT=<sha> npm run test:e2e -- polishEvidence   # opt-in: Phase 1.5 evidence, exact 390×844 + 1024×640 PNGs with JSON sidecars (A11Y_SHOTS=… a11yEvidence: Phase 7 accessibility)
 npm run balance        # headless week 1 × {novice, average, expert} bots × 30 seeds → reports/balance.csv + first-try pass table (~3 min; -- --seeds N, -- --out path)
 npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-timer} bot × {easy, normal} (-- --detail per seed)
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
