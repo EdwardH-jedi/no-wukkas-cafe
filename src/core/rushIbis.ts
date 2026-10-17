@@ -4,7 +4,7 @@
 // Gaz's lines here are 'react' (queued) or 'ambient' (only into silence): an order or a
 // customer's answer always goes first, so the bird never talks over what the player must hear.
 
-import { ENTER_TIME, type Rush } from './rush';
+import { ENTER_TIME, type Rush, type RushCustomer } from './rush';
 import { birdLeft } from './rush/events';
 import { gaz, orderLineDue } from './rushSpeech';
 import { stepIbis, type Ibis, type IbisEvent } from '../sim/ibis';
@@ -24,6 +24,21 @@ export function doorOpen(r: Rush): boolean {
   );
 }
 
+/** Someone is ordering or could start to any moment: at the register (the player takes the order
+ *  whenever they like) or the counter (an answer, a repeat). */
+const atTill = (c: RushCustomer): boolean =>
+  c.state === 'register' || c.state === 'ordering' || c.state === 'deciding';
+
+/** An order or answer could start within a honk's tail: someone is walking in or queueing (they
+ *  step up to a free register at once), at the register or the counter, or a listening line is
+ *  being said or queued. The bird keeps quiet meanwhile. */
+export function orderSoon(r: Rush): boolean {
+  return (
+    orderLineDue(r) ||
+    r.customers.some((c) => atTill(c) || c.state === 'entering' || c.state === 'queue')
+  );
+}
+
 /** One fixed step. Returns the bird's events (for sounds and the view). */
 export function stepRushIbis(r: Rush, b: Ibis, input: IbisControls, dt: number): IbisEvent[] {
   b.events.length = 0;
@@ -35,6 +50,7 @@ export function stepRushIbis(r: Rush, b: Ibis, input: IbisControls, dt: number):
       doorOpen: doorOpen(r),
       // RARE_BIRD's rule (sim/events/defs.ts): it never walks in, honking, over an order.
       midOrder: orderLineDue(r),
+      holdHonk: orderSoon(r),
       shoo: input.shoo,
       noticed: input.noticed,
     },

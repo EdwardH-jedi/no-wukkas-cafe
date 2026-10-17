@@ -76,6 +76,28 @@ describe('when a bin chicken turns up', () => {
   });
 });
 
+describe('keeping quiet while an order could start (review 2026-10-17 §6)', () => {
+  it('holds a due honk while holdHonk, honks once when quiet, then keeps its 5 s beat', () => {
+    const b = arrived();
+    const held = run(b, 12, () => ({ holdHonk: true }));
+    expect(held.filter((e) => e.type === 'honk')).toHaveLength(0);
+    const quiet = run(b, 0.05);
+    expect(quiet.filter((e) => e.type === 'honk')).toHaveLength(1); // the held honk, now
+    const next = run(b, IBIS.honkEvery - 0.1);
+    expect(next.filter((e) => e.type === 'honk')).toHaveLength(0); // no burst of missed honks
+    expect(run(b, 0.2).filter((e) => e.type === 'honk')).toHaveLength(1);
+  });
+
+  it('midOrder holds it too, and the look-up waits for quiet as well', () => {
+    const b = arrived();
+    const held = run(b, 6, () => ({ midOrder: true, noticed: true }));
+    expect(held.filter((e) => e.type === 'honk' || e.type === 'alert')).toEqual([]);
+    const quiet = run(b, 0.05, () => ({ noticed: true }));
+    expect(quiet).toContainEqual({ type: 'alert' });
+    expect(quiet).toContainEqual({ type: 'honk' });
+  });
+});
+
 describe('the encounter', () => {
   it('walks to the bin, honks now and then, looks up once when the player looks at it', () => {
     const b = createIbis(1, true);

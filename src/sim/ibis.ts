@@ -46,6 +46,11 @@ export interface IbisInput {
   /** A customer is saying their order or an answer (or is about to): the bird waits outside for
    *  the next open door, so it never walks in, honking, over a line the player must hear. */
   midOrder: boolean;
+  /** An order or answer could start any moment (someone walking in, queueing, at the register or
+   *  the counter, or a listening line due): a foraging bird holds its honk and its look-up until
+   *  the counter is quiet, so neither the honk nor its tail (sfx.ts, 0.46 s) lands on a line the
+   *  player must hear. A held honk goes off as soon as it's quiet, then the beat starts again. */
+  holdHonk?: boolean;
   /** The player clapped/waved at it this step. */
   shoo: boolean;
   /** The player is looking at it (pointer over it). */
@@ -143,13 +148,17 @@ export function stepIbis(b: Ibis, input: IbisInput, dt: number): void {
         herd(b);
         break;
       }
-      if (input.noticed && !b.alerted) {
-        b.alerted = true;
-        b.events.push({ type: 'alert' });
-      }
-      if (b.stateTime >= b.nextHonk) {
-        b.nextHonk += IBIS.honkEvery;
-        b.events.push({ type: 'honk' });
+      {
+        const hold = input.holdHonk === true || input.midOrder;
+        if (input.noticed && !b.alerted && !hold) {
+          b.alerted = true;
+          b.events.push({ type: 'alert' });
+        }
+        if (b.stateTime >= b.nextHonk && !hold) {
+          b.nextHonk += IBIS.honkEvery;
+          if (b.nextHonk <= b.stateTime) b.nextHonk = b.stateTime + IBIS.honkEvery;
+          b.events.push({ type: 'honk' });
+        }
       }
       if (b.stateTime >= IBIS.forageMax) {
         b.binRaided = true;

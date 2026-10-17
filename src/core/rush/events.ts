@@ -13,6 +13,7 @@ import { shiftDef, SHIFTS_PER_WEEK } from '../week/progress';
 import type { EventContext, EventOutcome, ShiftEventDef } from '../../sim/contracts/events';
 import { SHIFT_EVENTS } from '../../sim/events/defs';
 import { pickEvents, startShiftLog } from '../../sim/events/scheduler';
+import { IBIS } from '../../sim/ibis';
 import { atCounter } from './register';
 import { forgetCustomer, gaz, orderLineDue, varsFor } from './speech';
 import {
@@ -69,7 +70,9 @@ export function createShiftEvents(seed: number, week: RushWeek | null): ShiftEve
       playerMistake: false,
       rng: s.rng,
     };
-    s.bird = pickEvents(ctx, BIRD, s.log, false, { cap: capOf(week) }) !== null;
+    // The bird's own odds (IBIS.chance, as Day 2's scheduleIbis), not the register events' 0.35.
+    s.bird =
+      pickEvents(ctx, BIRD, s.log, false, { cap: capOf(week), chance: IBIS.chance }) !== null;
   }
   return s;
 }
