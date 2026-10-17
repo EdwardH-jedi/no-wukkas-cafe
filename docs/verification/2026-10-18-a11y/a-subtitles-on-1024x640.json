@@ -1,0 +1,26 @@
+{
+  "item": "a-subtitles",
+  "viewport": "1024x640",
+  "css": {
+    "width": 1024,
+    "height": 640
+  },
+  "devicePixelRatio": 1,
+  "commit": "dfc294c+a",
+  "timestamp": "2026-10-17T14:54:46.370Z",
+  "claim": "Show subtitles on (the default): captions start with the voice (A2 timing)",
+  "setting": {
+    "captions": true
+  },
+  "line": {
+    "speaker": "gaz",
+    "key": "rush.intro.0",
+    "text": "Righto, you're on the books. Welcome to your first paid shift.",
+    "delivery": "normal"
+  },
+  "seen": {
+    "attr": "on",
+    "display": "block",
+    "text": "Righto, you're on the books. Welcome to your first paid shift."
+  }
+}

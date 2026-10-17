@@ -18,6 +18,9 @@ export interface ListenSettings {
    *  The settings slider writes it; the pour input reads it. A v2 blob saved before it existed
    *  just gets the default. */
   pourSensitivity: number;
+  /** Subtitles at all (accessibility, Phase 7): off hides every caption, orders included; the
+   *  game is then by ear alone. Missing (saved before it existed) = on. */
+  captions?: boolean;
 }
 
 /** The pour-sensitivity slider's range. */
@@ -48,6 +51,7 @@ export function loadListenSettings(): ListenSettings {
     subtitles: 'auto',
     learning: false,
     pourSensitivity: POUR_SENSITIVITY.default,
+    captions: true,
   };
   try {
     const raw = localStorage.getItem(KEY);
@@ -67,6 +71,7 @@ export function loadListenSettings(): ListenSettings {
           : d.subtitles,
       learning: typeof s.learning === 'boolean' ? s.learning : d.learning,
       pourSensitivity: pourSensitivityOf(s.pourSensitivity),
+      captions: s.captions !== false,
     };
   } catch {
     return d;

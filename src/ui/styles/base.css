@@ -134,3 +134,8 @@ kbd {
     scroll-behavior: auto !important;
   }
 }
+
+/* Subtitles off (Settings → Show subtitles, Phase 7): no caption box anywhere, orders included. */
+html[data-captions='off'] :is(#subs, #psubs, #rsubs) {
+  display: none !important;
+}

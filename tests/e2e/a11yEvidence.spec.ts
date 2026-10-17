@@ -146,5 +146,46 @@ test.describe('Phase 7 accessibility evidence', () => {
       const reduced = measured.reduce?.durations as Array<{ transition: number | null }>;
       for (const d of reduced) if (d.transition !== null) expect(d.transition).toBeLessThan(0.001);
     });
+
+    test(`a: subtitles on (default) and off at ${vp}`, async ({ browser }) => {
+      test.setTimeout(120_000);
+      for (const captions of [true, false]) {
+        const { ctx, page } = await open(browser, vp, {}, (p) =>
+          p.addInitScript(
+            (c) =>
+              localStorage.setItem(
+                'nwc.listen.v1',
+                JSON.stringify({
+                  version: 2,
+                  difficulty: 'normal',
+                  subtitles: 'auto',
+                  captions: c,
+                }),
+              ),
+            captions,
+          ),
+        );
+        const s = await day2Intro(page);
+        const seen = await page.evaluate(() => {
+          const el = document.querySelector('#rsubs') as HTMLElement | null;
+          return {
+            attr: document.documentElement.dataset.captions ?? null,
+            display: el ? getComputedStyle(el).display : null,
+            text: el?.querySelector('.text')?.textContent ?? null,
+          };
+        });
+        await capture(page, 'a-subtitles', vp, captions ? 'on' : 'off', {
+          claim: captions
+            ? 'Show subtitles on (the default): captions start with the voice (A2 timing)'
+            : 'Show subtitles off: no caption box, orders included',
+          setting: { captions },
+          line: s.line,
+          seen,
+        });
+        if (captions) expect(seen.display).not.toBe('none');
+        else expect(seen.display).toBe('none');
+        await ctx.close();
+      }
+    });
   }
 });
