@@ -40,11 +40,11 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M2
+current_milestone: M3
 needs_replan: false
 pause_at_gate: true
-branch: `fix/review-0cae2cf` @ d8be91a, 3 ahead of `main` (0cae2cf = origin/main), unpushed. The F4 fix is
-green locally (`independentSuspendedCancellation` 8/8, `independentKeys`, `independentPausedCaptions`: 15/15).
+branch: `main` = origin/main = 3aa0828 (M2 pushed 2026-10-18 by Edward's go); M3 works on `feat/m3-playtest-ready`.
+One implementer session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2`.
 
 ---
 
@@ -91,7 +91,7 @@ jsdom.
 - [x] T2.0 Review fixes 6.1–6.11 on main (a3ff4e5, a16fde9, ef9071d, 66283fe, 14827e0, 7586668, cd28b37, 59b1c47,
       1e34e0c, 0a52ec4, 4d33c22, 8ca1287); Phase 1.5 polish 1.5.1–1.5.5, 1.5.7 (6c10050, 47c51f4, 7312c5a, 48bd0b1,
       2a6fe94); independent review Phase 4 (599c84f, b7c2fdc, f5ebe60) with fixes 4.F1–4.F7.
-- [ ] T2.1 Land F4 (`fix/review-0cae2cf` @ d8be91a: a line cancelled on a suspended AudioContext is cut, not faded
+- [x] T2.1 Land F4 (`fix/review-0cae2cf` @ d8be91a: a line cancelled on a suspended AudioContext is cut, not faded
       on resume). On that branch: `npm run typecheck && npm run lint && npm test` exit 0; full E2E in the background
       (command in Rules); append "6.12 (d8be91a) P2 F4 …" plus an Evidence line (unit count, e2e count, reviewer
       tests green) to `docs/TODO.md` Phase 6; `git checkout main && git merge --no-ff fix/review-0cae2cf`; push
@@ -132,7 +132,7 @@ jsdom.
       verify: `grep -q "Planning moved to" docs/TODO.md && grep -q "todo.md" docs/MILESTONES.md`
 
 Discovered:
-- (Edward) T2.1 push pending: everything else in T2.1 is done (checks 813/813, E2E 28 passed, 6.12 in docs/TODO.md,
+- (resolved 2026-10-18 23:40: Edward approved, `main` 3aa0828 pushed) T2.1 push pending: everything else in T2.1 is done (checks 813/813, E2E 28 passed, 6.12 in docs/TODO.md,
       `main` = 157329e merged locally, `review` messaged) but `git push origin main` was denied by the auto-mode
       permission classifier ("Modify Shared Resources"; AGENTS.md §2 also says never push to main directly).
       Edward: push it yourself (`! git push origin main`) or allow it, then T2.1's verify can pass.
@@ -338,3 +338,7 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
 ## Log
 - 2026-10-18 plan written from `docs/TODO.md` (Phases 0–7) + `docs/MILESTONES.md` + review 0cae2cf; M1 recorded
   as done; current = M2 (first task lands `fix/review-0cae2cf`).
+- M2 done 2026-10-18: F4 + F5 audio fixes, RegularMemory.visits, week-2+ shift rows, phone register under the
+  tickets, subtitle box inside 390 px, shared src/app/pause.ts; main 3aa0828 pushed (unit 824, E2E 34 passed at
+  c05d257). Discovered: the push of main needs Edward's go (permission classifier), a reviewer oracle encoding old
+  behaviour is re-issued by review (fuzzRules), Codex caught lastOrder being dropped (b39ca28).
