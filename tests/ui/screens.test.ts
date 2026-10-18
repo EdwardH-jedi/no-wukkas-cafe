@@ -3,6 +3,7 @@ import { FINDING_TEXT } from '../../src/data/coaching';
 import { FAULT_TEXT } from '../../src/data/tips';
 import type { Finding } from '../../src/sim/latte/coach';
 import { cardFaults } from '../../src/ui/screens';
+import { titleHtml } from '../../src/ui/screens/title';
 
 const finding = (id: Finding['id']): Finding => ({
   id,
@@ -35,5 +36,13 @@ describe('Day 1 result card', () => {
 
   it('falls back to the fault tip when there is no diagnosis', () => {
     expect(cardFaults(['blob'], [])).toEqual([FAULT_TEXT.blob]);
+  });
+});
+
+describe('title screen', () => {
+  it('has a Scores button between practice and settings', () => {
+    const acts = [...titleHtml(false, null).matchAll(/data-act="(\w+)"/g)].map((m) => m[1]);
+    expect(acts).toEqual(['start', 'day2', 'shifts', 'endless', 'practice', 'scores', 'settings']);
+    expect(titleHtml(false, null)).toContain('aria-label="Scores"');
   });
 });

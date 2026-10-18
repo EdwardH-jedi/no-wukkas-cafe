@@ -1,17 +1,24 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../src/core/rng';
+import type { RushWeek } from '../../src/core/rush';
 import { voiceScript } from '../../src/data/voice/script';
 import { CUSTOMERS } from '../../src/data/customers';
 import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../../src/data/ownerLines';
 import { FAULT_TEXT } from '../../src/data/tips';
+import { AWAITING_RENDER } from '../../src/data/voice/script';
+import { VOICE_MANIFEST } from '../../src/data/voice';
 import {
   addFrustration,
   createOwner,
+  endLines,
   lineDuration,
   ownerTier,
   pickLine,
   type LineBook,
 } from '../../src/sim/owner';
+import type { ShiftSummary } from '../../src/sim/rush';
+import { summaryBeats, type ScoreEntry } from '../../src/sim/scores';
+import { playRush } from '../helpers/rushBot';
 
 const book: LineBook = {
   a: { tiers: [[{ text: 'one' }, { text: 'two' }, { text: 'three' }], [{ text: 'cross' }]] },
@@ -120,5 +127,82 @@ describe('dialogue content', () => {
 
   it('has a coaching tip for every fault', () => {
     for (const t of Object.values(FAULT_TEXT)) expect(t.tip.length).toBeGreaterThan(10);
+  });
+});
+
+describe('the closing lines and a new best (todo.md M4 T4.5)', () => {
+  const best = (o: Partial<ScoreEntry> = {}): ScoreEntry => ({
+    mode: 'week',
+    week: 1,
+    shiftIndex: 0,
+    seed: 1,
+    difficulty: 'normal',
+    grade: 'good',
+    served: 5,
+    walkouts: 1,
+    tipsCents: 500,
+    at: '2026-10-19T01:00:00.000Z',
+    ...o,
+  });
+  const summary = (o: Partial<ShiftSummary> = {}): ShiftSummary => ({
+    customers: 6,
+    ordersCompleted: 5,
+    correctOrders: 5,
+    walkouts: 1,
+    avgServeSeconds: 40,
+    satisfaction: 70,
+    tipsCents: 500,
+    wasted: 0,
+    grade: 'good',
+    ...o,
+  });
+
+  it('the grade line, then "new best" only when there is one', () => {
+    expect(endLines('good', false)).toEqual(['rush.end.good']);
+    expect(endLines('disaster', true)).toEqual(['rush.end.disaster', 'rush.end.newBest']);
+  });
+
+  it('a new best beats the board on its own ranking (grade, served, tips, walk-outs)', () => {
+    expect(summaryBeats(summary(), best())).toBe(false);
+    expect(summaryBeats(summary({ ordersCompleted: 6 }), best())).toBe(true);
+    expect(summaryBeats(summary({ grade: 'excellent', ordersCompleted: 1 }), best())).toBe(true);
+    expect(summaryBeats(summary({ grade: 'okay', ordersCompleted: 9 }), best())).toBe(false);
+    expect(summaryBeats(summary({ walkouts: 0 }), best())).toBe(true);
+  });
+
+  it('the line is count-agnostic Australian copy, with a clip or waiting for one', () => {
+    const text = OWNER_LINES['rush.end.newBest']?.tiers[0]?.[0]?.text ?? '';
+    expect(text.length).toBeGreaterThan(10);
+    expect(text).not.toMatch(/\d/);
+    const clip = VOICE_MANIFEST.clips.some((c) => c.key === 'rush.end.newBest');
+    expect(clip || AWAITING_RENDER.has('rush.end.newBest')).toBe(true);
+  });
+
+  it('Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless', () => {
+    const NEW_BEST = OWNER_LINES['rush.end.newBest']!.tiers[0]![0]!.text;
+    const monday = {
+      week: 1,
+      shiftIndex: 0,
+      unlockedDrinks: ['flatWhite' as const, 'longBlack' as const],
+      affinity: {},
+    };
+    const saidOn = (week: RushWeek | undefined): boolean => {
+      const { events } = playRush({ seed: 3, ...(week ? { week } : {}) });
+      return events.some((e) => e.type === 'say' && e.line.text === NEW_BEST);
+    };
+    expect(saidOn({ ...monday, best: best({ grade: 'disaster', served: 0, tipsCents: 0 }) })).toBe(
+      true,
+    );
+    expect(saidOn({ ...monday, best: best({ grade: 'excellent', served: 99 }) })).toBe(false);
+    expect(saidOn({ ...monday, best: null })).toBe(false);
+    expect(saidOn(monday)).toBe(false);
+    expect(saidOn(undefined)).toBe(false);
+    expect(
+      saidOn({
+        ...monday,
+        endless: true,
+        best: best({ mode: 'endless', grade: 'disaster', served: 0 }),
+      }),
+    ).toBe(false);
   });
 });

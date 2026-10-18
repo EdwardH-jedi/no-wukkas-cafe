@@ -176,6 +176,15 @@
   text-align: center;
   margin: 6px 0 4px;
 }
+/* The leaderboard line under the stamp (app/scores.ts). */
+.verdictCard .best {
+  text-align: center;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.verdictCard .best.new {
+  color: #3d6b55;
+}
 .stamp.hired {
   color: #3d6b55;
 }

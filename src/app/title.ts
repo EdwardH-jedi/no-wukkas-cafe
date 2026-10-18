@@ -1,5 +1,5 @@
-// The title screen: its buttons (Day 2, the week, Endless Rush, practice, settings) and the way
-// back to it.
+// The title screen: its buttons (Day 2, the week, Endless Rush, practice, scores, settings) and
+// the way back to it.
 
 import { DEFAULT_NOISE } from '../audio/sfx';
 import { createTrial } from '../core/trial';
@@ -7,6 +7,7 @@ import { focusQuietly } from '../ui/screens/keys';
 import { endlessReason } from '../ui/screens/labels';
 import { renderTitle, type TitleCallbacks } from '../ui/screens/title';
 import type { App } from './context';
+import { openScores } from './scores';
 import { makeIbis } from './shared';
 import { act } from './trialWiring';
 
@@ -18,6 +19,7 @@ export function titleCallbacks(app: App): Omit<TitleCallbacks, 'start'> {
     endless: () => app.nav.startEndless(),
     endlessLock: () => endlessReason(app.store.load()),
     practice: () => app.nav.startPractice(),
+    scores: () => openScores(app),
     settings: () => {
       app.audio.unlock();
       app.audioPanel.open();

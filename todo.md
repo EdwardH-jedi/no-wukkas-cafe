@@ -243,17 +243,17 @@ site with no backend, an online board is Edward's call and a different milestone
 grade band, then served, then tips, then fewer walk-outs; Endless = served, then tips; ties keep the earlier
 entry; top 10 per board. No names or initials (one device, one player).
 
-- [ ] T4.1 `src/sim/scores.ts`: `ScoreEntry` (mode day2 | week | endless, week, shiftIndex, seed, difficulty, grade,
+- [x] T4.1 `src/sim/scores.ts`: `ScoreEntry` (mode day2 | week | endless, week, shiftIndex, seed, difficulty, grade,
       served, walkouts, tipsCents, `at` ISO passed in), board key per shift/difficulty and per Endless difficulty,
       `emptyScores`, `parseScores` (corrupt or other version → empty), `insert` (ranking above, cap 10),
       `isNewBest`, `fromSummary(ShiftSummary, ctx)`. Tests `tests/sim/scores.test.ts`: ordering, tie order, cap,
       parse corrupt, Endless vs shift keys.
       verify: `npx vitest run tests/sim/scores.test.ts`
-- [ ] T4.2 [simple] `src/core/save/scores.ts`: `ScoresStore` (`read` / `put` / `clear`, `memoryOnly`) copying
+- [x] T4.2 [simple] `src/core/save/scores.ts`: `ScoresStore` (`read` / `put` / `clear`, `memoryOnly`) copying
       `src/core/save/telemetry.ts` line for line with the new key and types; tests
       `tests/core/save/scores.test.ts` copying `tests/core/save/telemetry.test.ts`.
       verify: `npx vitest run tests/core/save/scores.test.ts`
-- [ ] T4.3 Wire it: `App` gets `scores` (`src/app/context.ts`; the review harness builds `App` by hand, so
+- [x] T4.3 Wire it: `App` gets `scores` (`src/app/context.ts`; the review harness builds `App` by hand, so
       `tests/review/harness.ts` gets a memory store too); on every shift summary (`src/app/weekWiring.ts
       onShiftSummary`, the Day 2 and Endless paths in `src/app/rushWiring.ts`) `put(fromSummary(...))` **before**
       the report renders; `renderShiftReport` (`src/ui/screens/shiftReport.ts`) shows one line: "New best!" or
@@ -261,21 +261,21 @@ entry; top 10 per board. No names or initials (one device, one player).
       a summary writes one entry, a worse second run doesn't change the best; `tests/ui/shiftReport.test.ts`:
       the line for new / not new.
       verify: `npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts`
-- [ ] T4.4 Scores screen: `src/ui/screens/scores.ts` (Mon–Fri best per difficulty, Endless top 10 with served and
+- [x] T4.4 Scores screen: `src/ui/screens/scores.ts` (Mon–Fri best per difficulty, Endless top 10 with served and
       tips, "Clear scores" asking twice like Clear log), a "Scores" entry in `MODES` of `src/ui/screens/title.ts`
       wired in `src/app/title.ts`, Esc/Tab loop via `menuKeys` like Settings, no horizontal scroll at 390 px.
       Tests `tests/ui/scores.test.ts` (render from a fixture, rows and cents formatting) and the title button in
       `tests/ui/screens.test.ts`.
       verify: `npx vitest run tests/ui/scores.test.ts tests/ui/screens.test.ts`
-- [ ] T4.5 Gaz on a new best in a **week** shift: one line key `rush.end.newBest` in `src/data/ownerLines.ts`,
+- [x] T4.5 Gaz on a new best in a **week** shift: one line key `rush.end.newBest` in `src/data/ownerLines.ts`,
       picked in `src/sim/owner.ts` after the grade line, count-agnostic copy, never in Endless or Day 2, never on
       the first play of a shift (nothing to beat). Put the key in `AWAITING_RENDER` (`src/data/voice/script.ts`).
       Test in `tests/sim/owner.test.ts`.
       verify: `npx vitest run tests/sim/owner.test.ts tests/data/voice.test.ts`
-- [ ] T4.6 [simple] Placeholder clip for T4.5: `npm run voices -- --only gaz`, commit `src/data/voice/manifest.json`
+- [x] T4.6 [simple] Placeholder clip for T4.5: `npm run voices -- --only gaz`, commit `src/data/voice/manifest.json`
       only (no audio), empty `AWAITING_RENDER`.
       verify: `npm run voices:check`
-- [ ] T4.7 E2E: after the Monday pass in `tests/e2e/weekUi.spec.ts`, open Scores from the title and assert
+- [x] T4.7 E2E: after the Monday pass in `tests/e2e/weekUi.spec.ts`, open Scores from the title and assert
       Monday's row shows the grade the report showed; screenshot `10-scores.png` into the week-UI evidence dir.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts`
 

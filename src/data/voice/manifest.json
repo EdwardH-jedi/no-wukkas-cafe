@@ -8105,6 +8105,31 @@
       }
     },
     {
+      "dialogueId": "gaz:ac7effbf",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.end.newBest",
+      "delivery": "normal",
+      "transcript": "And that's your best go at this shift yet. Don't let it go to your head.",
+      "file": "assets/voice/gaz/ac7effbf.mp3",
+      "duration": 3.563,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:ad4a5fe9",
       "characterId": "gaz",
       "voiceId": "macos:Karen",

@@ -178,6 +178,12 @@ test.describe('the week UI', () => {
     await expect(report).toContainText('WEEK 1 · MONDAY · SHIFT REPORT');
     await expect(report).toContainText(`${s.ordersCompleted}/${s.customers}`);
     await expect(report.locator('.stamp')).not.toHaveText('Total disaster');
+    // The first Monday on this device: its own entry is the best so far (todo.md M4).
+    const GRADE = { excellent: 'Excellent', good: 'Good', okay: 'Okay', poor: 'Poor' } as const;
+    const grade = GRADE[s.grade as keyof typeof GRADE];
+    await expect(report.locator('.best')).toHaveText(
+      `Best so far: ${grade}, ${s.ordersCompleted} served`,
+    );
     const next = report.getByRole('button', { name: 'Next shift', exact: true });
     await expect(next).toBeVisible();
     await expect(next).toBeFocused();
@@ -206,6 +212,25 @@ test.describe('the week UI', () => {
     expect((await readSave(page)).shift).toBe(1);
     await page.waitForTimeout(800);
     await snap(page, '07-tuesday-intro');
+
+    // --- Scores from the title (todo.md M4): Monday's row is the report's grade, served and tips.
+    await page.keyboard.press('Escape');
+    await page.locator('#rpause button[data-p="title"]').click();
+    await page.getByRole('button', { name: 'Scores', exact: true }).click();
+    const scores = page.getByRole('dialog', { name: 'Scores' });
+    await expect(scores).toBeVisible();
+    const tips = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(
+      s.tipsCents / 100,
+    );
+    const mon = scores.locator('.sc-row', { hasText: 'Monday' }).first();
+    await expect(mon).toContainText(`${grade} · ${s.ordersCompleted} served · ${tips}`);
+    await expect(scores.locator('.sc-row', { hasText: 'Tuesday' }).first()).toContainText(
+      'Not played yet',
+    );
+    await snap(page, '10-scores');
+    await page.keyboard.press('Escape');
+    await expect(scores).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Scores', exact: true })).toBeFocused();
     expect(errors).toEqual([]);
   });
 

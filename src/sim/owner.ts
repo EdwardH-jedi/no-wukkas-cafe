@@ -4,6 +4,7 @@
 
 import type { Rng } from '../core/rng';
 import { clamp } from './math';
+import type { ShiftGrade } from './rush';
 
 export type Mood =
   'neutral' | 'sceptical' | 'annoyed' | 'furious' | 'shocked' | 'impressed' | 'smug' | 'pleased';
@@ -130,4 +131,10 @@ export function pickLine(
     duration: lineDuration(def.text),
     live,
   };
+}
+
+/** Gaz's lines as a shift ends: the grade's, then "new best" when the shift beat the best already
+ *  on its board (a week shift only; the caller decides, see core/rush/machine.ts). */
+export function endLines(grade: ShiftGrade, newBest: boolean): string[] {
+  return newBest ? [`rush.end.${grade}`, 'rush.end.newBest'] : [`rush.end.${grade}`];
 }

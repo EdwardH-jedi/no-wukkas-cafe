@@ -1,5 +1,5 @@
 // The title screen: every way into the game on one menu (the trial, Day 2, the week, Endless Rush,
-// latte-art practice, settings), and what each button does. The Day 1 HUD shows and hides it; the
+// latte-art practice, scores, settings), and what each button does. The Day 1 HUD shows and hides it; the
 // buttons' actions come from src/app/title.ts, which also redraws it on the way back from a shift
 // (Endless Rush unlocks after one).
 
@@ -19,11 +19,13 @@ export interface TitleCallbacks {
   endlessLock(): string | null;
   /** Latte-art practice. */
   practice(): void;
+  /** The local leaderboard. */
+  scores(): void;
   /** Open the settings panel (sound, listening, pour). */
   settings(): void;
 }
 
-type TitleAct = 'start' | 'day2' | 'shifts' | 'endless' | 'practice' | 'settings';
+type TitleAct = 'start' | 'day2' | 'shifts' | 'endless' | 'practice' | 'scores' | 'settings';
 
 interface Mode {
   act: TitleAct;
@@ -55,6 +57,7 @@ function modes(endlessLock: string | null): Mode[] {
       disabled: endlessLock !== null,
     },
     { act: 'practice', name: 'Latte art practice', sub: 'No customers, no clock. Just pour.' },
+    { act: 'scores', name: 'Scores', sub: 'Your best shifts and Endless runs on this device.' },
     { act: 'settings', name: 'Settings', sub: 'Sound, subtitles, learning mode and pour feel.' },
   ];
 }
@@ -95,6 +98,7 @@ export function renderTitle(el: HTMLElement, touch: boolean, cb: TitleCallbacks)
       if (cb.endlessLock() === null) cb.endless();
     },
     practice: () => cb.practice(),
+    scores: () => cb.scores(),
     settings: () => cb.settings(),
   };
   el.querySelectorAll<HTMLButtonElement>('button[data-act]').forEach((b) => {

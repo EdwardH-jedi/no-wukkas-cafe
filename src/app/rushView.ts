@@ -8,6 +8,7 @@ import { pitcherFlow } from '../sim/latte/pitcher';
 import type { StationView } from '../world/station';
 import type { App } from './context';
 import { makeIbis } from './shared';
+import { recordScore } from './scores';
 import { onShiftSummary } from './weekWiring';
 
 /** The rush's events and view for one frame. */
@@ -59,6 +60,10 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
           },
         );
       } else if (ev.type === 'phase') {
+        // On its board before the report draws, so the report can say "New best!".
+        if (ev.phase === 'summary')
+          app.scoreNote = recordScore(app.scores, r, new Date().toISOString());
+        else if (ev.phase === 'intro') app.scoreNote = null;
         rushHud.onPhase(ev.phase, r);
         if (ev.phase === 'intro') {
           crowd.clear();

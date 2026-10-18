@@ -2,7 +2,7 @@
    door) and the café upgrade shop. */
 
 /* ---------- shared: a full-screen scroller with a centred card ---------- */
-:is(.shift-select, .shop) {
+:is(.shift-select, .shop, .scores-screen) {
   position: absolute;
   inset: 0;
   z-index: 30;
@@ -18,14 +18,14 @@
   background: rgba(20, 14, 10, 0.985);
   pointer-events: auto;
 }
-:is(.ss-card, .shop-card) {
+:is(.ss-card, .shop-card, .sc-card) {
   margin: auto;
   width: min(560px, 100%);
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-:is(.ss-card, .shop-card) h2 {
+:is(.ss-card, .shop-card, .sc-card) h2 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
@@ -33,7 +33,7 @@
   letter-spacing: 0.02em;
   color: var(--paper);
 }
-.ss-card header p {
+:is(.ss-card, .sc-card) header p {
   margin: 4px 0 0;
   color: var(--txt-dim);
   font-size: 14px;
@@ -278,4 +278,54 @@
   font-size: 14px;
   line-height: 1.4;
   color: var(--paper);
+}
+
+/* ---------- scores: the local leaderboard (ui/screens/scores.ts) ---------- */
+.sc-board {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sc-board h3 {
+  margin: 4px 0 2px;
+  font-size: 15px;
+  color: var(--gold);
+}
+.sc-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(246, 237, 225, 0.06);
+  font-size: 14px;
+}
+.sc-row span {
+  text-align: right;
+  color: var(--txt-dim);
+}
+.sc-top {
+  margin: 0;
+  padding-left: 28px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.sc-empty {
+  margin: 0;
+  color: var(--txt-dim);
+}
+.sc-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+#ui .sc-clear {
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--txt-dim);
+  font-weight: 700;
 }

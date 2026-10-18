@@ -7,10 +7,11 @@ import { shiftDef } from '../../core/week/progress';
 import { cueSpans, summariseListening, wrongFields } from '../../sim/listening';
 import { accuracyByField } from '../../sim/listening/stats';
 import { formatCents, orderLabel, type ShiftSummary } from '../../sim/rush';
+import type { ScoreNote } from '../../sim/scores';
 import { marked } from '../pos';
 import { esc } from '../screens';
 import { menuKeys } from './keys';
-import { reportButton, reportStamp } from './labels';
+import { GRADE_NAME, reportButton, reportStamp } from './labels';
 
 export interface ShiftReportCallbacks {
   /** Day 2 and Endless: run it again. */
@@ -20,6 +21,18 @@ export interface ShiftReportCallbacks {
   title(): void;
   /** The save only lasts until the page closes (storage blocked or full). */
   memoryOnly(): boolean;
+  /** This shift on its leaderboard board (app/scores.ts), or null. */
+  score(): ScoreNote | null;
+}
+
+/** The leaderboard line: "New best!", or the board's best so far (Endless: served and tips). */
+export function bestLine(note: ScoreNote | null): string | null {
+  if (!note) return null;
+  if (note.newBest) return 'New best!';
+  const b = note.best;
+  return b.mode === 'endless'
+    ? `Best so far: ${b.served} served, ${formatCents(b.tipsCents)} in tips`
+    : `Best so far: ${GRADE_NAME[b.grade]}, ${b.served} served`;
 }
 
 const DIFF_NAME = { easy: 'Easy', normal: 'Normal', hard: 'Hard' } as const;
@@ -89,6 +102,8 @@ export function renderShiftReport(
   // A week shift moves on after a pass and is played again after a disaster; a passed shift
   // isn't replayed (Edward, 2026-10-15). Day 2 and Endless Rush just run again.
   const main = reportButton(w, s);
+  const score = cb.score();
+  const best = bestLine(score);
   const note =
     w && !w.endless && cb.memoryOnly()
       ? `<p class="saveNote">Progress won't be saved in this browser.</p>`
@@ -96,6 +111,7 @@ export function renderShiftReport(
   el.innerHTML = `<div class="verdictCard"><div class="paper">
     <div class="hd"><b>NO WUKKAS</b><span>${esc(head)}</span></div>
     <div class="stamp ${stamp.band}">${esc(stamp.text)}</div>
+    ${best ? `<div class="best${score?.newBest ? ' new' : ''}">${esc(best)}</div>` : ''}
     <div class="rows">
       <div class="kv"><span>Orders completed</span><b>${s.ordersCompleted}/${s.customers}</b></div>
       <div class="kv"><span>Correct orders</span><b>${s.correctOrders}/${s.customers}</b></div>
