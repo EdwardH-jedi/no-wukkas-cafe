@@ -214,6 +214,7 @@ export function createAudioPanel(
     audio.voiceEnabled = voiceOn.checked;
   };
   panel.querySelectorAll<HTMLButtonElement>('button[data-a]').forEach((b) => {
+    if (b.dataset.a === 'keysReset') return; // bindKeys' own handler
     b.onclick = () => {
       audio.unlock();
       if (b.dataset.a === 'test') cb.test();
