@@ -141,7 +141,7 @@ Discovered:
       row `done`, none `locked`), so `npm test` had 4 red fuzz tests. Reverted, not committed; patch kept at
       `<scratchpad>/t2.3-shiftrows.patch` (session cd44c8ae). `review` asked to re-issue the rule 2026-10-18; when
       it lands, `git apply` the patch (or redo: ~15 lines in `shiftRows`) and tick T2.3.
-- [ ] T2.8 Review 157329e F5 (P2): merge the local branch `chore/review-main-157329e` (5b675ce, unpushed) `--no-ff`
+- [x] T2.8 Review 157329e F5 (P2): merge the local branch `chore/review-main-157329e` (5b675ce, unpushed) `--no-ff`
       into this branch, then in `src/audio/voiceLines.ts` (`stopSource`, ~lines 88-106) a cancel while the
       AudioContext is not running also cuts every source still in the `fading` Set (stop/disconnect or mute), not
       only the current one. Keep: uncancelled resume, onStart exactly once, no later segment starts; cutting

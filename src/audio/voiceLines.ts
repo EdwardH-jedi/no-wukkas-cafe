@@ -85,14 +85,14 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
 
   const stopSource = (): void => {
     const ctx = ctxOf();
+    // Suspended (paused, or the browser stopped audio): nothing is heard now, and a fade would
+    // only begin on resume, so the cancelled line would still play for it. Cut it here instead.
+    const now = !!ctx && ctx.state !== 'running';
     if (source && sourceGain && ctx) {
       fading.add(source);
       const r = board.current;
       if (r && r.via === 'clip' && r.endedAt === null) r.interrupted = true;
       const t = ctx.currentTime;
-      // Suspended (paused, or the browser stopped audio): nothing is heard now, and a fade would
-      // only begin on resume, so the cancelled line would still play for it. Cut it here instead.
-      const now = ctx.state !== 'running';
       sourceGain.gain.cancelScheduledValues(t);
       sourceGain.gain.setValueAtTime(now ? 0 : sourceGain.gain.value, t);
       if (!now) sourceGain.gain.linearRampToValueAtTime(0, t + 0.06);
@@ -102,6 +102,16 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
         /* already stopped */
       }
     }
+    // The same for lines a newer one was still fading out when audio stopped: their fade's tail
+    // would play on resume (review 2026-10-18 F5), so take them off the output now.
+    if (now)
+      for (const s of fading) {
+        try {
+          s.disconnect();
+        } catch {
+          /* already disconnected */
+        }
+      }
     source = null;
     sourceGain = null;
   };

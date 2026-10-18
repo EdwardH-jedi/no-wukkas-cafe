@@ -474,6 +474,10 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
 - [x] 6.12 (d8be91a) P2 F4 a clip or segment line cancelled while the AudioContext is suspended (stopVoice, quit to
       title, a customer gone, a newer line) is cut at once instead of fading over 60 ms after resume (`stopSource`,
       `src/audio/voiceLines.ts`).
+- Review 2026-10-18 of 157329e (`docs/reviews/2026-10-18-main-157329e.md`, branch `chore/review-main-157329e`, 4 red):
+- [x] 6.13 (todo.md T2.8) P2 F5 a line a newer one was still fading out when audio stopped is taken off the output
+      by a cancel on the suspended context (quit to title, stopVoice), so its fade's tail no longer plays on resume
+      (`stopSource` disconnects every source in `fading` when the context isn't running, `src/audio/voiceLines.ts`).
 - [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
   - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
@@ -520,6 +524,11 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     b78c3a4 → exit 0, `Test Files  100 passed (100)` · `Tests  813 passed (813)`. E2E at b78c3a4:
     `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts` → exit 0, `28 passed
     (27.8m)`, `17 skipped` (the opt-in evidence specs).
+  - 6.13 (todo.md T2.8, on `feat/m2-leftovers` after merging `chore/review-main-157329e` 0b72172): the four F5 tests in
+    `tests/review/independentSuspendedCancellation.test.ts` red before, green after (with `tests/audio/manager.test.ts`:
+    39/39); no reviewer test edited. `npm run typecheck && npm run lint && npm test` → exit 0, `Test Files  100 passed
+    (100)` · `Tests  823 passed (823)`. rushTrace's seven hashes unchanged (normal c565b78d…, idle 90a50992…).
+    E2E: at the M2 gate.
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
