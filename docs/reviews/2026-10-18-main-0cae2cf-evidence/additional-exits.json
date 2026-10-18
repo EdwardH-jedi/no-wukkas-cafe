@@ -1,0 +1,22 @@
+[
+  {
+    "command": "git log --stat 6941c37..0cae2cf",
+    "exit_code": 0
+  },
+  {
+    "command": "git diff 6941c37 0cae2cf -- src tests/audio/manager.test.ts",
+    "exit_code": 0
+  },
+  {
+    "command": "grep -rnE Math\\.random|Date\\.now|setTimeout src/sim src/core",
+    "exit_code": 1
+  },
+  {
+    "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+    "exit_code": 0
+  },
+  {
+    "command": "npm run release:check",
+    "exit_code": 1
+  }
+]

@@ -1,0 +1,152 @@
+diff --git a/src/audio/voiceLines.ts b/src/audio/voiceLines.ts
+index 6a07ac1..e4a0195 100644
+--- a/src/audio/voiceLines.ts
++++ b/src/audio/voiceLines.ts
+@@ -79,6 +79,9 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
+    *  to a new generation (the browser voice); it is still the same line with the same hooks. */
+   let hooks: VoiceHooks | null = null;
+   let hooksStarted = false;
++  /** Generation whose clip was started on a suspended context (paused, or the browser stopped
++   *  audio), or -1: its first sample plays on resume, so its onStart waits for that (update()). */
++  let startDue = -1;
+ 
+   const stopSource = (): void => {
+     const ctx = ctxOf();
+@@ -106,6 +109,11 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
+     hooksStarted = true;
+     hooks?.onStart?.();
+   };
++  /** A clip of generation `my` was just started on `ctx`: audible now, or once the context runs. */
++  const clipStarted = (ctx: BaseAudioContext, my: number): void => {
++    if (ctx.state === 'running') started(my);
++    else startDue = my;
++  };
+   /** The current line stops (a newer line, stopVoice): tell the caller, and forget its hooks. */
+   const dropHooks = (): void => {
+     const h = hooks;
+@@ -250,7 +258,7 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
+           };
+           begin(s, g);
+           r.segments = i + 1;
+-          started(my);
++          clipStarted(c, my);
+         };
+         board.record(r);
+         part(0);
+@@ -331,7 +339,7 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
+         board.record(r);
+         if (board.status === 'fallback' || board.status === 'error')
+           board.set('ok', deps.okMessage());
+-        started(my);
++        clipStarted(ctx, my);
+       },
+       (e: unknown) => {
+         if (loadingGen === my) loadingGen = -1;
+@@ -393,9 +401,16 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
+       }
+     },
+     update() {
++      const ctx = ctxOf();
++      // A clip started while the context was suspended is heard from now: its subtitle with it.
++      // A newer line or stopVoice moved the generation on, and started() ignores the old one.
++      if (startDue >= 0 && ctx?.state === 'running') {
++        const my = startDue;
++        startDue = -1;
++        started(my);
++      }
+       // A clip taking too long: the browser voice says its line now, under a new generation so
+       // the clip is dropped when it does land (never said twice).
+-      const ctx = ctxOf();
+       if (ctx && loadingReq && loadingGen === gen && ctx.currentTime - loadingAt > LOAD_TIMEOUT) {
+         const req = loadingReq;
+         loadingGen = -1;
+diff --git a/src/ui/audioPanel.ts b/src/ui/audioPanel.ts
+index 206bfbe..0e5fd56 100644
+--- a/src/ui/audioPanel.ts
++++ b/src/ui/audioPanel.ts
+@@ -161,7 +161,7 @@ export function createAudioPanel(
+     learnChk.onchange =
+       setListen;
+   const log = cb.log ? bindLogSection(panel, cb.log) : null;
+-  if (cb.keys) bindKeys(panel, cb.keys);
++  const cancelKey = cb.keys ? bindKeys(panel, cb.keys) : null;
+   pourIn.oninput = () => {
+     const v = roundPourSensitivity(Number(pourIn.value));
+     pourOut.textContent = pourSensitivityLabel(v);
+@@ -214,6 +214,7 @@ export function createAudioPanel(
+     audio.voiceEnabled = voiceOn.checked;
+   };
+   panel.querySelectorAll<HTMLButtonElement>('button[data-a]').forEach((b) => {
++    if (b.dataset.a === 'keysReset') return; // bindKeys' own handler
+     b.onclick = () => {
+       audio.unlock();
+       if (b.dataset.a === 'test') cb.test();
+@@ -260,6 +261,8 @@ export function createAudioPanel(
+       });
+     },
+     close() {
++      // A key change still waiting must not take the next key pressed in the game.
++      cancelKey?.();
+       if (panel.classList.contains('hide')) return;
+       panel.classList.add('hide');
+       // Back to the title's Settings button. In a shift, focus is let go instead: a focused Sound
+@@ -283,8 +286,9 @@ export function createAudioPanel(
+ }
+ 
+ /** Settings → Keys: click an action's key, press the new one (Escape keeps the old). A key the game
+- *  already uses, or another action's, is refused with the reason. */
+-function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): void {
++ *  already uses, or another action's, is refused with the reason. Returns `cancel`: stop waiting
++ *  for a key, as Escape does (the panel closed mid-change). */
++function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): () => void {
+   const msg = panel.querySelector('.keymsg') as HTMLElement;
+   const usual = msg.textContent ?? '';
+   const buttons = panel.querySelectorAll<HTMLButtonElement>('button[data-key]');
+@@ -337,4 +341,10 @@ function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): voi
+     show();
+   };
+   show();
++  return () => {
++    if (!stop) return;
++    stop();
++    msg.textContent = usual;
++    show();
++  };
+ }
+diff --git a/tests/audio/manager.test.ts b/tests/audio/manager.test.ts
+index 7cdf76a..1cc7d17 100644
+--- a/tests/audio/manager.test.ts
++++ b/tests/audio/manager.test.ts
+@@ -414,6 +414,32 @@ describe('a clip slow to load', () => {
+       expect(log).toEqual(['stop']);
+     });
+ 
++    it('a clip landing while paused starts its subtitle on resume; one stopped meanwhile never does', async () => {
++      const { m, ctx } = await started();
++      const a = hooks();
++      m.say(ORDER, a.h);
++      m.setPaused(true);
++      land();
++      await flush();
++      wait(m, ctx, 1);
++      expect(ctx.started).toHaveLength(1); // queued on the suspended context, not yet heard
++      expect(a.log).toEqual([]);
++      m.setPaused(false);
++      await flush();
++      wait(m, ctx, 0.01);
++      expect(a.log).toEqual(['start']);
++      const b = hooks();
++      m.say(ORDER, b.h);
++      m.setPaused(true);
++      land();
++      await flush();
++      m.stopVoice();
++      m.setPaused(false);
++      await flush();
++      wait(m, ctx, 0.01);
++      expect(b.log).toEqual(['stop']);
++    });
++
+     it('a newer line stops the one before (playing or not), then starts on its own', async () => {
+       const { m, ctx } = await started();
+       const a = hooks();

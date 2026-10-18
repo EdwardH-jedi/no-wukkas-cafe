@@ -14,3 +14,6 @@ An unanswered question is not a blocker: mark the item `[!]` and move on. Format
 - [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)?
 - [ ] Q5 (impl): Day 1 trial and practice captions get the rush's "start with the voice" rule?
 - [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?
+
+## Open (independent review of 0cae2cf, 2026-10-18)
+- [ ] Q7 (review): when the browser suspends audio while the game keeps running, should captions keep waiting for audio while patience drains (current behaviour), show immediately as a fallback, or should the game pause until sound resumes?

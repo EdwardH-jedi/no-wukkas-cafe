@@ -1,0 +1,32 @@
+[
+  {
+    "command": "git diff --exit-code 0cae2cf -- src scripts tests/helpers",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": "git diff --exit-code 6941c37 0cae2cf -- src/sim src/core src/data tests/helpers",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": "git rev-parse HEAD main",
+    "exit_code": 0,
+    "stdout": "0cae2cfbe5b0c8a5e0bf9721eb48069810c8e208\n0cae2cfbe5b0c8a5e0bf9721eb48069810c8e208\n",
+    "stderr": ""
+  },
+  {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": "node --version",
+    "exit_code": 0,
+    "stdout": "v26.7.0\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,140 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume
+clip stopVoice cancelled-source gains: [0.9833333333333333,0.5,0.01666666666666672,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume
+clip replaced-source gains: [0.9833333333333333,0.5,0.01666666666666672,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume
+segments stopVoice cancelled-source gains: [0.9833333333333333,0.5,0.01666666666666672,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume
+segments replaced-source gains: [0.9833333333333333,0.5,0.01666666666666672,0]
+
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > quitting to title while a decoded line waits must not emit the old game on resume 11ms
+   → the quit game still has an output path on the title: expected 0.5 to be +0 // Object.is equality
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > a gone customer whose segments decoded during suspension must stay silent on resume 6ms
+   → the departed customer still has an output path: expected 0.5 to be +0 // Object.is equality
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume 3ms
+   → cancelled queued audio must have no signal path after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume 3ms
+   → replaced queued audio must not overlap the new line after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: an uncancelled suspended line starts once and remains connected on resume 2ms
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume 4ms
+   → cancelled queued audio must have no signal path after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume 3ms
+   → replaced queued audio must not overlap the new line after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: an uncancelled suspended line starts once and remains connected on resume 3ms
+ ✓ tests/review/independentPausedCaptions.test.ts > paused: a decoded clip must not dispatch subtitle onStart before audio can start 10ms
+ ✓ tests/review/independentPausedCaptions.test.ts > browser-suspended: a decoded clip must not dispatch subtitle onStart before audio can start 6ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > Usual keys must restore all three bindings instead of only closing Settings 2ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > an explicit key choice still saves; Escape cancels without changing it 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > reset during capture cancels the capture, keeps Settings open, and restores every label 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > backdrop close cancels capture and reopening permits a fresh explicit key choice 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > quitting to title while a decoded line waits must not emit the old game on resume
+AssertionError: the quit game still has an output path on the title: expected 0.5 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 0.5
+
+ ❯ tests/review/independentSuspendedCancellation.test.ts:136:94
+    134|     expect(onStop).toHaveBeenCalledTimes(1);
+    135|     expect(onStart).not.toHaveBeenCalled();
+    136|     expect(oldGain(resumedAt + 0.03), 'the quit game still has an outp…
+       |                                                                                              ^
+    137|       0,
+    138|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > a gone customer whose segments decoded during suspension must stay silent on resume
+AssertionError: the departed customer still has an output path: expected 0.5 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 0.5
+
+ ❯ tests/review/independentSuspendedCancellation.test.ts:154:89
+    152|     await h.frame(0.001);
+    153|     expect(onStart).not.toHaveBeenCalled();
+    154|     expect(oldGain(resumedAt + 0.03), 'the departed customer still has…
+       |                                                                                         ^
+    155|   });
+    156|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume
+AssertionError: cancelled queued audio must have no signal path after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
+-   0,
+-   0,
++   0.9833333333333333,
++   0.5,
++   0.01666666666666672,
+    0,
+  ]
+
+ ❯ tests/review/independentSuspendedCancellation.test.ts:168:85
+    166|       const gains = [0.001, 0.03, 0.059, 0.08].map((dt) => oldGain(res…
+    167|       console.log(`${kind} stopVoice cancelled-source gains: ${JSON.st…
+    168|       expect(gains, 'cancelled queued audio must have no signal path a…
+       |                                                                                     ^
+    169|         0, 0, 0, 0,
+    170|       ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume
+AssertionError: replaced queued audio must not overlap the new line after resume: expected [ 0.9833333333333333, 0.5, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
+-   0,
+-   0,
++   0.9833333333333333,
++   0.5,
++   0.01666666666666672,
+    0,
+  ]
+
+ ❯ tests/review/independentSuspendedCancellation.test.ts:187:89
+    185|       const gains = [0.001, 0.03, 0.059, 0.08].map((dt) => oldGain(res…
+    186|       console.log(`${kind} replaced-source gains: ${JSON.stringify(gai…
+    187|       expect(gains, 'replaced queued audio must not overlap the new li…
+       |                                                                                         ^
+    188|         0, 0, 0, 0,
+    189|       ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  6 failed | 9 passed (15)
+   Start at  13:27:23
+   Duration  647ms (transform 58%, import 30%, tests 12%, worker 1%)
+

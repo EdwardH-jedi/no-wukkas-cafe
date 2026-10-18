@@ -1,0 +1,410 @@
+[
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-flat-white-shot-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-flat-white-shot-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-register-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-register-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-shot-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.1-shot-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.2-pass-and-register-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.2-pass-and-register-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.3-tuesday-intro-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.3-tuesday-intro-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.4-report-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.4-report-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.7-after-space-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.7-after-space-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.7-focused-watch-gaz-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-17-polish/1.5.7-focused-watch-gaz-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/a-subtitles-off-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/a-subtitles-off-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/a-subtitles-on-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/a-subtitles-on-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-l-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-l-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-m-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-m-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-s-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/b-text-size-s-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/c-milk-labels-tickets-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/c-milk-labels-tickets-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/d-reduced-motion-day2-intro-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/d-reduced-motion-day2-intro-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/e-keys-j-skips-intro-line-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/e-keys-j-skips-intro-line-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/e-keys-settings-1024x640.png",
+    "pixels": [
+      1024,
+      640
+    ],
+    "css": {
+      "width": 1024,
+      "height": 640
+    },
+    "matches": true
+  },
+  {
+    "file": "docs/verification/2026-10-18-a11y/e-keys-settings-390x844.png",
+    "pixels": [
+      390,
+      844
+    ],
+    "css": {
+      "width": 390,
+      "height": 844
+    },
+    "matches": true
+  }
+]
