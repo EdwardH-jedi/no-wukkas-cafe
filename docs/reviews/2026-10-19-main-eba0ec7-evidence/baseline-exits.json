@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exit": 0
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0
+  },
+  {
+    "command": "npm test",
+    "exit": 0
+  }
+]

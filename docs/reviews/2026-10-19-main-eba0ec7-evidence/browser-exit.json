@@ -1,0 +1,4 @@
+{
+  "command": "E2E_PORT=5202 npx playwright test tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts --output docs/reviews/2026-10-19-main-eba0ec7-evidence/browser-results",
+  "exit": 1
+}

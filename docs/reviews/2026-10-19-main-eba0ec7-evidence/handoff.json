@@ -1,0 +1,38 @@
+{
+  "status": "ready_for_harness_commit",
+  "branch": "chore/review-main-eba0ec7",
+  "targetSha": "eba0ec7156e16da0095b39272e9ed540b9d74dc3",
+  "reviewCommitSha": null,
+  "commitReason": "Run instructions: Git metadata is not writable; harness commits working-tree artifacts.",
+  "redCount": 5,
+  "independent": {
+    "passed": 4,
+    "failed": 5,
+    "total": 9
+  },
+  "finalSuite": {
+    "passed": 894,
+    "failed": 5,
+    "total": 899,
+    "passedFiles": 110,
+    "failedFiles": 1,
+    "exit": 1
+  },
+  "commitPaths": [
+    "tests/review/independentM4.test.ts",
+    "docs/reviews/2026-10-19-main-eba0ec7.md",
+    "docs/reviews/2026-10-19-main-eba0ec7-evidence"
+  ],
+  "suggestedCommitMessage": "test(review): audit M4 on eba0ec7 with five red regressions",
+  "trackedDiff": [],
+  "artifacts": {
+    "tests/review/independentM4.test.ts": {
+      "bytes": 8363,
+      "sha256": "f0e26af1c94e92636bab50c66be71d0a7fba379fbe44737a668b144388676dc3"
+    },
+    "docs/reviews/2026-10-19-main-eba0ec7.md": {
+      "bytes": 21625,
+      "sha256": "81af540e465fa3c4b6df8c0cfe5dc52891c724318ad8b732dfe4e09cdc393750"
+    }
+  }
+}

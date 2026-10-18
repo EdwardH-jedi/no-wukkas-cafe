@@ -1,0 +1,61 @@
+{
+  "rushTraceEqual": true,
+  "rushTraceCount": 7,
+  "largeSourceFiles": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687,
+      "changed": false
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 937,
+      "changed": true
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14933,
+      "changed": true
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839,
+      "changed": false
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623,
+      "changed": false
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894,
+      "changed": false
+    }
+  ],
+  "srcWorkingDiff": "",
+  "m3TestUnchanged": true,
+  "m3TestComparedTo": "97b879b (introduced after range base)",
+  "changedSource": [
+    "src/app/boot.ts",
+    "src/app/context.ts",
+    "src/app/rushView.ts",
+    "src/app/scores.ts",
+    "src/app/title.ts",
+    "src/app/weekWiring.ts",
+    "src/core/rush/machine.ts",
+    "src/core/rush/state.ts",
+    "src/core/save/scores.ts",
+    "src/data/ownerLines.ts",
+    "src/data/voice/manifest.json",
+    "src/sim/owner.ts",
+    "src/sim/scores.ts",
+    "src/sim/telemetrySummary.ts",
+    "src/ui/rushHud.ts",
+    "src/ui/screens/scores.ts",
+    "src/ui/screens/shiftReport.ts",
+    "src/ui/screens/title.ts",
+    "src/ui/styles/screens.css",
+    "src/ui/styles/shop.css"
+  ]
+}

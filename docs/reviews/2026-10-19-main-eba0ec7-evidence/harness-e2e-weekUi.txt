@@ -1,0 +1,14 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/weekUi.spec.ts:77:3 › the week UI › title → the week → shop → a passed Monday → next shift (3.0m)
+  ✓  2 [chromium] › tests/e2e/weekUi.spec.ts:237:3 › the week UI › Day 2: the bot plays the whole morning rush to its report (3.7m)
+  ✓  3 [chromium] › tests/e2e/weekUi.spec.ts:269:3 › the week UI › a shift event is answered with the number key 1 (12.3s)
+
+  Slow test file: [chromium] › tests/e2e/weekUi.spec.ts (6.9m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  3 passed (6.9m)
+exit=0
