@@ -136,6 +136,10 @@ Discovered:
       `main` = 157329e merged locally, `review` messaged) but `git push origin main` was denied by the auto-mode
       permission classifier ("Modify Shared Resources"; AGENTS.md §2 also says never push to main directly).
       Edward: push it yourself (`! git push origin main`) or allow it, then T2.1's verify can pass.
+      Gate state 2026-10-18 23:30: every other M2 task ticked, `feat/m2-leftovers` merged `--no-ff` into local
+      `main` = c05d257 (22 ahead of origin/main 0cae2cf); on it E2E `34 passed (29.7m)`, `17 skipped`, exit 0;
+      `npm test` 100 files / 824; Codex review 1 finding (lastOrder dropped, fixed b39ca28); M1 Done-when green
+      (balance --seeds 3 exit 0, 49/49). Only the push is left: then tick T2.1, Log line, current_milestone M3.
 - (review, resolved: re-issued in 0b72172, merged 1f0bfa8) T2.3 waited on a reviewer re-issue: implemented and green on its own verify, but the reviewer's oracle
       `tests/helpers/fuzzRules.ts:151-161` (used by `tests/fuzz/week*.test.ts`) asserts the old week-2+ rule (every
       row `done`, none `locked`), so `npm test` had 4 red fuzz tests. Reverted, not committed; patch kept at
