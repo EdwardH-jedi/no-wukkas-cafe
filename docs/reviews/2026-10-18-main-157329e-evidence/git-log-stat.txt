@@ -1,0 +1,140 @@
+commit 157329e0d78b1ddda6fbc18727fc9975ec30bd8d
+Merge: 0cae2cf 8fe52d1
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:27:05 2026 +1100
+
+    Merge fix/review-0cae2cf: review 2026-10-18 F4, 6 reviewer tests green
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 8fe52d14d3caf8ba5292c290c84da70756d9fb81
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:26:30 2026 +1100
+
+    docs(todo): review 2026-10-18 F4 as Phase 6.12, with evidence
+    
+    The six reviewer tests of the 0cae2cf review are green on d8be91a; unit
+    813/813 and E2E 28 passed (17 opt-in skipped) on b78c3a4. Also keeps
+    Edward's two clarifying lines in todo.md (E2E wait rule, T3.3 fixme).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md | 10 ++++++++++
+ todo.md      |  2 ++
+ 2 files changed, 12 insertions(+)
+
+commit b78c3a46b28d034f33ba1040f410655ed0715e01
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 21:52:52 2026 +1100
+
+    chore: ignore autopilot state
+
+ .gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit e6260b19a04a7b527ca131d9cd65e259acee8859
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 21:52:52 2026 +1100
+
+    chore: planning moved to todo.md
+
+ todo.md | 319 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 319 insertions(+)
+
+commit d8be91a0281dbf3da484035e160aa47cfa87bf28
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:36:21 2026 +1100
+
+    fix(audio): a line cancelled on a suspended context is cut, not faded on resume
+    
+    stopSource scheduled the 60 ms fade and the stop from ctx.currentTime,
+    which stands still while the context is suspended (paused, or the
+    browser stopped audio). A clip or segment line queued or playing there
+    and then cancelled (stopVoice, quit to title, a customer gone, a newer
+    line) still played the fade after resume: gain 0.98 / 0.5 / 0.02 / 0 at
+    1 / 30 / 59 / 80 ms (review 2026-10-18 F4). On a context that isn't
+    running nothing is heard, so the gain goes to 0 and the source stops at
+    that time; a running context keeps the 60 ms fade.
+    
+    Reviewer tests: tests/review/independentSuspendedCancellation.test.ts,
+    the six cancellation cases (quit to title, gone customer's segments,
+    stopVoice while paused and a newer line while browser-suspended, each
+    for a clip and for segments); its two uncancelled controls stay green.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/audio/voiceLines.ts | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+commit d0364e86db8462b6d1ec624f11373022083fee3e
+Merge: 0cae2cf 265410b
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:34:39 2026 +1100
+
+    Merge chore/review-main-0cae2cf: Codex review, 6 red reviewer tests
+
+commit 265410b48cd42cb54e8338e6d185288c7768e053
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:34:19 2026 +1100
+
+    test(review): Codex review of 6941c37..0cae2cf, 6 red reviewer tests
+    
+    Verdict FIX: P1 0, P2 1, P3 0 (docs/reviews/2026-10-18-main-0cae2cf.md).
+    F1-F3 from the previous review are accepted; their four tests are green.
+    
+    - F4 P2 src/audio/voiceLines.ts:95: cancelling a clip or segment line that
+      decoded while the AudioContext was suspended schedules its 60 ms fade and
+      stop from the frozen ctx.currentTime, so on resume the cancelled source
+      still plays at gain 0.98 / 0.5 / 0.02 at 1 / 30 / 59 ms. Reproduced via
+      stopVoice, a newer line, quit to title, and a customer gone mid-line.
+      New tests/review/independentSuspendedCancellation.test.ts: 6 red, 2 green
+      controls (an uncancelled suspended line starts once and stays connected).
+      Its TimelineParam keeps ramp times; the harness FakeParam applies ramps at
+      once, which hid this. Stop, disconnect or mute all satisfy it.
+    - tests/review/independentKeys.test.ts: 2 green controls added (reset during
+      capture; backdrop close then reopen). No existing expectation changed.
+    - docs/DECISIONS.md: Q7, captions vs patience when the browser suspends audio
+      while the game runs.
+    
+    Checked by the review session on this branch: typecheck 0, lint 0, npm test
+    exit 1 with 807 passed / 6 failed (813), the six being exactly the new red
+    tests, each failing on its output-path assertion; src/, scripts/,
+    tests/helpers/ identical to 0cae2cf.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/DECISIONS.md                                  |    3 +
+ .../additional-exits.json                          |   22 +
+ .../baseline-exits.json                            |   14 +
+ .../baseline-lint.txt                              |    6 +
+ .../baseline-test.txt                              |   18 +
+ .../baseline-typecheck.txt                         |    4 +
+ .../cancellation-exit.json                         |    4 +
+ .../cancellation-regressions-exit.json             |    4 +
+ .../cancellation-regressions.txt                   |  140 +++
+ .../codex-final-message.md                         |   20 +
+ .../determinism.txt                                |    0
+ .../final-exits.json                               |   14 +
+ .../final-lint.txt                                 |    6 +
+ .../final-test.txt                                 | 1026 ++++++++++++++++++++
+ .../final-typecheck.txt                            |    4 +
+ .../git-log-stat.txt                               |  164 ++++
+ .../ibis-day2.json                                 |    9 +
+ .../ibis-week-index-3.json                         |    9 +
+ .../ibis-week-shift-3.json                         |    9 +
+ .../2026-10-18-main-0cae2cf-evidence/inventory.py  |   25 +
+ .../2026-10-18-main-0cae2cf-evidence/inventory.txt |   30 +
+ .../large-source-files.json                        |   26 +
+ .../milestone-source.json                          |   32 +
+ .../production-diff.txt                            |  152 +++
+ .../release-check.txt                              |   35 +
+ .../review-typecheck-exit.json                     |    4 +
+ .../review-typecheck.txt                           |    4 +
+ .../rush-trace.json                                |   30 +
+ .../screenshot-metadata.json                       |  410 ++++++++
+ .../source-checks.json                             |   32 +
+ .../the-usual.json                                 |    8 +
+ docs/reviews/2026-10-18-main-0cae2cf.md            |  217 +++++
+ tests/review/independentKeys.test.ts               |   29 +
+ .../independentSuspendedCancellation.test.ts       |  204 ++++
+ 34 files changed, 2714 insertions(+)

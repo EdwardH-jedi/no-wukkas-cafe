@@ -98,41 +98,56 @@ jsdom.
       `main` fast-forward; `SendMessage` `review`: "main <sha>, unit N/N, e2e N passed, ready for review". Then
       cut `feat/m2-leftovers` from `main` for the rest of M2.
       verify: `git fetch -q origin && git merge-base --is-ancestor d8be91a origin/main && npx vitest run tests/review/independentSuspendedCancellation.test.ts tests/review/independentKeys.test.ts tests/review/independentPausedCaptions.test.ts`
-- [ ] T2.2 `RegularMemory.visits` is finally written: every serve to a regular in a week shift counts one visit
+- [x] T2.2 `RegularMemory.visits` is finally written: every serve to a regular in a week shift counts one visit
       (correct or not). Hook: `src/core/rush/serve.ts:93` calls `regularServed` (`src/core/rush/events.ts:182`)
       only when `result.correct`; add a visit counter beside it that runs on every serve to a regular, carried
       into the save by `finishShift` like affinity. Affinity rules unchanged. Nothing reads `visits` yet, so the
       event mix is unchanged: confirm the `npm run balance` first-try table is identical and say so in the
       commit body.
       verify: `npx vitest run tests/core/regularAffinity.test.ts` (new case: two visits, one wrong → visits 2, affinity 1; red before)
-- [ ] T2.3 Week 2+: `shiftRows` in `src/core/week/progress.ts` reports the current playable shift as `done` when it
+- [x] T2.3 Week 2+: `shiftRows` in `src/core/week/progress.ts` reports the current playable shift as `done` when it
       has a non-disaster best from week 1. Rule, every week: `index === save.shift` → `open`; `index < save.shift`
       → `done` (the week only advances on a pass); `index > save.shift` → `locked`, even when a week-1 best
       exists (`best` still carries the grade). The UI's `shiftCells` already uses `canPlay`; make the data agree.
       verify: `npx vitest run tests/core/week/progress.test.ts` (new case: week 2, shift 2 with week-1 bests → index 2 is `open`; red before)
-- [ ] T2.4 Phone HUD (390×844): the register panel (`src/ui/pos.ts`, styles in `src/ui/styles/rush.css`) no longer
+- [x] T2.4 Phone HUD (390×844): the register panel (`src/ui/pos.ts`, styles in `src/ui/styles/rush.css`) no longer
       covers the instruction line `#rinstr` while a customer is ordering. New spec `tests/e2e/phoneHud.spec.ts`
       (seed 7, Day 2, drive with `window.__trial` like `polishEvidence.spec.ts`): the two bounding boxes do not
       intersect, in the register state, at 390×844 and 375×667. Keep 1024×640 unchanged (assert the register's
       box there is as before, within 2 px).
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T2.5 Subtitle box (`#subs`, `src/ui/styles/base.css` large-text rules) at text size Medium and Large on a
+- [x] T2.5 Subtitle box (`#subs`, `src/ui/styles/base.css` large-text rules) at text size Medium and Large on a
       390-px phone stays inside the viewport (today 1 px over each side at Medium). Add the case to
       `tests/e2e/phoneHud.spec.ts`: for each text size, `#subs` left ≥ 0 and right ≤ 390 while a line shows.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts -g "subtitle"`
-- [ ] T2.6 Review-harness drift: `tests/review/harness.ts` lines ~390–430 copy boot's `setPaused` / `resumeAll` /
+- [x] T2.6 Review-harness drift: `tests/review/harness.ts` lines ~390–430 copy boot's `setPaused` / `resumeAll` /
       `replay`. Move those three into a small exported module under `src/app/` (B1 did the same for the frame in
       `src/app/frame.ts`), have `boot.ts` and the harness both import it, delete the copy and its "copied, not
       shared" comment. Behaviour identical: rushTrace's seven hashes unchanged
       (`node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts`).
       verify: `npx vitest run tests/review tests/core/rushTrace.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
-- [ ] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
+- [x] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
       on 2026-10-18; this file is the evidence archive, Evidence lines still get appended here") and a Notes line
       in `docs/MILESTONES.md` mapping its M1–M7 to this file's M2–M5. No other text changes.
       verify: `grep -q "Planning moved to" docs/TODO.md && grep -q "todo.md" docs/MILESTONES.md`
 
 Discovered:
-- (empty)
+- (Edward) T2.1 push pending: everything else in T2.1 is done (checks 813/813, E2E 28 passed, 6.12 in docs/TODO.md,
+      `main` = 157329e merged locally, `review` messaged) but `git push origin main` was denied by the auto-mode
+      permission classifier ("Modify Shared Resources"; AGENTS.md §2 also says never push to main directly).
+      Edward: push it yourself (`! git push origin main`) or allow it, then T2.1's verify can pass.
+- (review, resolved: re-issued in 0b72172, merged 1f0bfa8) T2.3 waited on a reviewer re-issue: implemented and green on its own verify, but the reviewer's oracle
+      `tests/helpers/fuzzRules.ts:151-161` (used by `tests/fuzz/week*.test.ts`) asserts the old week-2+ rule (every
+      row `done`, none `locked`), so `npm test` had 4 red fuzz tests. Reverted, not committed; patch kept at
+      `<scratchpad>/t2.3-shiftrows.patch` (session cd44c8ae). `review` asked to re-issue the rule 2026-10-18; when
+      it lands, `git apply` the patch (or redo: ~15 lines in `shiftRows`) and tick T2.3.
+- [x] T2.8 Review 157329e F5 (P2): merge the local branch `chore/review-main-157329e` (5b675ce, unpushed) `--no-ff`
+      into this branch, then in `src/audio/voiceLines.ts` (`stopSource`, ~lines 88-106) a cancel while the
+      AudioContext is not running also cuts every source still in the `fading` Set (stop/disconnect or mute), not
+      only the current one. Keep: uncancelled resume, onStart exactly once, no later segment starts; cutting
+      instead of fading is accepted. Report: `docs/reviews/2026-10-18-main-157329e.md`. Add `6.13` + Evidence to
+      `docs/TODO.md` Phase 6.
+      verify: `npx vitest run tests/review/independentSuspendedCancellation.test.ts tests/audio/manager.test.ts`
 
 Gate (Edward): answer `docs/DECISIONS.md` Q2 (delete 21 merged branches?), Q3 (stale renders in
 `public/assets/voice/`), Q4 (milk gauge target 68–74 °C on extra-hot tickets), Q5 (Day 1 / practice captions

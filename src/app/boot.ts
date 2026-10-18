@@ -6,14 +6,12 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAudioManager } from '../audio/manager';
 import { createMusic } from '../audio/music';
 import { createSfx } from '../audio/sfx';
-import { cancelPress } from '../core/barista';
 import { createClock } from '../core/clock';
 import { parseSeed } from '../core/rng';
 import { atCounter } from '../core/rush';
 import { browserStorage, createSaveStore } from '../core/save/storage';
 import { createTrial, emptyInput } from '../core/trial';
 import { GREETING } from '../data/ownerLines';
-import { spokenDuration } from '../data/voice';
 import { applyA11y } from '../ui/a11y';
 import { createAudioPanel } from '../ui/audioPanel';
 import { loadListenSettings, saveListenSettings } from '../ui/settings';
@@ -27,6 +25,7 @@ import type { App, LateFields } from './context';
 import { installDebugHandle } from './debug';
 import { createFrameDriver } from './frame';
 import { installInput } from './input';
+import { replayLast, resumeAll, setPaused } from './pause';
 import { createPracticeView, startPractice } from './practiceWiring';
 import { createRushView, rushAct, startDay2, startRush } from './rushWiring';
 import { makeIbis } from './shared';
@@ -97,47 +96,8 @@ export async function boot(): Promise<void> {
   window.addEventListener('pointerdown', () => audio.unlock(), { capture: true });
   window.addEventListener('keydown', () => audio.unlock(), { capture: true });
 
-  // These read `app` only when called (from DOM events, after boot() returns).
-  const setPaused = (p: boolean): void => {
-    if (app.mode === 'trial' && trial.phase === 'title' && p) return;
-    clock.paused = p;
-    app.hud.setPaused(p);
-    app.rushHud.setPaused(p);
-    app.practiceHud.setPaused(p);
-    audio.setPaused(p);
-    if (p) {
-      app.held = false;
-      app.spaceHeld = false;
-      // A button let go while paused must not read as a click on resume (it would stop the shot).
-      if (app.rush) cancelPress(app.rush.barista);
-    }
-  };
-  /** Unpause everything together: game clock, menus and audio (A1: switching days from the
-   *  pause menu used to leave the AudioContext suspended). */
-  const resumeAll = (): void => {
-    clock.paused = false;
-    app.hud.setPaused(false);
-    app.rushHud.setPaused(false);
-    app.practiceHud.setPaused(false);
-    audio.setPaused(false);
-  };
-  /** Say the last line again, with its subtitle once the voice starts (as rushView does). */
-  const replay = (): void => {
-    const l = audio.lastLine;
-    if (!l) return;
-    const secs = spokenDuration(l.speaker, l.text, l.delivery);
-    const mode = app.mode;
-    audio.replay({
-      onStart: () => {
-        if (mode === 'rush') app.rushHud.onReplay(l.speaker, l.text, secs);
-        else if (mode === 'practice') app.practiceHud.onReplay(l.text, secs);
-        else app.hud.onReplay(l.text, secs);
-      },
-      onStop: () => {
-        if (mode === 'rush') app.rushHud.onStop();
-      },
-    });
-  };
+  // These read `app` only when called (from DOM events, after boot() returns): src/app/pause.ts.
+  const replay = (): void => replayLast(app);
 
   const uiRoot = document.getElementById('ui') as HTMLElement;
   const ibisHint = document.createElement('div');
@@ -209,8 +169,8 @@ export async function boot(): Promise<void> {
       openShifts: () => openShifts(app),
       startPractice: () => startPractice(app),
     },
-    setPaused,
-    resumeAll,
+    setPaused: (p: boolean) => setPaused(app, p),
+    resumeAll: () => resumeAll(app),
     replay,
   };
   // The HUDs (LateFields) are assigned right below: their callbacks need `app` to exist first, and

@@ -146,20 +146,16 @@ export function progressBroken(
         best = x.summary.grade;
     if (r.best !== best || bestGrade(after, r.index) !== best)
       v.push(`row ${r.index} best ${r.best}`);
-    if (r.status === 'done' && (best === null || best === 'disaster'))
-      v.push(`row ${r.index} done without a pass`);
-    if (r.status === 'locked' && (after.week > 1 || r.index <= after.shift))
-      v.push(`row ${r.index} locked though reached`);
-    if (!played) continue;
-    const wantStatus =
-      after.week > 1
-        ? 'done'
-        : r.index < after.shift
-          ? 'done'
-          : r.index === after.shift
-            ? 'open'
-            : 'locked';
+    // Re-issued 2026-10-18 by the review session: in every week, and for any save, the row status
+    // follows canPlay (only the shift the week is on: earlier ones done, later ones locked;
+    // Edward, 2026-10-15, src/core/week/session.ts). The old week-2+ rule (every row done, none
+    // locked) encoded the defect docs/TODO.md Phase 4 called cosmetic. `best` still carries an
+    // earlier week's grade. A done row has a recorded pass only in a save reached by play: a
+    // positioned save (`played` false) skips the history before its shift.
+    const wantStatus = r.index < after.shift ? 'done' : r.index === after.shift ? 'open' : 'locked';
     if (r.status !== wantStatus) v.push(`row ${r.index} ${r.status}, want ${wantStatus}`);
+    if (played && r.status === 'done' && (best === null || best === 'disaster'))
+      v.push(`row ${r.index} done without a pass`);
   }
   return v;
 }

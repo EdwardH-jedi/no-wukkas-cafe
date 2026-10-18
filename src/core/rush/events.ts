@@ -59,6 +59,7 @@ export function createShiftEvents(seed: number, week: RushWeek | null): ShiftEve
     wasteCents: 0,
     reputation: 0,
     affinity: {},
+    visits: {},
     refused: 0,
   };
   if (week && !week.endless) {
@@ -176,11 +177,15 @@ function apply(r: Rush, c: RushCustomer | null, o: EventOutcome, gazLine: boolea
   }
 }
 
-/** A correct drink served to a regular in a week shift: they remember the player a bit better
- *  (+1 affinity, saved by finishShift at the end of the shift). This is how affinity accrues, so
- *  THE_USUAL (USUAL_AFFINITY) can come up from a fresh save; THE_USUAL itself adds one more. */
-export function regularServed(r: Rush, c: RushCustomer): void {
+/** A regular took a drink away in a week shift: one more visit, and if it was right they remember
+ *  the player a bit better (+1 affinity); both are saved by finishShift at the end of the shift.
+ *  This is how affinity accrues, so THE_USUAL (USUAL_AFFINITY) can come up from a fresh save;
+ *  THE_USUAL itself adds one more. */
+export function regularServed(r: Rush, c: RushCustomer, correct: boolean): void {
   if (!r.week || !(REGULAR_IDS as readonly string[]).includes(c.def.id)) return;
+  const v = r.shiftEvents.visits;
+  v[c.def.id] = (v[c.def.id] ?? 0) + 1;
+  if (!correct) return;
   const a = r.shiftEvents.affinity;
   a[c.def.id] = (a[c.def.id] ?? 0) + 1;
 }

@@ -68,21 +68,18 @@ export interface ShiftRow {
   best: ShiftGrade | null;
 }
 
-/** What the shift-select screen lists. */
+/** What the shift-select screen lists. In every week the save's shift is the open one (only it is
+ *  playable, see canPlay), the ones before it are done (the week moves on only on a pass) and the
+ *  ones after it are locked; `best` still carries an earlier week's grade. */
 export function shiftRows(save: Save): ShiftRow[] {
-  return WEEK.map((d) => {
-    const best = bestGrade(save, d.index);
-    const reached = save.week > 1 || d.index <= save.shift;
-    const passed = best !== null && best !== 'disaster';
-    return {
-      index: d.index,
-      day: d.day,
-      customers: d.customers,
-      unlocks: [...d.unlocks],
-      status: !reached ? 'locked' : passed ? 'done' : 'open',
-      best,
-    };
-  });
+  return WEEK.map((d) => ({
+    index: d.index,
+    day: d.day,
+    customers: d.customers,
+    unlocks: [...d.unlocks],
+    status: d.index < save.shift ? 'done' : d.index === save.shift ? 'open' : 'locked',
+    best: bestGrade(save, d.index),
+  }));
 }
 
 /** Endless Rush opens once the first shift has been passed. */

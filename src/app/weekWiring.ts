@@ -101,7 +101,7 @@ export function onShiftSummary(
 ): void {
   if (!r.week || r.week.endless) return;
   // Autosave: the receipt and tips, the next shift on a pass. Endless isn't a week shift.
-  finishShift(app.store, ev.summary, r.shiftEvents.affinity);
+  finishShift(app.store, ev.summary, r.shiftEvents.affinity, r.shiftEvents.visits);
   app.cooldowns = { ...r.shiftEvents.log.lastShift };
   app.lastEvent = r.shiftEvents.log.lastId;
 }

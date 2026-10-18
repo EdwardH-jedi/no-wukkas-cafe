@@ -3,7 +3,7 @@
 // the trial's frame) with no-op world/HUD objects, driven by boot.ts's own frame function
 // (src/app/frame.ts createFrameDriver; boot() itself needs WebGL). Network and browser speech are
 // fakes whose timing the test controls in harness seconds, so a clip can 404, or arrive 10 s or
-// 25 s late, deterministically. Still copied, not shared: boot's setPaused/resumeAll/replay below.
+// 25 s late, deterministically. Pause, resume and replay are boot's own too (src/app/pause.ts).
 
 import * as THREE from 'three';
 import { vi } from 'vitest';
@@ -13,6 +13,7 @@ import { createSfx, type Sfx } from '../../src/audio/sfx';
 import type { App } from '../../src/app/context';
 import { createFrameDriver } from '../../src/app/frame';
 import { startDay2, startRush } from '../../src/app/rushWiring';
+import { replayLast, resumeAll, setPaused } from '../../src/app/pause';
 import { makeIbis } from '../../src/app/shared';
 import { createTelemetry } from '../../src/app/telemetry';
 import { toTitle } from '../../src/app/title';
@@ -387,21 +388,6 @@ export function createHarness(o: HarnessOptions = {}): Harness {
   };
   const owner = { onSay: noop, update: noop, head: new THREE.Vector3(0, 1.7, -1) };
 
-  // boot.ts: setPaused / resumeAll / replay, as written there.
-  const setPaused = (p: boolean): void => {
-    if (app.mode === 'trial' && trial.phase === 'title' && p) return;
-    clock.paused = p;
-    audio.setPaused(p);
-    if (p) {
-      app.held = false;
-      app.spaceHeld = false;
-    }
-  };
-  const resumeAll = (): void => {
-    clock.paused = false;
-    audio.setPaused(false);
-  };
-
   let appRef: App | null = null;
   const partial = {
     params: new URLSearchParams(o.query ?? 'ibis=0'),
@@ -483,9 +469,9 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       openShifts: noop,
       startPractice: noop,
     },
-    setPaused,
-    resumeAll,
-    replay: () => void audio.replay(),
+    setPaused: (p: boolean) => setPaused(app, p),
+    resumeAll: () => resumeAll(app),
+    replay: () => replayLast(app),
   };
   const app = partial as unknown as App;
   appRef = app;

@@ -1,0 +1,27 @@
+[
+  {
+    "command": "git log --stat 0cae2cf..157329e",
+    "exit": 0,
+    "output": "git-log-stat.txt"
+  },
+  {
+    "command": "git diff 0cae2cf 157329e -- src",
+    "exit": 0,
+    "output": "production-diff.txt"
+  },
+  {
+    "command": "grep -rnE Math\\.random|Date\\.now|setTimeout src/sim src/core",
+    "exit": 1,
+    "output": "determinism.txt"
+  },
+  {
+    "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+    "exit": 0,
+    "output": "rush-trace.json"
+  },
+  {
+    "command": "npm run release:check",
+    "exit": 1,
+    "output": "release-check.txt"
+  }
+]

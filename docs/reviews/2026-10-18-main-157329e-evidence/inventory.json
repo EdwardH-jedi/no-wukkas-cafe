@@ -1,0 +1,47 @@
+{
+  "large_source_files": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 931
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14908
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894
+    }
+  ],
+  "trace_json_equal": true,
+  "unchanged_profiles": [
+    "normal",
+    "hard",
+    "easy",
+    "aids",
+    "misheard",
+    "hurry",
+    "idle"
+  ],
+  "hashes": {
+    "normal": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+    "hard": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+    "easy": "f4065c58885c4122e4c40ca5652e86af91f89348",
+    "aids": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+    "misheard": "9cb0c12941833c576d9f797b618c271d93ddf528",
+    "hurry": "d975462d381d8b61e57311db657d280d7a302bff",
+    "idle": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f"
+  }
+}

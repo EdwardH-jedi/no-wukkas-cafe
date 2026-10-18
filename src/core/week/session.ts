@@ -56,18 +56,21 @@ export function endlessFor(save: Save): RushWeek {
 }
 
 /** Autosave after a week shift: the receipt and tips, the next shift on a pass (nextShift), and
- *  what the shift's events changed in how the regulars feel about the player. One write. */
+ *  what the shift changed in how the regulars feel about the player and how often they came.
+ *  One write. */
 export function finishShift(
   store: SaveStore,
   report: ShiftSummary,
   affinity: Partial<Record<CustomerId, number>> = {},
+  visits: Partial<Record<CustomerId, number>> = {},
 ): Save {
   const s = nextShift(store.load(), report);
   for (const id of REGULAR_IDS) {
-    const d = affinity[id];
-    if (!d) continue;
+    const d = affinity[id] ?? 0;
+    const v = visits[id] ?? 0;
+    if (!d && !v) continue;
     const m = s.regulars[id] ?? { visits: 0, affinity: 0 };
-    s.regulars[id] = { ...m, affinity: m.affinity + d };
+    s.regulars[id] = { ...m, visits: m.visits + v, affinity: m.affinity + d };
   }
   store.save(s);
   return s;

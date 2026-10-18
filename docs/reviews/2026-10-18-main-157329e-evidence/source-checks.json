@@ -1,0 +1,57 @@
+[
+  {
+    "command": "git rev-parse HEAD main",
+    "exit": 0,
+    "output": "157329e0d78b1ddda6fbc18727fc9975ec30bd8d\n157329e0d78b1ddda6fbc18727fc9975ec30bd8d\n"
+  },
+  {
+    "command": "git cat-file -e main:docs/reviews/2026-10-18-main-0cae2cf.md",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "git cat-file -e main:docs/reviews/2026-10-18-main-157329e.md",
+    "exit": 128,
+    "output": "fatal: path 'docs/reviews/2026-10-18-main-157329e.md' does not exist in 'main'\n"
+  },
+  {
+    "command": "git show main:docs/DECISIONS.md",
+    "exit": 0,
+    "output": "# Decisions queue\n\nAgents append questions here; Edward answers in place with one line. Agents read this file before asking anything.\nAn unanswered question is not a blocker: mark the item `[!]` and move on. Format: `- [ ] Qn (date, who asks): question` \u2192 Edward replaces `[ ]` with `[x]` and adds `\u2192 answer`.\n\n## Answered\n- [x] AFFINITY_RULE (2026-10-17): correct serve to a regular adds +1 affinity \u2192 yes\n- [x] SEGMENT_GATE (2026-10-17): placeholder segment fails the build \u2192 yes\n- [x] Q1 (2026-10-18, impl): the inverted reviewer test in 7586668 \u2014 keep, or have review re-issue it? \u2192 review re-issues it, asserting AFFINITY_RULE\n\n## Open (from RUN3_REPORT, 2026-10-18)\n- [ ] Q2 (impl): delete the 21 merged local branches listed in RUN3_REPORT? (TODO rule says never delete branches)\n- [ ] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build \u2014 delete them?\n- [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68\u201374 \u00b0C)?\n- [ ] Q5 (impl): Day 1 trial and practice captions get the rush's \"start with the voice\" rule?\n- [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?\n\n## Open (independent review of 0cae2cf, 2026-10-18)\n- [ ] Q7 (review): when the browser suspends audio while the game keeps running, should captions keep waiting for audio while patience drains (current behaviour), show immediately as a fallback, or should the game pause until sound resumes?\n"
+  },
+  {
+    "command": "git log --oneline -- tests/review/independentFuzz.test.ts",
+    "exit": 0,
+    "output": "28eb1b4 test(review): re-issue the THE_USUAL test as an AFFINITY_RULE test (DECISIONS Q1)\n7586668 feat(events): a correct serve to a regular adds +1 affinity (THE_USUAL reachable)\n8333240 test(review): record independent main 1a54a00 verification\n"
+  },
+  {
+    "command": "git diff --exit-code d0364e8 265410b",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "git diff --exit-code 157329e 8fe52d1",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "git diff --exit-code 0cae2cf 157329e -- src/sim src/core src/data tests/helpers",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "git diff --exit-code 157329e -- src scripts tests/helpers",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "git check-ignore -v .autopilot .autopilot.count STATUS.md",
+    "exit": 0,
+    "output": ".gitignore:20:.autopilot\t.autopilot\n.gitignore:21:.autopilot.count\t.autopilot.count\n.gitignore:22:STATUS.md\tSTATUS.md\n"
+  },
+  {
+    "command": "node --version",
+    "exit": 0,
+    "output": "v26.7.0\n"
+  }
+]

@@ -174,6 +174,7 @@ export function playWeek(
         store,
         last ? { ...report, grade: 'poor' } : report,
         r.shiftEvents.affinity,
+        r.shiftEvents.visits,
       );
       const bought = shop(after);
       store.save(bought);

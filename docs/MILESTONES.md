@@ -17,3 +17,10 @@ Sessions: `impl` (src/), `review` (tests/, docs/; runs Codex), `plan` (run once 
 
 Rules: a milestone starts only when its HUMAN gate is cleared or explicitly waived in DECISIONS.md. The review session
 never starts a milestone; it only closes one.
+
+Notes: `todo.md` (repo root) now holds the plan and numbers its milestones differently. Mapping from this file:
+M0 (review fixes 2026-10-17) and M1 (Codex re-review) are todo.md M2 (T2.0, T2.1); M2 (playtest-ready build) is
+todo.md M3; M3 (playtest #1) is the Edward gate after todo.md M3 (docs/playtests/<date>.md, then a replan); M4 (fixes
+from playtest) are the tasks that replan adds to todo.md M5; M5 (voice: licensed clips), M6 (ship prep) and M7 (first
+public web release) are todo.md M5 (its Gate lines) plus M3's deploy. The local leaderboard is todo.md M4 and has no
+row here.
