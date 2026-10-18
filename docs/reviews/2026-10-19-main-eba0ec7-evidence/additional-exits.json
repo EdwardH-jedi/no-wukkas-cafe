@@ -1,0 +1,37 @@
+[
+  {
+    "command": "npx vitest run tests/sim/scores.test.ts tests/core/save/scores.test.ts tests/app/scores.test.ts tests/ui/scores.test.ts tests/ui/screens.test.ts tests/ui/shiftReport.test.ts tests/sim/owner.test.ts tests/data/voice.test.ts tests/review/independentM3.test.ts --reporter=verbose",
+    "exit": 0,
+    "log": "m4-units.txt"
+  },
+  {
+    "command": "npx vitest run tests/review/audioGateBuild.test.ts tests/review/independentGate.test.ts --reporter=verbose",
+    "exit": 0,
+    "log": "audio-gate.txt"
+  },
+  {
+    "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+    "exit": 0,
+    "log": "rush-trace.txt"
+  },
+  {
+    "command": "npm run voices:check",
+    "exit": 0,
+    "log": "voices-check.txt"
+  },
+  {
+    "command": "npm run release:check",
+    "exit": 1,
+    "log": "release-check.txt"
+  },
+  {
+    "command": "grep -rnE 'Math\\.random|Date\\.now|setTimeout' src/sim src/core",
+    "exit": 1,
+    "log": "determinism.txt"
+  },
+  {
+    "command": "git log --stat 7192583..eba0ec7",
+    "exit": 0,
+    "log": "git-log-stat.txt"
+  }
+]

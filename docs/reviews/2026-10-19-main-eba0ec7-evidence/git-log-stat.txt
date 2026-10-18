@@ -1,0 +1,388 @@
+commit eba0ec7156e16da0095b39272e9ed540b9d74dc3
+Merge: 0591eea 813629c
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:51:50 2026 +1100
+
+    Merge fix/m4-gate: week.spec wall-clock budget
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 813629c71f921b48a5616cf52e866c83046f974b
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:51:50 2026 +1100
+
+    M4: gate fixes (week.spec Monday wait survives a busy machine)
+    
+    test(e2e): week.spec 'a fresh save plays Monday…' waited 240 s of wall
+    clock at 4x for the report; headless software WebGL at load ~19 needed
+    3.6-3.7 min alone and timed out in the full suite at both the M3 and M4
+    gates. Wait 480 s, test timeout 600 s; the game time waited for is
+    unchanged. Re-run alone: passed (3.7m).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/e2e/week.spec.ts | 6 +++++-
+ todo.md                | 6 ++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+commit 0591eeaa32d17981a4c40fa4d3a9f24c8a5de587
+Merge: 9c5eb58 4a98ea4
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:15:22 2026 +1100
+
+    Merge feat/m4-leaderboard: M4 (local Scores board, report best line, Gaz's new best)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 4a98ea4ff03dbea207cd5795671aa5c0415ade23
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:15:22 2026 +1100
+
+    docs(agents): the e2e suite is 36 run + 17 skipped (phone HUD, draw-call specs)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 4f7ae365d9c297f93f410d714c51aeefd992c800
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:15:04 2026 +1100
+
+    M4 T4.7: the week UI e2e checks the report's best line and the Scores screen
+    
+    test(e2e): weekUi "title → the week → … → next shift": the first
+    Monday's report says "Best so far: <grade>, N served"; after Tuesday's
+    intro, pause → Title screen → Scores shows Monday's row with the
+    report's grade, served and tips (en-AU dollars) and Tuesday "Not played
+    yet"; screenshot 10-scores; Esc closes it and focus returns to the
+    title's Scores button. Run: `E2E_PORT=5202 npx playwright test
+    tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts`
+    3 passed (6.9m); the capture shows "Excellent · 6 served · $9.80".
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/e2e/weekUi.spec.ts | 25 +++++++++++++++++++++++++
+ todo.md                  |  2 +-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+commit f3d85b3636df4c9795e041692877b48cb03036c4
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:07:32 2026 +1100
+
+    M4 T4.6: placeholder clip for Gaz's new-best line
+    
+    chore(voice): `npm run voices -- --only gaz` rendered 1/1 (macOS
+    placeholder, gitignored voice-cache/); manifest +1 (rush.end.newBest,
+    gaz:ac7effbf, 3.563 s). The run also re-measured three Priya clips
+    (duration / meanDb drift of a non-deterministic voice: rejected.flatWhite,
+    complaint.lukewarm, answer.milk.almond); those were put back from HEAD,
+    as in Phase 1.5, so the manifest diff is the one new entry. No audio
+    committed. AWAITING_RENDER emptied; the owner test now accepts a clip or
+    a pending render.
+    
+    Verify: `npm run voices:check` exit 0 (597 clips, 0 errors); npm test
+    110 files / 890 (voicesCheck green again).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/data/voice/manifest.json | 25 +++++++++++++++++++++++++
+ src/data/voice/script.ts     |  2 +-
+ tests/sim/owner.test.ts      |  6 ++++--
+ todo.md                      |  2 +-
+ 4 files changed, 31 insertions(+), 4 deletions(-)
+
+commit 09c6d648e12ab3c3b3e022911ab2b9e33998bf96
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:04:08 2026 +1100
+
+    M4 T4.5: Gaz notices a new best at the end of a week shift
+    
+    feat(core): RushWeek.best carries the shift's best on the Scores board
+    before it (set by app/weekWiring startShift from the scores store; null
+    on a first play). At wrap-up, sim/owner endLines(grade, newBest) gives
+    the grade's line and then 'rush.end.newBest' when sim/scores
+    summaryBeats(summary, best) says the shift beat it on the board's own
+    ranking; never in Day 2, Endless or a first play. Copy (no counts):
+    "And that's your best go at this shift yet. Don't let it go to your
+    head." The report keeps the grade's line as Gaz's quote.
+    
+    Tests: tests/sim/owner.test.ts +4 (endLines, summaryBeats, the copy and
+    AWAITING_RENDER, and a headless Monday: said with a lower best, not with
+    a higher one, a null best, no best, Day 2 or Endless). rushTrace 7/7
+    unchanged (Day 2 never has a best).
+    
+    Known red until T4.6: tests/scripts/voicesCheck.test.ts reports the new
+    line's placeholder clip as missing (AWAITING_RENDER doesn't cover
+    voices:check); T4.6 renders it and empties AWAITING_RENDER.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/weekWiring.ts    | 10 +++++-
+ src/core/rush/machine.ts |  9 ++++--
+ src/core/rush/state.ts   |  4 +++
+ src/data/ownerLines.ts   |  6 ++++
+ src/data/voice/script.ts |  2 +-
+ src/sim/owner.ts         |  7 +++++
+ src/sim/scores.ts        | 13 ++++++++
+ src/ui/rushHud.ts        |  2 +-
+ tests/sim/owner.test.ts  | 82 ++++++++++++++++++++++++++++++++++++++++++++++++
+ todo.md                  |  2 +-
+ 10 files changed, 131 insertions(+), 6 deletions(-)
+
+commit 87398f0e50048ea8db1dfef1106d8b41925d6877
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 01:00:51 2026 +1100
+
+    M4 T4.4: a Scores screen from the title
+    
+    feat(ui): "Scores" on the title (between practice and settings) opens
+    ui/screens/scores.ts over it, like shift select: each week shift's best
+    per difficulty played (grade, served, tips; "Not played yet"), Day 2's
+    best, and the Endless Rush top ten (served, tips), or "No scores yet".
+    "Clear scores" asks twice like "Clear log". Modal dialog with the menu
+    keys (Tab loop, Esc = Back), focus starts on Back and returns to the
+    title's Scores button. Styles share the shift-select scroller and card
+    (shop.css). Wiring: app/scores.ts openScores.
+    
+    Tests: tests/ui/scores.test.ts (3, markup from stored scores, cents as
+    dollars), tests/ui/screens.test.ts (title order incl. Scores). Browser
+    check (scratch spec, seeded scores): 1024x640 title still doesn't
+    scroll; Scores at 390x844 and 1024x640 has no horizontal scroll; Esc
+    closes and focuses the title's Scores button.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/scores.ts        |  18 +++++++++
+ src/app/title.ts         |   6 ++-
+ src/ui/screens/scores.ts | 103 +++++++++++++++++++++++++++++++++++++++++++++++
+ src/ui/screens/title.ts  |   8 +++-
+ src/ui/styles/shop.css   |  58 ++++++++++++++++++++++++--
+ tests/ui/scores.test.ts  |  60 +++++++++++++++++++++++++++
+ tests/ui/screens.test.ts |   9 +++++
+ todo.md                  |   2 +-
+ 8 files changed, 255 insertions(+), 9 deletions(-)
+
+commit f082fdf209222b9e7f36bf74d10c03f08adac4f7
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:57:29 2026 +1100
+
+    M4 T4.3: every finished shift goes on its board before the report draws
+    
+    feat(app): App gains `scores` (createScoresStore(browserStorage())) and
+    `scoreNote`. Core pushes the summary phase (which draws the report)
+    before the summary event, so rushView records the score on the phase
+    event itself, before rushHud.onPhase: app/scores.ts recordScore builds
+    the entry from r.summary (mode from r.week: day2 / week / endless; the
+    save's week and shift for week mode; seed, difficulty, wall-clock time),
+    notes whether it beats a best already on the board, then puts it. The
+    report (ShiftReportCallbacks.score) shows one line under the stamp:
+    "New best!" or "Best so far: Good, 6 served" (Endless: served and tips),
+    from the pure bestLine(). An intro clears the note. ScoreNote lives in
+    sim/scores.ts so ui/ doesn't import app/. The review harness builds App
+    by hand, so it gets a memory store.
+    
+    Tests: tests/app/scores.test.ts (3: one entry per shift, first is not a
+    "new best", worse leaves the best, better is new; week/Endless boards;
+    no report no entry), tests/ui/shiftReport.test.ts (3). npm test 109
+    files / 882; rushTrace 7/7 unchanged.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/boot.ts               |  3 +++
+ src/app/context.ts            |  6 +++++
+ src/app/rushView.ts           |  5 ++++
+ src/app/scores.ts             | 26 +++++++++++++++++++++
+ src/app/weekWiring.ts         |  1 +
+ src/sim/scores.ts             |  7 ++++++
+ src/ui/screens/shiftReport.ts | 18 ++++++++++++++-
+ src/ui/styles/screens.css     |  9 ++++++++
+ tests/app/scores.test.ts      | 53 +++++++++++++++++++++++++++++++++++++++++++
+ tests/review/harness.ts       |  3 +++
+ tests/ui/shiftReport.test.ts  | 43 +++++++++++++++++++++++++++++++++++
+ todo.md                       |  2 +-
+ 12 files changed, 174 insertions(+), 2 deletions(-)
+
+commit dd50d53831f593f40904e556cb4065d1f2877908
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:54:49 2026 +1100
+
+    M4 T4.2: the leaderboard on disk (nwc.scores.v1, outside the save)
+    
+    feat(core): src/core/save/scores.ts createScoresStore, modelled on the
+    telemetry store: read through parseScores, put = insert + write and
+    returns the rank (null past the top ten), clear, memoryOnly when
+    storage is missing or throws. Own localStorage key nwc.scores.v1, so
+    the save and its migrations are untouched.
+    
+    Tests tests/core/save/scores.test.ts (5). Written by the lite subagent;
+    read and verified before commit.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/core/save/scores.ts        |  55 ++++++++++++++++++++++
+ tests/core/save/scores.test.ts | 101 +++++++++++++++++++++++++++++++++++++++++
+ todo.md                        |   2 +-
+ 3 files changed, 157 insertions(+), 1 deletion(-)
+
+commit 3158f1a90df2423b451ca2caa2f87c1c96df3cdb
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:53:37 2026 +1100
+
+    M4 T4.1: pure leaderboard ranking (src/sim/scores.ts)
+    
+    feat(sim): ScoreEntry (mode, week, shiftIndex, seed, difficulty, grade,
+    served, walk-outs, tips in cents, `at` passed in); one board per week
+    shift + difficulty (any week), per Endless difficulty and per Day 2
+    difficulty. Week/Day 2 rank by grade, served, tips, fewer walk-outs;
+    Endless by served, then tips. insert() keeps ten, puts a tie after the
+    earlier entry, returns the rank (null if it didn't make it) and never
+    changes its input. bestOf, isNewBest (only when a best exists to beat),
+    fromSummary (served = ordersCompleted), parseScores (corrupt / other
+    version -> empty; non-entries dropped). Versioned SCORES_VERSION 1, kept
+    outside the save (no migration).
+    
+    Tests tests/sim/scores.test.ts (10).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/sim/scores.ts        | 160 +++++++++++++++++++++++++++++++++++++++++++
+ tests/sim/scores.test.ts | 174 +++++++++++++++++++++++++++++++++++++++++++++++
+ todo.md                  |   2 +-
+ 3 files changed, 335 insertions(+), 1 deletion(-)
+
+commit 9c5eb58939aa361e2ff1bff250f983407c93019f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:51:17 2026 +1100
+
+    chore(todo): M3 done, current milestone M4
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ todo.md | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+commit af981d17eebc4f38fe8c531477cfbccb9fbbe58b
+Merge: 7192583 8320cad
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:51:13 2026 +1100
+
+    Merge fix/review-7192583: review 2026-10-19 F1-F2, 7 reviewer tests green
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 8320cad5dda3847d45ea1fd1351d91906f8b6168
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:50:54 2026 +1100
+
+    review fixes: playtest summary keeps the newest copy and validates records (F1, F2)
+    
+    fix(sim): review 2026-10-19 of 7192583.
+    F1: summarise() deduped records by id with the last file winning, so an
+    older checkpoint of a run given after its finished export undid it (6
+    served -> 0, finished -> quit). A duplicated record now keeps the copy
+    with the latest endedAt (ties: the later file), whatever the order.
+    F2: readExport() cast `records` without checking them, so unknown kinds
+    were silently dropped (CLI exit 0, wrong session count) and null,
+    incomplete or non-numeric records reached the sums. Every record and
+    every field the summary reads (kind, id, session, endedAt, ending; a
+    shift's mode, counts, walk-outs by stage, accuracy, pardons, seconds,
+    visits, quit; a trial's verdict and quit) is checked first; the first
+    bad one is named ("record 0 (x): "served" is missing or not what an
+    export holds") and the CLI exits 1 with no table.
+    
+    Acceptance: tests/review/independentM3.test.ts 7 red -> 9/9 green, no
+    reviewer test edited; tests/sim/telemetrySummary.test.ts 8/8 (the
+    committed fixture passes validation). npm test 105 files / 861 tests.
+    docs/TODO.md 6.14, 6.15; todo.md M3 Discovered T3.8 + the week.spec
+    load flake.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md                |  9 +++++
+ src/sim/telemetrySummary.ts | 91 +++++++++++++++++++++++++++++++++++++++++++--
+ todo.md                     |  8 +++-
+ 3 files changed, 104 insertions(+), 4 deletions(-)
+
+commit d47d315caf32e881ef2f3e76630b4536be91c6c2
+Merge: 7192583 97b879b
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:48:42 2026 +1100
+
+    Merge chore/review-main-7192583: review of 7192583 (F1, F2; 7 red)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 97b879bb11faf3150849f16d7dc7e9184afc0218
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:48:27 2026 +1100
+
+    test(review): Codex review of 3aa0828..7192583, 7 red reviewer tests
+    
+    Independent review (Codex, REVIEW_PROMPT_TEMPLATE, BASE 3aa0828) of the
+    M3 merge. P1 0, P2 2, P3 0:
+    - F1 telemetrySummary.ts: a record exported twice keeps whichever file
+      came last, so an older checkpoint given after the finished export
+      undoes it (6 served -> 0, finished -> quit). 2 red.
+    - F2 telemetrySummary.ts: readExport takes any records under a version-1
+      envelope: unknown kinds silently dropped (CLI exit 0, 3 sessions for
+      2), null / incomplete / string counts reach summarise. 5 red.
+    2 green controls (pooled medians, dedupe without mutation).
+    T3.1, T3.2, T3.4, T3.5, T3.7 and Done-when PASS; T3.3 UNVERIFIED in the
+    sandbox (Chromium blocked; the harness E2E is in the evidence dir).
+    Baseline 852/852; determinism 0 hits; rushTrace 7/7; balance CSV same.
+    
+    Codex could not write .git from its sandbox, so this harness commits its
+    files: tests/review/independentM3.test.ts, the report, the evidence
+    (incl. its own patch and commit record of the same files).
+    `npx vitest run tests/review/independentM3.test.ts` on 7192583: 7 failed
+    / 2 passed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../additional-exits.json                          |   34 +
+ .../artifact-checks.json                           |    9 +
+ .../audio-gate.txt                                 |   58 +
+ .../balance-base-exit.json                         |   12 +
+ .../balance-base.csv                               |  651 +++
+ .../balance-base.txt                               |   23 +
+ .../balance-comparison.json                        |   11 +
+ .../balance-current.csv                            |  651 +++
+ .../balance-current.txt                            |   23 +
+ .../baseline-exits.json                            |   14 +
+ .../baseline-lint.txt                              |    6 +
+ .../baseline-test.txt                              |   18 +
+ .../baseline-typecheck.txt                         |    4 +
+ .../browser-attempt.txt                            |   21 +
+ .../browser-exit.json                              |    5 +
+ .../browser-launch.txt                             |   50 +
+ .../build-budget.txt                               |   46 +
+ .../build-clean.txt                                |   45 +
+ .../build-exits.json                               |   17 +
+ .../codex-commit.json                              |   22 +
+ .../codex-commit.patch                             | 4621 ++++++++++++++++++++
+ .../codex-last-message.md                          |   30 +
+ .../deploy-dry.txt                                 |   46 +
+ .../determinism.txt                                |    0
+ .../docs-verify.txt                                |    0
+ .../environment-exits.json                         |   23 +
+ .../final-test-exit.json                           |    4 +
+ .../final-test.txt                                 | 1257 ++++++
+ .../git-log-stat.txt                               |  290 ++
+ .../2026-10-19-main-7192583-evidence/handoff.json  |   13 +
+ .../harness-e2e-full.txt                           |  120 +
+ .../harness-e2e-week68-rerun.txt                   |    9 +
+ .../independent-m3.txt                             |  293 ++
+ .../lint-review.txt                                |    6 +
+ .../release-check.txt                              |   35 +
+ .../remote-connectivity.txt                        |    1 +
+ .../review-exits.json                              |   18 +
+ .../rush-trace.txt                                 |   30 +
+ .../2026-10-19-main-7192583-evidence/scratch.json  |    4 +
+ .../source-inventory.json                          |   29 +
+ .../2026-10-19-main-7192583-evidence/summary.txt   |   34 +
+ .../task-units.txt                                 |   31 +
+ .../typecheck-review.txt                           |    4 +
+ docs/reviews/2026-10-19-main-7192583.md            |  198 +
+ tests/review/independentM3.test.ts                 |  136 +
+ 45 files changed, 8952 insertions(+)

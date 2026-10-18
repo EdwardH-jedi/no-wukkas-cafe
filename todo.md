@@ -283,6 +283,14 @@ Discovered:
 - (M4 gate) `tests/e2e/week.spec.ts:68` timed out again in the full run (35 passed / 1 failed, load ~19); its
       wall-clock wait went from 240 s to 480 s (test timeout 600 s); alone it passes in 3.7 min. A game-time
       budget would be sturdier (replan item).
+- [x] T4.8 Gate review (Codex, 7192583..eba0ec7, `docs/reviews/2026-10-19-main-eba0ec7.md`): F1 a restart after a
+      difficulty change refreshes Gaz's best (`app/scores.ts weekBest`); F2 `parseScores` own-key grades and entries
+      on their own board; F3 the scores store keeps its last good read. 5 red reviewer tests → green; docs/TODO.md
+      6.16–6.18.
+      verify: `npx vitest run tests/review/independentM4.test.ts`
+- (replan) F3's flaw is also in `src/core/save/telemetry.ts` and `src/core/save/storage.ts` (the save): after a good
+      read, a later `getItem` failure returns the empty memory copy (a fresh save for the rest of the session). Not
+      flagged by the review; same fix (keep the last good read), each with a regression test.
 
 Gate (Edward): online leaderboard yes/no (needs a backend; out of scope for the static site).
 Done when: `npx vitest run tests/sim/scores.test.ts tests/core/save/scores.test.ts tests/app/scores.test.ts tests/ui/scores.test.ts`

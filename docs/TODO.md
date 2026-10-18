@@ -486,6 +486,13 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       so an older checkpoint given after the finished export no longer undoes it (`src/sim/telemetrySummary.ts`).
 - [x] 6.15 P2 F2 `readExport` checks every record and every field the summary reads; an unknown kind, a null or
       incomplete record or a non-count is refused with the record and field named (CLI exit 1, no table).
+- Review 2026-10-19 of eba0ec7 (`docs/reviews/2026-10-19-main-eba0ec7.md`, branch `chore/review-main-eba0ec7`, 5 red):
+- [x] 6.16 P2 F1 a restart after a difficulty change gives Gaz that difficulty's best (`app/scores.ts weekBest`,
+      called by `startShift` and the restart callback in `app/rushWiring.ts`), so he and the report use one board.
+- [x] 6.17 P2 F2 `parseScores` takes a grade only as an own key of the grade table (not "constructor") and drops
+      an entry filed under another board's key (`src/sim/scores.ts`).
+- [x] 6.18 P2 F3 the scores store keeps its last good read when storage starts failing, so a worse run never
+      becomes the session's best (`src/core/save/scores.ts`).
 - [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
   - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
@@ -541,6 +548,12 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     reviewer tests in `tests/review/independentM3.test.ts` red before (7 failed / 2 passed on 7192583), green after;
     no reviewer test edited. `npm run typecheck && npm run lint && npm test` → exit 0, `Test Files  105 passed (105)` ·
     `Tests  861 passed (861)`.
+  - 6.16–6.18 (todo.md M4 gate, on `fix/review-eba0ec7` after merging `chore/review-main-eba0ec7` f92492f): the five
+    reviewer tests in `tests/review/independentM4.test.ts` red before (5 failed / 4 passed on eba0ec7), green after;
+    no reviewer test edited. `npm run typecheck && npm run lint && npm test` → exit 0, `Test Files  111 passed (111)` ·
+    `Tests  899 passed (899)`; rushTrace 7/7. `E2E_PORT=5202 npx playwright test tests/e2e/week.spec.ts
+    tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts` → `8 passed (11.0m)`. Full E2E on the
+    M4 merge 0591eea: 35 passed / 1 failed (week.spec.ts:68 wall-clock budget, widened in eba0ec7).
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).

@@ -151,7 +151,7 @@ function isEntry(x: unknown): x is ScoreEntry {
     Number.isInteger(e.seed) &&
     DIFFICULTIES.includes(e.difficulty) &&
     typeof e.grade === 'string' &&
-    e.grade in GRADE_RANK &&
+    Object.hasOwn(GRADE_RANK, e.grade) &&
     isCount(e.served) &&
     isCount(e.walkouts) &&
     isCount(e.tipsCents) &&
@@ -170,7 +170,9 @@ export function parseScores(raw: string | null | undefined): Scores {
     const boards: Record<string, ScoreEntry[]> = {};
     for (const [k, v] of Object.entries(d.boards as Record<string, unknown>)) {
       if (!Array.isArray(v)) continue;
-      const kept = v.filter(isEntry).slice(0, SCORES_CAP);
+      // Only entries that belong on this board (review 2026-10-19 F2: an Easy result filed under
+      // Hard must never stand as Hard's best).
+      const kept = v.filter((e) => isEntry(e) && boardKey(e) === k).slice(0, SCORES_CAP);
       if (kept.length > 0) boards[k] = kept;
     }
     return { version: SCORES_VERSION, boards };

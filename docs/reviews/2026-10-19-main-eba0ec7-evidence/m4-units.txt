@@ -1,0 +1,75 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/no-wukkas-cafe
+
+ ✓ tests/sim/scores.test.ts > boardKey > one board per week shift and difficulty, one per Endless and Day 2 difficulty 2ms
+ ✓ tests/sim/scores.test.ts > insert > a week shift ranks by grade, then served, then tips, then fewer walk-outs 1ms
+ ✓ tests/sim/scores.test.ts > insert > Endless ranks by served, then tips; the grade does not count 0ms
+ ✓ tests/sim/scores.test.ts > insert > a tie keeps the earlier entry first 0ms
+ ✓ tests/sim/scores.test.ts > insert > keeps the best 10; one that doesn't make it has no rank 1ms
+ ✓ tests/sim/scores.test.ts > insert > boards are apart, and the input is never changed 0ms
+ ✓ tests/sim/scores.test.ts > isNewBest / bestOf > only when it beats a best that already exists 0ms
+ ✓ tests/sim/scores.test.ts > fromSummary > takes served, walk-outs, tips and the grade from the report 0ms
+ ✓ tests/sim/scores.test.ts > parseScores > round-trips, and reads anything corrupt or of another version as empty 0ms
+ ✓ tests/sim/scores.test.ts > parseScores > drops entries that are not scores, keeping the rest of the board 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > writes its own key, versioned, and reads it back 3ms
+ ✓ tests/core/save/scores.test.ts > scores store > corrupt JSON reads as empty scores, and the next put starts it over 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > put returns 0 for the first entry and null for one that misses the top ten 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > Clear empties it 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > blocked or full storage falls back to memory for the session (never throws) 1ms
+ ✓ tests/data/voice.test.ts > voice ids > are stable across runs and platforms 1ms
+ ✓ tests/data/voice.test.ts > voice ids > differ by speaker, words and delivery 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > expands every template: no {placeholders} left to record 2ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > has a voice profile for every speaker 2ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > every line in the script has a recording in the manifest (or is awaiting its render) 1ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > lines awaiting a render are real script keys (no typos hiding a missing clip) 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > manifest entries carry the required fields and look like speech 12ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > placeholder clips are labelled as placeholders 2ms
+ ✓ tests/data/voice.test.ts > spoken duration > holds the floor for the clip plus a beat 0ms
+ ✓ tests/data/voice.test.ts > spoken duration > falls back to reading time without a clip 0ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > shows the diagnosis's own fix for a blob, never the generic pull-through line 1ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > matches each art fault to its own finding, and keeps tips for the rest 0ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > falls back to the fault tip when there is no diagnosis 0ms
+ ✓ tests/ui/screens.test.ts > title screen > has a Scores button between practice and settings 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > nothing yet says so 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > lists each week shift's best for a difficulty played, and the shifts not played 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > Day 2's best, and Endless as a ranked top ten of served and tips 1ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > says "New best!" for a shift that beat the board 1ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > otherwise the best so far: grade and served for a shift, served and tips for Endless 0ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > no note (nothing recorded), no line 0ms
+ ✓ tests/app/scores.test.ts > recordScore > writes one entry per finished shift; the first is the best but not a "new best" 1401ms
+ ✓ tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers 1390ms
+ ✓ tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point 1ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total 1ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary 91ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > pools every register wait, rather than averaging per-shift medians 0ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > deduplicates identical exports without mutating either input 0ms
+ ✓ tests/app/scores.test.ts > recordScore > a worse run leaves the best alone; a better one is a new best 1059ms
+ ✓ tests/app/scores.test.ts > recordScore > a week shift and Endless go on their own boards; no report, no entry 1756ms
+ ✓ tests/sim/owner.test.ts > pickLine > never repeats a line until the pool is exhausted 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > does not immediately repeat the last line after starting over 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > respects cooldowns 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gets crankier as frustration builds 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > is deterministic for a seed 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > returns null for unknown keys 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gives longer lines more reading time 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > includes the lines from the brief 1ms
+ ✓ tests/sim/owner.test.ts > dialogue content > every pool has at least one line and no empty text 2ms
+ ✓ tests/sim/owner.test.ts > dialogue content > uses Australian spelling 3ms
+ ✓ tests/sim/owner.test.ts > dialogue content > gives every Day 2 customer a full set of lines 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > has a coaching tip for every fault 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > the grade line, then "new best" only when there is one 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > a new best beats the board on its own ranking (grade, served, tips, walk-outs) 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > the line is count-agnostic Australian copy, with a clip or waiting for one 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless 8623ms
+
+ Test Files  9 passed (9)
+      Tests  63 passed (63)
+   Start at  01:52:42
+   Duration  9.24s (tests 81%, transform 16%, import 3%)
+

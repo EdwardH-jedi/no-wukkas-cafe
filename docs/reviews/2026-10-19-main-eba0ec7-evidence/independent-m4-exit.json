@@ -1,0 +1,4 @@
+{
+  "command": "npx vitest run tests/review/independentM4.test.ts --reporter=verbose",
+  "exit": 1
+}
