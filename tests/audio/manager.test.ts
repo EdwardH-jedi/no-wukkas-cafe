@@ -414,6 +414,32 @@ describe('a clip slow to load', () => {
       expect(log).toEqual(['stop']);
     });
 
+    it('a clip landing while paused starts its subtitle on resume; one stopped meanwhile never does', async () => {
+      const { m, ctx } = await started();
+      const a = hooks();
+      m.say(ORDER, a.h);
+      m.setPaused(true);
+      land();
+      await flush();
+      wait(m, ctx, 1);
+      expect(ctx.started).toHaveLength(1); // queued on the suspended context, not yet heard
+      expect(a.log).toEqual([]);
+      m.setPaused(false);
+      await flush();
+      wait(m, ctx, 0.01);
+      expect(a.log).toEqual(['start']);
+      const b = hooks();
+      m.say(ORDER, b.h);
+      m.setPaused(true);
+      land();
+      await flush();
+      m.stopVoice();
+      m.setPaused(false);
+      await flush();
+      wait(m, ctx, 0.01);
+      expect(b.log).toEqual(['stop']);
+    });
+
     it('a newer line stops the one before (playing or not), then starts on its own', async () => {
       const { m, ctx } = await started();
       const a = hooks();
