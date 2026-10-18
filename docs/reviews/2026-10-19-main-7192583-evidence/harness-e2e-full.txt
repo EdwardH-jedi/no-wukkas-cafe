@@ -1,0 +1,120 @@
+
+> no-wukkas-cafe@0.1.0 test:e2e
+> playwright test --config tests/review/playwright.ipv6.config.ts
+
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 53 tests using 1 worker
+
+  -   1 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 390x844
+  -   2 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 390x844
+  -   3 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 390x844
+  -   4 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 390x844
+  -   5 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 390x844
+  -   6 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 1024x640
+  -   7 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 1024x640
+  -   8 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 1024x640
+  -   9 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 1024x640
+  -  10 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 1024x640
+first line: "Oi. You the trial? You're late. Well, you're not, but I like saying it." decoded 5.002 s (manifest 5.002), played 5.003 s, peak RMS 0.241
+  ✓  11 [chromium] › tests/e2e/audio.spec.ts:38:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work (12.7s)
+  ✓  12 [chromium] › tests/e2e/audio.spec.ts:124:1 › a voice clip that fails to load is reported, not silent (4.2s)
+owner: "Oi. You the trial? You're late. Well, yo…" 5.002 s, voice RMS 0.238, master RMS 0.236, sim moved on 0.595 s after the clip (game time 0.208 s behind audio over the line); output {"state":"running","sampleRate":48000,"baseLatency":0.005333333333333333,"outputLatency":0.024,"destinationChannels":2,"sinkId":""}
+  ✓  13 [chromium] › tests/e2e/audioSmoke.spec.ts:105:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active (15.9s)
+order: "Morning. Long black, cheers, mate. Big d…" 3.823 s; register opened 0.805 s after the clip (game time 0.302 s behind audio)
+  ✓  14 [chromium] › tests/e2e/audioSmoke.spec.ts:154:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause (27.6s)
+  ✓  15 [chromium] › tests/e2e/audioSmoke.spec.ts:237:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on (15.3s)
+  ✓  16 [chromium] › tests/e2e/audioState.spec.ts:89:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running (10.5s)
+  ✓  17 [chromium] › tests/e2e/audioState.spec.ts:114:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks (12.8s)
+  ✓  18 [chromium] › tests/e2e/audioState.spec.ts:147:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard (17.1s)
+  ✓  19 [chromium] › tests/e2e/audioState.spec.ts:191:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume (10.5s)
+  ✓  20 [chromium] › tests/e2e/casting.spec.ts:156:1 › casting page: identity cards, missing assets, waveforms, one take at a time, decisions (6.9s)
+  ✓  21 [chromium] › tests/e2e/ibis.spec.ts:45:3 › bin chicken › three presses of I see it out; Gaz reacts; draw calls stay in budget (39.0s)
+  ✓  22 [chromium] › tests/e2e/ibis.spec.ts:66:3 › bin chicken › clicking the bird shoos it too (30.1s)
+perfect pour: {"art":0.891660409512679,"findings":["textbook"],"rows":{"Heart":82,"Symmetry":100,"Centred":100,"Crisp":100,"White":35},"verdict":"Proper heart"}
+  ✓  23 [chromium] › tests/e2e/latteRegression.spec.ts:136:1 › latte regression: a recorded perfect pour keeps its score band (1.2m)
+duck under an order 0.28, under chat 0.55
+  ✓  24 [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes (20.8s)
+opening: -20.1 LUFS, -4.1 dBTP, DC 0.00000; worst case -0.5 dBTP, 0 clipped
+rush: -20.5 LUFS, -2.5 dBTP, DC 0.00000; worst case -0.6 dBTP, 0 clipped
+afternoon: -20.3 LUFS, -1.4 dBTP, DC 0.00001; worst case -0.8 dBTP, 0 clipped
+  ✓  25 [chromium] › tests/e2e/listening.spec.ts:176:1 › the three moods: no clipping, no DC offset, even loudness, orders above the music (7.8s)
+opening: master RMS peak with only music audible 0.1151
+rush: music ducked to 0.28 under Dazza's order, then recovered
+  ✓  26 [chromium] › tests/e2e/music.spec.ts:25:1 › music plays, follows the day and ducks under an order (24.6s)
+perf 1024x640: 114 draw calls, 3 in the café, median frame 66.6 ms
+  ✓  27 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 1024x640 (57.9s)
+perf 390x844: 102 draw calls, 3 in the café, median frame 33.3 ms
+  ✓  28 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 390x844 (35.0s)
+  ✓  29 [chromium] › tests/e2e/phoneHud.spec.ts:96:5 › phone HUD › register clear of the instruction at 390x844 (14.5s)
+  ✓  30 [chromium] › tests/e2e/phoneHud.spec.ts:96:5 › phone HUD › register clear of the instruction at 375x667 (14.4s)
+  ✓  31 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size s (390x844) (28.0s)
+  ✓  32 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size m (390x844) (28.2s)
+  ✓  33 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size l (390x844) (28.4s)
+  ✓  34 [chromium] › tests/e2e/phoneHud.spec.ts:137:3 › phone HUD › the desktop register keeps its place at 1024x640 (14.9s)
+  -  35 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 390x844
+  -  36 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 390x844
+  -  37 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 390x844
+  -  38 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 1024x640
+  -  39 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 1024x640
+  -  40 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 1024x640
+  -  41 [chromium] › tests/e2e/polishEvidence.spec.ts:458:3 › Phase 1.5 evidence › 1.5.4 the closing line after a whole Day 2 (1024x640, the report again at 390x844)
+  ✓  42 [chromium] › tests/e2e/practice.spec.ts:112:1 › latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz (1.6m)
+  ✓  43 [chromium] › tests/e2e/rush.spec.ts:316:1 › Day 2 morning rush: listening at the register, a misheard ticket, walk-outs, report (5.8m)
+  ✓  44 [chromium] › tests/e2e/segments.spec.ts:45:1 › a generated order plays two or more segment clips as one line (14.4s)
+  ✓  45 [chromium] › tests/e2e/trial.spec.ts:234:1 › Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart (3.4m)
+  ✘  46 [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved (4.6m)
+  ✓  47 [chromium] › tests/e2e/week.spec.ts:116:3 › the week › a save on Wednesday opens Wednesday only, and Endless Rush (6.9s)
+  ✓  48 [chromium] › tests/e2e/week.spec.ts:140:3 › the week › Day 2 from the title is still Day 2 (4.1s)
+  ✓  49 [chromium] › tests/e2e/week.spec.ts:148:3 › the week › the title lists every mode; Endless Rush unlocks on the way back (4.9s)
+  ✓  50 [chromium] › tests/e2e/week.spec.ts:196:3 › the week › the shop sells what the till covers and says why it refuses the rest (4.6s)
+  ✓  51 [chromium] › tests/e2e/weekUi.spec.ts:77:3 › the week UI › title → the week → shop → a passed Monday → next shift (2.9m)
+  ✓  52 [chromium] › tests/e2e/weekUi.spec.ts:212:3 › the week UI › Day 2: the bot plays the whole morning rush to its report (3.8m)
+  ✓  53 [chromium] › tests/e2e/weekUi.spec.ts:244:3 › the week UI › a shift event is answered with the number key 1 (12.6s)
+
+
+  1) [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('#rsummary')
+    Expected substring: "WEEK 1 · MONDAY · SHIFT REPORT"
+    Received string:    ""
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toContainText" locator('#rsummary') with timeout 20000ms
+      - waiting for locator('#rsummary')
+        44 × locator resolved to <div class="hide" id="rsummary"></div>
+           - unexpected value ""
+
+
+       98 |     }
+       99 |     await setScale(page, 1);
+    > 100 |     await expect(page.locator('#rsummary')).toContainText('WEEK 1 · MONDAY · SHIFT REPORT');
+          |                                             ^
+      101 |     await snap(page, '02-monday-report');
+      102 |     const save = (await dbg(page)).save;
+      103 |     expect(save.reports).toEqual([expect.objectContaining({ shift: 0 })]);
+        at /Users/edwardhwang/Desktop/no-wukkas-cafe/tests/e2e/week.spec.ts:100:45
+
+    Error Context: tests/review/.e2e-results/week-the-week-a-fresh-save-83276-ek-mode-the-report-is-saved-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/week-the-week-a-fresh-save-83276-ek-mode-the-report-is-saved-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/week-the-week-a-fresh-save-83276-ek-mode-the-report-is-saved-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: [chromium] › tests/e2e/weekUi.spec.ts (7.0m)
+  Slow test file: [chromium] › tests/e2e/rush.spec.ts (5.8m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved 
+  17 skipped
+  35 passed (32.2m)
+e2e exit=1

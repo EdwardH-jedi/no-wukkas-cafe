@@ -1,0 +1,22 @@
+{
+  "reviewedHead": "7192583c4a86c0c958db1fb83a9a80344947a466",
+  "branch": "chore/review-main-7192583",
+  "originalGitWrite": "blocked: git add exit 128, index.lock Operation not permitted",
+  "commitRepository": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+  "originalCheckoutCommitInstalled": false,
+  "redTests": 7,
+  "greenTests": 854,
+  "totalTests": 861,
+  "newReviewerTests": 9,
+  "baselineTests": 852,
+  "report": "docs/reviews/2026-10-19-main-7192583.md",
+  "commitSha": "2ad836fcab5aefe1ad926fd6b7f2802c294a91ee",
+  "patch": "/Users/edwardhwang/Desktop/no-wukkas-cafe/docs/reviews/2026-10-19-main-7192583.patch",
+  "patchSha256": "4f92f43639949abd2676939099340a31c7346513c6a1a835bfef06a41e6e0bb2",
+  "commitParent": "7192583c4a86c0c958db1fb83a9a80344947a466",
+  "patchCheckExit": 0,
+  "patchCheckOutput": "",
+  "reportAndTestMatchCommit": true,
+  "productionFilesUnchanged": true,
+  "temporaryCloneUntrackedOnly": "node_modules dependency symlink"
+}

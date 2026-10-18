@@ -1,0 +1,293 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/no-wukkas-cafe
+
+ × tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers 870ms
+   → expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+ × tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point 2ms
+   → expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise 1ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise 0ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise 0ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total 1ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary 80ms
+   → expected +0 to be 1 // Object.is equality
+   → expected '' to contain '/var/folders/55/tmvqlq7s0zbfb7z81wqhm…'
+   → expected '## Playtest summary\n\n| | |\n| --- |…' to be '' // Object.is equality
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > pools every register wait, rather than averaging per-shift medians 0ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > deduplicates identical exports without mutating either input 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers
+AssertionError: expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+
+- Expected
++ Received
+
+@@ -1,46 +1,53 @@
+  {
+    "accuracy": {
+      "drink": {
+-       "correct": 6,
+-       "total": 6,
++       "correct": 0,
++       "total": 0,
+      },
+      "heart": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+      "milk": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+      "temp": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+    },
+-   "customers": 6,
+-   "finished": 1,
++   "customers": 0,
++   "finished": 0,
+    "handedBack": 0,
+    "logs": 2,
+-   "ordersHeard": 6,
++   "ordersHeard": 0,
+    "pardons": {
+      "questions": 0,
+      "repeats": 0,
+      "replays": 0,
+    },
+-   "pardonsPerOrder": 0,
+-   "quits": [],
++   "pardonsPerOrder": null,
++   "quits": [
++     {
++       "ending": "closed",
++       "id": "2026-10-19T00:00:00.000Z#1",
++       "kind": "shift",
++       "where": "day2: intro at 0 s, station idle, 0 served, 0 in the café",
++     },
++   ],
+    "refused": 0,
+    "registerWait": {
+-     "max": 0,
+-     "median": 0,
++     "max": null,
++     "median": null,
+    },
+    "serveSeconds": {
+-     "max": 39.6,
+-     "median": 31.2,
++     "max": null,
++     "median": null,
+    },
+-   "served": 6,
++   "served": 0,
+    "sessions": 1,
+    "shifts": 1,
+    "shiftsByMode": {
+      "day2": 1,
+      "endless": 0,
+
+ ❯ tests/review/independentM3.test.ts:50:31
+     48|       [latest, old],
+     49|     ]) {
+     50|       expect(summarise(logs)).toEqual({ ...expected, logs: 2 });
+       |                               ^
+     51|     }
+     52|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point
+AssertionError: expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+
+- Expected
++ Received
+
+@@ -28,14 +28,14 @@
+      "replays": 0,
+    },
+    "pardonsPerOrder": null,
+    "quits": [
+      {
+-       "ending": "title",
++       "ending": "closed",
+        "id": "2026-10-19T00:00:00.000Z#1",
+        "kind": "trial",
+-       "where": "steam, attempt 1",
++       "where": "title, attempt 1",
+      },
+    ],
+    "refused": 0,
+    "registerWait": {
+      "max": null,
+
+ ❯ tests/review/independentM3.test.ts:72:38
+     70|       where: 'steam, attempt 1',
+     71|     });
+     72|     expect(summarise([latest, old])).toEqual({ ...summarise([latest]),…
+       |                                      ^
+     73|   });
+     74| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise
+AssertionError: expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "error": Any<String>,
+-   "ok": false,
++   "ok": true,
+  }
+
+ ❯ tests/review/independentM3.test.ts:83:20
+     81|   ])('rejects %s instead of silently dropping it or crashing in summar…
+     82|     const result = readExport(JSON.stringify({ version: 1, records: [r…
+     83|     expect(result).toMatchObject({ ok: false, error: expect.any(String…
+       |                    ^
+     84|     if (!result.ok) expect(result.error.length).toBeGreaterThan(0);
+     85|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total
+AssertionError: expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "error": Any<String>,
+-   "ok": false,
++   "ok": true,
+  }
+
+ ❯ tests/review/independentM3.test.ts:92:76
+     90|     // Simulate a malformed JSON export, without weakening the product…
+     91|     const corrupt: unknown = { ...shift, served: 'not-a-count' };
+     92|     expect(readExport(JSON.stringify({ version: 1, records: [corrupt] …
+       |                                                                            ^
+     93|       ok: false,
+     94|       error: expect.any(String),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/review/independentM3.test.ts:110:29
+    108|       },
+    109|     );
+    110|     expect.soft(run.status).toBe(1);
+       |                             ^
+    111|     expect.soft(run.stderr).toContain(bad);
+    112|     expect.soft(run.stdout).toBe('');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected '' to contain '/var/folders/55/tmvqlq7s0zbfb7z81wqhm…'
+
+- Expected
++ Received
+
+- /var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-m3-LK5vIP/invalid-record.json
+
+ ❯ tests/review/independentM3.test.ts:111:29
+    109|     );
+    110|     expect.soft(run.status).toBe(1);
+    111|     expect.soft(run.stderr).toContain(bad);
+       |                             ^
+    112|     expect.soft(run.stdout).toBe('');
+    113|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected '## Playtest summary\n\n| | |\n| --- |…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ ## Playtest summary
++
++ | | |
++ | --- | --- |
++ | Logs · sessions | 2 · 3 |
++ | Day 1 trials | 2: hired 0, almost 1, failed 0, disaster 0, unfinished 1 |
++ | Shifts | 3 (Day 2 2, week 1, Endless 0), 2 to the report |
++ | Customers · served · walk-outs · shown the door | 14 · 8 · 6 · 0 |
++ | Walk-outs by stage | queue 0 · register 6 · ordering 0 · ticket 0 |
++ | Drinks handed back | 0 |
++ | Pardons (replays · repeats · questions) | 0 · 0 · 2 |
++ | Pardons per order | 0.2 (10 orders heard) |
++ | Register wait (median · max) | 0 s · 0 s |
++ | Time to serve (median · max) | 54.6 s · 68.8 s |
++
++ ### Accuracy per field (what was rung up vs. what was said)
++
++ | Field | Right | Heard | |
++ | --- | --- | --- | --- |
++ | drink | 9 | 9 | 100 % |
++ | milk | 3 | 3 | 100 % |
++ | temp | 3 | 3 | 100 % |
++ | heart | 3 | 3 | 100 % |
++
++ ### Quit points
++
++ | Record | Ending | Where |
++ | --- | --- | --- |
++ | trial 2026-10-18T10:00:00.000Z#1 | title | steam, attempt 1 |
++ | shift 2026-10-18T10:00:00.000Z#2 | title | week shift 1: service at 89 s, station shot, 2 served, 2 in the café |
++
+
+ ❯ tests/review/independentM3.test.ts:112:29
+    110|     expect.soft(run.status).toBe(1);
+    111|     expect.soft(run.stderr).toContain(bad);
+    112|     expect.soft(run.stdout).toBe('');
+       |                             ^
+    113|   });
+    114| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 2 passed (9)
+   Start at  00:41:53
+   Duration  1.28s (tests 80%, transform 16%, import 4%)
+

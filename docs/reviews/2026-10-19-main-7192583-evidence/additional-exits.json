@@ -1,0 +1,34 @@
+[
+  {
+    "command": "git log --stat 3aa0828..7192583",
+    "exit": 0
+  },
+  {
+    "command": "grep -rnE 'Math\\.random|Date\\.now|setTimeout' src/sim src/core",
+    "exit": 1
+  },
+  {
+    "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+    "exit": 0
+  },
+  {
+    "command": "npx vitest run tests/scripts/indexMeta.test.ts tests/scripts/deploy.test.ts tests/sim/telemetrySummary.test.ts --reporter=verbose",
+    "exit": 0
+  },
+  {
+    "command": "npm run playtest:summary -- tests/fixtures/telemetry/sample.json",
+    "exit": 0
+  },
+  {
+    "command": "test -f docs/playtests/README.md && test -f docs/playtests/TEMPLATE.md && grep -q \"docs/playtests\" README.md && grep -q \"DEVLOG\" README.md",
+    "exit": 0
+  },
+  {
+    "command": "npm run release:check",
+    "exit": 1
+  },
+  {
+    "command": "npm run balance -- --out docs/reviews/2026-10-19-main-7192583-evidence/balance-current.csv",
+    "exit": 0
+  }
+]

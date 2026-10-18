@@ -218,7 +218,13 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       verify: `grep -q "docs/playtests" README.md && grep -q "DEVLOG" README.md`
 
 Discovered:
-- (empty)
+- [x] T3.8 Gate review (Codex, 3aa0828..7192583, `docs/reviews/2026-10-19-main-7192583.md`): F1 a duplicated record
+      keeps the copy that closed last; F2 `readExport` validates every record. 7 red reviewer tests → green
+      (`tests/review/independentM3.test.ts`); docs/TODO.md 6.14, 6.15.
+      verify: `npx vitest run tests/review/independentM3.test.ts tests/sim/telemetrySummary.test.ts`
+- (flaky, not a regression) `tests/e2e/week.spec.ts:68` waits 240 s of wall clock at 4x for Monday's report; at
+      load average ~19 (Finder + Spotlight busy) it timed out in the M3 gate run (35 passed / 1 failed) and passed
+      alone in 3.6 min. Give it a game-time budget instead of a wall-clock one (a replan item; not done tonight).
 
 Gate (Edward): `npm run deploy -- --push` (or pick another host / a domain); privacy-friendly analytics
 provider (none wired until chosen); iPhone Safari + mid-range Android pass (audio unlock, pinch, key remap,

@@ -1,0 +1,35 @@
+
+> no-wukkas-cafe@0.1.0 release:check
+> node scripts/voices-check.ts --release && npm run build
+
+  placeholder-in-release: beryl:07bdba99 placeholder audio cannot ship
+  placeholder-in-release: beryl:1e17e9b5 placeholder audio cannot ship
+  placeholder-in-release: beryl:2a5cf9c0 placeholder audio cannot ship
+  placeholder-in-release: beryl:2eaff6a9 placeholder audio cannot ship
+  placeholder-in-release: beryl:3fea3475 placeholder audio cannot ship
+  placeholder-in-release: beryl:4578ffbc placeholder audio cannot ship
+  placeholder-in-release: beryl:5c509233 placeholder audio cannot ship
+  placeholder-in-release: beryl:5e930ae6 placeholder audio cannot ship
+  placeholder-in-release: beryl:67d6b180 placeholder audio cannot ship
+  placeholder-in-release: beryl:6a9eb1e8 placeholder audio cannot ship
+  placeholder-in-release: beryl:6ad44db0 placeholder audio cannot ship
+  placeholder-in-release: beryl:6b93255a placeholder audio cannot ship
+  placeholder-in-release: beryl:770fb69e placeholder audio cannot ship
+  placeholder-in-release: beryl:83641850 placeholder audio cannot ship
+  placeholder-in-release: beryl:8e27654d placeholder audio cannot ship
+  placeholder-in-release: beryl:93ddd5a3 placeholder audio cannot ship
+  placeholder-in-release: beryl:98b13f14 placeholder audio cannot ship
+  placeholder-in-release: beryl:9a02f04a placeholder audio cannot ship
+  placeholder-in-release: beryl:a1c6124b placeholder audio cannot ship
+  placeholder-in-release: beryl:a2cbb977 placeholder audio cannot ship
+  placeholder-in-release: beryl:aa29fb14 placeholder audio cannot ship
+  placeholder-in-release: beryl:af96fc19 placeholder audio cannot ship
+  placeholder-in-release: beryl:b410b824 placeholder audio cannot ship
+  placeholder-in-release: beryl:b506987d placeholder audio cannot ship
+  placeholder-in-release: beryl:ba2b8706 placeholder audio cannot ship
+voices:check (release): 596 clips, status "placeholder", 1050 error(s), 5 warning(s)
+  error pitch-shift: 453
+  error placeholder-in-release: 596
+  error shared-voice: 1
+  warn orphan-file: 5
+voices:check segments: 0/181 segments have a release clip in src/data/voice/segments.manifest.json, 0 error(s), 0 warning(s)

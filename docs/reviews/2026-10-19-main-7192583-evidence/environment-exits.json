@@ -1,0 +1,23 @@
+[
+  {
+    "command": [
+      "git",
+      "ls-remote",
+      "--heads",
+      "origin",
+      "gh-pages"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+    "exit": 128
+  },
+  {
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import { chromium } from '@playwright/test'; const b = await chromium.launch(); await b.close();"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+    "exit": 1
+  }
+]

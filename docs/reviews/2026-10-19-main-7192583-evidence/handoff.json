@@ -1,0 +1,13 @@
+{
+  "reviewedHead": "7192583c4a86c0c958db1fb83a9a80344947a466",
+  "branch": "chore/review-main-7192583",
+  "originalGitWrite": "blocked: git add exit 128, index.lock Operation not permitted",
+  "commitRepository": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+  "originalCheckoutCommitInstalled": false,
+  "redTests": 7,
+  "greenTests": 854,
+  "totalTests": 861,
+  "newReviewerTests": 9,
+  "baselineTests": 852,
+  "report": "docs/reviews/2026-10-19-main-7192583.md"
+}

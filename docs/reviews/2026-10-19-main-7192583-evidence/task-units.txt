@@ -1,0 +1,31 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/no-wukkas-cafe
+
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > is titled after the game, not Day 1 1ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > describes the week of morning rushes 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > has Open Graph and Twitter card tags 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > ships a 1200×630 PNG under 300 kB as public/og.png 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > reads a version-1 export 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > refuses other versions, other JSON and broken files, saying why 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > adds up every shift and trial record 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > counts a record once when the same log is exported twice 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > no records: zeros and dashes, not NaN 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > summaryMarkdown > a table per part, with the numbers from the summary 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > prints the summary of the files given 82ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > stops on a file of another version, naming it 80ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a dry run commits nothing to the remote and says where it would go 453ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > --push replaces gh-pages with the build and .nojekyll 499ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a custom domain writes CNAME and serves from / 455ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > the same build twice pushes nothing new 624ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > refuses without a gh-pages branch on the remote 314ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > GitHub remotes publish under /<repo>/ on <owner>.github.io 212ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > a domain serves from / at that domain; a local remote has no address 233ms
+
+ Test Files  3 passed (3)
+      Tests  19 passed (19)
+   Start at  00:40:18
+   Duration  2.90s (tests 96%, transform 3%, import 1%)
+

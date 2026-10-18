@@ -1,0 +1,18 @@
+[
+  {
+    "command": "npx vitest run tests/review/independentM3.test.ts --reporter=verbose",
+    "exit": 1
+  },
+  {
+    "command": "npx vitest run tests/review/audioGateBuild.test.ts tests/review/independentGate.test.ts --reporter=verbose",
+    "exit": 0
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0
+  }
+]

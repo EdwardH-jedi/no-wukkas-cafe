@@ -1,0 +1,1257 @@
+
+> no-wukkas-cafe@0.1.0 test
+> vitest run --reporter=verbose
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/no-wukkas-cafe
+
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > is a dry run by default; --allow-paid without credentials is refused; nothing is written 276ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > a good barista gets through every step and is hired 1096ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > the owner demonstrates before the first attempt only 436ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > a competent barista serves all six, correctly, with patience to spare 1684ms
+ × tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers 1659ms
+   → expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+ × tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point 7ms
+   → expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise 2ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise 0ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise 0ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total 1ms
+   → expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+ × tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary 84ms
+   → expected +0 to be 1 // Object.is equality
+   → expected '' to contain '/var/folders/55/tmvqlq7s0zbfb7z81wqhm…'
+   → expected '## Playtest summary\n\n| | |\n| --- |…' to be '' // Object.is equality
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > pools every register wait, rather than averaging per-shift medians 1ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > deduplicates identical exports without mutating either input 1ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > pouring on the counter every time is three invalid attempts and a disaster 470ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 1: dazza.1, priya.1, beryl.1, mei.1, jiwoo.1, karen.1 2209ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > gets crankier with repeated failure 338ms
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > stages each clip with its provenance, resumes, and never promotes the stand-in 2667ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > a barista 10 s slower per drink loses at most one customer 1446ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > Day 2 (no week) never asks for one 3600ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > every line key the trial uses exists 1549ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 2: dazza.2, priya.2, beryl.2, mei.2, jiwoo.2, karen.2 1794ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > an idle barista loses everyone, and Gaz notices 31ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > a wrong drink is handed back, stays on the pass, and Gaz calls it out 880ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-day2: {"seeds":500,"scheduled":134,"appeared":134,"honks":634,"orders":3000,"answers":3000,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird 4346ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > handing back the wrong milk > a week shift raises no wrong-milk event for a hand-back that sends them out 948ms
+ ✓ tests/review/eventsDeterministic.test.ts > S6: the bird and shift events are deterministic > Day 2 with the bird: the same seed and inputs give the same shift, event for event 4972ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 3: dazza.3, priya.3, beryl.3, mei.3, jiwoo.3, karen.3 1337ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > handing back the wrong milk > each hand-back costs patience; never tops it back up 382ms
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > promotes licensed staging into release clips the validator accepts 2693ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > handing back the wrong milk > three wrong-milk hand-backs use up the last of their patience: they walk out 417ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > the first shift of the week has none (cap 0) 2580ms
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > imports an actor's takes only with a signed licence, as recorded clips 645ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > handing back the wrong milk > spamming Serve on a nearly-gone customer does not hold them at the counter 411ms
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > promotes licensed staged segments into the segment manifest, never the stand-in 562ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > every line Gaz says has a voice recording, and holds the floor for it 3057ms
+ ✓ tests/scripts/voicesRender.test.ts > npm run voices:render > imports an actor's segment takes (<speaker>/segments/<id>.wav) as recorded segment clips 444ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 4: dazza.4, priya.4, beryl.4, mei.4, jiwoo.4, karen.1 2096ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > binning a drink counts as waste and gets a comment 1315ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-shift-3: {"seeds":500,"scheduled":159,"appeared":159,"honks":427,"orders":4000,"answers":4000,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 3500ms
+ ✓ tests/sim/latte.test.ts > owner demo track (same physics as the player) > pours a heart that scores as one 1ms
+ ✓ tests/sim/latte.test.ts > owner demo track (same physics as the player) > proves "Hired" (85+) is reachable with the real controls 0ms
+ ✓ tests/sim/latte.test.ts > owner demo track (same physics as the player) > pours the pull-through the way the lesson says: lift, keep pouring, let go at the far edge 7ms
+ ✓ tests/sim/latte.test.ts > owner demo track (same physics as the player) > fills the cup without spilling 0ms
+ ✓ tests/sim/latte.test.ts > owner demo track (same physics as the player) > is deterministic: the same inputs give the same pattern and score 507ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > never says the same line twice in a row 1564ms
+ ✓ tests/sim/latte.test.ts > scorePattern > scores the template heart itself near 100% 166ms
+ ✓ tests/sim/latte.test.ts > scorePattern > gives a blank cup nothing 3ms
+ ✓ tests/sim/latte.test.ts > scorePattern > does not reward a crisp, centred round blob as a heart 184ms
+ ✓ tests/sim/latte.test.ts > scorePattern > does not reward whiting out the whole cup 191ms
+ ✓ tests/review/eventsDeterministic.test.ts > S6: the bird and shift events are deterministic > a week shift with RARE_BIRD booked: bird and events at the same times on a replay 3958ms
+ ✓ tests/sim/latte.test.ts > scorePattern > marks a heart poured near the rim as off centre 440ms
+ ✓ tests/sim/latte.test.ts > scorePattern > loses symmetry when one lobe is missing 135ms
+ ✓ tests/sim/latte.test.ts > scorePattern > treats beige (half-mixed) foam as muddy 134ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 5: dazza.1, priya.5, beryl.1, mei.5, jiwoo.5, karen.2 2277ms
+ ✓ tests/sim/latte.test.ts > pour physics > sinks milk poured from high up: the cup fills but no white appears 276ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > is reproducible for a seed 1506ms
+ ✓ tests/fuzz/weekPlayServe.test.ts > real week shifts, served (500 seeds, expert bot, long-black menu) > every customer is accounted for (served + walked out + shown the door), events fair 9981ms
+ ✓ tests/sim/latte.test.ts > pour physics > counts milk poured outside the rim as spill 0ms
+ ✓ tests/sim/latte.test.ts > pour physics > overflows past the brim 380ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > never cuts a customer off mid-sentence 2762ms
+ ✓ tests/sim/latte.test.ts > pour physics > flat (unstretched) milk cannot draw 314ms
+ ✓ tests/core/rushTrace.test.ts > rush trace > seeded shifts replay byte-for-byte 8796ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > "Watch Gaz again" replays the demo and returns to the same result card 1040ms
+ ✓ tests/sim/latte.test.ts > pour physics > a pull-through that stops short leaves no tip 503ms
+ ✓ tests/review/eventsDeterministic.test.ts > S6: events never interrupt an order > no shift event is asked for while an order is being said or rung up (week shifts) 2244ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > only says "last go" on the last attempt 400ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-index-3: {"seeds":500,"scheduled":159,"appeared":159,"honks":408,"orders":4500,"answers":4500,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 3128ms
+ ✓ tests/sim/latte.test.ts > pour physics > no pull-through at all leaves a blob 475ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift pacing > a first-timer on Normal keeps customers 1–3, loses at most one, and Dazza has time to spare 11927ms
+ ✓ tests/sim/latte.test.ts > pull-through: the taught motion is the winning motion > lift to [2], keep pouring and sweep: a thin stream draws the point (the lesson as written) 415ms
+ ✓ tests/sim/latte.test.ts > pull-through: the taught motion is the winning motion > let go, then sweep to the far edge within 0.3 s: still a heart (the old timing trick) 420ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 6: dazza.2, priya.6, beryl.2, mei.6, jiwoo.6, karen.3 2694ms
+ ✓ tests/sim/latte.test.ts > pull-through: the taught motion is the winning motion > the Day 2 bot's pour (Session A's demo) never meets the cap, so pace stays comparable 443ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > calls out the same mistake twice in a row 1603ms
+ ✓ tests/sim/latte.test.ts > pull-through: the taught motion is the winning motion > let go, wait 0.6 s, then sweep: the stream is dead, so it stays a blob 414ms
+ ✓ tests/fuzz/weekPlayServe.test.ts > real week shifts, served (500 seeds, expert bot, long-black menu) > Karen shown the door is "refused", not a walk-out, and the counts still add up 3335ms
+ ✓ tests/core/rushListening.test.ts > every curated order, end to end > shift 7: dazza.3, priya.1, beryl.3, mei.7, jiwoo.1, karen.1 887ms
+ ✓ tests/sim/latte.test.ts > pull-through cap: only once the white is laid > a dip during the fill leaves a fleck of white, but the rest of the fill is not thinned 298ms
+ ✓ tests/sim/latte.test.ts > pull-through cap: only once the white is laid > dropping low a little early (40% full) and staying down still arms the pull-through 380ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > notices improving cup after cup 1157ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > every line key used exists, and nobody says the same thing twice in a row 4074ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > notices failing twice in a row 320ms
+ ✓ tests/core/rushListening.test.ts > reactions follow the drink > Beryl handed a good long black talks about the coffee, not a heart 1353ms
+ ✓ tests/sim/latte.test.ts > pull-through cap: only once the white is laid > the pitcher's lay gate is the coach's step 2, step for step 864ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > height presets jump the jug target (trackpad-friendly height control) 403ms
+ ✓ tests/review/eventsDeterministic.test.ts > S6: events never interrupt an order > neither the bird's lines nor an event's cut an order or answer short 0ms
+ ✓ tests/review/eventsDeterministic.test.ts > S6: the bird never walks in on an order > week shift 2 with RARE_BIRD booked: no ibis entrance during an order line 3613ms
+ ✓ tests/sim/latte.test.ts > when the lesson says "pull now": as full as the cup is when Gaz starts his > is read from Gaz's demo, and matches the full pour simulation 262ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > restart works mid-trial too (pause menu) 0ms
+ ✓ tests/core/trial.test.ts > trial shift, played headless > restart goes back to the greeting with a clean slate 337ms
+ ✓ tests/sim/latte.test.ts > when the lesson says "pull now": as full as the cup is when Gaz starts his > a wide white is not enough: the cup has to be that full too 0ms
+ ✓ tests/sim/latte.test.ts > when the lesson says "pull now": as full as the cup is when Gaz starts his > following the lesson (drop at half full, pull when it says) ends in a heart and a full cup 473ms
+ ✓ tests/core/rushWeek.test.ts > week mode: generated orders at the register > each customer says the generated order for their slot 3ms
+ ✓ tests/core/rushWeek.test.ts > week mode: generated orders at the register > is deterministic for a seed and differs from shift to shift 1ms
+ ✓ tests/core/rushWeek.test.ts > week mode: generated orders at the register > Day 2 (no week) still picks from the curated lines 1ms
+ ✓ tests/core/rushWeek.test.ts > week mode: generated orders at the register > a restart keeps the week and replays the same orders 1ms
+ ✓ tests/core/rushWeek.test.ts > week mode: generated orders at the register > a headless shift on generated orders runs to the report 4746ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > starts at the pour with a fresh cup, the heart guide on and no Gaz 8ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > a finished cup goes for review on its own, scored from the foam field 753ms
+ ✓ tests/sim/latte.test.ts > trackpad-style pour (Space to tip, height only from the 1/2/3 presets) > still pours a recognisable heart 432ms
+ ✓ tests/core/rushWeek.test.ts > week mode: the week table sets the shift > size, arrivals and patience come from the shift and the difficulty 1ms
+ ✓ tests/core/rushWeek.test.ts > week mode: the week table sets the shift > Day 2 keeps its own arrivals, patience and keys 0ms
+ ✓ tests/core/rushWeek.test.ts > week mode: the week table sets the shift > week 2's Monday doesn't replay week 1's orders 0ms
+ ✓ tests/core/rushWeek.test.ts > week mode: the week table sets the shift > a returning regular waits outside until their earlier visit has left 495ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a dry run commits nothing to the remote and says where it would go 689ms
+ ✓ tests/sim/latte.test.ts > pitcher controls > tips progressively while held and back when released 0ms
+ ✓ tests/sim/latte.test.ts > pitcher controls > follows the pointer smoothly rather than teleporting 0ms
+ ✓ tests/sim/latte.test.ts > pitcher controls > runs dry and stops pouring 370ms
+ ✓ tests/sim/latte.test.ts > pitcher controls > controlsAt interpolates position and steps the hold flag 0ms
+ ✓ tests/core/rushListening.test.ts > reactions follow the drink > a heart they asked for gets the heart line 1805ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > the player pours the same heart as the headless track (same physics, same inputs) 927ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > --push replaces gh-pages with the build and .nojekyll 754ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > "again" gives a fresh cup and keeps the history; the next attempt compares with it 991ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > reset mid-pour throws the cup away: fresh cup, still pouring, nothing judged 111ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a custom domain writes CNAME and serves from / 782ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > after a reset, a button still held from before does not pour until let go 121ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > practice: identical input, a different field: a different score, each from its own field 1455ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > "done" hands the cup over early, but not before anything is poured 115ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > G toggles the heart guide in any phase 468ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > the same input timing with different milk makes a different field, scored differently 820ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > keeps the last 12 attempts, but counts them all 276ms
+ ✓ tests/core/rushListening.test.ts > answer keys > each single-field mishearing of each order is caught as exactly that field 1ms
+ ✓ tests/core/rushListening.test.ts > answer keys > the ticket keeps what was rung up and the answer key keeps what was said 2343ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > the same build twice pushes nothing new 1036ms
+ ✓ tests/core/rushWeek.test.ts > week mode: the week table sets the shift > a full Friday (ten customers) runs to the report, serving by each visit's key 2811ms
+ ✓ tests/core/rushWeek.test.ts > Endless Rush > lines up a batch of generated customers on the Endless clock 4ms
+ ✓ tests/core/rushWeek.test.ts > Endless Rush > ends at the third walk-out, counting only who came in, with no shift events 12ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > refuses without a gh-pages branch on the remote 472ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > GitHub remotes publish under /<repo>/ on <owner>.github.io 330ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > a domain serves from / at that domain; a local remote has no address 316ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > the same field always scores the same, and scoring never changes the field 919ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > later shifts fire some, never past the cap, the same for the same seed 14193ms
+ ✓ tests/core/practice.test.ts > practice mode: pour, review, go again > is reproducible: same seed and inputs, same attempts 1855ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > Day 1: every attempt is scored from the field it left in the cup 969ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > ticks off all four steps, in order, on Gaz's own pour 1ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > steps line up with the demo's narrated chapters 0ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > measures white coverage the way the scorer does 136ms
+ ✓ tests/core/rushListening.test.ts > correcting a misheard order > wrong milk: handed back, they name the milk, ticket fixed, remade, served right 2286ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > remembers how the pour was done: dropped in about half full, low, then pulled through 0ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > a pour that never pulls through stops at step 3 329ms
+ ✓ tests/core/practice.test.ts > practice mode: watching Gaz > Gaz demonstrates on request, narrating the four steps, then hands back a fresh cup 782ms
+ ✓ tests/sim/coach.test.ts > pour log: the four steps of a heart > a pour from up high never lays any white down 300ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > their order waits for the answer, which costs and pleases as the outcome says 1ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > Gaz says the event's line 1ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > a wrong answer is ignored and the event stays 5ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > an event is dropped when its customer walks out 3ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > showing someone the door is not a walk-out and leaves them out of the report 1339ms
+ ✓ tests/core/practice.test.ts > practice mode: watching Gaz > the demo pours Gaz's heart through the real physics 747ms
+ ✓ tests/core/practice.test.ts > practice mode: watching Gaz > skip stops the demo straight away and gives you the cup 0ms
+ ✓ tests/core/practice.test.ts > practice mode: watching Gaz > every line practice can say has a recording (or is awaiting its render) 0ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > Day 2: every flat white on the pass carries the score of the field in its cup 1805ms
+ ✓ tests/review/latteFieldScore.test.ts > S7: the latte is scored from the foam field > every place the game judges a pour passes the foam field and nothing else 8ms
+ ✓ tests/core/audioContract.test.ts > A3: a line waits for its audio > Day 2: while the order clip loads, the line, the register and their patience all wait 5ms
+ ✓ tests/core/audioContract.test.ts > A3: a line waits for its audio > Day 1: Gaz holds his line while it loads 1ms
+ ✓ tests/core/audioContract.test.ts > A3: a line waits for its audio > no hold, no change: headless shifts are exactly as before 2944ms
+ ✓ tests/sim/coach.test.ts > demo player (teaching pace, same physics) > pours exactly the same heart as the headless track, whatever the narration does 1263ms
+ ✓ tests/core/rushListening.test.ts > correcting a misheard order > wrong drink: handed back, ticket fixed, remade, served right 1839ms
+ ✓ tests/sim/coach.test.ts > demo player (teaching pace, same physics) > narrates the four chapters in order, one cue each 306ms
+ ✓ tests/sim/coach.test.ts > demo player (teaching pace, same physics) > slows down while Gaz talks (never below the floor) and waits for him at a boundary 588ms
+ ✓ tests/fuzz/weekProgress.test.ts > week progression fuzz (500 seeds, synthetic shift reports) > every report moves the save on by the rules: one shift per pass, nothing lost 1216ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: accuracy per field > counts a misheard milk against milk only, from what was rung up 2ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: accuracy per field > a wrong drink counts against the drink, and the visit's wrong fields come from its ticket 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: pardons, times, walk-outs > sums pardons over every visit, including one who walked out before it was rung up 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: pardons, times, walk-outs > time-to-serve per served customer with mean and median; register wait per order taken 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: pardons, times, walk-outs > walk-outs by how far they got; refused and handed-back counted apart 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: endings and modes > a finished shift has its grade and no quit point 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: endings and modes > a shift left mid-service records where: phase, service time, served so far, the station 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: endings and modes > week mode names the week and shift, and lists the events fired 0ms
+ ✓ tests/sim/telemetry.test.ts > shift telemetry: endings and modes > Endless is its own mode (no week or shift), counting only who came in 0ms
+ ✓ tests/sim/telemetry.test.ts > trial telemetry > a finished trial: every attempt, the verdict band, no quit point 0ms
+ ✓ tests/sim/telemetry.test.ts > trial telemetry > a trial left mid-way records the step and the attempt they were on 0ms
+ ✓ tests/sim/telemetry.test.ts > secondsStat > median of an even count is the mean of the middle two; empty is all null 0ms
+ ✓ tests/sim/telemetry.test.ts > the log > parses what it wrote, and anything else is an empty log (never throws) 0ms
+ ✓ tests/sim/telemetry.test.ts > the log > a record with the same id replaces the earlier one in place (a page hidden, then back) 0ms
+ ✓ tests/sim/telemetry.test.ts > the log > keeps the last 200 records 2ms
+ ✓ tests/sim/telemetry.test.ts > a headless shift (rush bot) > Day 2 with a first-timer's hands: the record's totals match the shift report 1575ms
+ ✓ tests/core/audioContract.test.ts > A8: the wrong milk gets a wrong-milk reaction > a flat white made for someone else, handed to an oat customer: no contradictory line 4ms
+ ✓ tests/core/audioContract.test.ts > A9: every question asked is counted > asking about the milk three times costs three times and counts three questions 2ms
+ ✓ tests/core/audioContract.test.ts > A10: replays never pile up, and nobody talks after they have gone > fifteen replays while someone else is talking queue one line, cost once, count once 2ms
+ ✓ tests/core/audioContract.test.ts > A10: replays never pile up, and nobody talks after they have gone > a customer who walks out takes their queued lines with them 7ms
+ ✓ tests/core/audioContract.test.ts > A10: replays never pile up, and nobody talks after they have gone > across whole shifts with every aid, no customer speaks once they are gone 1350ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > finds nothing wrong with Gaz's heart 0ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > a blob without a pull-through is blamed on staying low, not on shape maths 469ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > a pull swept after the stream died is blamed on letting go, not on staying low 453ms
+ ✓ tests/core/rushListening.test.ts > correcting a misheard order > missed "extra hot": they take it but it is wrong, and nothing is "corrected" 1852ms
+ ✓ tests/fuzz/generator.test.ts > order generator fuzz (500 seeds) > every week shift (weeks 1–2, 3 difficulties) generates valid, fully-said orders 689ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > carrying the jug on after a finished pull-through is not a dead stream 308ms
+ ✓ tests/fuzz/generator.test.ts > order generator fuzz (500 seeds) > the checker itself catches a broken order (so the fuzz is not vacuous) 1ms
+ ✓ tests/fuzz/generator.test.ts > order generator fuzz (500 seeds) > the Endless batch (40 customers, every drink id) keeps every per-order rule 346ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > an event's satisfaction lands on their serve 3656ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > from synthetic pour logs > streamDied: lifted, then 0.25 radii or more forward with no milk coming out 0ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > from synthetic pour logs > stayedLow only when the jug never rose above 2.5 cm 0ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > from synthetic pour logs > sweptLong: the pull ran past the far rim, or poured heavy past the middle 1ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > says which way an off-centre heart sits 444ms
+ ✓ tests/fuzz/generator.test.ts > order generator fuzz (500 seeds) > a one-drink menu (no change of mind possible) still gives valid orders 173ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > a pattern drawn from too high is muddy (or blank), with the height that caused it 447ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > a lopsided heart names the heavier side 154ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > works from the field alone (no log) and reads the cup totals 1ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > is deterministic 162ms
+ ✓ tests/sim/coach.test.ts > diagnosis: why the pattern came out like that > compass directions follow the field axes (+x right, +y far) 1ms
+ ✓ tests/fuzz/weekProgress.test.ts > week progression fuzz (500 seeds, synthetic shift reports) > is deterministic: the same seed plays the same saves 2550ms
+ ✓ tests/fuzz/generator.test.ts > order generator fuzz (500 seeds) > is deterministic: same seed and options → deep-equal, in any call order 983ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > every line anyone says has a voice recording 12230ms
+ ✓ tests/sim/telemetry.test.ts > a headless shift (rush bot) > nobody served: every walk-out is in the queue or at the register 26ms
+ ✓ tests/sim/telemetry.test.ts > a headless shift (rush bot) > a week Friday (returning regulars, events): totals still match the report 2796ms
+ ✓ tests/sim/telemetry.test.ts > a headless shift (rush bot) > Endless: ends at the third walk-out, counted the same way as the report 25ms
+ ✓ tests/scripts/voicesCheck.test.ts > npm run voices:check: the segment manifest > passes a licensed segment entry, and reports how many segments ship 177ms
+ ✓ tests/scripts/voicesCheck.test.ts > npm run voices:check: the segment manifest > fails a broken entry: changed words, no licence, a placeholder (also with --release) 281ms
+ ✓ tests/scripts/voicesCheck.test.ts > npm run voices:check: the segment manifest > checks the files: a listed clip must exist at its duration; an unlisted one fails 828ms
+ ✓ tests/scripts/voicesCheck.test.ts > npm run voices:check: the segment manifest > placeholder segment clips and the licensed staging in voice-cache/ are not orphans 160ms
+ ✓ tests/sim/pitcher.test.ts > pull-through: lifted after drawing low, the stream thins > filling from up high is never thinned (the jug has not been low yet) 1ms
+ ✓ tests/sim/pitcher.test.ts > pull-through: lifted after drawing low, the stream thins > lifted to [2] after drawing low, holding pours a thin stream 0ms
+ ✓ tests/sim/pitcher.test.ts > pull-through: lifted after drawing low, the stream thins > thins at the let-go rate, not all at once 0ms
+ ✓ tests/sim/pitcher.test.ts > pull-through: lifted after drawing low, the stream thins > below the lift height nothing changes 0ms
+ ✓ tests/sim/pitcher.test.ts > pull-through: lifted after drawing low, the stream thins > letting go still stops the stream 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > aim is limited to AIM_LIMIT from the cup centre, keeping its direction 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > pointer far off the cup still aims at the edge of the limit, not off-screen 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > keeps the last aim while the pointer is off the pour plane 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > height stays between HEIGHT_MIN and HEIGHT_MAX for scrolls, keys and presets 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > the jug itself never leaves its limits, however wild the input 101ms
+ ✓ tests/app/telemetry.test.ts > telemetry recorder > a finished shift is written once; a second end (the report's "again") is a no-op 2544ms
+ ✓ tests/app/telemetry.test.ts > telemetry recorder > page hidden: written as closed but kept open, then replaced by its real ending 1ms
+ ✓ tests/app/telemetry.test.ts > telemetry recorder > starting a shift with one still open ends it first; each record has its own id 1ms
+ ✓ tests/app/telemetry.test.ts > telemetry recorder > a trial counts its game time from its intro, and a restart records where they were 1ms
+ ✓ tests/app/telemetry.test.ts > telemetry recorder > a shift whose rush is already gone writes nothing 0ms
+ ✓ tests/app/telemetry.test.ts > export and settings copy > names the file by the local date 0ms
+ ✓ tests/app/telemetry.test.ts > export and settings copy > says what is in the log 0ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > every customer ends up gone and the summary matches the records 2461ms
+ ✓ tests/sim/listening/stats.test.ts > accuracyByField > is all zeros for no orders 1ms
+ ✓ tests/sim/listening/stats.test.ts > accuracyByField > counts each field, only where it could be heard (flat whites, right drink) 0ms
+ ✓ tests/sim/listening/stats.test.ts > accuracyByField > matches a whole shift rung up exactly as said 2589ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: boundaries > nearestPreset names the 1/2/3 key a height is closest to 1ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: no accidental pouring > a button already held when the pour starts does not pour until let go once 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: no accidental pouring > a press that starts inside the pour pours straight away 0ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: no accidental pouring > holding on through the start pours no milk at all 7ms
+ ✓ tests/sim/pitcher.test.ts > pour controls: no accidental pouring > a quick tap (a click to skip a subtitle) tips the jug but spills nothing 2ms
+ ✓ tests/sim/pitcher.test.ts > deterministic pouring > the same inputs give the same foam, bit for bit 729ms
+ ✓ tests/review/wrongMilkRemake.test.ts > S4: wrong milk, handed back, remade, taken > a making mistake (ticket right): handed back, ticket kept, remade with their milk, taken 7ms
+ ✓ tests/review/wrongMilkRemake.test.ts > S4: wrong milk, handed back, remade, taken > a listening mistake (milk misheard): the record keeps what was wrong after the fix 3035ms
+ ✓ tests/core/rushListening.test.ts > correcting a misheard order > extra hot rung up for a normal order: counted as misheard, and they like it less 4722ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > is deterministic over 1000 seeds 214ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift pacing > two hands: a perfect flat white is ~8 s faster with the milk steamed during the shot 17907ms
+ ✓ tests/fuzz/scheduler.test.ts > event scheduler fuzz (500 seeds, two weeks of absolute shifts) > each event fires only when its own rule allows, and the log records exactly that 637ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects export const r = Math.random(); 486ms
+ ✓ tests/sim/pitcher.test.ts > deterministic pouring > different inputs give a different pattern 722ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > honours the cap (none on the first shift), minShift and cooldowns 95ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > never fires while an order is being said, and keeps events apart 231ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects export const r = Math['random'](); 4ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects const { random } = Math;
+export const r = random(); 6ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects export const t = Date.now(); 7ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects setTimeout(() => 0, 1); 4ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/__probe.ts rejects setInterval(() => 0, 1); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects export const r = Math.random(); 16ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects export const r = Math['random'](); 3ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects const { random } = Math;
+export const r = random(); 7ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects export const t = Date.now(); 3ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects setTimeout(() => 0, 1); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/events/__probe.ts rejects setInterval(() => 0, 1); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects export const r = Math.random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects export const r = Math['random'](); 8ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects export const t = Date.now(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects setTimeout(() => 0, 1); 3ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/listening/__probe.ts rejects setInterval(() => 0, 1); 4ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects export const r = Math.random(); 3ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects export const r = Math['random'](); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects export const t = Date.now(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects setTimeout(() => 0, 1); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/sim/contracts/__probe.ts rejects setInterval(() => 0, 1); 10ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects export const r = Math.random(); 4ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects export const r = Math['random'](); 2ms
+ ✓ tests/fuzz/scheduler.test.ts > event scheduler fuzz (500 seeds, two weeks of absolute shifts) > the trigger rules above reject what they should (so the fuzz is not vacuous) 8ms
+ ✓ tests/fuzz/scheduler.test.ts > event scheduler fuzz (500 seeds, two weeks of absolute shifts) > the week table's cap holds: none on either Monday, never more than the row allows 345ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > never fires the same event twice in a row, even across a quiet shift (1000 seeds) 71ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > the last event carries into the next shift, and is left out of the next pick 0ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > THE_USUAL only for a regular who knows the player (1000 seeds) 71ms
+ ✓ tests/fuzz/scheduler.test.ts > start-of-shift bird booking fuzz (createShiftEvents, 500 seeds) > books the bin chicken only when RARE_BIRD may fire: shift, cap, cooldown, last event 42ms
+ ✓ tests/sim/events/scheduler.test.ts > event scheduler > every event can turn up, and options change the cap 68ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects export const t = Date.now(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects setTimeout(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/__probe.ts rejects setInterval(() => 0, 1); 9ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects export const r = Math.random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects export const r = Math['random'](); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects const { random } = Math;
+export const r = random(); 4ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects export const t = Date.now(); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects setTimeout(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rng.ts rejects setInterval(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects export const r = Math.random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects export const r = Math['random'](); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects export const t = Date.now(); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects setTimeout(() => 0, 1); 6ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/rush/__probe.ts rejects setInterval(() => 0, 1); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects export const r = Math.random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects export const r = Math['random'](); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects export const t = Date.now(); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects setTimeout(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/week/__probe.ts rejects setInterval(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects export const r = Math.random(); 8ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects export const r = Math['random'](); 5ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects const { random } = Math;
+export const r = random(); 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects export const t = Date.now(); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects setTimeout(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim purity lint > src/core/save/__probe.ts rejects setInterval(() => 0, 1); 1ms
+ ✓ tests/lint/corePurity.test.ts > core and sim source scan > the scanner finds calls in code, at the right line, and ignores comments 2ms
+ ✓ tests/lint/corePurity.test.ts > core and sim source scan > no file in src/sim or src/core calls Math.random, the wall clock or a real timer 138ms
+ ✓ tests/scripts/voicesPlan.test.ts > the voice pass plan > TTS for the licensed speakers, everything else for the actors, every script line once 10ms
+ ✓ tests/scripts/voicesPlan.test.ts > the voice pass plan > with segments: every segment of every speaker, at normal pace, served at its segment path 3ms
+ ✓ tests/scripts/voicesPlan.test.ts > npm run voices:estimate > prints AUD per TTS speaker and the actors’ share, well under the cap 129ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing
+{"scale":1,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > each customer is announced gone once, as they go, and says nothing after 1502ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+{"scale":1,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > Web Audio advances by wall time, including a long RAF gap, and freezes on pause 11ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing 72ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing
+{"scale":2,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+{"scale":2,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+{"scale":3,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech 28ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing 64ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech 18ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+{"scale":3,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects window.alert("x"); 613ms
+ ✓ tests/scripts/voicesPlan.test.ts > npm run voices:estimate > refuses above the cap, and a cap can only be lowered 248ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing 57ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech 15ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > legacy scaled audio clock masks the timeScale 3 timeout ordering defect 57ms
+ ✓ tests/scripts/voices.test.ts > npm run voices fails closed > no installed voices: exit 1, nothing written 505ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects document.title; 3ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects setTimeout(() => 0, 1); 11ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects setInterval(() => 0, 1); 4ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects export const t = Date.now(); 5ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects export const r = Math.random(); 15ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects import * as THREE from 'three';
+export const v = THREE; 4ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects import { x } from '../ui/hud';
+export const v = x; 3ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects import { x } from '../world/cafe';
+export const v = x; 3ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/sim rejects import { x } from '../audio/manager';
+export const v = x; 12ms
+ ✓ tests/lint/simPurity.test.ts > sim purity lint > src/core gets the same timer ban, but may wrap storage (core/save needs it) 13ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > reads a version-1 export 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > refuses other versions, other JSON and broken files, saying why 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > adds up every shift and trial record 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > counts a record once when the same log is exported twice 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > no records: zeros and dashes, not NaN 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > summaryMarkdown > a table per part, with the numbers from the summary 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > prints the summary of the files given 100ms
+ ✓ tests/core/rushListening.test.ts > what listening aids cost > replay, repeat and clarify each cost exactly their patience, on top of the clock 1531ms
+stdout | tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone
+pruned 1 cached clip(s) no longer in the manifest
+
+ ✓ tests/audio/manager.test.ts > segmented lines > play their segment clips back to back, in order, as one line 7ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a missing segment sends the WHOLE line to the browser voice, never half and half 2ms
+ ✓ tests/audio/manager.test.ts > segmented lines > pausing mid-list freezes it; resuming carries on from the same part 6ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a newer line (the customer has gone) drops the parts not yet played 2ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a slow repeat has no segment takes: the browser voice says it whole 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > still plays when it lands within the timeout 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > past the timeout the browser voice says the line, and the late clip is dropped 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > time spent paused does not count towards the timeout 4ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > once its speaker has left, the line never starts: not the clip, nor the browser voice (200) 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > once its speaker has left, the line never starts: not the clip, nor the browser voice (404) 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > someone else leaving doesn't touch the line 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > a line of theirs already playing stops when they leave 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > onStart fires at the clip’s first sample, not when the line is asked for; once 4ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a line stopped while loading never starts: onStop, and no onStart when the clip lands 4ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a clip landing while paused starts its subtitle on resume; one stopped meanwhile never does 11ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a newer line stops the one before (playing or not), then starts on its own 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > turning voices off mid-line stops the sound but keeps the words 4ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > voices off: the subtitle is the line, so it starts at once 1ms
+ ✓ tests/review/slowOrderAudio.test.ts > S2: a slow or missing order clip never skips the order > 404: the browser voice says the order at once, and the register takes it 72ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > past the timeout, onStart waits for the browser voice’s own start event 43ms
+ ✓ tests/audio/manager.test.ts > stopping the voice > keeps the last line for Replay, unless told to forget it (back to the title) 1ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a line whose segments are all listed as release audio plays its clips 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a line with an unlisted segment is the browser voice, whole; nothing is fetched 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a listed segment without a licence is not served either 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a slow repeat stays the browser voice even when every segment ships 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in development > every segment is tried, listed or not (placeholders from voice-cache/segments/) 3ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > stops on a file of another version, naming it 101ms
+stdout | tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+{"output":"pruned 1 cached clip(s) no longer in the manifest","outsideSentinelSurvived":true}
+
+ ✓ tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone 166ms
+ ✓ tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache 85ms
+ ✓ tests/review/slowOrderAudio.test.ts > S2: a slow or missing order clip never skips the order > 10 s: the clip plays when it arrives, whole, and the register takes it 41ms
+ ✓ tests/review/slowOrderAudio.test.ts > S2: a slow or missing order clip never skips the order > 404 after 10 s: the browser voice says it once the clip has failed 65ms
+ ✓ tests/review/slowOrderAudio.test.ts > S2: a slow or missing order clip never skips the order > 25 s: the order is still heard (clip or browser voice) before it is rung up 57ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > is deterministic for a seed and options (100 seeds × 3 difficulties) 41ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > gives every shift of a save different orders 4ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > never repeats a transcript within a shift, and cycles speakers in arrival order 23ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > keeps to the difficulty: tiers, modifier cap, changes of mind 27ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > mixes curated and generated orders, more generated as it gets harder 8ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (clips on time) > served: their reaction is heard while they leave, and nothing of theirs after 46ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (clips on time) > walked out: their parting shot is heard while they leave, and nothing of theirs after 32ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > only orders unlocked, playable drinks 5ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > every generated voice resolves to segments whose words are exactly the transcript 27ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > says every non-default part of the order (cues), except the drink in a vague order 43ms
+ ✓ tests/sim/listening/generate.test.ts > generateOrders > curated orders round-trip unchanged as source "curated", voiced as one clip 1ms
+ ✓ tests/scripts/voicesSheet.test.ts > npm run voices:sheet > writes JSON and Markdown for every speaker: TTS lines to review, actors’ lines to record 146ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > a replay requested during loading is cancelled when the customer leaves before the response 24ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > served, reaction clip 5 s late: it does not start once they have gone 25ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > walked out, parting-shot clip 5 s late: it does not start once they have gone 35ms
+ ✓ tests/review/leftCustomerSilent.test.ts > S3: nobody speaks after they have left (late audio) > served, reaction clip fails after 5 s: the browser voice does not stand in once they have gone 17ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > the game's build config runs the release gate at build time 2ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a build with an unlisted audio file in public/ fails, naming the file 43ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > every listed audio extension fails the same way, upper case included 33ms
+ ✓ tests/sim/listening/segments.test.ts > segment inventory > covers every Day 2 customer, with the accent their voice profile has 1ms
+ ✓ tests/sim/listening/segments.test.ts > segment inventory > segment ids are unique and every segment has words 1ms
+ ✓ tests/sim/listening/segments.test.ts > segment inventory > segments join cleanly and carry the words the cues rely on 2ms
+ ✓ tests/sim/listening/segments.test.ts > segment inventory > accent is never written as respelt words: not in segments, not in any transcript 96ms
+ ✓ tests/sim/listening/segments.test.ts > slang glossary > keeps the prototype table, terms unique, every entry explained 0ms
+ ✓ tests/sim/listening/segments.test.ts > slang glossary > explains the slang the phrasebooks use 1ms
+ ✓ tests/sim/listening/segments.test.ts > slang glossary > lists the mishearing pairs 1ms
+ ✓ tests/audio/meter.test.ts > K-weighting > matches the BS.1770 reference coefficients at 48 kHz 2ms
+ ✓ tests/audio/meter.test.ts > integratedLoudness (BS.1770 / EBU R128) > a 0 dBFS 1 kHz sine in one channel reads -3.01 LUFS, at 48 and 44.1 kHz 14ms
+ ✓ tests/audio/meter.test.ts > integratedLoudness (BS.1770 / EBU R128) > EBU Tech 3341 case 1: a -23 dBFS 1 kHz sine in both channels reads -23 LUFS 37ms
+ ✓ tests/audio/meter.test.ts > integratedLoudness (BS.1770 / EBU R128) > silence, and anything shorter than a 400 ms block, has no loudness 2ms
+ ✓ tests/audio/meter.test.ts > integratedLoudness (BS.1770 / EBU R128) > the absolute gate ignores silence; the relative gate ignores much quieter passages 19ms
+ ✓ tests/audio/meter.test.ts > peaks and clipping > true peak finds the inter-sample peak a sample peak misses 11ms
+ ✓ tests/audio/meter.test.ts > peaks and clipping > true peak is never below the sample peak 2ms
+ ✓ tests/audio/meter.test.ts > peaks and clipping > counts clipped samples 0ms
+ ✓ tests/audio/meter.test.ts > peaks and clipping > analyse reports a sine: crest 3 dB, no DC, no clipping 28ms
+ ✓ tests/audio/meter.test.ts > waveformPeaks > keeps the loudest sample of each bucket 1ms
+stdout | tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > audio asked for inside the code (?inline, ?raw) fails the build, naming the imports
+[audio-gate] ok: 0 licensed audio file(s) in the build
+
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > an unlicensed AIFF in public/ fails the build 27ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > an unlicensed clip imported from code (inlined as a data: URL) fails the build 36ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > audio asked for inside the code (?inline, ?raw) fails the build, naming the imports 46ms
+stderr | tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a placeholder voice clip is stripped from the build, not shipped (and the build passes)
+[audio-gate] removed 1 placeholder voice clip(s) from /var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-gate-fnqIYD/dist: placeholder audio never ships
+
+stdout | tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a placeholder voice clip is stripped from the build, not shipped (and the build passes)
+[audio-gate] ok: 0 licensed audio file(s) in the build
+
+stdout | tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a build with no audio files passes
+[audio-gate] ok: 0 licensed audio file(s) in the build
+
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a placeholder voice clip is stripped from the build, not shipped (and the build passes) 33ms
+ ✓ tests/review/audioGateBuild.test.ts > S8: unlicensed audio fails the build > a build with no audio files passes 44ms
+ ✓ tests/review/pauseTitleAudio.test.ts > S1: pause mid-shift, quit to the title, start a new game > the quit game never speaks again; the new one has running audio, one voice, one mood, no doubled loops 36ms
+ ✓ tests/review/pauseTitleAudio.test.ts > S1: nothing from the quit game carries into the next one > Replay (R / "Replay last line") on the title does not say the quit customer's order 29ms
+ ✓ tests/review/pauseTitleAudio.test.ts > S1: nothing from the quit game carries into the next one > the café ambience on the title (and the Day 1 trial after it) is back to a fresh page's 25ms
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public
+public .aif: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  probe.aif: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src
+src .mp3 import: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/probe-Ctu3S1jV.mp3: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing
+missing licence: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/voice/probe.mp3: release voice clip without a licence
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+ ✓ tests/review/busesAndDuck.test.ts > S5: four independent volume buses > moving any one slider changes only that bus, never another or the duck 12ms
+ ✓ tests/review/busesAndDuck.test.ts > S5: four independent volume buses > voices off mutes only the voice bus; its slider still remembers, and comes back 8ms
+ ✓ tests/review/busesAndDuck.test.ts > S5: four independent volume buses > saved volumes load bus by bus (one saved value never moves another) 1ms
+ ✓ tests/review/busesAndDuck.test.ts > S5: the music ducks under dialogue and recovers > deep under an order, lighter under Gaz, back to full after; only the music moves 7ms
+ ✓ tests/review/busesAndDuck.test.ts > S5: the music ducks under dialogue and recovers > the browser-voice fallback ducks the music too, and lets it back up when it ends 45ms
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+{"placeholder":true,"error":"[audio-gate] 1 audio file(s) in the build have no verified licence:\n  assets/voice/segments/dazza/probe.mp3: segment clip is a placeholder: the segment manifest lists release audio only\nRemove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).","remainsInBuild":true}
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false)
+{"placeholder":false,"error":"[audio-gate] 1 audio file(s) in the build have no verified licence:\n  assets/voice/segments/dazza/probe.mp3: segment clip is a placeholder: the segment manifest lists release audio only\nRemove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).","remainsInBuild":true}
+
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public 42ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src 16ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing 19ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true) 17ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false) 18ms
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading
+clip title previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading
+clip stopVoice previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading
+segments title previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading
+segments stopVoice previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume
+clip stopVoice cancelled-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume
+clip replaced-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume
+segments stopVoice cancelled-source gains: [0,0,0,0]
+
+ ✓ tests/data/voiceValidate.test.ts > the committed voice manifest > is valid for development: no errors, no warnings (bar lines awaiting their render) 4ms
+ ✓ tests/data/voiceValidate.test.ts > the committed voice manifest > is honestly labelled: placeholder status, every clip a placeholder with a source 5ms
+ ✓ tests/data/voiceValidate.test.ts > the committed voice manifest > fails a release check: placeholders, pitch-shifted and shared voices 3ms
+ ✓ tests/data/voiceValidate.test.ts > the committed voice manifest > records which voices render reproducibly (Tara does not) 0ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > duplicate dialogue ids and files 4ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > an id or file that does not match the speaker, words and delivery 4ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > unknown speaker, wrong accent or locale 6ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > durations, pace and loudness that do not look like the line spoken 12ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > missing fields 3ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > a missing clip is an error, a clip for a line the game no longer says is a warning 7ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > placeholder vs release: macOS voices can never be release audio; release needs a licence 8ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > provenance: release clips are licensed TTS or recorded, placeholders never claim either 16ms
+ ✓ tests/data/voiceValidate.test.ts > validation catches broken manifests > manifest version and status 2ms
+ ✓ tests/data/voiceValidate.test.ts > expected clip paths > follow speaker, id hash and delivery 0ms
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume
+segments replaced-source gains: [0,0,0,0]
+
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: cancelling an already audible line while suspended must silence it on resume 17ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading 12ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading 7ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: cancelling an already audible line while suspended must silence it on resume 7ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading 14ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > quitting to title while a decoded line waits must not emit the old game on resume 6ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > a gone customer whose segments decoded during suspension must stay silent on resume 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: an uncancelled suspended line starts once and remains connected on resume 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: an uncancelled suspended line starts once and remains connected on resume 4ms
+ ✓ tests/sim/ibis.test.ts > when a bin chicken turns up > is rare, deterministic per seed, and inside the window 8ms
+ ✓ tests/sim/ibis.test.ts > when a bin chicken turns up > only comes in through an open door 1ms
+ ✓ tests/sim/ibis.test.ts > when a bin chicken turns up > waits outside while someone is mid-order, and comes in at the next open door 0ms
+ ✓ tests/sim/ibis.test.ts > keeping quiet while an order could start (review 2026-10-17 §6) > holds a due honk while holdHonk, honks once when quiet, then keeps its 5 s beat 1ms
+ ✓ tests/sim/ibis.test.ts > keeping quiet while an order could start (review 2026-10-17 §6) > midOrder holds it too, and the look-up waits for quiet as well 0ms
+ ✓ tests/sim/ibis.test.ts > the encounter > walks to the bin, honks now and then, looks up once when the player looks at it 1ms
+ ✓ tests/sim/ibis.test.ts > the encounter > three shoos see it out the door, safely, on its own feet 0ms
+ ✓ tests/sim/ibis.test.ts > the encounter > frantic clicking counts as one shoo per cooldown 0ms
+ ✓ tests/sim/ibis.test.ts > the encounter > left alone after a shoo, it goes back to the bin 0ms
+ ✓ tests/sim/ibis.test.ts > the encounter > ignored, it raids the bin and wanders off by itself 1ms
+ ✓ tests/sim/ibis.test.ts > the encounter > never gets stuck: every visit ends with the bird gone, whatever the player does 46ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > writes its own key, versioned, and reads it back 2ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > corrupt JSON or another version reads as an empty log, and the next record starts it over 0ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > replaces a provisional "closed" record when the same shift closes later 0ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > keeps only the last 200 records 76ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > Clear empties it 0ms
+ ✓ tests/core/save/telemetry.test.ts > telemetry store > blocked or full storage falls back to memory for the session (never throws) 1ms
+ ✓ tests/core/week/endless.test.ts > endless rush > keeps speeding arrivals up, never below the floor 6ms
+ ✓ tests/core/week/endless.test.ts > endless rush > is over at the third walk-out, not before 0ms
+ ✓ tests/core/week/endless.test.ts > endless rush > always ends as walk-outs get likelier with the shrinking gaps (1000 seeds) 47ms
+ ✓ tests/sim/events/events.test.ts > shift events > has the eight events, each with distinct choices 2ms
+ ✓ tests/sim/events/events.test.ts > shift events > every Gaz line an outcome can emit exists: ≥3 keys per event, ≥3 variants per key 4ms
+ ✓ tests/sim/events/events.test.ts > shift events > each event's choices lead to different outcomes 0ms
+ ✓ tests/sim/events/events.test.ts > shift events > a choice that costs time costs at least that much patience; waste is whole cents 22ms
+ ✓ tests/sim/events/events.test.ts > shift events > THE_USUAL needs the player to know the regular, and otherwise falls back to a clarify 0ms
+ ✓ tests/sim/events/events.test.ts > shift events > fairness: a legitimate complaint is never scored as a difficult customer 0ms
+ ✓ tests/sim/events/events.test.ts > shift events > fairness: difficult behaviour belongs to a personality, never to anyone else 0ms
+ ✓ tests/sim/events/events.test.ts > shift events > fairness: CALL_MANAGER always backs the staff; abuse ends service without touching the drink 4ms
+ ✓ tests/sim/events/events.test.ts > shift events > an unknown choice is an error, not a silent outcome 1ms
+ ✓ tests/sim/events/events.test.ts > shift events > RARE_BIRD delegates to the ibis state machine 1ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v2: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 12ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v3: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 2ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > day2 summary must not persist visits or affinity 1ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > endless summary must not persist visits or affinity 1ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > pause must synchronise all HUDs and audio and prevent a released hold becoming a click 9ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > title pause is a no-op, but a subsequent rush pause must actually suspend audio 0ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > trial: replay captions must wait for resumed audio and target exactly that HUD 21ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > practice: replay captions must wait for resumed audio and target exactly that HUD 4ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > rush: replay captions must wait for resumed audio and target exactly that HUD 7ms
+ ✓ tests/core/rushIbis.test.ts > the bin chicken during a shift > comes in with a customer, gets shooed out, and Gaz has a (recorded) line for each beat 15ms
+ ✓ tests/core/rushIbis.test.ts > the bin chicken during a shift > never cuts off a customer: Gaz waits until they have finished 26ms
+ ✓ tests/core/rushIbis.test.ts > the bin chicken during a shift > does nothing outside service, and the door is shut when nobody is coming or going 1ms
+ ✓ tests/core/rushIbis.test.ts > the bin chicken during a shift > a shift without the bird is untouched (no RNG shared with the rush) 4ms
+ ✓ tests/audio/musicPatterns.test.ts > café music moods > each mood has its own tempo and feel 1ms
+ ✓ tests/audio/musicPatterns.test.ts > café music moods > opening is acoustic (pluck, brushes, no kit); rush has a kit and a surf lead; afternoon is keys and swing 1ms
+ ✓ tests/audio/musicPatterns.test.ts > café music moods > a bar always plays the same notes, and the notes are well-formed 30ms
+ ✓ tests/audio/musicPatterns.test.ts > café music moods > melodies vary from phrase to phrase 0ms
+ ✓ tests/audio/musicPatterns.test.ts > where each mood plays > opening before service, rush during it, afternoon after 0ms
+ ✓ tests/audio/musicPatterns.test.ts > ducking under speech > full when quiet, down under talk, further down under orders and answers 1ms
+ ✓ tests/scripts/ttsProvider.test.ts > the paid-call guard > needs --allow-paid AND credentials; otherwise it says why and stays a dry run 1ms
+ ✓ tests/scripts/ttsProvider.test.ts > the paid-call guard > reads Google credentials from the environment: a token with its project, or a key 6ms
+ ✓ tests/scripts/ttsProvider.test.ts > cost and text > bills every character sent, spaces included, and converts the price to AUD 0ms
+ ✓ tests/scripts/ttsProvider.test.ts > cost and text > reads ranges, units and dashes the way they are meant, and keeps everything else 1ms
+ ✓ tests/scripts/ttsProvider.test.ts > Google Cloud TTS requests > asks for MP3 at a speaking rate, never a pitch (Chirp 3 HD has none) 1ms
+ ✓ tests/scripts/ttsProvider.test.ts > Google Cloud TTS requests > posts to text:synthesize and decodes the base64 audio 15ms
+ ✓ tests/scripts/ttsProvider.test.ts > Google Cloud TTS requests > lists voices for a language and surfaces errors with the status 1ms
+ ✓ tests/data/voice.test.ts > voice ids > are stable across runs and platforms 1ms
+ ✓ tests/data/voice.test.ts > voice ids > differ by speaker, words and delivery 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > expands every template: no {placeholders} left to record 4ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > has a voice profile for every speaker 3ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > every line in the script has a recording in the manifest (or is awaiting its render) 1ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > lines awaiting a render are real script keys (no typos hiding a missing clip) 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > manifest entries carry the required fields and look like speech 20ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > placeholder clips are labelled as placeholders 5ms
+ ✓ tests/data/voice.test.ts > spoken duration > holds the floor for the clip plus a beat 0ms
+ ✓ tests/data/voice.test.ts > spoken duration > falls back to reading time without a clip 0ms
+ ✓ tests/review/independentPausedCaptions.test.ts > paused: a decoded clip must not dispatch subtitle onStart before audio can start 43ms
+ ✓ tests/review/independentPausedCaptions.test.ts > browser-suspended: a decoded clip must not dispatch subtitle onStart before audio can start 52ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > strips placeholder voice clips and ignores non-audio files 1ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > rejects audio nobody can account for (e.g. old renders not in the manifest) 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > checks the formats takes arrive in as well (AIFF, CAF), in any case 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > keeps files with a verified licence; unverified entries are rejected 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > keeps licensed release voice clips, rejects release clips without a licence 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > ships only licensed TTS and recordings: any other provenance fails the build 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio release gate > the committed provenance list is valid (every entry verified) 3ms
+ ✓ tests/scripts/audioGate.test.ts > audio never ships inside the code > audio is never inlined; anything else keeps the limit it had 0ms
+ ✓ tests/scripts/audioGate.test.ts > audio never ships inside the code > finds audio imported with ?inline or ?raw, and nothing else 0ms
+ ✓ tests/scripts/audioGate.test.ts > the build gate with the segment manifest (scripts/vite-voice.ts) > keeps a licensed segment the segment manifest lists, rejects an unlisted one 2ms
+ ✓ tests/scripts/audioGate.test.ts > the build gate with the segment manifest (scripts/vite-voice.ts) > a segment listed without a licence or a release provenance fails the build 1ms
+ ✓ tests/scripts/audioGate.test.ts > the build gate with the segment manifest (scripts/vite-voice.ts) > SEGMENT_GATE: a placeholder in the segment manifest fails the build, flag or not; a line placeholder is still stripped 1ms
+ ✓ tests/scripts/audioGate.test.ts > the build gate with the segment manifest (scripts/vite-voice.ts) > the committed manifests: no segment clip ships yet, so any segment file fails the build 2ms
+ ✓ tests/scripts/audioGate.test.ts > the build gate with the segment manifest (scripts/vite-voice.ts) > the build plugin keeps the listed segment in dist/ and fails on an unlisted one 7ms
+ ✓ tests/world/camera.test.ts > camera: transitions into and out of the pour > eases from the steam wand to the pour close-up smoothly, within a second 6ms
+ ✓ tests/world/camera.test.ts > camera: transitions into and out of the pour > holds perfectly still while pouring (the pointer maps through it), whatever the time 1ms
+ ✓ tests/world/camera.test.ts > camera: transitions into and out of the pour > Gaz's demo uses the same framing, so nothing moves when the player takes over 1ms
+ ✓ tests/world/camera.test.ts > camera: transitions into and out of the pour > eases back out to Gaz for the inspection, and between practice review and the pour 4ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > pushing the mouse up the screen moves the jug forward (the pull-through goes up) 0ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > is a close-up: the cup fills a good part of the screen 0ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > keeps the cup and its surroundings on screen (MacBook 16:10) 0ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > keeps the cup and its surroundings on screen (e2e viewport) 0ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > keeps the cup and its surroundings on screen (4:3) 0ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > keeps the cup and its surroundings on screen (iPhone portrait) 1ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > two hands (shot + steam): the group head and the jug at the wand are both in view 1ms
+ ✓ tests/world/camera.test.ts > camera: pour framing > practice review looks straight down, with the cup clear of the card 0ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > Day 2 and the first Monday are the first paid shift 5ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > later week shifts never say "first paid shift" and use their own lines 1ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > week 2's Monday isn't a first shift either 0ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > Endless has its own intro 1ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > one intro per row of the week table, never naming a drink the station can't make 1ms
+ ✓ tests/core/rushIntro.test.ts > Gaz's shift intro > every intro line is in the voice script under the key the rush says 3ms
+ ✓ tests/core/rushIntro.test.ts > end-of-shift lines > the excellent line doesn't count customers (shifts serve 6 to 10) 0ms
+ ✓ tests/sim/contracts/ticket.test.ts > diffTickets > is empty when the ticket matches, including defaults (null milk = full cream) 1ms
+ ✓ tests/sim/contracts/ticket.test.ts > diffTickets > names each wrong field with what was said and what was rung up 0ms
+ ✓ tests/sim/contracts/ticket.test.ts > diffTickets > a wrong drink trumps everything else 0ms
+ ✓ tests/sim/contracts/ticket.test.ts > diffTickets > agrees with wrongFields on every curated order against every other 7ms
+ ✓ tests/sim/contracts/ticket.test.ts > diffTickets > ticketValue reads normalised values 0ms
+ ✓ tests/sim/contracts/ticket.test.ts > drink ids > only the drinks the station can make today are playable 1ms
+ ✓ tests/sim/contracts/ticket.test.ts > drink ids > isDrinkId accepts catalogue ids only 0ms
+ ✓ tests/sim/contracts/ticket.test.ts > drink ids > every drink has a name 0ms
+ ✓ tests/review/independentTelemetry.test.ts > exports a valid JSON Blob of generated records without PII fields and clears it 11ms
+ ✓ tests/review/independentTelemetry.test.ts > real QuotaExceededError during a gameplay checkpoint falls back to memory and never escapes 1ms
+(node:80306) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tests/core/save/storage.test.ts > save storage > starts fresh when nothing is stored 1ms
+ ✓ tests/core/save/storage.test.ts > save storage > round-trips a save through storage as JSON 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > reads old, empty or corrupt data through migrate, never throwing 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > a v2 save in storage loads as v3 with the default keys, and saves back as v3 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > falls back to memory when storage is blocked 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > keeps the latest save in memory when storage is full 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > works with no storage at all 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > autosaves after each shift report 0ms
+ ✓ tests/core/save/storage.test.ts > save storage > finding browser storage never throws 1ms
+ ✓ tests/ui/labels.test.ts > title: Endless Rush > is locked on a fresh save, with a one-line reason 1ms
+ ✓ tests/ui/labels.test.ts > title: Endless Rush > opens once Monday is passed, and stays open in later weeks 0ms
+ ✓ tests/ui/labels.test.ts > shift select: the Monday–Friday grid > a fresh save: Monday to play, the rest locked, no grades yet 1ms
+ ✓ tests/ui/labels.test.ts > shift select: the Monday–Friday grid > mid-week: passed shifts are done with their best grade; a disaster is played again 0ms
+ ✓ tests/ui/labels.test.ts > shift select: the Monday–Friday grid > reads each shift as one sentence per line for screen readers 0ms
+ ✓ tests/ui/labels.test.ts > shift select: the Monday–Friday grid > the shop button shows the till and how many upgrades are owned 1ms
+ ✓ tests/ui/labels.test.ts > the shop > lists every upgrade with its price in cents, one-line effect and state 1ms
+ ✓ tests/ui/labels.test.ts > the shop > a buy the till covers says what is left 0ms
+ ✓ tests/ui/labels.test.ts > the shop > a buy the till can't cover is refused with the price and the till, never silently 0ms
+ ✓ tests/ui/labels.test.ts > the shop > an owned or unknown upgrade says so 0ms
+ ✓ tests/ui/labels.test.ts > the shift report > a passed week shift offers the next shift 0ms
+ ✓ tests/ui/labels.test.ts > the shift report > a failed week shift, Day 2 and Endless Rush offer another go 0ms
+ ✓ tests/ui/labels.test.ts > the shift report > Endless Rush is stamped with how many were served; the rest with the grade 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > never repeats a line until the pool is exhausted 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > does not immediately repeat the last line after starting over 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > respects cooldowns 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gets crankier as frustration builds 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > is deterministic for a seed 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > returns null for unknown keys 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gives longer lines more reading time 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > includes the lines from the brief 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > every pool has at least one line and no empty text 3ms
+ ✓ tests/sim/owner.test.ts > dialogue content > uses Australian spelling 5ms
+ ✓ tests/sim/owner.test.ts > dialogue content > gives every Day 2 customer a full set of lines 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > has a coaching tip for every fault 0ms
+ ✓ tests/core/rng.test.ts > createRng > gives the same sequence for the same seed 1ms
+ ✓ tests/core/rng.test.ts > createRng > differs between seeds and stays in [0, 1) 1ms
+ ✓ tests/core/rng.test.ts > createRng > int and pick stay in range 7ms
+ ✓ tests/core/rng.test.ts > parseSeed > parses numbers and falls back otherwise 0ms
+ ✓ tests/sim/listening.test.ts > answer key > a long black has no milk, temperature or art; a flat white defaults to full cream 1ms
+ ✓ tests/sim/listening.test.ts > answer key > finds exactly the parts that were misheard 0ms
+ ✓ tests/sim/listening.test.ts > difficulty > scores how an order is said, plus how much is in it 0ms
+ ✓ tests/sim/listening.test.ts > difficulty > picks within the difficulty tiers, deterministically for a seed 1ms
+ ✓ tests/sim/listening.test.ts > difficulty > falls back to the nearest tier when a customer has none in range 0ms
+ ✓ tests/sim/listening.test.ts > difficulty > on the first shift, first-shift lines are the only candidates, on every difficulty 1ms
+ ✓ tests/sim/listening.test.ts > difficulty > one rng draw per pick, whatever the pool, so other customers keep their orders 0ms
+ ✓ tests/sim/listening.test.ts > difficulty > harder settings are noisier and show fewer subtitles 0ms
+ ✓ tests/sim/listening.test.ts > clarifying answers come from the answer key > answers each question with the truth 0ms
+ ✓ tests/sim/listening.test.ts > clarifying answers come from the answer key > a long black customer says so when asked about milk, temperature or art 0ms
+ ✓ tests/sim/listening.test.ts > transcript visibility > always: always shown 0ms
+ ✓ tests/sim/listening.test.ts > transcript visibility > afterRepeat: hidden until they have repeated it twice (one repeat is too cheap) 0ms
+ ✓ tests/sim/listening.test.ts > transcript visibility > off: never shown while ordering, even after a repeat 0ms
+ ✓ tests/sim/listening.test.ts > transcript visibility > learning mode reveals it once the ticket is rung up, never before 0ms
+ ✓ tests/sim/listening.test.ts > no audio > an answer nobody can hear is shown as text; an answer they can hear is not 0ms
+ ✓ tests/sim/listening.test.ts > no audio > the order itself is never shown for being inaudible 0ms
+ ✓ tests/sim/listening.test.ts > no audio > tells answers from orders by their key 0ms
+ ✓ tests/sim/listening.test.ts > cues and summary > locates the key words for highlighting 0ms
+ ✓ tests/sim/listening.test.ts > cues and summary > summarises a shift of listening 0ms
+ ✓ tests/core/week/progress.test.ts > week table > is five shifts of 6, 7, 8, 9 and 10 customers 1ms
+ ✓ tests/core/week/progress.test.ts > week table > unlocks every drink exactly once, each one in the recipe table 1ms
+ ✓ tests/core/week/progress.test.ts > week table > has no events on the first shift; Hard is the same table with less patience 0ms
+ ✓ tests/core/week/progress.test.ts > week table > speeds arrivals up through each shift 1ms
+ ✓ tests/core/week/progress.test.ts > progression > plays a full week from a fixed seed, deterministically 1ms
+ ✓ tests/core/week/progress.test.ts > progression > replays a failed shift, never a game over: receipt and tips kept, nothing unlocked 0ms
+ ✓ tests/core/week/progress.test.ts > progression > adds the next shift's drinks as it is reached 0ms
+ ✓ tests/core/week/progress.test.ts > progression > never changes the save it is given 0ms
+ ✓ tests/core/week/progress.test.ts > progression > lists shifts as locked ahead, open now, done with the best grade 0ms
+ ✓ tests/core/week/progress.test.ts > progression > in week 2 the current shift is open and later ones locked, whatever week 1 left 0ms
+ ✓ tests/core/week/progress.test.ts > upgrades > are data only: unique ids, whole-cent prices, a parameter each changes 0ms
+ ✓ tests/core/rushListening.test.ts > what listening aids cost > a third "repeat that?" is refused and free; the second earns a remark from Gaz 1840ms
+ ✓ tests/core/rushSegments.test.ts > generated orders carry their segments to the audio > the order line, and its replay, are voiced by the order segments 6ms
+ ✓ tests/core/rushSegments.test.ts > generated orders carry their segments to the audio > the slow repeat has no segment takes, so it carries no segments 1ms
+ ✓ tests/core/rushSegments.test.ts > generated orders carry their segments to the audio > Day 2 curated orders carry none (their clips are found by their words) 1ms
+ ✓ tests/core/rushRegisterWait.test.ts > rush register timestamps > takenAt is null until "Take order", then the game time it was pressed 4ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > adds +1 affinity per correct serve in a week shift 3ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > a drink handed back (the wrong one) adds nothing 0ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > Day 2 (no week, nothing saved) keeps no affinity 0ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > counts a visit for every served drink, right or not 1ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > a hand-back is no visit; Day 2 keeps none 0ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > two shifts, one served wrong: the save says two visits, one affinity 1ms
+ ✓ tests/sim/contracts/voice.test.ts > provenance > placeholder clips, and release clips without a licence, never count as shippable 1ms
+ ✓ tests/sim/contracts/voice.test.ts > provenance > licensed clips are TTS unless the engine says recorded 3ms
+ ✓ tests/sim/contracts/voice.test.ts > provenance > today every clip in the manifest is a placeholder (matches the release gate) 3ms
+ ✓ tests/sim/contracts/voice.test.ts > voiceRefIds > lists the clips a reference plays, in order, as a copy 1ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > turns empty or missing data into a fresh save without throwing 2ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > a fresh save uses the defaults it is given (no clock read) 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > a pre-v2 shape (no v1 save ever shipped) starts fresh, keeping a valid difficulty and seed 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > loads a v2 save (the previous version) as v3: every field kept, the default keys added 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > round-trips a v3 save, parsed or as JSON 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > repairs a v3 key map: a key the game already uses, a duplicate or junk falls back to that key's default 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > repairs a damaged v2 save field by field 0ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > never shares arrays or objects with its input 1ms
+ ✓ tests/sim/contracts/save.test.ts > migrate > REGULAR_IDS are exactly the Day 2 customers 0ms
+ ✓ tests/core/shopStation.test.ts > upgrades at the station > Day 2 and an upgrade-free week keep today's station 3ms
+ ✓ tests/core/shopStation.test.ts > upgrades at the station > the save's upgrades reach the machine for a week shift, Endless and a restart 1ms
+ ✓ tests/core/shopStation.test.ts > upgrades at the station > a better grinder doses faster and a better wand heats faster 1ms
+ ✓ tests/core/shopStation.test.ts > upgrades at the station > the docket rail shows three tickets in week mode, six with the upgrade; Day 2 shows all 1ms
+ ✓ tests/core/shopStation.test.ts > upgrades at the station > a bought upgrade survives a save round-trip 1ms
+ ✓ tests/data/orders.test.ts > order bank > every customer has orders; ids are unique and theirs 2ms
+ ✓ tests/data/orders.test.ts > order bank > every part of the order is audible: a cue, in the text, naming the right thing 2ms
+ ✓ tests/data/orders.test.ts > order bank > never fakes an accent with spelling: orders are standard English words 1ms
+ ✓ tests/data/orders.test.ts > order bank > every accent group has at least six orders, spanning every difficulty tier 1ms
+ ✓ tests/data/orders.test.ts > order bank > every customer has an order for every difficulty (no fallback needed) 0ms
+ ✓ tests/data/orders.test.ts > order bank > delighted lines fit the drink: only the heart line mentions a heart, none mentions milk 0ms
+ ✓ tests/data/orders.test.ts > order bank > Korean is Korean: "와", not the Singlish "wah" 0ms
+ ✓ tests/data/orders.test.ts > order bank > clarifying answers name what they answer 0ms
+ ✓ tests/ui/rushRail.test.ts > the docket rail > holds tickets oldest first, whatever order the customers are in 2ms
+ ✓ tests/ui/rushRail.test.ts > the docket rail > reuses the array it is given and counts the tickets behind a full rail 2ms
+ ✓ tests/ui/rushRail.test.ts > regulars on the rail > on Day 2 everyone is new: name and a few words about them 0ms
+ ✓ tests/ui/rushRail.test.ts > regulars on the rail > a regular the save remembers is shown by name only 0ms
+ ✓ tests/ui/rushRail.test.ts > regulars on the rail > someone back for a second visit in the same shift is a regular by then 0ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > without marks the ticket reads as orderLabel does 0ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > marks the corrected milk, spelling out full cream when that was it 0ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > marks a corrected temperature or heart, defaults included 0ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > a misheard drink marks the whole drink 0ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > notes what was rung up, struck out, then what they said 1ms
+ ✓ tests/ui/rushRail.test.ts > misheard marks on a ticket > reads each field the way a ticket says it 0ms
+ ✓ tests/ui/rushRail.test.ts > the carton on a ticket (Phase 7: not colour alone) > a flat white's ticket names its carton, full cream included; a long black has none 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > Usual keys must restore all three bindings instead of only closing Settings 3ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key 1ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > an explicit key choice still saves; Escape cancels without changing it 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > reset during capture cancels the capture, keeps Settings open, and restores every label 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > backdrop close cancels capture and reopening permits a fresh explicit key choice 0ms
+ ✓ tests/ui/eventCard.test.ts > the event card > is up only in service, with an event waiting 3ms
+ ✓ tests/ui/eventCard.test.ts > the event card > number keys 1–3 pick its choices, in order 0ms
+ ✓ tests/ui/eventCard.test.ts > the event card > keeps 1–3 while it is up, even past its last choice; 4–6 and other keys stay free 0ms
+ ✓ tests/ui/eventCard.test.ts > the event card > leaves 1–3 to the jug heights during the pour (3 = low must never refuse a customer) 0ms
+ ✓ tests/ui/eventCard.test.ts > the event card > no event has more choices than there are keys for it 0ms
+ ✓ tests/ui/eventCard.test.ts > the event card > names the customer in the prompt and shows each choice's cost from the data 0ms
+ ✓ tests/data/casting.test.ts > casting plan data > every character has 2-3 audition lines, all real lines they say in the game 3ms
+ ✓ tests/data/casting.test.ts > casting plan data > every character has at least one real candidate; placeholders are never candidates 1ms
+ ✓ tests/data/casting.test.ts > casting plan data > no two characters audition the same TTS voice 0ms
+ ✓ tests/data/casting.test.ts > Azure SSML > uses the voice locale, prosody rate and escapes the text 0ms
+ ✓ tests/data/casting.test.ts > Azure SSML > the release cast: one voice per speaker, licensed TTS or an actor, every TTS pick auditioned 1ms
+ ✓ tests/core/week/session.test.ts > week session > only the shift the week is on can be played 1ms
+ ✓ tests/core/week/session.test.ts > week session > builds the rush's week from the save 1ms
+ ✓ tests/core/week/session.test.ts > week session > a pass records the receipt and moves on; regulars keep what events taught them 1ms
+ ✓ tests/core/week/session.test.ts > week session > visits add up beside affinity and a regular's last order is kept 0ms
+ ✓ tests/core/week/session.test.ts > week session > a disaster keeps the receipt and tips but plays the same shift again 0ms
+ ✓ tests/core/week/session.test.ts > week session > the last shift of the week starts the next week 0ms
+ ✓ tests/ui/rushTopbar.test.ts > the top chips > say which shift it is: Day 2, a day of the week, or Endless 3ms
+ ✓ tests/ui/rushTopbar.test.ts > the top chips > runs the clock from 7:00, past the hour too 0ms
+ ✓ tests/ui/rushTopbar.test.ts > the top chips > counts served out of the shift, and walk-outs (out of three in Endless) 1ms
+ ✓ tests/data/auditionIndex.test.ts > lineOfTake > reads the leading line number, 1-based, within the line count 1ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > lists every configured candidate, as missing when nothing was rendered or delivered 1ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > matches delivered takes to the candidate, marks partial sets and records the licence 1ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > a candidate with every line is ready; extra takes of a line are kept 0ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > macOS pipeline-test takes are listed apart and never count as candidates 0ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > ignores folders for characters that have no audition lines 0ms
+ ✓ tests/data/auditionIndex.test.ts > buildAuditionIndex > works on the real casting data: seven characters, nothing castable rendered yet 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > a great, quick drink delights and tips 1ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > the wrong drink is handed back 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > extra hot means 68–74 °C 1ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > a requested heart has to actually be a heart 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > drinks left to go cold lose their appeal 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > long black strength depends on the hot water 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > slow service costs satisfaction and tips 0ms
+ ✓ tests/sim/rush.test.ts > evaluateServe > a harder-to-please customer scores the same drink lower 0ms
+ ✓ tests/sim/rush.test.ts > reactions > a long black, a flat white, or the heart they asked for 0ms
+ ✓ tests/sim/rush.test.ts > patience drain > drains faster at the register, less so while the barista is busy on another drink 0ms
+ ✓ tests/sim/rush.test.ts > shift summary > counts walkouts as zero satisfaction and sums tips in cents 0ms
+ ✓ tests/sim/rush.test.ts > shift summary > grades the shift 0ms
+ ✓ tests/sim/rush.test.ts > shift summary > labels and money read naturally 1ms
+ ✓ tests/data/decision.test.ts > decisionIssues > a fresh set has only "not decided" warnings 1ms
+ ✓ tests/data/decision.test.ts > decisionIssues > a clean cast of distinct, licensed, fully-heard voices passes 0ms
+ ✓ tests/data/decision.test.ts > decisionIssues > refuses placeholders, uncleared licences, caricature, and unheard candidates 0ms
+ ✓ tests/data/decision.test.ts > decisionIssues > two characters can never share a base voice 0ms
+ ✓ tests/data/decision.test.ts > decisionIssues > warns when an L2 accent was not checked by a speaker of it 0ms
+ ✓ tests/data/decision.test.ts > decisionIssues > a shortlist needs a chosen candidate that exists 0ms
+ ✓ tests/data/decision.test.ts > parseDecisions > round-trips an exported file 0ms
+ ✓ tests/data/decision.test.ts > parseDecisions > rejects other files, unknown statuses and out-of-range ratings 0ms
+ ✓ tests/data/decision.test.ts > averageRating > averages only the ratings given 0ms
+ ✓ tests/sim/steam.test.ts > steaming > stretches air in only with the tip near the surface 2ms
+ ✓ tests/sim/steam.test.ts > steaming > screeches and makes big bubbles with the tip out of the milk 0ms
+ ✓ tests/sim/steam.test.ts > steaming > foam lifts the surface, so the tip ends up deeper 0ms
+ ✓ tests/sim/steam.test.ts > steaming > heats while open and stops heating when closed 0ms
+ ✓ tests/sim/steam.test.ts > steaming > a stretch-then-spin technique makes silky milk at the right temperature 1ms
+ ✓ tests/sim/steam.test.ts > steaming > names temperature and texture faults 1ms
+ ✓ tests/data/segmentManifest.test.ts > the committed segment manifest > is valid, and lists only release audio (no segment clip ships yet) 2ms
+ ✓ tests/data/segmentManifest.test.ts > segment manifest validator > accepts licensed TTS and recorded segment clips with their trimmed words 0ms
+ ✓ tests/data/segmentManifest.test.ts > segment manifest validator > catches segments the game no longer says, or says differently 0ms
+ ✓ tests/data/segmentManifest.test.ts > segment manifest validator > catches the wrong file, speaker, duplicates and silent or empty clips 0ms
+ ✓ tests/data/segmentManifest.test.ts > segment manifest validator > lists only release audio: placeholders, stand-ins, no licence or no provenance fail 0ms
+ ✓ tests/data/segmentManifest.test.ts > segment manifest validator > catches a version bump and one voice shared by two characters 0ms
+ ✓ tests/data/segmentManifest.test.ts > releaseSegmentIds (what a production build asks the server for) > only listed release audio with a licence and a release provenance 0ms
+ ✓ tests/sim/attempt.test.ts > bands > uses the trial bands exactly 1ms
+ ✓ tests/sim/attempt.test.ts > scoreAttempt > adds art, cup, milk and shot points 0ms
+ ✓ tests/sim/attempt.test.ts > scoreAttempt > rejects attempts that cannot be judged 0ms
+ ✓ tests/sim/attempt.test.ts > scoreAttempt > lists the worst fault first 0ms
+ ✓ tests/sim/attempt.test.ts > scoreAttempt > spilling costs points 0ms
+ ✓ tests/sim/attempt.test.ts > artFaults > distinguishes the classic failures 0ms
+ ✓ tests/sim/attempt.test.ts > best valid attempt > takes the best score among valid attempts only 0ms
+ ✓ tests/sim/attempt.test.ts > best valid attempt > is a disaster when nothing counted 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > defaults: Normal, subtitles by difficulty, learning mode off, pour sensitivity 1 1ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > a v1 blob (saved before learning mode went off by default) is replaced by the defaults 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > a v2 blob round-trips 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > a v2 blob from before pour sensitivity keeps its settings and gets the default 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > text size is s, m or l; anything else (or nothing) is m 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > subtitles (captions) are on unless saved off; a blob from before them gets them on 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > pour sensitivity is clamped to the slider range; junk gives the default 0ms
+ ✓ tests/ui/settings.test.ts > listening settings (localStorage) > garbage or blocked storage just gives the defaults 0ms
+ ✓ tests/ui/settings.test.ts > pour sensitivity slider > snaps slider values to the range and its 0.1 steps 0ms
+ ✓ tests/ui/settings.test.ts > pour sensitivity slider > every step from 0.5 to 2 is a clean one-decimal number 0ms
+ ✓ tests/ui/settings.test.ts > pour sensitivity slider > reads as a multiplier with one decimal 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > is titled after the game, not Day 1 1ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > describes the week of morning rushes 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > has Open Graph and Twitter card tags 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > ships a 1200×630 PNG under 300 kB as public/og.png 1ms
+ ✓ tests/scripts/devTools.test.ts > dev tools save endpoint > saves casting decisions to the fixed file, normalised 1ms
+ ✓ tests/scripts/devTools.test.ts > dev tools save endpoint > saves listening notes only when they say what they are 0ms
+ ✓ tests/scripts/devTools.test.ts > dev tools save endpoint > refuses unknown kinds (never a path), bad JSON and invalid decisions 0ms
+ ✓ tests/sim/espresso.test.ts > espresso > grinds only while held 1ms
+ ✓ tests/sim/espresso.test.ts > espresso > runs the shot timer faster than real time and stops itself at the max 0ms
+ ✓ tests/sim/espresso.test.ts > espresso > a heavier dose runs slower 0ms
+ ✓ tests/sim/espresso.test.ts > espresso > scores a textbook shot fully and names the faults of bad ones 1ms
+ ✓ tests/sim/espresso.test.ts > espresso > stopShot marks the shot done 0ms
+ ✓ tests/sim/shop.test.ts > the upgrade shop > with nothing owned the station is today's: every upgrade's `from` 1ms
+ ✓ tests/sim/shop.test.ts > the upgrade shop > each owned upgrade sets its own parameter, and unknown ids do nothing 0ms
+ ✓ tests/sim/shop.test.ts > the upgrade shop > buys out of the till in integer cents and records the id; the old save is untouched 0ms
+ ✓ tests/sim/shop.test.ts > the upgrade shop > refuses what the till can't cover, what's owned, and what doesn't exist 0ms
+ ✓ tests/audio/mixCheck.test.ts > mixFindings > clean moods give only information 1ms
+ ✓ tests/audio/mixCheck.test.ts > mixFindings > clipping is a defect, alone or in the worst-case mix 0ms
+ ✓ tests/audio/mixCheck.test.ts > mixFindings > warns on a hot true peak, a DC offset is a defect 0ms
+ ✓ tests/audio/mixCheck.test.ts > mixFindings > warns when the moods are far apart in loudness 0ms
+ ✓ tests/audio/mixCheck.test.ts > mixFindings > speech over the ducked music: info above the rule of thumb, warning below 0ms
+ ✓ tests/core/speech.test.ts > speech channel > only ever has one line on screen and plays the queue in order 1ms
+ ✓ tests/core/speech.test.ts > speech channel > a customer order jumps the queue and is never dropped 0ms
+ ✓ tests/core/speech.test.ts > speech channel > an order cuts a Gaz aside but not another customer 0ms
+ ✓ tests/core/speech.test.ts > speech channel > live reactions never stomp on unread lines and are rate limited 0ms
+ ✓ tests/core/speech.test.ts > speech channel > ambient lines only fill silence 0ms
+ ✓ tests/ui/keys.test.ts > controlOwnsSpace > a visible button on a card or menu presses with Space 1ms
+ ✓ tests/ui/keys.test.ts > controlOwnsSpace > a button in the play HUD leaves Space to the game (a click leaves it focused) 0ms
+ ✓ tests/ui/keys.test.ts > controlOwnsSpace > a hidden control that kept focus (the title after Start) leaves Space to the game 0ms
+ ✓ tests/ui/keys.test.ts > controlOwnsSpace > the page itself, the canvas and non-elements leave Space to the game 0ms
+ ✓ tests/ui/keys.test.ts > aliasKey (Settings → Keys) > a chosen key stands for its action's default; the defaults and other keys stay themselves 1ms
+ ✓ tests/ui/keys.test.ts > aliasKey (Settings → Keys) > labels keys as the settings show them 0ms
+ ✓ tests/ui/gauges.test.ts > the milk label > names the carton in words and an icon, one icon per carton 1ms
+ ✓ tests/ui/gauges.test.ts > the milk label > is empty where no carton is chosen (Day 1, practice) 0ms
+ ✓ tests/ui/gauges.test.ts > two hands > follows the shot and the steam 0ms
+ ✓ tests/core/clock.test.ts > clock > turns frame time into whole fixed steps and keeps the remainder 1ms
+ ✓ tests/core/clock.test.ts > clock > runs no steps while paused 0ms
+ ✓ tests/core/clock.test.ts > clock > caps long stalls instead of fast-forwarding 0ms
+ ✓ tests/core/clock.test.ts > clock > advances game time per step 0ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > shows the diagnosis's own fix for a blob, never the generic pull-through line 1ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > matches each art fault to its own finding, and keeps tips for the rest 0ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > falls back to the fault tip when there is no diagnosis 0ms
+ ✓ tests/ui/a11y.test.ts > applyA11y > subtitles are on unless the setting says off (missing = on) 1ms
+ ✓ tests/ui/a11y.test.ts > applyA11y > text size sets data-text and --text-scale (missing = medium, scale 1) 0ms
+ ✓ tests/ui/pos.test.ts > register costs > shows a patience cost as minus seconds, and nothing when it is free 1ms
+ ✓ tests/ui/pos.test.ts > register costs > takes each aid's cost from the sim's table 0ms
+ ✓ tests/ui/pos.test.ts > register costs > counts down the repeats they will put up with 0ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > is deterministic for a seed 3323ms
+ ✓ tests/core/rushListening.test.ts > what listening aids cost > clarified fields are recorded once each, in the order asked 1327ms
+ ✓ tests/core/rushListening.test.ts > dialogue never talks over another customer > with every aid used on every customer, customers never cut each other off 1109ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > a misheard ticket is made as rung up, handed back, corrected, then served right 1465ms
+ ✓ tests/core/rushListening.test.ts > dialogue never talks over another customer > asking a question cuts Gaz off, and a customer may cut themselves off, never another 1ms
+ ✓ tests/core/rushListening.test.ts > rapid switching at the register > ringing up and taking the next order in back-to-back steps keeps every ticket with its customer 1099ms
+ ✓ tests/fuzz/weekPlayServe.test.ts > real week shifts, served (500 seeds, expert bot, long-black menu) > real flat-white shifts (novice bot, real menu, 12 seeds): the same rules hold 24246ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > replay, repeat and clarify are counted, cost patience, and use the right recordings 2191ms
+ ✓ tests/fuzz/weekPlayIdle.test.ts > real week shifts, nobody served (500 seeds × 5 shifts, idle player) > every customer is accounted for, the report and events agree, a disaster is replayed 38171ms
+ ✓ tests/core/rushListening.test.ts > rapid switching at the register > aids after a ticket prints go to the next customer, not the last one 3ms
+ ✓ tests/core/rushListening.test.ts > rapid switching at the register > ringing up while they are still talking is ignored until they finish 0ms
+ ✓ tests/core/rushListening.test.ts > shifts finish after corrections > every order misheard (drinks and milks): all corrected, the shift still reaches the report 1751ms
+ ✓ tests/core/rushListening.test.ts > shifts finish after corrections > a restart mid-shift keeps forced order lines and difficulty 0ms
+ ✓ tests/fuzz/weekPlayIdle.test.ts > real week shifts, nobody served (500 seeds × 5 shifts, idle player) > Endless Rush ends at the third walk-out with no events, every fifth seed 932ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > "could you repeat that?" works twice per customer; Replay plays what they said last 0ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > difficulty picks the order tiers, and the same seed gives the same orders 2ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > a competent listener gets through a hard shift too 1741ms
+ ✓ tests/core/rush.test.ts > Day 2 rush, played headless > restart mid-shift goes back to the intro with a fresh queue 2ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > a click is a press let go within 0.25 s; a longer hold steams 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > the click that started the pump never turns into steam until it is let go 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > flat white: hold during the shot steams fresh milk, a click stops the shot, the milk carries on 1ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > while steaming, Enter stops the shot and the milk keeps going 1ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > while steaming, a quick click is just steam: it never stops the shot 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > pausing cancels a press: a release first seen on resume is never a click 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > a second device pressed while steaming is just more holding, in either order 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > when the shot stops and the milk finishes in the same step, the shot is done first 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > warm milk left alone once the shot is off counts as finished, after a short grace 1ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > let go to click the shot off, then grab the jug again: the milk keeps heating 0ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > Gaz praises the two hands once a shift, not every drink 1ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > a shot left running to the limit while steaming goes in the bin, and Gaz says why 1ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > long black: no milk, so nothing changes: a press stops the shot at once, never steams 2ms
+ ✓ tests/core/rush.test.ts > two hands: steaming the milk while the shot runs > every flat white starts with a cold jug (the milk gauge shows during its shot) 0ms
+stdout | tests/review/independentFuzz.test.ts > AFFINITY_RULE: a correct serve to a regular adds +1, the save keeps it, and THE_USUAL becomes reachable
+the-usual: {"seeds":1000,"shifts":5000,"correctServes":35113,"points":36001,"usual":888,"bad":0}
+
+ ✓ tests/review/independentFuzz.test.ts > AFFINITY_RULE: a correct serve to a regular adds +1, the save keeps it, and THE_USUAL becomes reachable 31826ms
+ ✓ tests/review/independentFuzz.test.ts > AFFINITY_RULE (decided 2026-10-17): serving a regular correctly raises affinity by 1 1ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift pacing > a perfect player still loses nobody, on Easy or Normal 15856ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift customers > the first customer is patient, and everyone who might order a flat white has 110 s+ 0ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift customers > Karen comes last and is the hardest to please 0ms
+ ✓ tests/core/rushPace.test.ts > Day 2 first-shift customers > arrivals are at least 35 s apart, so the line stays short 0ms
+ ✓ tests/core/week/curve-novice.test.ts > week 1 curve: novice > fails Friday 60500ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > the bin chicken is booked at the start, and cooldowns from earlier shifts hold 1ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > the last event of earlier shifts is never this shift's first 40357ms
+ ✓ tests/core/rushEvents.test.ts > shift events in the service loop > the bird's visit applies RARE_BIRD's outcome 0ms
+ ✓ tests/core/week/curve-average.test.ts > week 1 curve: average > passes Mon–Wed, about 70 % of Thursdays and half of Fridays 72182ms
+ ✓ tests/core/week/curve-expert.test.ts > week 1 curve: expert > never fails a shift 73203ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers
+AssertionError: expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+
+- Expected
++ Received
+
+@@ -1,46 +1,53 @@
+  {
+    "accuracy": {
+      "drink": {
+-       "correct": 6,
+-       "total": 6,
++       "correct": 0,
++       "total": 0,
+      },
+      "heart": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+      "milk": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+      "temp": {
+-       "correct": 3,
+-       "total": 3,
++       "correct": 0,
++       "total": 0,
+      },
+    },
+-   "customers": 6,
+-   "finished": 1,
++   "customers": 0,
++   "finished": 0,
+    "handedBack": 0,
+    "logs": 2,
+-   "ordersHeard": 6,
++   "ordersHeard": 0,
+    "pardons": {
+      "questions": 0,
+      "repeats": 0,
+      "replays": 0,
+    },
+-   "pardonsPerOrder": 0,
+-   "quits": [],
++   "pardonsPerOrder": null,
++   "quits": [
++     {
++       "ending": "closed",
++       "id": "2026-10-19T00:00:00.000Z#1",
++       "kind": "shift",
++       "where": "day2: intro at 0 s, station idle, 0 served, 0 in the café",
++     },
++   ],
+    "refused": 0,
+    "registerWait": {
+-     "max": 0,
+-     "median": 0,
++     "max": null,
++     "median": null,
+    },
+    "serveSeconds": {
+-     "max": 39.6,
+-     "median": 31.2,
++     "max": null,
++     "median": null,
+    },
+-   "served": 6,
++   "served": 0,
+    "sessions": 1,
+    "shifts": 1,
+    "shiftsByMode": {
+      "day2": 1,
+      "endless": 0,
+
+ ❯ tests/review/independentM3.test.ts:50:31
+     48|       [latest, old],
+     49|     ]) {
+     50|       expect(summarise(logs)).toEqual({ ...expected, logs: 2 });
+       |                               ^
+     51|     }
+     52|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point
+AssertionError: expected { logs: 2, sessions: 1, …(18) } to deeply equal { logs: 2, sessions: 1, …(18) }
+
+- Expected
++ Received
+
+@@ -28,14 +28,14 @@
+      "replays": 0,
+    },
+    "pardonsPerOrder": null,
+    "quits": [
+      {
+-       "ending": "title",
++       "ending": "closed",
+        "id": "2026-10-19T00:00:00.000Z#1",
+        "kind": "trial",
+-       "where": "steam, attempt 1",
++       "where": "title, attempt 1",
+      },
+    ],
+    "refused": 0,
+    "registerWait": {
+      "max": null,
+
+ ❯ tests/review/independentM3.test.ts:72:38
+     70|       where: 'steam, attempt 1',
+     71|     });
+     72|     expect(summarise([latest, old])).toEqual({ ...summarise([latest]),…
+       |                                      ^
+     73|   });
+     74| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise
+AssertionError: expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "error": Any<String>,
+-   "ok": false,
++   "ok": true,
+  }
+
+ ❯ tests/review/independentM3.test.ts:83:20
+     81|   ])('rejects %s instead of silently dropping it or crashing in summar…
+     82|     const result = readExport(JSON.stringify({ version: 1, records: [r…
+     83|     expect(result).toMatchObject({ ok: false, error: expect.any(String…
+       |                    ^
+     84|     if (!result.ok) expect(result.error.length).toBeGreaterThan(0);
+     85|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total
+AssertionError: expected { ok: true, log: { version: 1, …(1) } } to match object { ok: false, error: Any<String> }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "error": Any<String>,
+-   "ok": false,
++   "ok": true,
+  }
+
+ ❯ tests/review/independentM3.test.ts:92:76
+     90|     // Simulate a malformed JSON export, without weakening the product…
+     91|     const corrupt: unknown = { ...shift, served: 'not-a-count' };
+     92|     expect(readExport(JSON.stringify({ version: 1, records: [corrupt] …
+       |                                                                            ^
+     93|       ok: false,
+     94|       error: expect.any(String),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/review/independentM3.test.ts:110:29
+    108|       },
+    109|     );
+    110|     expect.soft(run.status).toBe(1);
+       |                             ^
+    111|     expect.soft(run.stderr).toContain(bad);
+    112|     expect.soft(run.stdout).toBe('');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected '' to contain '/var/folders/55/tmvqlq7s0zbfb7z81wqhm…'
+
+- Expected
++ Received
+
+- /var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-m3-L6Q7gm/invalid-record.json
+
+ ❯ tests/review/independentM3.test.ts:111:29
+    109|     );
+    110|     expect.soft(run.status).toBe(1);
+    111|     expect.soft(run.stderr).toContain(bad);
+       |                             ^
+    112|     expect.soft(run.stdout).toBe('');
+    113|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary
+AssertionError: expected '## Playtest summary\n\n| | |\n| --- |…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ ## Playtest summary
++
++ | | |
++ | --- | --- |
++ | Logs · sessions | 2 · 3 |
++ | Day 1 trials | 2: hired 0, almost 1, failed 0, disaster 0, unfinished 1 |
++ | Shifts | 3 (Day 2 2, week 1, Endless 0), 2 to the report |
++ | Customers · served · walk-outs · shown the door | 14 · 8 · 6 · 0 |
++ | Walk-outs by stage | queue 0 · register 6 · ordering 0 · ticket 0 |
++ | Drinks handed back | 0 |
++ | Pardons (replays · repeats · questions) | 0 · 0 · 2 |
++ | Pardons per order | 0.2 (10 orders heard) |
++ | Register wait (median · max) | 0 s · 0 s |
++ | Time to serve (median · max) | 54.6 s · 68.8 s |
++
++ ### Accuracy per field (what was rung up vs. what was said)
++
++ | Field | Right | Heard | |
++ | --- | --- | --- | --- |
++ | drink | 9 | 9 | 100 % |
++ | milk | 3 | 3 | 100 % |
++ | temp | 3 | 3 | 100 % |
++ | heart | 3 | 3 | 100 % |
++
++ ### Quit points
++
++ | Record | Ending | Where |
++ | --- | --- | --- |
++ | trial 2026-10-18T10:00:00.000Z#1 | title | steam, attempt 1 |
++ | shift 2026-10-18T10:00:00.000Z#2 | title | week shift 1: service at 89 s, station shot, 2 served, 2 in the café |
++
+
+ ❯ tests/review/independentM3.test.ts:112:29
+    110|     expect.soft(run.status).toBe(1);
+    111|     expect.soft(run.stderr).toContain(bad);
+    112|     expect.soft(run.stdout).toBe('');
+       |                             ^
+    113|   });
+    114| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+
+ Test Files  1 failed | 104 passed (105)
+      Tests  7 failed | 854 passed (861)
+   Start at  00:42:09
+   Duration  73.66s (tests 98%, import 1%, transform 1%)
+
