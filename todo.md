@@ -23,6 +23,7 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 - Checks before every commit: `npm run typecheck && npm run lint && npm test` exit 0. Full E2E once per
   milestone gate: `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts`
   (~30 min, run in the background; 127.0.0.1:5196 is held by a foreign server; never edit `src/` while it runs).
+  The task that started the E2E waits for it to finish before merging or ticking; the next task never starts while it runs.
 - `npm run build` in this checkout fails on nine stale untracked renders in `public/assets/voice/` (Q3). A build
   verify uses a clean export (`git archive HEAD | tar -x -C <scratch>` + symlinked `node_modules`) until Q3 is
   answered; T3.1 scripts that.
@@ -170,6 +171,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       measurement is already over 150, do **not** start merging geometry here: commit the spec as `.fixme`
       with the numbers, note it under `Discovered`, and let the replan size the `world/` work.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/perf.spec.ts --config tests/review/playwright.ipv6.config.ts`
+      (a `.fixme` commit with numbers under Discovered counts as this task done)
 - [ ] T3.4 `scripts/deploy.ts` → `npm run deploy`: runs `build:clean`, then in a temporary worktree of
       `origin/gh-pages` replaces the contents with `dist/` plus `.nojekyll` and (with `--domain <host>`) a `CNAME`,
       commits "deploy <sha>", and prints what it would push; **dry run by default**, `--push` publishes. `base`
