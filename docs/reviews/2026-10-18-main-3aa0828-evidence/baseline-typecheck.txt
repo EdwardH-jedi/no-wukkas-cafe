@@ -1,0 +1,4 @@
+
+> no-wukkas-cafe@0.1.0 typecheck
+> tsc --noEmit
+

@@ -1,0 +1,41 @@
+{
+  "head": "3aa082856a2d33a4f13606383955f6ea78c040d3",
+  "over_600_lines": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 931
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14908
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894
+    }
+  ],
+  "trace_equal": true,
+  "balance": {
+    "base": {
+      "bytes": 60880,
+      "sha256": "c0eb006c733febbe25033d3a7f70bd49e8bcac7651cf870d22c281454a8ae054"
+    },
+    "current": {
+      "bytes": 60880,
+      "sha256": "c0eb006c733febbe25033d3a7f70bd49e8bcac7651cf870d22c281454a8ae054"
+    }
+  },
+  "balance_identical": true
+}

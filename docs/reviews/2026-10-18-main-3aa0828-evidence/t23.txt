@@ -1,0 +1,12 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+
+ Test Files  6 passed (6)
+      Tests  27 passed (27)
+   Start at  23:38:38
+   Duration  21.79s (tests 98%, transform 2%)
+

@@ -1,0 +1,61 @@
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v2: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 7ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v3: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 1ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > day2 summary must not persist visits or affinity 0ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > endless summary must not persist visits or affinity 1ms
+ × tests/review/independentM2.test.ts > independent shared pause harness coverage > pause must synchronise all HUDs and audio and prevent a released hold becoming a click 10ms
+   → expected { click: true, steam: false } to deeply equal { click: false, steam: false }
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > title pause is a no-op, but a subsequent rush pause must actually suspend audio 0ms
+ × tests/review/independentM2.test.ts > independent shared pause harness coverage > trial: replay captions must wait for resumed audio and target exactly that HUD 10ms
+   → expected "noop" to be called 1 times, but got 0 times
+ × tests/review/independentM2.test.ts > independent shared pause harness coverage > practice: replay captions must wait for resumed audio and target exactly that HUD 3ms
+   → expected "noop" to be called 1 times, but got 0 times
+ × tests/review/independentM2.test.ts > independent shared pause harness coverage > rush: replay captions must wait for resumed audio and target exactly that HUD 6ms
+   → expected "noop" to be called 1 times, but got 0 times
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentM2.test.ts > independent shared pause harness coverage > pause must synchronise all HUDs and audio and prevent a released hold becoming a click
+AssertionError: expected { click: true, steam: false } to deeply equal { click: false, steam: false }
+
+- Expected
++ Received
+
+  {
+-   "click": false,
++   "click": true,
+    "steam": false,
+  }
+
+ ❯ tests/review/independentM2.test.ts:125:74
+    123|     expect(h.app.clock.paused).toBe(false);
+    124|     expect(h.ctx().state).toBe('running');
+    125|     expect(stepPress(press, { holding: false, pressed: false }, 1 / 60…
+       |                                                                          ^
+    126|       click: false,
+    127|       steam: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/review/independentM2.test.ts > independent shared pause harness coverage > trial: replay captions must wait for resumed audio and target exactly that HUD
+ FAIL  tests/review/independentM2.test.ts > independent shared pause harness coverage > practice: replay captions must wait for resumed audio and target exactly that HUD
+ FAIL  tests/review/independentM2.test.ts > independent shared pause harness coverage > rush: replay captions must wait for resumed audio and target exactly that HUD
+AssertionError: expected "noop" to be called 1 times, but got 0 times
+ ❯ tests/review/independentM2.test.ts:169:28
+    167|       for (let i = 0; i < 20; i++) await Promise.resolve();
+    168|       h.audio.update();
+    169|       expect(replay[mode]).toHaveBeenCalledTimes(1);
+       |                            ^
+    170|       expect(replay[mode].mock.calls[0]).toContain(clip.transcript);
+    171|       for (const other of ['trial', 'practice', 'rush'] as const)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  23:38:16
+   Duration  540ms (transform 73%, import 18%, tests 8%)
+

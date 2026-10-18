@@ -1,0 +1,82 @@
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading
+clip title previously fading gains: [0.8166666666666668,0.33333333333333315,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading
+clip stopVoice previously fading gains: [0.8166666666666668,0.33333333333333315,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading
+segments title previously fading gains: [0.8166666666666668,0.33333333333333315,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading
+segments stopVoice previously fading gains: [0.8166666666666668,0.33333333333333315,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume
+clip stopVoice cancelled-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume
+clip replaced-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume
+segments stopVoice cancelled-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume
+segments replaced-source gains: [0,0,0,0]
+
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: cancelling an already audible line while suspended must silence it on resume 11ms
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading 11ms
+   → suspended cancellation must silence all old sources, including fading ones: expected [ 0.8166666666666668, …(3) ] to deeply equal [ +0, +0, +0, +0 ]
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading 3ms
+   → suspended cancellation must silence all old sources, including fading ones: expected [ 0.8166666666666668, …(3) ] to deeply equal [ +0, +0, +0, +0 ]
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: cancelling an already audible line while suspended must silence it on resume 3ms
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading 4ms
+   → suspended cancellation must silence all old sources, including fading ones: expected [ 0.8166666666666668, …(3) ] to deeply equal [ +0, +0, +0, +0 ]
+ × tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading 4ms
+   → suspended cancellation must silence all old sources, including fading ones: expected [ 0.8166666666666668, …(3) ] to deeply equal [ +0, +0, +0, +0 ]
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > quitting to title while a decoded line waits must not emit the old game on resume 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > a gone customer whose segments decoded during suspension must stay silent on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: an uncancelled suspended line starts once and remains connected on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: an uncancelled suspended line starts once and remains connected on resume 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading
+ FAIL  tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading
+AssertionError: suspended cancellation must silence all old sources, including fading ones: expected [ 0.8166666666666668, …(3) ] to deeply equal [ +0, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
+-   0,
++   0.8166666666666668,
++   0.33333333333333315,
+    0,
+    0,
+  ]
+
+ ❯ tests/review/independentSuspendedCancellation.test.ts:183:11
+    181|           gains,
+    182|           'suspended cancellation must silence all old sources, includ…
+    183|         ).toEqual([0, 0, 0, 0]);
+       |           ^
+    184|       });
+    185|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 10 passed (14)
+   Start at  23:38:15
+   Duration  597ms (transform 72%, import 16%, tests 11%)
+

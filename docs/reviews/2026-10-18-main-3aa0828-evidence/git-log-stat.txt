@@ -1,0 +1,332 @@
+commit 3aa082856a2d33a4f13606383955f6ea78c040d3
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:33:22 2026 +1100
+
+    chore(todo): M2 gate state, waiting only on the push of main
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ todo.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+commit c05d25751bc8e8879b9d3b61df1868db861826ca
+Merge: 157329e b39ca28
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:02:14 2026 +1100
+
+    Merge feat/m2-leftovers: M2 (visits, week-2 rows, phone register + subtitles, shared pause, F5)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit b39ca28378c504dd47cf2a1e38f04665466b6cdb
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:02:08 2026 +1100
+
+    review fixes: finishShift keeps a regular's lastOrder when adding visits
+    
+    fix(core): T2.2 rebuilt each regular's record as {visits, affinity},
+    dropping RegularMemory.lastOrder on every save after a shift (the base
+    commit spread the old record). Codex review of the M2 branch, P2. Spread
+    the old record again.
+    
+    Regression test tests/core/week/session.test.ts "visits add up beside
+    affinity and a regular's last order is kept": red before (lastOrder
+    missing), green after. npm test 100 files / 824 tests.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/core/week/session.ts        |  2 +-
+ tests/core/week/session.test.ts | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+commit 0f30d166c7058ef5a9348ff63d53756140c11cdf
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:58:26 2026 +1100
+
+    M2 T2.7: docs/TODO.md and docs/MILESTONES.md point at todo.md
+    
+    docs: a banner on docs/TODO.md (planning moved to todo.md on 2026-10-18;
+    the file stays the evidence archive) and a Notes paragraph in
+    docs/MILESTONES.md mapping its M0-M7 to todo.md's M2-M5.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/MILESTONES.md | 7 +++++++
+ docs/TODO.md       | 3 +++
+ todo.md            | 2 +-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+commit 4c4d72d3765ae9e4c191a04379e513936a3a023c
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:57:50 2026 +1100
+
+    M2 T2.6: one pause/resume/replay for boot and the review harness
+    
+    refactor(app): boot.ts's setPaused / resumeAll / replay move to
+    src/app/pause.ts (setPaused, resumeAll, replayLast; they take `app` and
+    read it when called). boot.ts and tests/review/harness.ts both call
+    them, so the harness no longer carries a copy that had drifted: it
+    skipped the HUDs' setPaused, cancelPress on pause, and replay's subtitle
+    hooks. Behaviour in the game is identical.
+    
+    Checks: tests/review + rushTrace 17 files / 83 tests green; npm test 100
+    files / 823 tests; rushTrace's seven hashes equal the review's values
+    (normal c565b78d, hard 884d6e21, easy f4065c58, aids dbbb5640,
+    misheard 9cb0c129, hurry d975462d, idle 90a50992).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/boot.ts         | 50 +++++-------------------------------------------
+ src/app/pause.ts        | 51 +++++++++++++++++++++++++++++++++++++++++++++++++
+ tests/review/harness.ts | 24 +++++------------------
+ todo.md                 |  2 +-
+ 4 files changed, 62 insertions(+), 65 deletions(-)
+
+commit a506dab0470c4dc0ab39cd61d10397a8afff7135
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:55:21 2026 +1100
+
+    M2 T2.5: the subtitle box keeps its 16 px margin on a phone at Medium
+    
+    fix(ui): #subs/#psubs/#rsubs are content-box with width
+    min(720px, 100vw - 32px), so on a 390 px phone the box was 392 px wide
+    (358 + 2 x 16 padding + 2 x 1 border) and sat 1 px off each side. The
+    width now subtracts those 34 px, as the Large rule already did; screens
+    786 px and wider keep 720 px, so desktop is unchanged.
+    
+    tests/e2e/phoneHud.spec.ts: Day 2 #rsubs while a line shows at text
+    size S / M / L at 390x844, left >= 0 and right <= 390. Before: M red
+    (left -1), S and L green. After: 3/3.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/ui/styles/hud.css      |  3 ++-
+ tests/e2e/phoneHud.spec.ts | 25 +++++++++++++++++++++++++
+ todo.md                    |  2 +-
+ 3 files changed, 28 insertions(+), 2 deletions(-)
+
+commit 592c20060b1854f0db549ca5ab965dfa9806c2e7
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:50:23 2026 +1100
+
+    M2 T2.8: a suspended cancel also cuts lines still fading out (review F5)
+    
+    fix(audio): a line replaced on a running context keeps its 60 ms fade,
+    and stopSource dropped its refs, so the faded source lived only in the
+    `fading` set. A later cancel while the context was suspended (quit to
+    title, stopVoice) cut only the current source, and on resume the old
+    line's remaining fade played (gain 0.82 / 0.33 / 0 at 1 / 30 / 59 ms,
+    review 2026-10-18 of 157329e, F5). stopSource now disconnects every
+    source in `fading` when the context isn't running; this runs even when
+    there is no current source (the newer line may still be loading).
+    Running-context fades are unchanged.
+    
+    Acceptance: the four F5 reviewer tests in
+    tests/review/independentSuspendedCancellation.test.ts, red before, green
+    after; no reviewer test edited. typecheck/lint/test exit 0: 100 files,
+    823 tests. rushTrace's seven hashes unchanged. docs/TODO.md 6.13.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md            |  9 +++++++++
+ src/audio/voiceLines.ts | 16 +++++++++++++---
+ todo.md                 |  2 +-
+ 3 files changed, 23 insertions(+), 4 deletions(-)
+
+commit 53fdda280b20cf05771e1d25a3f1d219a5c496d4
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:48:01 2026 +1100
+
+    M2 T2.3: week 2+ shift rows follow the save's shift (open / done / locked)
+    
+    fix(core): shiftRows reported every row of week 2+ as `done` (any row
+    with a week-1 pass), so a later shift read "Done" while only the save's
+    shift is playable. Now, in every week: index < save.shift -> done,
+    === -> open, > -> locked; `best` still carries an earlier week's grade.
+    Week 1 is unchanged.
+    
+    Test: tests/core/week/progress.test.ts "in week 2 the current shift is
+    open ..." (red before: every row done). The reviewer's fuzz oracle
+    (tests/helpers/fuzzRules.ts) was re-issued by the review session for
+    this rule (0b72172, merged in 1f0bfa8): tests/fuzz + progress 27/27.
+    npm test at this commit: 819 passed / 4 failed, the four being review
+    157329e F5 (independentSuspendedCancellation), fixed next in T2.8.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/core/week/progress.ts        | 25 +++++++++++--------------
+ tests/core/week/progress.test.ts | 11 +++++++++++
+ todo.md                          |  4 ++--
+ 3 files changed, 24 insertions(+), 16 deletions(-)
+
+commit 1f0bfa8a21b0297cc2e6697c464282115427610b
+Merge: ea6fdd4 0b72172
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:46:15 2026 +1100
+
+    Merge chore/review-main-157329e: review of 157329e (F5, 4 red) + T2.3 oracle re-issue
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit ea6fdd46a4539bbb05d510d345238915483cbc3b
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:46:00 2026 +1100
+
+    M2 T2.4: on a phone the register opens under the tickets and instruction
+    
+    fix(ui): at max-width 720px #pos started at top 60px, over the ticket
+    column (#rtl: rail + #rinstr, from 62px). It now starts below #rtl:
+    rushHud.ts keeps --rtl-h (#rtl's height, one ResizeObserver; desktop's
+    display: contents gives 0) and rush.css places #pos at 70px + safe area
+    + --rtl-h, with max-height keeping the old bottom edge (100vh - 170px,
+    min 180px; a full rail makes the register scroll). Same for the "drink on
+    the pass" variant. Desktop rules untouched.
+    
+    New spec tests/e2e/phoneHud.spec.ts (seed 7, first customer ordering):
+    390x844 and 375x667 #pos vs #rinstr no overlap (before: #pos 60-433 over
+    #rinstr 70-143; after: #pos from 151), 1024x640 #pos within 2 px of its
+    measured box (662, 133.3, 346 x 373.4). 375x667 screenshot: register
+    151-524, subtitles from 570.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/ui/rushHud.ts          |   7 +++
+ src/ui/styles/rush.css     |  10 ++--
+ tests/e2e/phoneHud.spec.ts | 127 +++++++++++++++++++++++++++++++++++++++++++++
+ todo.md                    |   2 +-
+ 4 files changed, 141 insertions(+), 5 deletions(-)
+
+commit 0b721723882964b4565ef36e6452d5036ff2f9e0
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:45:02 2026 +1100
+
+    test(review): re-issue the week-2+ shift-row status rule (todo.md T2.3)
+    
+    tests/helpers/fuzzRules.ts progressBroken asserted the old week-2+ rule:
+    every row done, none locked. That encoded the defect docs/TODO.md Phase 4
+    called cosmetic and contradicts Edward's 2026-10-15 rule recorded in
+    src/core/week/session.ts (only the shift the week is on is playable:
+    earlier ones done, later ones locked). Re-issued, in every week and for any
+    save: index < shift -> done, === shift -> open, > shift -> locked (best still
+    carries an earlier week's grade). "Done without a pass" now applies only to
+    saves reached by play (`played`); the play fuzz's positioned saves skip the
+    history before their shift, so a done row there has no recorded pass.
+    
+    On 157329e: red in tests/fuzz/weekProgress (19,848 violations),
+    weekPlayIdle (7,500) and weekPlayServe (1,300 + 36), i.e. the acceptance
+    tests for T2.3. With the implementer's patch (t2.3-shiftrows.patch) applied
+    in a scratch export: tests/fuzz + tests/core/week/progress.test.ts 27/27
+    green. On this branch: typecheck 0, lint 0, npm test 811 passed / 8 failed
+    (819): these four plus F5's four.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/helpers/fuzzRules.ts | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
+
+commit 5275cf61feb6cf25401446b12a4d871625285450
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:38:59 2026 +1100
+
+    chore(todo): T2.3 waits on a reviewer re-issue; F5 queued as T2.8
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ todo.md | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+commit 5b675cedda17431e9504dd78dd81a0d61574b13d
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:37:22 2026 +1100
+
+    test(review): Codex review of 0cae2cf..157329e, 4 red reviewer tests
+    
+    Verdict FIX: P1 0, P2 1, P3 0 (docs/reviews/2026-10-18-main-157329e.md).
+    F4 accepted: its six cancellation tests are green.
+    
+    - F5 P2 src/audio/voiceLines.ts:88: a line replaced on a running context
+      keeps its 60 ms fade but leaves `source`, so a later cancel while
+      suspended (quit to title, stopVoice) cuts only the current source; on
+      resume the old line's remaining fade still plays (gain 0.82 / 0.33 / 0 at
+      1 / 30 / 59 ms). 4 red in tests/review/independentSuspendedCancellation
+      .test.ts ("<clip|segments>: <title|stopVoice> during suspension must also
+      silence a previously replaced line still fading"), plus 2 green controls
+      (an already audible line cancelled while suspended stays silent).
+    - Same file, oracle only: old-line sources are now tagged at decode instead
+      of matched by duration === 1, which also caught the engine's one-second
+      ambience buffers. No existing expectation changed.
+    
+    Checked by the review session on this branch: typecheck 0, lint 0, npm test
+    exit 1 with 815 passed / 4 failed (819), the four being exactly F5's tests,
+    each failing on its output-path assertion; src/, scripts/, tests/helpers/
+    identical to 157329e.
+    
+    Not pushed: 157329e is not on origin (its main push waits on Edward), and
+    this branch carries it.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../additional-exits.json                          |  27 +
+ .../baseline-exits.json                            |  14 +
+ .../baseline-lint.txt                              |   6 +
+ .../baseline-test.txt                              |  18 +
+ .../baseline-typecheck.txt                         |   4 +
+ .../cancellation-exit.json                         |   4 +
+ .../cancellation-regressions.txt                   | 116 +++
+ .../cancellation-verified-exit.json                |   4 +
+ .../cancellation-verified.txt                      |  92 ++
+ .../codex-final-message.md                         |  34 +
+ .../determinism.txt                                |   0
+ .../final-exits.json                               |  14 +
+ .../final-lint.txt                                 |   6 +
+ .../final-test.txt                                 | 978 +++++++++++++++++++++
+ .../final-typecheck.txt                            |   4 +
+ .../git-log-stat.txt                               | 140 +++
+ .../2026-10-18-main-157329e-evidence/handoff.json  |  36 +
+ .../ibis-day2.json                                 |   9 +
+ .../ibis-week-index-3.json                         |   9 +
+ .../ibis-week-shift-3.json                         |   9 +
+ .../inventory.json                                 |  47 +
+ .../2026-10-18-main-157329e-evidence/inventory.py  |  20 +
+ .../production-diff.txt                            |  22 +
+ .../release-check.txt                              |  35 +
+ .../rush-trace.json                                |  30 +
+ .../source-checks.json                             |  57 ++
+ .../the-usual.json                                 |   8 +
+ docs/reviews/2026-10-18-main-157329e.md            | 200 +++++
+ .../independentSuspendedCancellation.test.ts       |  66 +-
+ 29 files changed, 2008 insertions(+), 1 deletion(-)
+
+commit 932563dfe5a567f12c53a6ae1007d1adfa0b9dbc
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 22:35:28 2026 +1100
+
+    M2 T2.2: write RegularMemory.visits on every drink a regular takes away
+    
+    feat(core): a regular served in a week shift counts one visit, right or
+    wrong (regularServed now takes `correct`; affinity still only on a correct
+    serve). ShiftEvents.visits is carried into the save by finishShift's new
+    optional 4th argument (weekWiring and the balance harness pass it). A
+    hand-back is no visit; Day 2 keeps none. Nothing reads visits yet.
+    
+    Tests: tests/core/regularAffinity.test.ts +3 (red before: visits
+    undefined; save {visits: 0, affinity: 1} after two shifts).
+    
+    Balance: `npm run balance` (30 seeds) on main vs this commit, CSV
+    byte-identical (cmp), so the first-try table is unchanged:
+    novice 90 63 37 0 0 · average 100 100 100 80 60 · expert 100 x5.
+    
+    Also in todo.md: T2.1 push pending noted under M2 Discovered (push to
+    main was denied by the permission classifier).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/weekWiring.ts              |  2 +-
+ src/core/rush/events.ts            | 13 +++++--
+ src/core/rush/serve.ts             |  2 +-
+ src/core/rush/state.ts             |  2 +
+ src/core/week/session.ts           | 11 ++++--
+ tests/core/regularAffinity.test.ts | 78 ++++++++++++++++++++++++++++++++++++++
+ tests/helpers/pace.ts              |  1 +
+ todo.md                            |  7 +++-
+ 8 files changed, 104 insertions(+), 12 deletions(-)
