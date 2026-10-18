@@ -191,7 +191,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       with the numbers, note it under `Discovered`, and let the replan size the `world/` work.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/perf.spec.ts --config tests/review/playwright.ipv6.config.ts`
       (a `.fixme` commit with numbers under Discovered counts as this task done)
-- [ ] T3.4 `scripts/deploy.ts` → `npm run deploy`: runs `build:clean`, then in a temporary worktree of
+- [x] T3.4 `scripts/deploy.ts` → `npm run deploy`: runs `build:clean`, then in a temporary worktree of
       `origin/gh-pages` replaces the contents with `dist/` plus `.nojekyll` and (with `--domain <host>`) a `CNAME`,
       commits "deploy <sha>", and prints what it would push; **dry run by default**, `--push` publishes. `base`
       for Vite: `/<repo name from the origin URL>/` (today `/no-wukkas-cafe/`) without a domain, `/` with one

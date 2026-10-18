@@ -16,6 +16,9 @@ const siteUrl = (): Plugin => ({
 });
 
 export default defineConfig({
+  // The path the game is served under: "/" here and in dev; scripts/deploy.ts sets the GitHub
+  // Pages path (/<repo>/) or "/" for a custom domain.
+  base: process.env.NWC_BASE ?? '/',
   // devTools: dev-server-only plumbing for the audio review pages in dev/ (never built).
   plugins: [voiceAssets(import.meta.dirname), devTools(import.meta.dirname), siteUrl()],
   server: { port: DEV_PORT, strictPort: true },

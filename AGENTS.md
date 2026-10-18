@@ -38,6 +38,7 @@ npm run dev -- --host  # same, reachable from an iPhone on the same Wi-Fi
 npm run build          # production build → dist/
 npm run build:clean    # production build of HEAD from a `git archive` export (untracked files can't reach the audio gate) → dist/; prints bytes without audio, fails over -- --budget N (default 3,000,000)
 npm run preview        # serve dist/ locally → http://localhost:4183
+npm run deploy         # GitHub Pages: build:clean with base /<repo>/, dist/ + .nojekyll into a temp worktree of origin/gh-pages, commit "deploy <sha>", print the URL; DRY RUN unless -- --push (Edward's call); -- --domain <host> → base / + CNAME
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint + prettier --check
 npm test               # vitest (sim + data unit tests)
