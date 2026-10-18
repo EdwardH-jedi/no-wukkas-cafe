@@ -105,7 +105,7 @@ jsdom.
       event mix is unchanged: confirm the `npm run balance` first-try table is identical and say so in the
       commit body.
       verify: `npx vitest run tests/core/regularAffinity.test.ts` (new case: two visits, one wrong → visits 2, affinity 1; red before)
-- [ ] T2.3 Week 2+: `shiftRows` in `src/core/week/progress.ts` reports the current playable shift as `done` when it
+- [x] T2.3 Week 2+: `shiftRows` in `src/core/week/progress.ts` reports the current playable shift as `done` when it
       has a non-disaster best from week 1. Rule, every week: `index === save.shift` → `open`; `index < save.shift`
       → `done` (the week only advances on a pass); `index > save.shift` → `locked`, even when a week-1 best
       exists (`best` still carries the grade). The UI's `shiftCells` already uses `canPlay`; make the data agree.
@@ -136,7 +136,7 @@ Discovered:
       `main` = 157329e merged locally, `review` messaged) but `git push origin main` was denied by the auto-mode
       permission classifier ("Modify Shared Resources"; AGENTS.md §2 also says never push to main directly).
       Edward: push it yourself (`! git push origin main`) or allow it, then T2.1's verify can pass.
-- (review) T2.3 waits on a reviewer re-issue: implemented and green on its own verify, but the reviewer's oracle
+- (review, resolved: re-issued in 0b72172, merged 1f0bfa8) T2.3 waited on a reviewer re-issue: implemented and green on its own verify, but the reviewer's oracle
       `tests/helpers/fuzzRules.ts:151-161` (used by `tests/fuzz/week*.test.ts`) asserts the old week-2+ rule (every
       row `done`, none `locked`), so `npm test` had 4 red fuzz tests. Reverted, not committed; patch kept at
       `<scratchpad>/t2.3-shiftrows.patch` (session cd44c8ae). `review` asked to re-issue the rule 2026-10-18; when

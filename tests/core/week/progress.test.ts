@@ -133,6 +133,17 @@ describe('progression', () => {
     expect(bestGrade(nextShift(s, report('excellent')), 1)).toBe('excellent');
     expect(endlessUnlocked(s)).toBe(true);
   });
+
+  it('in week 2 the current shift is open and later ones locked, whatever week 1 left', () => {
+    let s = newSave();
+    for (let i = 0; i < 5; i++) s = nextShift(s, report('good'));
+    s = nextShift(s, report('okay'));
+    s = nextShift(s, report('okay'));
+    expect([s.week, s.shift]).toEqual([2, 2]);
+    const rows = shiftRows(s);
+    expect(rows.map((r) => r.status)).toEqual(['done', 'done', 'open', 'locked', 'locked']);
+    expect(rows.map((r) => r.best)).toEqual(['good', 'good', 'good', 'good', 'good']);
+  });
 });
 
 describe('upgrades', () => {
