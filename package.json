@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite --open",
     "build": "tsc --noEmit && vite build",
+    "build:clean": "node scripts/build-clean.ts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . && prettier --check .",

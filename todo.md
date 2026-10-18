@@ -172,7 +172,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
 - [x] T3.0 Shell screens, service HUD, settings (71df0e5, 58d729c); local playtest log `nwc.telemetry.v1` with
       Export/Clear (4c08363); accessibility: captions, text size, milk shape + name, reduced motion, remappable
       keys (c1b6f17); Phase 1.5 evidence captures (1e34e0c).
-- [ ] T3.1 `scripts/build-clean.ts` → `npm run build:clean`: export `HEAD` with `git archive` into a scratch dir,
+- [x] T3.1 `scripts/build-clean.ts` → `npm run build:clean`: export `HEAD` with `git archive` into a scratch dir,
       symlink `node_modules`, run the production build there, copy `dist/` back, print the audio-gate line and the
       total bytes of non-audio files; exit with the build's code; `--budget <bytes>` (default 3,000,000) fails
       over budget. Add the script to `package.json` and one line to `AGENTS.md` §3.
