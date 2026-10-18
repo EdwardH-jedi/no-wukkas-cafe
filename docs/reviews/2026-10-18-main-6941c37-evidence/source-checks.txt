@@ -1,0 +1,6 @@
+{"command": ["git", "rev-parse", "HEAD", "main", "6941c37"], "exit": 0, "stdout": "28eb1b4a418473c6d35dd7ac4802eba357262f23\n6941c3704e3ef6d4b2c76363389ab1a58854d390\n6941c3704e3ef6d4b2c76363389ab1a58854d390\n", "stderr": ""}
+{"command": ["git", "diff", "--exit-code", "6941c37", "--", "src", "scripts", "tests/helpers"], "exit": 0, "stdout": "", "stderr": ""}
+{"command": ["grep", "-rnE", "Math\\.random|Date\\.now|setTimeout", "src/sim", "src/core"], "exit": 1, "stdout": "", "stderr": ""}
+{"command": ["git", "diff", "--check"], "exit": 0, "stdout": "", "stderr": ""}
+{"src_files_over_600": [{"file": "src/core/trial.ts", "lines": 687}, {"file": "src/data/ownerLines.ts", "lines": 931}, {"file": "src/data/voice/manifest.json", "lines": 14908}, {"file": "src/dev/dev.css", "lines": 839}, {"file": "src/world/owner.ts", "lines": 623}, {"file": "src/world/station.ts", "lines": 894}]}
+{"png_sidecar_pairs": 34, "dimensions_match": 34}
