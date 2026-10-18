@@ -109,6 +109,31 @@ test.describe('phone HUD', () => {
     });
   }
 
+  // One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is the one measured.
+  for (const size of ['s', 'm', 'l'] as const) {
+    test(`subtitle box inside the screen at text size ${size} (390x844)`, async ({ browser }) => {
+      test.setTimeout(180_000);
+      const { ctx, page } = await open(browser, PHONES['390x844']!);
+      await page.addInitScript(
+        (t) =>
+          localStorage.setItem(
+            'nwc.listen.v1',
+            JSON.stringify({ version: 2, difficulty: 'normal', subtitles: 'always', textSize: t }),
+          ),
+        size,
+      );
+      await toRegister(page);
+      await page.locator('#rsubs:not(.gone)').waitFor({ state: 'attached', timeout: 30_000 });
+      const b = await page.evaluate(() => {
+        const r = document.querySelector('#rsubs')!.getBoundingClientRect();
+        return { left: r.left, right: r.right };
+      });
+      expect(b.left, `#rsubs left ${b.left}`).toBeGreaterThanOrEqual(0);
+      expect(b.right, `#rsubs right ${b.right}`).toBeLessThanOrEqual(390);
+      await ctx.close();
+    });
+  }
+
   test('the desktop register keeps its place at 1024x640', async ({ browser }) => {
     test.setTimeout(180_000);
     const { ctx, page } = await open(browser, DESKTOP);

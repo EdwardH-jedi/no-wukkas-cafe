@@ -116,7 +116,7 @@ jsdom.
       intersect, in the register state, at 390×844 and 375×667. Keep 1024×640 unchanged (assert the register's
       box there is as before, within 2 px).
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T2.5 Subtitle box (`#subs`, `src/ui/styles/base.css` large-text rules) at text size Medium and Large on a
+- [x] T2.5 Subtitle box (`#subs`, `src/ui/styles/base.css` large-text rules) at text size Medium and Large on a
       390-px phone stays inside the viewport (today 1 px over each side at Medium). Add the case to
       `tests/e2e/phoneHud.spec.ts`: for each text size, `#subs` left ≥ 0 and right ≤ 390 while a line shows.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts -g "subtitle"`

@@ -93,7 +93,8 @@
   left: 50%;
   bottom: calc(26px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
-  width: min(720px, calc(100vw - 32px));
+  /* 34 px = 2 × 16 px padding + 2 × 1 px border, so the whole box keeps a 16 px margin. */
+  width: min(720px, calc(100vw - 32px - 34px));
   background: var(--glass2);
   border: 1px solid var(--line);
   border-radius: 16px;
