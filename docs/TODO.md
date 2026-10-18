@@ -446,7 +446,7 @@ Goal: nothing shipped has only been graded by the agent that wrote it. Owns `tes
     it gained the telemetry (memory store) at the merge; rushTrace re-recorded once at the 1.5 merge (hashes with
     `gone` filtered out equal the 1.5 branch's).
 
-## Phase 6 — Fixes: review 2026-10-17, then playtest  `[~]` review fixes done (overnight run #3); playtest fixes wait for Phase 5
+## Phase 6 — Fixes: review 2026-10-17, then playtest  `[~]` review fixes done (overnight run #3, review 2026-10-18); playtest fixes wait for Phase 5
 Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the acceptance criteria; merged into main as
 8333240) and `docs/QA_SCENARIOS.md`. Decisions (Edward, 2026-10-18): AFFINITY_RULE = yes, SEGMENT_GATE = yes.
 - [x] 6.1 (a3ff4e5) P1 `voices --prune` never follows symlinks out of the cache: `listClips` uses lstat, skips links, and
@@ -459,9 +459,17 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       at the register or counter, or a listening line due); the week books the bird at `IBIS.chance` 0.30 (review §6).
 - [x] 6.5 (7586668) THE_USUAL reachable: +1 affinity per correct serve to a regular in a week shift (1.5.5; review §7).
       The review's "THE_USUAL remains unreachable" test asserted the defect; Edward approved inverting it in place.
+      DECISIONS Q1: the review session re-issued it as an AFFINITY_RULE test (28eb1b4), green on 6941c37.
 - [x] 6.6 (cd28b37) a placeholder in the segment manifest fails the build instead of being stripped (review §5).
 - [x] 6.7 (59b1c47) "telemetry has no transport; the game fetches its own static assets", not "no network" (review §8).
 - [x] 6.8 (1e34e0c) Phase 1.5 evidence: all five items at exact 390×844 / 1024×640 with JSON sidecars (review §9).
+- Review 2026-10-18 (`docs/reviews/2026-10-18-main-6941c37.md`, branch `chore/review-main-6941c37`, 4 red):
+- [x] 6.9 (0a52ec4) P2 F1 closing Settings while a key change waits stops waiting: the next gameplay key is neither
+      taken as the binding nor preventDefault'ed (`bindKeys` returns a cancel that `close()` calls).
+- [x] 6.10 (4d33c22) P2 F2 a clip started on a suspended AudioContext (paused, or the browser stopped audio) fires its
+      subtitle's onStart on the first frame the context runs, once; a line stopped meanwhile never starts.
+- [x] 6.11 (8ca1287) P3 F3 "Usual keys" restores the three bindings (the generic Settings button loop no longer
+      replaces its handler with close).
 - [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
   - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
@@ -493,6 +501,15 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     untracked renders in `public/assets/voice/`; `RegularMemory.visits` is never written; the subtitle box at Medium
     on a 390-px phone is 1 px over each side. One reviewer test was edited, with Edward's in-session approval: the
     THE_USUAL "remains unreachable" test, inverted in 7586668.
+  - Review 2026-10-18 fixes (6.9–6.11, on `fix/review-6941c37` after merging `chore/review-main-6941c37`): the four
+    reviewer tests red before (independentKeys 2, independentPausedCaptions 2), green after; no reviewer test edited.
+    One impl regression test added in `tests/audio/manager.test.ts` ("a clip landing while paused …"): red without
+    4d33c22 (`expected [ 'start' ] to deeply equal []`), green with it. `npm run typecheck && npm run lint && npm
+    test` at 4d33c22 → exit 0, `Test Files  99 passed (99)` · `Tests  803 passed (803)`. E2E at 4d33c22:
+    `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts` → exit 0, `28 passed
+    (26.7m)`, `17 skipped` (the opt-in evidence specs). Not on a device: iPhone Safari key remap and an iOS audio
+    interruption are untested. With the context suspended and the game running, a clip line's caption now waits for
+    audio; boot.ts resumes audio on any pointerdown/keydown, as the "blocked sound" toast says.
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
@@ -501,6 +518,7 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       a163a66 milk shape + name, then the keys commit: save v3 with a v2 → v3 migration test). Evidence:
       `docs/verification/2026-10-18-a11y/` (exact 390×844 and 1024×640, a JSON sidecar per capture,
       `tests/e2e/a11yEvidence.spec.ts`, opt-in with A11Y_SHOTS). Not on a device: iPhone Safari is untested.
+      Review 2026-10-18 found two key-remap defects (F1, F3), fixed in 6.9 and 6.11.
 - [~] Steam wrapper spike (Tauri): Windows build, save path, controller/Steam Deck input map; go/no-go note in `docs/STEAM.md`.
       Research note written (overnight run #3 B4, sources cited, unverified points marked); no scaffold: `cargo`
       isn't installed and no toolchain was installed. The go/no-go waits on Edward's three questions at its end.
