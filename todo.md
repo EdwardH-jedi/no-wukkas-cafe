@@ -40,11 +40,13 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M4
+current_milestone: M5
 needs_replan: false
 pause_at_gate: true
-branch: `main` = origin/main (M3 + its review fixes pushed 2026-10-19); M4 works on `feat/m4-leaderboard`.
-One implementer session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2`.
+branch: `main` = origin/main (M2, M3, M4 and their gate-review fixes pushed by 2026-10-19 02:20).
+**Do not start M5 until Edward says so** (2026-10-19). Next real input is the playtest (M3 gate below): when
+`docs/playtests/<date>.md` lands, `/plan replan`. One implementer session only, in this checkout; the review session
+lives in `~/Desktop/nwc-review-2` and never edits `src/`.
 
 ---
 
@@ -342,9 +344,28 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
 
 ## Gates (Edward) — in the order they unblock work
 
-1. M2 → M3: DECISIONS Q2, Q3, Q4, Q5, Q7; feel-test `feat/latte-feel`; 1.5.6.
-2. M3 → playtest: publish (`npm run deploy -- --push` or a host), phone pass, 3–5 testers → `docs/playtests/<date>.md`.
-3. M5: paid render + listen-through + actors' takes; Q6 Steam; domain, analytics; the tag push.
+Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-19 02:20.
+
+1. Decisions (`docs/DECISIONS.md`, all still open): Q2 delete the 21 merged local branches; Q3 the nine stale untracked
+   renders in `public/assets/voice/` (until then use `npm run build:clean`); Q4 milk gauge target 68–74 °C on
+   extra-hot tickets; Q5 Day 1 / practice captions start with the voice; Q7 captions while the browser suspends audio.
+2. Feel-test `feat/latte-feel` (`cd ../nwc-p1c && npx vite --port 5195 --strictPort`) so 1C can merge; decide 1.5.6
+   (pull-through thins only at ≥ 3.0 cm).
+3. Publish the playtest build: `npm run deploy -- --push` (dry run prints https://edwardh-jedi.github.io/no-wukkas-cafe/;
+   `origin/gh-pages` today is the old db4c056 site) — or pick another host / a custom domain (`-- --domain <host>`).
+4. Privacy-friendly analytics: which provider, or none (nothing is wired).
+5. Device pass: iPhone Safari + a mid-range Android (audio unlock, pinch, key remap, Export log download, the phone
+   register and subtitle layout from M2, the Scores screen).
+6. Playtest: 3–5 testers with `docs/playtests/README.md`; notes in `docs/playtests/<date>.md`, logs in
+   `docs/playtests/logs/`; then `npm run playtest:summary -- docs/playtests/logs/*.json` and `/plan replan`.
+7. Online leaderboard yes/no (needs a backend; M4 is local only).
+8. Voice for release: paid Google TTS render (`npm run voices:render -- --allow-paid`, AU$20 cap) + listen-through with
+   Korean / Mandarin / Indian-English speakers; actors' takes for Gaz, Jiwoo, Mei (`voices:render -- --import`);
+   Google Service Terms §20(d) check.
+9. Q6 Steam (first release or later port; Tauri or Electron; Steam features).
+10. Domain, then press go on v0.1.0 (`git push origin v0.1.0` once M5's tag script exists).
+11. Review loop from 2026-10-19: restart the `review` session in `~/Desktop/nwc-review-2` (it stood down tonight;
+    `chore/review-main-157329e` and `-3aa0828` are merged into main, so nothing of it is left to push).
 
 ## Parked (not before v0.1.0)
 - Jasmine Rush / tea queue, branches as levels, Karen as recurring boss, rival café, staff, seasonal events,
@@ -363,3 +384,7 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
   is Edward's), playtest kit + npm run playtest:summary, README; main 7192583 pushed (E2E 35 passed + 1 load flake
   re-run green). Discovered: gate review F1/F2 in the summary (fixed, 7 reviewer tests), week.spec.ts:68 wall-clock
   budget flakes under load.
+- M4 done 2026-10-19: local Scores board (nwc.scores.v1, outside the save), report "New best!" / "Best so far",
+  Scores screen from the title, Gaz's new-best line (+ placeholder clip), weekUi e2e step. Discovered: gate review
+  F1–F3 (restart board, score parsing, last good read; fixed, 5 reviewer tests), week.spec wall-clock budget widened,
+  the telemetry and save stores share F3's read flaw (replan). Main pushed; M5 not started (Edward).
