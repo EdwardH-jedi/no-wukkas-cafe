@@ -66,6 +66,10 @@ test.describe('the week', () => {
   test.setTimeout(300_000);
 
   test('a fresh save plays Monday in week mode; the report is saved', async ({ page }) => {
+    // Waiting out a whole shift at 4x still depends on the frame rate: headless software WebGL
+    // under a busy machine (load ~19) needed 3.6 of the old 4 minutes alone and timed out in the
+    // full suite (todo.md M3/M4 gates). The game time it waits for is unchanged.
+    test.setTimeout(600_000);
     await page.goto('/?voice=0&seed=7&ibis=0');
     await page.getByRole('button', { name: 'The week: shifts' }).click();
     await expect(page.locator('.shift-select')).toBeVisible();
@@ -89,7 +93,7 @@ test.describe('the week', () => {
     // Nobody is served: everyone walks out, a disaster. The receipt is kept, the shift isn't.
     // About 300 s of game time: the same budget as the Day 2 spec's wait for its report.
     await setScale(page, 4);
-    const deadline = Date.now() + 240_000;
+    const deadline = Date.now() + 480_000;
     while (Date.now() < deadline) {
       const d = await dbg(page);
       if (d.rush?.phase === 'summary') break;
