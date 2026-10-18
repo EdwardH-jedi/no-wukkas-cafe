@@ -133,4 +133,33 @@ describe('independent Settings key lifecycle', () => {
     expect(h.keys().action).toBe('q');
     expect(h.press('x').defaultPrevented).toBe(false);
   });
+
+  it('reset during capture cancels the capture, keeps Settings open, and restores every label', () => {
+    const h = setup();
+    h.click('button[data-key="action"]');
+    h.click('[data-a="keysReset"]');
+    expect(h.keys()).toEqual(DEFAULT_KEYS);
+    expect(h.dom.classList.contains('hide')).toBe(false);
+    expect(h.press('q').defaultPrevented).toBe(false);
+    expect(h.keys()).toEqual(DEFAULT_KEYS);
+    for (const action of ['action', 'replay', 'serve'])
+      expect(h.dom.querySelector(`button[data-key="${action}"]`).textContent).not.toBe(
+        'Press a key…',
+      );
+  });
+
+  it('backdrop close cancels capture and reopening permits a fresh explicit key choice', () => {
+    const h = setup();
+    h.click('button[data-key="replay"]');
+    const backdropClick = h.dom.onclick as unknown as (e: { target: Node }) => void;
+    backdropClick({ target: h.dom });
+    expect(h.dom.classList.contains('hide')).toBe(true);
+    expect(h.press('q').defaultPrevented).toBe(false);
+    expect(h.keys().replay).toBe('k');
+    expect(h.dom.querySelector('button[data-key="replay"]').textContent).toBe('K');
+    h.panel.open();
+    h.click('button[data-key="replay"]');
+    h.press('q');
+    expect(h.keys()).toEqual({ action: 'j', replay: 'q', serve: 'n' });
+  });
 });

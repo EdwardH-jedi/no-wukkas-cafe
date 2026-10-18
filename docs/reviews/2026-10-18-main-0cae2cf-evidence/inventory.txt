@@ -1,0 +1,30 @@
+{
+  "src_files_over_600": [
+    {
+      "path": "src/core/trial.ts",
+      "lines": 687
+    },
+    {
+      "path": "src/data/ownerLines.ts",
+      "lines": 931
+    },
+    {
+      "path": "src/data/voice/manifest.json",
+      "lines": 14908
+    },
+    {
+      "path": "src/dev/dev.css",
+      "lines": 839
+    },
+    {
+      "path": "src/world/owner.ts",
+      "lines": 623
+    },
+    {
+      "path": "src/world/station.ts",
+      "lines": 894
+    }
+  ]
+}
+{"png_sidecar_pairs": 34, "matching": 34}
+{"rush_trace_json_equal": true, "profiles": 7}
