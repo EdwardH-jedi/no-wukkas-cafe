@@ -1,0 +1,1141 @@
+commit 6941c3704e3ef6d4b2c76363389ab1a58854d390
+Merge: 416ae77 d1e60da
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:25:43 2026 +1100
+
+    Merge chore/decisions-q1: Q1 answered (review re-issues THE_USUAL test)
+
+commit d1e60da084915f78d4f7fcf1441370d7f7a0707e
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:25:43 2026 +1100
+
+    docs(decisions): Q1 answered, review re-issues the THE_USUAL test
+    
+    Edward, 2026-10-18: the reviewer test inverted in 7586668 is re-issued by
+    the review session as a test of the decided rule (AFFINITY_RULE), not kept
+    as the implementer's inversion.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/DECISIONS.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 416ae775df0daec5ba0e693be066700ab056d6ae
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:22:26 2026 +1100
+
+    chore(agents): impl/review session loop, decisions queue, milestones
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .claude/hooks/guard-review-tests.mjs  | 23 +++++++++++++++++++++++
+ .claude/settings.json                 | 15 +++++++++++++++
+ docs/DECISIONS.md                     | 16 ++++++++++++++++
+ docs/MILESTONES.md                    | 19 +++++++++++++++++++
+ docs/agents/IMPL.md                   | 15 +++++++++++++++
+ docs/agents/PLAN_REVIEW.md            | 10 ++++++++++
+ docs/agents/REVIEW.md                 | 15 +++++++++++++++
+ docs/agents/REVIEW_PROMPT_TEMPLATE.md | 31 +++++++++++++++++++++++++++++++
+ 8 files changed, 144 insertions(+)
+
+commit ce389865216c462f6b81628d3c3d30a233a04a26
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:57:06 2026 +1100
+
+    docs(todo): run #3's not-done list in Phase 6 and Phase 7 Evidence
+    
+    Overnight run #3 finish: Phase 6 Evidence gains what the review-fix part
+    left undone (Day 1/practice captions on request, the harness's copied
+    pause/replay, the nine stale renders that stop an in-checkout build,
+    RegularMemory.visits, the 1-px subtitle box at Medium on a phone) and the
+    one reviewer test edited with Edward's approval (7586668). Phase 7
+    Evidence lists Part B's merges and what is not done (no device runs,
+    Steam research only, devlog without playtest learnings, no branch
+    deleted, performance and deploy untouched). Details and questions:
+    docs/integration/RUN3_REPORT.md (kept untracked, as RUN2's).
+    
+    Final checks on 89e4214: npm test 97 files / 797 tests, 0 failed; E2E
+    (ipv6 config, port 5202) 28 passed, 17 skipped (opt-in evidence specs),
+    0 failed (26.6m); caption probes 3/3; clean-export build exit 0,
+    "[audio-gate] ok: 0 licensed audio file(s)".
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+commit 89e42144813ba8ed27a87fb8886265b86e89b29a
+Merge: e2c9c94 c5e10d5
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:27:10 2026 +1100
+
+    Merge chore/worktrees: AGENTS.md commands, worktree housekeeping
+    
+    B6 of overnight run #3. No branch deleted (docs/TODO.md: never delete
+    branches); nothing to prune; npm test 797/797.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit c5e10d55859dbb6738b260d3111d2aa05a7698dd
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:27:10 2026 +1100
+
+    chore(agents): commands that changed tonight; worktree housekeeping
+    
+    B6 of overnight run #3.
+    - AGENTS.md §3: test:e2e now runs 28 specs and skips 17 (the opt-in
+      evidence specs); the review's IPv6 and probe configs; how to run the
+      opt-in Phase 1.5 and Phase 7 evidence specs (POLISH_SHOTS / A11Y_SHOTS).
+    - `git worktree prune`: nothing to prune (every recorded worktree
+      directory exists). The run's own scratch worktree (8333240, used to
+      show the audio.spec flake predates the run) was removed with
+      `git worktree remove`; no directory under ~/Desktop was touched.
+    - No branch deleted: B6 asks to delete fully merged local branches, but
+      docs/TODO.md's global rules say "never delete branches". The 20 merged
+      ones (and 18 more checked out in worktrees) are listed in RUN3_REPORT.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+commit e2c9c94fe5aadba695cb8c73ecb239540d2151fa
+Merge: cbd465b b3fd5ee
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:25:28 2026 +1100
+
+    Merge docs/devlog: architecture draft (docs/DEVLOG.md)
+    
+    B5 of overnight run #3. Facts from the code, one Mermaid diagram, no
+    playtest learnings yet. npm test 797/797.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit b3fd5ee42fbe793d6baf814355f14062e1fc27c6
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:25:28 2026 +1100
+
+    docs(devlog): how the game is built (architecture draft)
+    
+    B5 of overnight run #3 (Phase 7 "Devlog"). docs/DEVLOG.md, facts from the
+    code on main: the layers (one Mermaid flowchart: input -> frame driver ->
+    core -> sim, events -> view/UI/world/audio, and the Node side: balance,
+    tests, the review harness), the enforced pure sim (ESLint + the
+    simPurity test), the one seeded RNG (mulberry32, salted streams), the
+    fixed-step clock and createFrameDriver, the audio-clock voice hold and
+    caption timing, the audio modules with voiceLines.ts as the one voice
+    coordinator, headless balance, the four levels of tests (unit/fuzz,
+    trace hashes, the review harness, Playwright), content as data with the
+    audio release gate, and the versioned save. No playtest learnings: Phase
+    5 hasn't happened. TODO Phase 7's devlog item is [~] for that reason.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/DEVLOG.md | 102 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ docs/TODO.md   |   4 ++-
+ 2 files changed, 105 insertions(+), 1 deletion(-)
+
+commit cbd465b974113f454c560f52601d8718e64a4c4e
+Merge: 2dd94b1 79fc8cb
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:24:00 2026 +1100
+
+    Merge docs/steam-spike: Tauri 2 wrapper research note (docs/STEAM.md)
+    
+    B4 of overnight run #3. Research with sources and UNVERIFIED markers, a
+    Steam Deck input layout, three questions for Edward. No scaffold: cargo
+    is not installed. npm test 797/797.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 79fc8cb3e945c41f65a3fe037158255ba8440e07
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:23:52 2026 +1100
+
+    docs(steam): Tauri 2 wrapper spike — findings and Edward's three questions
+    
+    B4 of overnight run #3 (Phase 7 "Steam wrapper spike"). docs/STEAM.md:
+    what the game needs from a wrapper, Tauri 2 on Windows (WebView2) and on
+    Linux / Steam Deck (WebKitGTK) by topic (build requirements, Web Audio
+    unlock, the speech fallback, the save path, WebGL, controllers,
+    Steamworks) with sources, a Steam Input layout for the Deck using only
+    keys the game already has, and three questions for Edward (first release
+    or later port; Tauri or Electron; which Steam features). Points no source
+    confirmed are marked UNVERIFIED.
+    
+    Research only: no scaffold, because `cargo`/`rustc` are not installed and
+    the run must not install toolchains. No decision is made. TODO Phase 7's
+    Steam item is [~] (note written, go/no-go waiting on the questions).
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/STEAM.md | 85 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ docs/TODO.md  |  4 ++-
+ 2 files changed, 88 insertions(+), 1 deletion(-)
+
+commit 2dd94b1cf729c2f6083ba3f9c879f1b92756f884
+Merge: c1b6f17 89a8e98
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:22:29 2026 +1100
+
+    Merge refactor/audio-manager: the audio manager split along its five seams
+    
+    B2 of overnight run #3 (review 2026-10-17 §11). manager.ts (814 lines)
+    -> types, prefs, graph, clips, status, voiceLines (the one voice
+    cancellation authority) and a 216-line composition. No behaviour change:
+    rushTrace hashes identical; npm test 797/797; tests/audio + tests/review
+    106/106; caption probes 3/3; audio E2E subset (audio, audioSmoke,
+    audioState, listening, music, segments, ibis) 15 passed. Also two
+    follow-ups making tests/e2e/audio.spec.ts's replay check race-free
+    (f6da39e, 89a8e98: it read the line to look for at a different moment
+    from the click; 15/15 after).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 89a8e9882c67701a147ac1564ebeaa4494abc855
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:18:00 2026 +1100
+
+    test(e2e): click Replay while a line plays, not between two lines
+    
+    Follow-up to f6da39e, which still failed once in a full audio run: its
+    diagnostic log showed the test read lastLine "Oi. You the trial? …" at
+    audio time 5.968 s, the trial asked for "I'm Gaz. …" before the click
+    landed, and Replay (correctly) repeated that line instead. The read and
+    the click can't be atomic, so the test now waits until a line is playing
+    that started under 1.5 s ago and is the last line asked for (Gaz's next
+    line is seconds away), then reads it and clicks.
+    
+    --repeat-each 15: 15 passed (3.2m).
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/e2e/audio.spec.ts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+commit f6da39ef40fd1a3593d6ff6490f3bb8a1b21ecf8
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 03:08:16 2026 +1100
+
+    test(e2e): find the replay by the manager's last line and the audio clock
+    
+    Follow-up to 5aa1d4a, whose replay check still raced (1 in 8 failed): it
+    took the line to look for from the history, which records a line only once
+    it plays, while Replay repeats the last line *asked for* (Gaz's next
+    greeting can be loading at that moment); and it indexed into the history,
+    a ring of 40 whose positions shift.
+    
+    - app/debug.ts: window.__trial.audio.lastLine (read-only, dev builds):
+      the text Replay would say.
+    - tests/e2e/audio.spec.ts: after the click, wait for a record of that
+      line whose startedAt (audio clock) is at or after the time read just
+      before the click; on failure it logs the history for diagnosis.
+    
+    --repeat-each 10: 10 passed.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/debug.ts        |  2 ++
+ tests/e2e/audio.spec.ts | 28 +++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 5 deletions(-)
+
+commit 1285f00c7d6d57e7efdd72125c7f595920eca75f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:55:42 2026 +1100
+
+    refactor(audio): split the audio manager along its five seams
+    
+    Review 2026-10-17 §11: src/audio/manager.ts had grown to 814 lines. It is
+    now composed of one module per seam, with the public API unchanged
+    (manager.ts re-exports every type and constant it exported before):
+    
+      types.ts       the API and records (Bus, AudioStatus, VoiceRequest,
+                     VoiceHooks, PlayRecord, AudioManager)            118 lines
+      prefs.ts       saved volumes + the voices switch (nwc.audio.v1),
+                     DEFAULT_VOLUMES                                    52
+      graph.ts       the AudioContext, master taps, buses, duck, voice
+                     analyser, meters, output info (same node order)  102
+      clips.ts       fetch + LRU decode cache, the shipped/segment
+                     serving rule, prefetch                             84
+      status.ts      status/message/listeners and the line history     57
+      voiceLines.ts  the voice lifecycle: generation, load timeout,
+                     fades, single clips, segments, replay, the browser-
+                     voice fallback, pending speech on pause, subtitle
+                     hooks                                             436
+      manager.ts     the composition: context lifecycle (unlock, pause,
+                     "blocked"), ducking, volumes, the voices switch   216
+    
+    One voice-cancellation authority: the generation counter lives only in
+    voiceLines.ts; every stop, replacement or timeout goes through it, and
+    the manager only delegates. Code moved verbatim (the same statements in
+    the same order, through injected getters for the context, analyser,
+    status and clip cache).
+    
+    No behaviour change. rushTrace (node --import
+    ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts),
+    before (main) and after, identical:
+      normal   c565b78d766c5ba56ecd8392abd023854b279cd1
+      hard     884d6e217f4bd585a5f9b6978bc98a006cf38905
+      easy     f4065c58885c4122e4c40ca5652e86af91f89348
+      aids     dbbb564067f0e0c74eb796726e3686f27618ada8
+      misheard 9cb0c12941833c576d9f797b618c271d93ddf528
+      hurry    d975462d381d8b61e57311db657d280d7a302bff
+      idle     90a50992c8d385091bb9c22a3e4455d5d9b93c2f
+    tests/audio + tests/review: 17 files, 106 tests passed.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/audio/clips.ts      |  84 ++++++
+ src/audio/graph.ts      | 102 +++++++
+ src/audio/manager.ts    | 780 ++++++------------------------------------------
+ src/audio/prefs.ts      |  52 ++++
+ src/audio/status.ts     |  57 ++++
+ src/audio/types.ts      | 118 ++++++++
+ src/audio/voiceLines.ts | 436 +++++++++++++++++++++++++++
+ 7 files changed, 940 insertions(+), 689 deletions(-)
+
+commit c1b6f17847fe34b66f08f42d6806e20dba42a7a2
+Merge: 9f05502 5aa1d4a
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:50:19 2026 +1100
+
+    Merge feat/a11y: Phase 7 accessibility (no-device items)
+    
+    B3 of overnight run #3: reduced motion (dfc294c), a Show subtitles switch
+    (e94f7ff), text size S/M/L (b09615f), milk named by shape and word
+    (a163a66), remappable keys with save v3 and its v2 migration test
+    (f955e3d), plus a prettierignore chore (102f0a1) and a fix for a
+    pre-existing flaky replay check in tests/e2e/audio.spec.ts (5aa1d4a).
+    Evidence: docs/verification/2026-10-18-a11y/ (exact 390x844 and
+    1024x640 with JSON sidecars). npm test 797/797; full E2E 27 passed,
+    17 skipped (opt-in evidence specs), 1 failed = that pre-existing flake,
+    fixed and then 6/6; caption probes 3/3.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 5aa1d4a7fcb67c5a9c6f96d1a56c0de2c6a5fd39
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:50:11 2026 +1100
+
+    test(e2e): the replay check no longer races Gaz's next greeting
+    
+    tests/e2e/audio.spec.ts "pressing Start makes Gaz audibly speak; pause,
+    replay …" compared the last two playback records after clicking Replay.
+    Gaz's second greeting starts about a second after the first clip ends,
+    which is right when the test clicks Replay, so the newest record was
+    sometimes that greeting: "expected 'Oi. You the trial? …', received 'I'm
+    Gaz. …'". Pre-existing: 2 of 5 runs failed on 8333240 (the code before
+    overnight run #3, in a scratch worktree), 1 of 3 on feat/a11y.
+    
+    It now looks among the records made after the click for one with the
+    text of the line that was last said before it: still "Replay says the
+    last line again", without depending on what comes next. 6 of 6 passed
+    (--repeat-each 6).
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/e2e/audio.spec.ts | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+commit f955e3ddaf52b38b32cc85bec1bd5ff112928347
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:16:20 2026 +1100
+
+    feat(a11y): remappable keys for the main action, replay and serve (save v3)
+    
+    Phase 7 accessibility (overnight run #3 B3e). Settings → Keys: the main
+    action (Space), "replay the last line" (R) and "serve the first ticket"
+    (1, which also answers 1 on an event card) each take a key of the
+    player's choosing. The chosen key works as an alias of the usual one,
+    which keeps working, so every key hint in the game stays true. Keys the
+    game already uses (Space, 1–6, arrows, Enter, Esc, Tab, B D F G I L M P R
+    S T V W) and another action's key are refused with the reason; Escape
+    keeps the old key; "Usual keys" resets.
+    
+    Save format: version 3 (SAVE_VERSION), the v2 fields plus
+    `keys: { action, replay, serve }`. migrate() reads a v2 save as v3 with
+    the default keys (every other field kept) and repairs a v3 key map key by
+    key (disallowed, duplicate or junk -> that key's default). Stored under
+    the same `nwc.save.v2` key, so existing saves carry on. The interface is
+    now `Save`; `SaveV2` stays exported as an alias of it because the review's
+    fuzz tests (tests/fuzz, not edited by this run) import that name.
+    
+    - sim/contracts/save.ts: KeyMap, DEFAULT_KEYS, RESERVED_KEYS, keyAllowed,
+      readKeys; v3 newSave/readSave; SaveV2 -> Save across src (mechanical).
+    - ui/screens/keys.ts: aliasKey (pure), keyLabel. app/input.ts applies
+      aliasKey to keydown and keyup before anything else.
+    - ui/audioPanel.ts: the Keys section (capture-phase listener while
+      waiting for a key, so the game never sees it); boot.ts wires it to
+      app.store.
+    
+    Tests written first: tests/sim/contracts/save.test.ts (v2 -> v3 with
+    every field kept and default keys; v3 round trip; key-map repair),
+    tests/core/save/storage.test.ts (a stored v2 save loads as v3 and saves
+    back as v3), tests/ui/keys.test.ts (+2 aliasKey/keyLabel).
+    
+    Evidence (docs/verification/2026-10-18-a11y/e-keys-*, exact 390x844 and
+    1024x640): Settings → Keys, F refused ("F already does something in the
+    game"), J accepted; the stored save is {version: 3, keys: {action: "j",
+    replay: "r", serve: "1"}}; in Day 2's intro K (nobody's key) leaves Gaz's
+    line, J moves it on (rush.intro.0 -> rush.intro.1 in 37 ms / 194 ms).
+    AGENTS.md (save v3) and docs/TODO.md Phase 7 accessibility updated.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 797 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md                                          |   2 +-
+ docs/TODO.md                                       |   6 +-
+ .../e-keys-j-skips-intro-line-1024x640.json        |  31 ++++++
+ .../e-keys-j-skips-intro-line-1024x640.png         | Bin 0 -> 365520 bytes
+ .../e-keys-j-skips-intro-line-390x844.json         |  31 ++++++
+ .../e-keys-j-skips-intro-line-390x844.png          | Bin 0 -> 164727 bytes
+ .../2026-10-18-a11y/e-keys-settings-1024x640.json  |  21 ++++
+ .../2026-10-18-a11y/e-keys-settings-1024x640.png   | Bin 0 -> 271029 bytes
+ .../2026-10-18-a11y/e-keys-settings-390x844.json   |  21 ++++
+ .../2026-10-18-a11y/e-keys-settings-390x844.png    | Bin 0 -> 118931 bytes
+ src/app/boot.ts                                    |   4 +
+ src/app/input.ts                                   |   7 +-
+ src/core/rush/state.ts                             |   4 +-
+ src/core/save/storage.ts                           |  12 +--
+ src/core/week/progress.ts                          |  10 +-
+ src/core/week/session.ts                           |  12 +--
+ src/sim/contracts/save.ts                          | 111 +++++++++++++++++----
+ src/sim/shop.ts                                    |   7 +-
+ src/ui/audioPanel.ts                               |  78 ++++++++++++++-
+ src/ui/rushRail.ts                                 |   2 +-
+ src/ui/screens/keys.ts                             |  13 +++
+ src/ui/screens/labels.ts                           |  14 +--
+ src/ui/screens/shiftSelect.ts                      |   4 +-
+ src/ui/screens/shop.ts                             |   8 +-
+ tests/core/save/storage.test.ts                    |  19 +++-
+ tests/e2e/a11yEvidence.spec.ts                     |  61 +++++++++++
+ tests/sim/contracts/save.test.ts                   |  44 ++++++--
+ tests/ui/keys.test.ts                              |  22 +++-
+ 28 files changed, 474 insertions(+), 70 deletions(-)
+
+commit a163a665623b694410f718fb19867ab158bbd0fc
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:08:26 2026 +1100
+
+    feat(a11y): milk named by shape and word on tickets and the pass
+    
+    Phase 7 accessibility (overnight run #3 B3c). No milk in the game was told
+    by colour, but a ticket gave it as a bare word and full cream as nothing at
+    all ("flat white"). Now:
+    - ui/rushRail.ts milkLine: every flat white's ticket gets a carton line,
+      the carton's shape and its name ("🌰 Almond", "🐄 Full cream"); a long
+      black has none. The order line itself (ticketOrderHtml) is unchanged.
+    - ui/rushHud.ts: the pass card names full cream too ("🐄 full cream flat
+      white"), as it already did the other cartons.
+    (The milk gauge already showed shape + name: ui/gauges.ts milkTag.)
+    
+    Evidence (docs/verification/2026-10-18-a11y/c-milk-labels-*): Day 2, seed
+    7, the first two customers rung up as ordered, at exactly 390x844 and
+    1024x640; sidecars list each ticket: "long black" (no carton line) and
+    "almond flat white · extra hot (68–74 °C)" with "🌰 Almond". 2 passed
+    (1.9m). Tests: tests/ui/rushRail.test.ts +1.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 792 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../c-milk-labels-tickets-1024x640.json            |  22 ++++++++
+ .../c-milk-labels-tickets-1024x640.png             | Bin 0 -> 390733 bytes
+ .../c-milk-labels-tickets-390x844.json             |  22 ++++++++
+ .../c-milk-labels-tickets-390x844.png              | Bin 0 -> 193828 bytes
+ src/ui/rushHud.ts                                  |   3 +-
+ src/ui/rushRail.ts                                 |  12 +++-
+ src/ui/styles/rush.css                             |  12 ++++
+ tests/e2e/a11yEvidence.spec.ts                     |  62 +++++++++++++++++++++
+ tests/ui/rushRail.test.ts                          |  12 ++++
+ 9 files changed, 143 insertions(+), 2 deletions(-)
+
+commit b09615fc2e7be5aad0f83266b1bf71711c79de3b
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 02:03:43 2026 +1100
+
+    feat(a11y): text size small / medium / large for the HUD and subtitles
+    
+    Phase 7 accessibility (overnight run #3 B3b). Settings → Listening gets
+    "Text size" (Small, Medium, Large). ui/a11y.ts sets <html data-text> and
+    --text-scale (0.9 / 1 / 1.2); base.css zooms the HUD's text blocks and
+    the subtitles together: subtitles, instruction, ticket rail, register,
+    gauges, action buttons, event card, the pass and the review cards. The
+    top bars keep their size (their chips already fill a phone's width).
+    Medium is scale 1: the layout as designed, untouched.
+    
+    Large on a phone: the subtitle box's width, padding and border are zoomed
+    too, so it gets its own width rule and keeps to the screen (16 + 358 px
+    on a 390 px phone; it overflowed by 40 px a side before that rule).
+    
+    - ui/settings.ts: ListenSettings.textSize ('s' | 'm' | 'l', optional,
+      anything else = 'm'), TEXT_SCALE.
+    
+    Evidence (docs/verification/2026-10-18-a11y/b-text-size-*): the register
+    with Dazza ordering, at S/M/L, at exactly 390x844 and 1024x640; sidecars
+    give each block's box and computed zoom (equal to the scale) and an
+    off-screen list (empty in all six). 2 passed (1.7m). Tests:
+    tests/ui/settings.test.ts +1, tests/ui/a11y.test.ts +1.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 791 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../2026-10-18-a11y/b-text-size-l-1024x640.json    |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-l-1024x640.png     | Bin 0 -> 326177 bytes
+ .../2026-10-18-a11y/b-text-size-l-390x844.json     |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-l-390x844.png      | Bin 0 -> 157367 bytes
+ .../2026-10-18-a11y/b-text-size-m-1024x640.json    |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-m-1024x640.png     | Bin 0 -> 347809 bytes
+ .../2026-10-18-a11y/b-text-size-m-390x844.json     |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-m-390x844.png      | Bin 0 -> 181876 bytes
+ .../2026-10-18-a11y/b-text-size-s-1024x640.json    |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-s-1024x640.png     | Bin 0 -> 358361 bytes
+ .../2026-10-18-a11y/b-text-size-s-390x844.json     |  54 +++++++++++++++++
+ .../2026-10-18-a11y/b-text-size-s-390x844.png      | Bin 0 -> 186638 bytes
+ src/ui/a11y.ts                                     |   9 ++-
+ src/ui/audioPanel.ts                               |  15 ++++-
+ src/ui/settings.ts                                 |   9 +++
+ src/ui/styles/base.css                             |  31 ++++++++++
+ tests/e2e/a11yEvidence.spec.ts                     |  67 +++++++++++++++++++++
+ tests/ui/a11y.test.ts                              |  18 +++++-
+ tests/ui/settings.test.ts                          |  18 ++++++
+ 19 files changed, 486 insertions(+), 5 deletions(-)
+
+commit e94f7ff74b242f387d75ab89bce7919ff3a5abda
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:56:27 2026 +1100
+
+    feat(a11y): a "Show subtitles" switch (on by default)
+    
+    Phase 7 accessibility (overnight run #3 B3a). Settings → Listening gets
+    "Show subtitles" above the existing "Subtitles: always (accessibility)".
+    Off hides every caption box (Day 1, practice and the rush, orders
+    included), for players who want the game by ear alone. On is the default
+    and changes nothing: captions still start with the voice and stop with it
+    (a16fde9), and the order rule (auto / always) still applies.
+    
+    - ui/settings.ts: ListenSettings.captions (optional; missing or not
+      false = on), so a stored v2 blob from before it keeps its settings.
+    - ui/a11y.ts applyA11y: <html data-captions="on|off">, applied at boot
+      and on every settings change; base.css hides #subs, #psubs, #rsubs when
+      off.
+    
+    Evidence (docs/verification/2026-10-18-a11y/, a11yEvidence.spec.ts):
+    Day 2's intro at exactly 390x844 and 1024x640 with the setting on and off;
+    sidecars: on -> #rsubs display block, off -> display none (the line is
+    still said). 2 passed (24.4s). Tests: tests/ui/settings.test.ts updated
+    for the new field + 1 case; tests/ui/a11y.test.ts +1.
+    
+    Checks: typecheck, lint clean; npm test 97 files / 789 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../2026-10-18-a11y/a-subtitles-off-1024x640.json  |  26 +++++++++++++
+ .../2026-10-18-a11y/a-subtitles-off-1024x640.png   | Bin 0 -> 356258 bytes
+ .../2026-10-18-a11y/a-subtitles-off-390x844.json   |  26 +++++++++++++
+ .../2026-10-18-a11y/a-subtitles-off-390x844.png    | Bin 0 -> 168097 bytes
+ .../2026-10-18-a11y/a-subtitles-on-1024x640.json   |  26 +++++++++++++
+ .../2026-10-18-a11y/a-subtitles-on-1024x640.png    | Bin 0 -> 358133 bytes
+ .../2026-10-18-a11y/a-subtitles-on-390x844.json    |  26 +++++++++++++
+ .../2026-10-18-a11y/a-subtitles-on-390x844.png     | Bin 0 -> 166223 bytes
+ src/app/boot.ts                                    |   3 ++
+ src/ui/a11y.ts                                     |   9 +++++
+ src/ui/audioPanel.ts                               |   6 ++-
+ src/ui/settings.ts                                 |   5 +++
+ src/ui/styles/base.css                             |   5 +++
+ tests/e2e/a11yEvidence.spec.ts                     |  41 +++++++++++++++++++++
+ tests/ui/a11y.test.ts                              |  25 +++++++++++++
+ tests/ui/settings.test.ts                          |  13 +++++++
+ 16 files changed, 210 insertions(+), 1 deletion(-)
+
+commit 102f0a1c4d4ea91f48c1a7dd19abb3691d715079
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:55:11 2026 +1100
+
+    chore(lint): prettier skips Playwright output under tests/review
+    
+    The review configs (tests/review/playwright.*.config.ts) write their output
+    to tests/review/.e2e-results/ (gitignored there), but .prettierignore did
+    not list it, so every review E2E or probe run broke `npm run lint` until
+    the folder was deleted by hand.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .prettierignore | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit dfc294c654ecd677dd8aa1f3d823f33db1a5ba1e
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:52:20 2026 +1100
+
+    feat(a11y): respect prefers-reduced-motion (UI, the bin chicken, steam)
+    
+    Phase 7 accessibility (overnight run #3 B3d). With the OS "reduce motion"
+    setting on:
+    - UI: every transition and animation collapses to 0.01 ms (base.css), so
+      the subtitle fade, button presses and panel slides land at once.
+    - The bin chicken (world/ibis.ts) still walks in and lifts the bin lid, but
+      without the leg swing, body bob, pecking, wobbling lid or wing flaps.
+    - Steam (world/station.ts): a quarter of the puffs, rising slower and
+      straight up; the wand still shows it is open.
+    src/world/motion.ts reads the media query live, so toggling the OS setting
+    applies at once. No setting of our own: the OS one is the player's choice.
+    
+    Evidence (docs/verification/2026-10-18-a11y/, tests/e2e/a11yEvidence.spec.ts,
+    opt-in with A11Y_SHOTS): Day 2's intro at exactly 390x844 and 1024x640 under
+    reducedMotion 'reduce', with sidecars measuring computed durations against
+    'no-preference': #rsubs 0.25 s -> 0.00001 s, buttons 0.12 s -> 0.00001 s,
+    animations 0.00001 s. 2 passed (23.9s). The 3D changes are by code; a still
+    cannot show them.
+    
+    Checks: typecheck, lint clean; npm test 96 files / 787 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../d-reduced-motion-day2-intro-1024x640.json      |  64 +++++++++
+ .../d-reduced-motion-day2-intro-1024x640.png       | Bin 0 -> 357706 bytes
+ .../d-reduced-motion-day2-intro-390x844.json       |  64 +++++++++
+ .../d-reduced-motion-day2-intro-390x844.png        | Bin 0 -> 171883 bytes
+ src/ui/styles/base.css                             |  13 ++
+ src/world/ibis.ts                                  |  18 ++-
+ src/world/motion.ts                                |  11 ++
+ src/world/station.ts                               |  17 ++-
+ tests/e2e/a11yEvidence.spec.ts                     | 150 +++++++++++++++++++++
+ 9 files changed, 324 insertions(+), 13 deletions(-)
+
+commit 9f05502087962f170d90b2d9aeb32d69f066c165
+Merge: 38b80e5 4c8467d
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:47:18 2026 +1100
+
+    Merge refactor/frame-driver: one frame driver for boot and the review harness
+    
+    B1 of overnight run #3 (review 2026-10-17 §1). createFrameDriver in
+    src/app/frame.ts; boot.ts and tests/review/harness.ts both run it.
+    No behaviour change: rushTrace hashes identical; npm test 787/787;
+    tests/review 61/61; e2e smoke (trial, practice, audioState, audioSmoke,
+    rush) 10 passed (11.1m).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 4c8467d8af886ef0c2c53a741d51a7e576cbb2b6
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:35:55 2026 +1100
+
+    refactor(app): one frame driver for boot and the review harness
+    
+    Review 2026-10-17 §1: tests/review/harness.ts ran a hand-made copy of
+    boot.ts's frame body, so a change to the loop had to be mirrored by hand
+    (A3 did exactly that) and the copy could drift (it already left practice
+    out).
+    
+    src/app/frame.ts createFrameDriver(app, sampleInput) now owns the frame:
+    clamp/scale the elapsed time, the voice hold, the fixed steps (input
+    sampled before each; rush, practice or trial), then the view (viewTime,
+    voice level, audio.update, music mood, the day's per-frame view).
+    boot.ts calls driver.frame((ts - last) / 1000) from requestAnimationFrame
+    and renders afterwards. The harness calls the same driver with its own
+    controlled times; its beforeStep is the sampleInput. Rendering, RAF
+    timestamps and Web Audio's clock stay outside, as the review proposed.
+    The harness still copies boot's setPaused/resumeAll/replay (noted in its
+    header).
+    
+    No behaviour change. rushTrace (node --import
+    ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts),
+    before (main 38b80e5) and after, identical:
+      normal   c565b78d766c5ba56ecd8392abd023854b279cd1
+      hard     884d6e217f4bd585a5f9b6978bc98a006cf38905
+      easy     f4065c58885c4122e4c40ca5652e86af91f89348
+      aids     dbbb564067f0e0c74eb796726e3686f27618ada8
+      misheard 9cb0c12941833c576d9f797b618c271d93ddf528
+      hurry    d975462d381d8b61e57311db657d280d7a302bff
+      idle     90a50992c8d385091bb9c22a3e4455d5d9b93c2f
+    
+    Checks: typecheck, lint clean; npm test 96 files / 787 tests, 0 failed;
+    tests/review 61/61 on the shared driver.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/boot.ts         | 56 +++++++-------------------------------------
+ src/app/frame.ts        | 62 +++++++++++++++++++++++++++++++++++++++++++++++++
+ tests/review/harness.ts | 49 +++++++++++---------------------------
+ 3 files changed, 85 insertions(+), 82 deletions(-)
+
+commit 38b80e5afb81e92351549e0d3470714f33ce4e34
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 01:28:45 2026 +1100
+
+    docs(todo): Phase 6 — the review fixes, with evidence
+    
+    docs/TODO.md Phase 6 now lists 6.1–6.8 (overnight run #3 A1–A8, review
+    2026-10-17) with their commits and the run's evidence: unit 96 files /
+    787 tests 0 failed (baseline 10 failed), each review acceptance test
+    green, the three browser probes, balance moves, the seven rushTrace
+    hashes (unchanged from the review's 1a54a00 values), the clean-export
+    build, and E2E on the IPv6 config: 28 passed (30.5m), 7 skipped (the
+    opt-in evidence spec), exit 0. Playtest fixes stay open for Phase 5.
+    
+    Also records what was seen and not fixed: the milk gauge's 55-65 °C
+    target on an extra-hot order, the phone register panel over the
+    instruction, and the in-checkout build stopping on nine old untracked
+    placeholder renders in public/assets/voice/ (left for Edward).
+    
+    Checks: typecheck, lint clean; npm test 96 files / 787 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md | 42 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 40 insertions(+), 2 deletions(-)
+
+commit ef9071d28552f0ecdd50d554976b953490258677
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:56:05 2026 +1100
+
+    fix(audio): turning voices off mid-line keeps its subtitle
+    
+    Follow-up to a16fde9 (found re-reading it): the voice toggle (V, or the
+    sound panel) called stopVoice, which now also fires the line's onStop, so
+    switching voices off mid-line cleared that line's subtitle. With voices off
+    the subtitle is the only channel.
+    
+    The setter now stops the sound without stopping the line: its hooks
+    survive, a line still loading shows its words at once (onStart), and a
+    newer line still replaces it (onStop) as before.
+    
+    Evidence: tests/audio/manager.test.ts +1 (off while loading: words shown,
+    late clip never plays, the next line still stops it; off while a clip
+    plays: subtitle kept, nothing audible).
+    
+    Checks: typecheck, lint clean; npm test 96 files / 787 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/audio/manager.ts        | 12 +++++++++++-
+ tests/audio/manager.test.ts | 23 +++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+
+commit 1e34e0cef77b093481c8475aa5af7c094b9f409f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:53:53 2026 +1100
+
+    test(evidence): Phase 1.5 at exact 390x844 and 1024x640, with sidecars
+    
+    Review 2026-10-17 §9: the polish shots were 416x900 / 750x1334 JPGs with
+    no capture metadata, and items 1.5.3, 1.5.4 and 1.5.7 had none at all.
+    
+    tests/e2e/polishEvidence.spec.ts (skipped unless POLISH_SHOTS is set, so
+    the normal e2e run is unchanged) captures every item at exactly 390x844
+    (isMobile, touch) and 1024x640, deviceScaleFactor 1 (each PNG is the
+    viewport), with one JSON sidecar per capture: item, viewport, CSS size,
+    devicePixelRatio, commit, timestamp and the measured facts. It asserts
+    them too. docs/verification/2026-10-17-polish/ is replaced (old JPGs in
+    history at 59b1c47): 16 PNG + 18 JSON, game code at 59b1c47.
+    
+      1.5.1 register: instruction over rail false (both); long black's shot
+            and seed 7's almond extra-hot flat white's shot: gauges over cup
+            false, #ractions visible (both)
+      1.5.2 pass + register: "Bin it" over "Ring it up" false (both)
+      1.5.3 Tuesday save: intro keys rush.intro.shift1.0/1, no RUSH_INTRO,
+            no "first paid shift" (both)
+      1.5.4 whole Day 2 by the browser bot: 6/6, 0 walk-outs, grade
+            excellent; closing line rush.end.excellent "Bloody oath. Not one
+            walked out. ..." said once, no "five for five"; report at 1024x640
+            and the same page resized to 390x844 (no touch emulation)
+      1.5.7 practice review, Tab to "Watch Gaz", Space: 1 activation, phase
+            review -> demo (both)
+    
+    Command: POLISH_SHOTS=docs/verification/2026-10-17-polish
+    POLISH_COMMIT=59b1c47 E2E_PORT=5202 npx playwright test --config
+    tests/review/playwright.ipv6.config.ts polishEvidence -> 7 passed (7.5m);
+    the 1.5.1 test re-run with the flat-white leg -> 2 passed (2.2m).
+    
+    Seen, not fixed (reported): the milk gauge's target card says 55-65 °C
+    (ui/gauges.ts TARGET_TEMP) even for an extra-hot order (68-74 °C).
+    
+    Checks: typecheck, lint clean; npm test 96 files / 786 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md                                       |   4 +-
+ .../1.5.1-flat-white-shot-1024x640.json            |  53 +++
+ .../1.5.1-flat-white-shot-1024x640.png             | Bin 0 -> 274828 bytes
+ .../1.5.1-flat-white-shot-390x844.json             |  53 +++
+ .../1.5.1-flat-white-shot-390x844.png              | Bin 0 -> 144496 bytes
+ .../2026-10-17-polish/1.5.1-register-1024x640.json |  36 ++
+ .../2026-10-17-polish/1.5.1-register-1024x640.png  | Bin 0 -> 350169 bytes
+ .../2026-10-17-polish/1.5.1-register-390x844.json  |  36 ++
+ .../2026-10-17-polish/1.5.1-register-390x844.png   | Bin 0 -> 185019 bytes
+ .../2026-10-17-polish/1.5.1-shot-1024x640.json     |  52 +++
+ .../2026-10-17-polish/1.5.1-shot-1024x640.png      | Bin 0 -> 260439 bytes
+ .../2026-10-17-polish/1.5.1-shot-390x844.json      |  52 +++
+ .../2026-10-17-polish/1.5.1-shot-390x844.png       | Bin 0 -> 135447 bytes
+ .../1.5.2-pass-and-register-1024x640.json          |  52 +++
+ .../1.5.2-pass-and-register-1024x640.png           | Bin 0 -> 361353 bytes
+ .../1.5.2-pass-and-register-390x844.json           |  52 +++
+ .../1.5.2-pass-and-register-390x844.png            | Bin 0 -> 190019 bytes
+ .../1.5.3-intro-lines-1024x640.json                |  16 +
+ .../1.5.3-intro-lines-390x844.json                 |  16 +
+ .../1.5.3-tuesday-intro-1024x640.json              |  23 +
+ .../1.5.3-tuesday-intro-1024x640.png               | Bin 0 -> 355611 bytes
+ .../1.5.3-tuesday-intro-390x844.json               |  23 +
+ .../1.5.3-tuesday-intro-390x844.png                | Bin 0 -> 168720 bytes
+ .../2026-10-17-polish/1.5.4-report-1024x640.json   |  32 ++
+ .../2026-10-17-polish/1.5.4-report-1024x640.png    | Bin 0 -> 372950 bytes
+ .../2026-10-17-polish/1.5.4-report-390x844.json    |  33 ++
+ .../2026-10-17-polish/1.5.4-report-390x844.png     | Bin 0 -> 144475 bytes
+ .../1.5.7-after-space-1024x640.json                |  16 +
+ .../1.5.7-after-space-1024x640.png                 | Bin 0 -> 214868 bytes
+ .../1.5.7-after-space-390x844.json                 |  16 +
+ .../1.5.7-after-space-390x844.png                  | Bin 0 -> 135714 bytes
+ .../1.5.7-focused-watch-gaz-1024x640.json          |  14 +
+ .../1.5.7-focused-watch-gaz-1024x640.png           | Bin 0 -> 260429 bytes
+ .../1.5.7-focused-watch-gaz-390x844.json           |  14 +
+ .../1.5.7-focused-watch-gaz-390x844.png            | Bin 0 -> 94507 bytes
+ .../d1024-pass-and-register-after.jpg              | Bin 146958 -> 0 bytes
+ .../d1024-pass-and-register-before.jpg             | Bin 143223 -> 0 bytes
+ .../2026-10-17-polish/p375-shot-after.jpg          | Bin 150643 -> 0 bytes
+ .../2026-10-17-polish/p375-shot-before.jpg         | Bin 145633 -> 0 bytes
+ .../p390-pass-and-register-after.jpg               | Bin 86638 -> 0 bytes
+ .../p390-pass-and-register-before.jpg              | Bin 85971 -> 0 bytes
+ .../2026-10-17-polish/p390-pour-after.jpg          | Bin 67785 -> 0 bytes
+ .../2026-10-17-polish/p390-pour-before.jpg         | Bin 60635 -> 0 bytes
+ .../2026-10-17-polish/p390-shot-after.jpg          | Bin 70280 -> 0 bytes
+ .../2026-10-17-polish/p390-shot-before.jpg         | Bin 66995 -> 0 bytes
+ .../2026-10-17-polish/p390-two-hands-after.jpg     | Bin 75957 -> 0 bytes
+ .../2026-10-17-polish/p390-two-hands-before.jpg    | Bin 75136 -> 0 bytes
+ tests/e2e/polishEvidence.spec.ts                   | 511 +++++++++++++++++++++
+ 48 files changed, 1103 insertions(+), 1 deletion(-)
+
+commit 59b1c475bc556d4443a02a18538145f9c16ed935
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:27:37 2026 +1100
+
+    docs(telemetry): "no transport", not a blanket "no network"
+    
+    Review 2026-10-17 §8: the claim "no network calls anywhere in src" is false
+    (the game fetches its own voice clips in audio/manager.ts; the dev-only
+    review pages fetch their files). What is true: telemetry has no transport.
+    
+    - docs/TODO.md Phase 5 (item and Evidence), AGENTS.md §3 and the
+      src/app/telemetry.ts header now say "telemetry has no transport; the game
+      fetches its own static assets". The in-game Settings copy ("Saved on this
+      device only; nothing is sent anywhere.") is about the log and stays.
+    - AGENTS.md §3 audio release gate: placeholder line clips are removed, a
+      placeholder in the segment manifest fails the build (keeps the file true
+      after cd28b37).
+    
+    Comment and docs only. Checks: typecheck, lint clean; npm test 96 files /
+    786 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md            | 4 ++--
+ docs/TODO.md         | 7 ++++---
+ src/app/telemetry.ts | 3 ++-
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+commit cd28b373e816ac5eb9f48fff0fdaa0cbcdba5f52
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:26:00 2026 +1100
+
+    fix(audio-gate): a placeholder in the segment manifest fails the build
+    
+    classifyAudio stripped any manifest clip with `placeholder !== false` before
+    looking at provenance, and received the line and segment manifests as one
+    list, so a segment entry with placeholder: true and provenance "placeholder"
+    was quietly removed and the build passed (review 2026-10-17 §5).
+    
+    Decision (Edward, 2026-10-18): SEGMENT_GATE = yes. The segment manifest
+    lists release audio only, so:
+    - vite-voice.ts gateManifests tags segment-manifest clips `segment: true`.
+    - audio-gate.ts: a tagged clip that is a placeholder (flag not false, or
+      provenance "placeholder") is rejected ("segment clip is a placeholder:
+      the segment manifest lists release audio only"); never stripped.
+      Placeholder LINE clips (manifest.json) are still stripped, as before.
+    - docs/AUDIO_PROVENANCE.md and docs/VOICE_ASSETS.md state the rule.
+    
+    Evidence: independentGate 5/5 (both placeholder-flag cases now reject).
+    tests/scripts/audioGate.test.ts +1 (segment placeholder rejected with the
+    flag true and false; a line placeholder in the same build still stripped).
+    Clean export of this tree (git stash create + git archive, node_modules
+    linked): `npm run build` exit 0, "[audio-gate] ok: 0 licensed audio
+    file(s) in the build" (the committed segment manifest lists 0 clips).
+    
+    Checks: typecheck, lint clean; npm test 96 files / 786 tests, 0 failed.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/AUDIO_PROVENANCE.md        |  6 ++++--
+ docs/VOICE_ASSETS.md            |  3 ++-
+ scripts/audio-gate.ts           | 15 ++++++++++++---
+ scripts/vite-voice.ts           |  3 ++-
+ tests/scripts/audioGate.test.ts | 19 +++++++++++++++++++
+ 5 files changed, 39 insertions(+), 7 deletions(-)
+
+commit 7586668ed2764b101b3bdaec998157a6b21d646d
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:23:10 2026 +1100
+
+    feat(events): a correct serve to a regular adds +1 affinity (THE_USUAL reachable)
+    
+    THE_USUAL needs affinity >= USUAL_AFFINITY (2), and only THE_USUAL itself
+    wrote affinity, so from a fresh save it could never fire: 0 in 1,000 seeds x
+    5 saved shifts (review 2026-10-17 §7, P2 reachability gap; TODO 1.5.5).
+    
+    Decision (Edward, 2026-10-18): AFFINITY_RULE = yes. core/rush/events.ts
+    regularServed(): a correct (accepted) serve to a regular (REGULAR_IDS) in a
+    week shift adds +1 to the shift's affinity delta, which finishShift saves
+    into SaveV2.regulars (no save-shape change). Day 2 has no save and keeps
+    none; a hand-back earns nothing. THE_USUAL's own +1 stays.
+    
+    Reviewer test changed, with Edward's explicit approval in this session
+    ("Invert that one test"): tests/review/independentFuzz.test.ts
+    "THE_USUAL remains unreachable ..." asserted the defect (regulars stay {},
+    THE_USUAL 0) and is false by construction under the approved rule. It is
+    inverted in place: same 1,000 seeds and five saved shifts, now asserting
+    THE_USUAL > 0 and that affinity is written in shifts without THE_USUAL.
+    No other reviewer test is edited.
+    
+    Evidence (REVIEW_EVIDENCE_DIR): 1,000 seeds, 5,000 shifts, 40,000 serves,
+    THE_USUAL fired 888 times, 27,371 affinity writes, 4,112 shifts wrote
+    affinity without THE_USUAL. "PROPOSED RULE" test green.
+    tests/core/regularAffinity.test.ts +3 (+1 per correct serve; hand-back
+    nothing; Day 2 nothing). TODO 1.5.5 -> [x].
+    
+    npm run balance, 30 seeds, before 14827e0 -> after (rows that moved):
+      novice  Wednesday  events/shift 1.5 -> 1.7
+      novice  Thursday   events/shift 1.3 -> 1.5
+      novice  Friday     events/shift 1.7 -> 1.8, tips $6.40 -> $6.41
+      average Thursday   events/shift 1.3 -> 1.8, satisfaction 64 -> 65
+      average Friday     events/shift 1.8 -> 1.9
+      expert  Thursday   events/shift 1.3 -> 1.8
+      expert  Friday     tips $12.33 -> $12.28, serve s 63.3 -> 63.2
+      First-try pass, walk-outs and tries-to-pass unchanged in every row.
+    
+    Checks: typecheck, lint clean; npm test 1 failed / 784 passed (the A6
+    segment-gate acceptance test). rushTrace hashes unchanged (Day 2).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md                         |  5 +++-
+ src/core/rush/events.ts              | 10 +++++++
+ src/core/rush/serve.ts               |  3 ++-
+ tests/core/regularAffinity.test.ts   | 52 ++++++++++++++++++++++++++++++++++++
+ tests/review/independentFuzz.test.ts | 20 +++++++++-----
+ 5 files changed, 82 insertions(+), 8 deletions(-)
+
+commit 14827e076538c1dab92f8a89b31b7d296235bce7
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:16:05 2026 +1100
+
+    fix(ibis): honks wait for a quiet counter; the week books the bird at 30 %
+    
+    Only the bird's entrance checked for an order: a foraging bird honked every
+    5 s regardless, and its 0.46 s tail (sfx.ts) landed on orders and milk
+    answers (review 2026-10-17 §6, P2: 189 overlaps on Day 2, 541/716 in the
+    week modes). The week also booked the bird with the register events' chance
+    (0.35) instead of IBIS.chance (0.30): 37.2 % of sampled shifts.
+    
+    - sim/ibis: IbisInput.holdHonk (optional). A foraging bird holds a due honk
+      and its look-up (alert) while holdHonk or midOrder; the held honk goes off
+      as soon as it is quiet, then the 5 s beat restarts (no burst of missed
+      honks). On-time honks keep their exact cadence.
+    - core/rushIbis: holdHonk = orderSoon(r): a listening line said or queued,
+      or someone entering, queueing (they step up to a free register at once),
+      at the register or the counter. An order or answer can only start from
+      those states, so neither the honk nor its tail can overlap one. The
+      entrance keeps its orderLineDue gate (widening it kept the bird out for a
+      whole shift when nobody rang up; the fuzz saw no entrance overlap).
+    - core/rush/events: the week's RARE_BIRD booking passes chance: IBIS.chance.
+    
+    Evidence (independentFuzz ibis, 500 seeds each, REVIEW_EVIDENCE_DIR):
+      day2           134/500 = 26.8 %, honks 634, overlaps 0, orders/answers 3000/3000
+      week-shift-3   159/500 = 31.8 %, honks 427, overlaps 0, orders/answers 4000/4000
+      week-index-3   159/500 = 31.8 %, honks 408, overlaps 0, orders/answers 4500/4500
+    tests/sim/ibis.test.ts +2 (held honk then beat; midOrder holds honk and alert).
+    
+    npm run balance (30 seeds) before 66283fe -> after; only these rows moved:
+      average Wednesday  events/shift 1.8 -> 1.7
+      average Thursday   satisfaction 65 -> 64, serve s 68.7 -> 68.4
+      average Friday     events/shift 1.9 -> 1.8
+      expert  Wednesday  events/shift 1.8 -> 1.7
+      (first-try pass, walk-outs, tips unchanged in every row)
+    
+    Checks: typecheck, lint clean; npm test 2 failed / 780 passed (A5, A6
+    acceptance tests).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/core/rush/events.ts |  5 ++++-
+ src/core/rushIbis.ts    | 18 +++++++++++++++++-
+ src/sim/ibis.ts         | 23 ++++++++++++++++-------
+ tests/sim/ibis.test.ts  | 22 ++++++++++++++++++++++
+ 4 files changed, 59 insertions(+), 9 deletions(-)
+
+commit 66283fe65a6ace44cebc8074ea2b38ce3f3ff1c2
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 00:04:07 2026 +1100
+
+    fix(audio): one deadline on the audio clock for a loading line
+    
+    A line whose clip was still loading was held by two deadlines on two clocks:
+    boot.ts held the sim for MAX_VOICE_HOLD = 6 s of (timeScale-scaled) game
+    time, the manager fell back to the browser voice after LOAD_TIMEOUT = 12 s
+    of AudioContext time. At 3x the hold ran out after 2 wall seconds, the sim
+    moved on, and a newer line invalidated the still-loading order before the
+    fallback, so the order was never heard (review 2026-10-17 §2, P2).
+    
+    Authority: the AUDIO clock. The sim hold is now derived from it:
+    `input.voiceHold = audio.loading && !clock.paused`, with no sim-side cap.
+    `loading` ends exactly when the clip starts or LOAD_TIMEOUT hands the line
+    to the browser voice, so the sim can never pass a line the audio has not
+    either played or handed on, and a stuck download still ends at 12 s of
+    audio time (frozen while paused, as before). Edge: a context the browser
+    keeps suspended without a pause freezes this deadline with it, as pausing
+    does; the first click resumes both.
+    
+    tests/review/harness.ts copies boot's frame body by design (TODO Phase 4):
+    its hold now follows the same rule, and the MAX_VOICE_HOLD copy is gone.
+    B1 will make the harness call the production frame instead.
+    
+    Evidence: independentSlowAudio 8/8 (25 s load heard at 1x/2x/3x via the
+    browser voice at 18.05 s; 10 s clip and caption both at 16.05 s). Browser
+    probes (E2E_PORT=5201, playwright.probes.config.ts) 3 passed: caption
+    after clip start by 0.011 s (1x), 0.048 s (2x), 0.027 s (3x).
+    
+    Checks: typecheck, lint clean; npm test 5 failed / 775 passed (A4-A6
+    review acceptance tests).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/boot.ts         | 14 ++++++--------
+ src/audio/manager.ts    |  7 +++----
+ tests/review/harness.ts | 10 +++-------
+ 3 files changed, 12 insertions(+), 19 deletions(-)
+
+commit a16fde9fd8da54c03d631a73736f8febb3a9acf4
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sat Oct 17 23:59:48 2026 +1100
+
+    fix(audio): subtitles start when the voice does and stop with it
+    
+    The rush forwarded every line to the HUD before asking the audio for it
+    (rushView.ts:43), so a clip slow to load showed its words up to 10 s before
+    anyone said them (review 2026-10-17 §2, P2; Chromium probes 10.02 s lead at
+    1x/2x/3x).
+    
+    - audio/manager: say(req, hooks) and replay(hooks) take VoiceHooks.
+      onStart fires once, for the current line only, at a clip's first sample,
+      a segmented line's first part, or the browser voice's own start event;
+      also at once when nothing will be heard (voices off, no speech engine, the
+      browser voice failed to start) so the words still show. onStop fires when
+      the line is replaced by a newer one or stopped (stopVoice/stopSpeaker),
+      loading or playing. A load timeout keeps the same line (and hooks) under a
+      new generation, so the dropped late clip never starts it twice.
+    - audio/voice: speak(..., onStarted) reports the utterance's start event.
+    - app/rushView: rushHud.onSay (and Gaz's gesture) run from onStart;
+      onStop clears the subtitle (rushHud.onStop). boot.ts replay() does the
+      same for its subtitle.
+    - tests/review/harness.ts: its fake rushHud gains the onStop no-op.
+    
+    Evidence: tests/audio/manager.test.ts +5 hook cases (slow clip, stopped
+    while loading, newer line, voices off, browser-voice start). Browser probe
+    (E2E_PORT=5201, playwright.probes.config.ts): 1x green, caption at audio
+    16.032 s vs clip start 15.984 s. 2x/3x still red: the 6 s sim hold expires
+    before the 10 s clip lands, so the sim has dropped the line (speaker null)
+    when it plays; that is the A3 lifecycle fix. independentSlowAudio 10 s at
+    1x/2x now green.
+    
+    Checks: typecheck, lint clean; npm test 7 failed / 773 passed (the A3-A6
+    review acceptance tests).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/app/boot.ts             | 18 ++++++---
+ src/app/rushView.ts         | 27 ++++++++-----
+ src/audio/manager.ts        | 67 +++++++++++++++++++++++++------
+ src/audio/voice.ts          | 16 ++++++--
+ src/ui/rushHud.ts           | 14 +++++++
+ tests/audio/manager.test.ts | 96 +++++++++++++++++++++++++++++++++++++++++++++
+ tests/review/harness.ts     |  1 +
+ 7 files changed, 210 insertions(+), 29 deletions(-)
+
+commit a3ff4e51c283ea36fb8edf1c545b7f79f6df166e
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sat Oct 17 23:48:31 2026 +1100
+
+    fix(voices): prune never follows symlinks out of the cache
+    
+    `npm run voices -- --prune` deleted every listed orphan through `listClips`,
+    which followed directory symlinks with statSync. A speaker directory linked to
+    a sibling outside voice-cache/ let prune delete the MP3s there (review
+    2026-10-17 §10, P1, confirmed by tests/review/independentPrune.test.ts).
+    
+    listClips now uses lstatSync: symbolic links (directory or file) are never
+    followed or listed, and a file is listed only when its real path is inside the
+    real path of the listed directory (both sides realpath'd: macOS tmpdir is
+    /var -> /private/var). The prune block deletes only what listClips lists, so
+    containment is checked before any unlink. voices:check and the legacy count
+    in voices.ts also use listClips and get the same safer listing.
+    
+    Checks: typecheck, lint clean; npm test 9 failed / 766 passed (the nine
+    remaining review acceptance tests; independentPrune 2/2 green).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ scripts/voice-node.ts | 17 ++++++++++++-----
+ scripts/voices.ts     |  1 +
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+commit 83332402d725ab416b44927f8393ae1f33631e2d
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sat Oct 17 03:15:52 2026 +1100
+
+    test(review): record independent main 1a54a00 verification
+
+ docs/QA_SCENARIOS.md                               |   33 +
+ .../browser-slow-audio.txt                         |  110 +
+ .../clean-build.txt                                |   37 +
+ .../2026-10-17-main-1a54a00-evidence/e2e-final.txt |   58 +
+ .../full-review-unit.txt                           |  597 +++
+ .../ibis-day2.json                                 | 1144 ++++++
+ .../ibis-week-index-3.json                         | 4306 ++++++++++++++++++++
+ .../ibis-week-shift-3.json                         | 3256 +++++++++++++++
+ .../independent-final.txt                          |  169 +
+ .../network-scan.txt                               |   22 +
+ .../rush-trace.json                                |  273 ++
+ .../source-checks.txt                              |  160 +
+ .../the-usual.json                                 |    7 +
+ docs/reviews/2026-10-17-main-1a54a00.md            |  427 ++
+ tests/review/.gitignore                            |    2 +
+ tests/review/harness.ts                            |    4 +-
+ tests/review/independentFuzz.test.ts               |  110 +
+ tests/review/independentFuzz.ts                    |   78 +
+ tests/review/independentGate.test.ts               |   82 +
+ tests/review/independentPrune.test.ts              |   77 +
+ tests/review/independentSlowAudio.browser.ts       |   89 +
+ tests/review/independentSlowAudio.test.ts          |   50 +
+ tests/review/independentTelemetry.test.ts          |   79 +
+ tests/review/leftCustomerSilent.test.ts            |   15 +
+ tests/review/nodeReviewLoader.mjs                  |   31 +
+ tests/review/orderFlow.ts                          |   14 +-
+ tests/review/playwright.ipv6.config.ts             |   21 +
+ tests/review/playwright.probes.config.ts           |    9 +
+ tests/review/recomputeRushTrace.ts                 |   52 +
+ 29 files changed, 11308 insertions(+), 4 deletions(-)

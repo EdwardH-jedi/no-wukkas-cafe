@@ -1,0 +1,135 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+ × tests/review/independentPausedCaptions.test.ts > paused: a decoded clip must not dispatch subtitle onStart before audio can start 12ms
+   → subtitle exposed while its audio context is suspended: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array []
+
+
+Number of calls: 1
+
+ × tests/review/independentPausedCaptions.test.ts > browser-suspended: a decoded clip must not dispatch subtitle onStart before audio can start 5ms
+   → subtitle exposed while its audio context is suspended: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array []
+
+
+Number of calls: 1
+
+ × tests/review/independentKeys.test.ts > independent Settings key lifecycle > Usual keys must restore all three bindings instead of only closing Settings 4ms
+   → expected { Object (action, replay, ...) } to deeply equal { Object (action, replay, ...) }
+ × tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key 1ms
+   → a hidden settings panel changed the action binding: expected { Object (action, replay, ...) } to deeply equal { Object (action, replay, ...) }
+   → the next gameplay key was intercepted: expected true to be false // Object.is equality
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > an explicit key choice still saves; Escape cancels without changing it 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentKeys.test.ts > independent Settings key lifecycle > Usual keys must restore all three bindings instead of only closing Settings
+AssertionError: expected { Object (action, replay, ...) } to deeply equal { Object (action, replay, ...) }
+
+- Expected
++ Received
+
+  {
+-   "action": " ",
+-   "replay": "r",
+-   "serve": "1",
++   "action": "j",
++   "replay": "k",
++   "serve": "n",
+  }
+
+ ❯ tests/review/independentKeys.test.ts:112:22
+    110|     const h = setup();
+    111|     h.click('[data-a="keysReset"]');
+    112|     expect(h.keys()).toEqual(DEFAULT_KEYS);
+       |                      ^
+    113|   });
+    114|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key
+AssertionError: a hidden settings panel changed the action binding: expected { Object (action, replay, ...) } to deeply equal { Object (action, replay, ...) }
+
+- Expected
++ Received
+
+  {
+-   "action": "j",
++   "action": "q",
+    "replay": "k",
+    "serve": "n",
+  }
+
+ ❯ tests/review/independentKeys.test.ts:122:81
+    120|     expect(h.dom.classList.contains('hide')).toBe(true);
+    121|     const e = h.press('q');
+    122|     expect.soft(h.keys(), 'a hidden settings panel changed the action …
+       |                                                                                 ^
+    123|     expect(e.defaultPrevented, 'the next gameplay key was intercepted'…
+    124|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key
+AssertionError: the next gameplay key was intercepted: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/review/independentKeys.test.ts:123:73
+    121|     const e = h.press('q');
+    122|     expect.soft(h.keys(), 'a hidden settings panel changed the action …
+    123|     expect(e.defaultPrevented, 'the next gameplay key was intercepted'…
+       |                                                                         ^
+    124|   });
+    125|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/review/independentPausedCaptions.test.ts > paused: a decoded clip must not dispatch subtitle onStart before audio can start
+ FAIL  tests/review/independentPausedCaptions.test.ts > browser-suspended: a decoded clip must not dispatch subtitle onStart before audio can start
+AssertionError: subtitle exposed while its audio context is suspended: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array []
+
+
+Number of calls: 1
+
+ ❯ tests/review/independentPausedCaptions.test.ts:30:12
+     28|     expect
+     29|       .soft(onStart, 'subtitle exposed while its audio context is susp…
+     30|       .not.toHaveBeenCalled();
+       |            ^
+     31|     h.app.clock.paused = false;
+     32|     h.audio.setPaused(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 1 passed (5)
+   Start at  12:38:34
+   Duration  493ms (transform 71%, import 22%, tests 6%, worker 1%)
+

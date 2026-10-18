@@ -1,0 +1,23 @@
+Command: npm run typecheck && npm run lint && npm test
+Working tree at start: chore/review-main-6941c37, clean, HEAD 28eb1b4
+Production source: identical to 6941c37
+Exit: 0 (the && chain reached and completed npm test; each component exited 0)
+
+Terminal output transcribed from the completed command, not a full raw log:
+> no-wukkas-cafe@0.1.0 typecheck
+> tsc --noEmit
+
+> no-wukkas-cafe@0.1.0 lint
+> eslint . && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+
+> no-wukkas-cafe@0.1.0 test
+> vitest run
+Test Files  97 passed (97)
+Tests       797 passed (797)
+Start at    12:31:41
+Duration    60.73s (tests 98%, import 1%, transform 1%)
+
+Warnings: Vite native config loader will require explicit import extensions in
+src/data/voice/decision.ts; Node localStorage unavailable without --localstorage-file.
