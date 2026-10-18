@@ -113,5 +113,6 @@ export function reportCallbacks(app: App, again: () => void): ShiftReportCallbac
     next: () => startShift(app),
     title: () => app.nav.toTitle(),
     memoryOnly: () => app.store.memoryOnly,
+    score: () => app.scoreNote,
   };
 }

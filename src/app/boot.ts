@@ -9,6 +9,7 @@ import { createSfx } from '../audio/sfx';
 import { createClock } from '../core/clock';
 import { parseSeed } from '../core/rng';
 import { atCounter } from '../core/rush';
+import { createScoresStore } from '../core/save/scores';
 import { browserStorage, createSaveStore } from '../core/save/storage';
 import { createTrial, emptyInput } from '../core/trial';
 import { GREETING } from '../data/ownerLines';
@@ -140,6 +141,8 @@ export async function boot(): Promise<void> {
     cooldowns: {},
     lastEvent: null,
     telemetry: createTelemetry({ rush: () => app.rush, trial: () => trial }),
+    scores: createScoresStore(browserStorage()),
+    scoreNote: null,
     audio,
     sfx,
     music,

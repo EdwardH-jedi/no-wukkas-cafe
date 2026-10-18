@@ -9,11 +9,13 @@ import type { Sfx } from '../audio/sfx';
 import type { Clock } from '../core/clock';
 import type { Practice, PracticeAction } from '../core/practice';
 import type { Rush, RushAction, RushWeek } from '../core/rush';
+import type { ScoresStore } from '../core/save/scores';
 import type { SaveStore } from '../core/save/storage';
 import type { Trial, TrialInput } from '../core/trial';
 import type { Cooldowns } from '../core/week/session';
 import type { ShiftEventId } from '../sim/contracts/events';
 import type { Ibis } from '../sim/ibis';
+import type { ScoreNote } from '../sim/scores';
 import type { AudioPanel } from '../ui/audioPanel';
 import type { Hud } from '../ui/hud';
 import type { PracticeHud } from '../ui/practiceHud';
@@ -84,6 +86,10 @@ export interface App {
   lastEvent: ShiftEventId | null;
   /** The playtest log (local only): records open and close with shifts and the trial. */
   readonly telemetry: Telemetry;
+  /** The local leaderboard (its own storage key, outside the save). */
+  readonly scores: ScoresStore;
+  /** The shift that just reached its report, on its board (app/scores.ts); null before then. */
+  scoreNote: ScoreNote | null;
 
   // Audio.
   readonly audio: AudioManager;

@@ -93,6 +93,13 @@ export function isNewBest(s: Scores, e: ScoreEntry): boolean {
   return best !== null && compare(e, best) < 0;
 }
 
+/** What a report says about its board: whether the shift beat a best already there, and the
+ *  board's best now (the shift's own entry when it is the first). */
+export interface ScoreNote {
+  newBest: boolean;
+  best: ScoreEntry;
+}
+
 export interface ScoreContext {
   mode: ScoreMode;
   week: number | null;

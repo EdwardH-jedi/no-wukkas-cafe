@@ -19,6 +19,7 @@ import { createTelemetry } from '../../src/app/telemetry';
 import { toTitle } from '../../src/app/title';
 import { createClock } from '../../src/core/clock';
 import type { Utterance } from '../../src/core/speech';
+import { createScoresStore } from '../../src/core/save/scores';
 import { createTelemetryStore } from '../../src/core/save/telemetry';
 import { createTrial, emptyInput } from '../../src/core/trial';
 import { VOICE_MANIFEST } from '../../src/data/voice';
@@ -420,6 +421,8 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       { rush: (): App['rush'] => appRef?.rush ?? null, trial: () => trial },
       createTelemetryStore(null),
     ),
+    scores: createScoresStore(null),
+    scoreNote: null,
     audio,
     sfx,
     music,

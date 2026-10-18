@@ -253,7 +253,7 @@ entry; top 10 per board. No names or initials (one device, one player).
       `src/core/save/telemetry.ts` line for line with the new key and types; tests
       `tests/core/save/scores.test.ts` copying `tests/core/save/telemetry.test.ts`.
       verify: `npx vitest run tests/core/save/scores.test.ts`
-- [ ] T4.3 Wire it: `App` gets `scores` (`src/app/context.ts`; the review harness builds `App` by hand, so
+- [x] T4.3 Wire it: `App` gets `scores` (`src/app/context.ts`; the review harness builds `App` by hand, so
       `tests/review/harness.ts` gets a memory store too); on every shift summary (`src/app/weekWiring.ts
       onShiftSummary`, the Day 2 and Endless paths in `src/app/rushWiring.ts`) `put(fromSummary(...))` **before**
       the report renders; `renderShiftReport` (`src/ui/screens/shiftReport.ts`) shows one line: "New best!" or
