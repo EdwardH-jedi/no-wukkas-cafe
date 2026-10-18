@@ -172,18 +172,18 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
 - [x] T3.0 Shell screens, service HUD, settings (71df0e5, 58d729c); local playtest log `nwc.telemetry.v1` with
       Export/Clear (4c08363); accessibility: captions, text size, milk shape + name, reduced motion, remappable
       keys (c1b6f17); Phase 1.5 evidence captures (1e34e0c).
-- [ ] T3.1 `scripts/build-clean.ts` → `npm run build:clean`: export `HEAD` with `git archive` into a scratch dir,
+- [x] T3.1 `scripts/build-clean.ts` → `npm run build:clean`: export `HEAD` with `git archive` into a scratch dir,
       symlink `node_modules`, run the production build there, copy `dist/` back, print the audio-gate line and the
       total bytes of non-audio files; exit with the build's code; `--budget <bytes>` (default 3,000,000) fails
       over budget. Add the script to `package.json` and one line to `AGENTS.md` §3.
       verify: `npm run build:clean` exits 0 (no script today) and `npm run build:clean -- --budget 1` exits 1
-- [ ] T3.2 `index.html` for sharing: `<title>No Wukkas Café</title>` (today "Day 1: The Trial"), description that
+- [x] T3.2 `index.html` for sharing: `<title>No Wukkas Café</title>` (today "Day 1: The Trial"), description that
       names the week, `og:title` / `og:description` / `og:image` / `og:type`, `twitter:card`. OG image
       `public/og.png` 1200×630: a Playwright script `scripts/og-image.ts` screenshots the title screen at that
       size (dev server on a free port, `?voice=0`); commit the PNG (≤ 300 kB). Test `tests/scripts/indexMeta.test.ts`
       parses `index.html` and checks the tags and that the file exists.
       verify: `npx vitest run tests/scripts/indexMeta.test.ts`
-- [ ] T3.3 Draw-call budget: `tests/e2e/perf.spec.ts` at 1024×640 and 390×844, Day 2 seed 7 with three customers
+- [x] T3.3 Draw-call budget: `tests/e2e/perf.spec.ts` at 1024×640 and 390×844, Day 2 seed 7 with three customers
       in the café, read `drawCalls` from the `window.__trial` state (`src/app/debug.ts` already exposes
       `renderer.info.render.calls`) and assert < 150; log frame-time median to a JSON sidecar next to the
       evidence dirs. Opt-in like `polishEvidence` is **not** wanted: this runs in the normal suite. If the first
@@ -191,7 +191,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       with the numbers, note it under `Discovered`, and let the replan size the `world/` work.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/perf.spec.ts --config tests/review/playwright.ipv6.config.ts`
       (a `.fixme` commit with numbers under Discovered counts as this task done)
-- [ ] T3.4 `scripts/deploy.ts` → `npm run deploy`: runs `build:clean`, then in a temporary worktree of
+- [x] T3.4 `scripts/deploy.ts` → `npm run deploy`: runs `build:clean`, then in a temporary worktree of
       `origin/gh-pages` replaces the contents with `dist/` plus `.nojekyll` and (with `--domain <host>`) a `CNAME`,
       commits "deploy <sha>", and prints what it would push; **dry run by default**, `--push` publishes. `base`
       for Vite: `/<repo name from the origin URL>/` (today `/no-wukkas-cafe/`) without a domain, `/` with one
@@ -199,20 +199,20 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       dependency. Test `tests/scripts/deploy.test.ts` on a temp bare repo (pattern: temp dirs in
       `tests/scripts/voicesRender.test.ts`): dry run writes nothing to the remote, `--push` updates the branch.
       verify: `npx vitest run tests/scripts/deploy.test.ts && npm run deploy`
-- [ ] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
+- [x] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
       or the deployed URL, Settings → Playtest log → Clear between testers, Export log at the end, where to put
       the file) and `docs/playtests/TEMPLATE.md` (per tester: device/browser, Trial result, shifts played, where
       they got stuck, pardons per order, walk-outs, "one more shift?" yes/no, quotes). Copy for testers only;
       the metrics list is ROADMAP "Success metrics" + `docs/TODO.md` Phase 5.
       verify: `test -f docs/playtests/README.md && test -f docs/playtests/TEMPLATE.md`
-- [ ] T3.6 `npm run playtest:summary -- <log.json …>`: pure aggregation `src/sim/telemetrySummary.ts` over
+- [x] T3.6 `npm run playtest:summary -- <log.json …>`: pure aggregation `src/sim/telemetrySummary.ts` over
       exported logs (`{version: 1, records}` from `src/sim/telemetry.ts`): sessions, shifts, served, walk-outs by
       stage, accuracy per field, pardons per order, register wait median/max, quit points, trial verdicts; a
       Markdown table from `scripts/playtest-summary.ts`. Fixture `tests/fixtures/telemetry/sample.json` written
       from headless `playRush` records (as `tests/sim/telemetry.test.ts` builds them). Rejects other versions
       with a message, exit 1.
       verify: `npx vitest run tests/sim/telemetrySummary.test.ts && npm run playtest:summary -- tests/fixtures/telemetry/sample.json`
-- [ ] T3.7 [simple] README: how to play (URL once deployed, controls, Space/1–3, phone), the playtest kit link,
+- [x] T3.7 [simple] README: how to play (URL once deployed, controls, Space/1–3, phone), the playtest kit link,
       the commands table pointer to `AGENTS.md` §3, architecture pointer to `docs/DEVLOG.md`. Keep the existing
       sections; add, don't rewrite.
       verify: `grep -q "docs/playtests" README.md && grep -q "DEVLOG" README.md`

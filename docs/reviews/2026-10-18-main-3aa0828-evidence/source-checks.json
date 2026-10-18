@@ -1,0 +1,85 @@
+{
+  "git diff --exit-code 157329e 3aa0828 -- src/sim/contracts/save.ts": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "git diff --exit-code b39ca28 c05d257 -- src tests": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "git diff --exit-code 3aa0828 -- src scripts tests/helpers tests/review/harness.ts": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "git cat-file -e 3aa0828:docs/reviews/2026-10-18-main-157329e.md": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "git merge-base --is-ancestor 0b72172 3aa0828": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "git log --oneline -- tests/review/independentFuzz.test.ts": {
+    "exit_code": 0,
+    "stdout": "28eb1b4 test(review): re-issue the THE_USUAL test as an AFFINITY_RULE test (DECISIONS Q1)\n7586668 feat(events): a correct serve to a regular adds +1 affinity (THE_USUAL reachable)\n8333240 test(review): record independent main 1a54a00 verification\n",
+    "stderr": ""
+  },
+  "grep -q Planning moved to docs/TODO.md": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "grep -q todo.md docs/MILESTONES.md": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "grep -q copied, not shared tests/review/harness.ts": {
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "node --version": {
+    "exit_code": 0,
+    "stdout": "v26.7.0\n",
+    "stderr": ""
+  },
+  "over_600_lines": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687,
+      "unchanged_in_range": true
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 931,
+      "unchanged_in_range": true
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14908,
+      "unchanged_in_range": true
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839,
+      "unchanged_in_range": true
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623,
+      "unchanged_in_range": true
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894,
+      "unchanged_in_range": true
+    }
+  ],
+  "trace_equal": true
+}

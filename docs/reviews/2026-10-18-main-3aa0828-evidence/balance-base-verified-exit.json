@@ -1,0 +1,4 @@
+{
+  "command": "node --import ./docs/reviews/2026-10-18-main-3aa0828-evidence/baseline-loader.mjs scripts/balance.ts --out docs/reviews/2026-10-18-main-3aa0828-evidence/balance-base.csv",
+  "exit_code": 0
+}

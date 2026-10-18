@@ -1,0 +1,22 @@
+[
+  {
+    "id": "t22",
+    "command": "npx vitest run tests/core/regularAffinity.test.ts tests/core/week/session.test.ts",
+    "exit_code": 0
+  },
+  {
+    "id": "t23",
+    "command": "npx vitest run tests/core/week/progress.test.ts tests/fuzz",
+    "exit_code": 0
+  },
+  {
+    "id": "t26",
+    "command": "npx vitest run tests/review tests/core/rushTrace.test.ts",
+    "exit_code": 0
+  },
+  {
+    "id": "t28",
+    "command": "npx vitest run tests/review/independentSuspendedCancellation.test.ts tests/audio/manager.test.ts",
+    "exit_code": 0
+  }
+]

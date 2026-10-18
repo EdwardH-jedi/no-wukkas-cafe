@@ -21,6 +21,32 @@ Work out what they actually said, make it right, and do it before their patience
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full plan.
 
+## How to play
+
+The web build will live at https://edwardh-jedi.github.io/no-wukkas-cafe/ once it is published. It is not live yet: Edward publishes with `npm run deploy -- --push`. Until then run it locally (see Getting started) with `npm run dev`, which opens http://localhost:5183. On a phone on the same Wi-Fi, run `npm run dev -- --host`, then open `http://<your Mac's LAN IP>:5183/` in Safari or Chrome.
+
+What's playable now:
+
+- Day 1 barista trial: one flat white with a heart for Gaz, three goes.
+- Day 2 morning rush: six customers, take every order by ear.
+- The week: Monday to Friday shifts with tips and café upgrades.
+- Endless Rush: unlocks after passing Monday.
+- Latte art practice: no customers, no clock.
+
+| Keys | What they do |
+|---|---|
+| Mouse | move the jug · set steam depth |
+| Hold click / Space | grind · steam · pour (trackpad: use Space) |
+| 1 · 2 · 3 | jug high · lift · low (trackpad-friendly) |
+| Scroll · W / S | fine jug height while pouring |
+| Enter | confirm · next |
+| T | take the order at the register |
+| Esc | pause |
+
+Keys can be remapped in Settings; Settings also has subtitles, text size, learning mode and pour feel.
+
+On a phone, touch to steer the jug and steam; the on-screen buttons stand in for keys. Tap Start (or any button) first so sound can play, because iOS needs a tap before audio.
+
 ## What's in the game (prototype)
 
 - **First-person counter view** with mouse head-look (drag on touch) and clickable stations: grinder, group heads, steam wand, milk cartons, cup stacks, sugar/choc/chai/syrups, ice, bin, bell.
@@ -112,3 +138,13 @@ Then paste:
 ## Licence
 
 TBD. Choose before making the repo public (MIT for code is a common default; audio and art assets may need separate terms).
+
+## Playtesting
+
+Running a 30-minute playtest is described in [docs/playtests/README.md](docs/playtests/README.md) (notes template: [docs/playtests/TEMPLATE.md](docs/playtests/TEMPLATE.md)). The game keeps a local playtest log (Settings → Playtest log → Export log; nothing is sent anywhere), and `npm run playtest:summary -- <files>` turns exported logs into tables.
+
+## For developers
+
+- Every command (dev, build, `build:clean`, deploy, tests, balance, voices) with what it does is in [AGENTS.md §3](AGENTS.md#3-commands).
+- The architecture (pure sim + seeded RNG + headless balance) is written up in [docs/DEVLOG.md](docs/DEVLOG.md).
+- The plan and its status live in [todo.md](todo.md) (milestones), with the evidence archive in [docs/TODO.md](docs/TODO.md).

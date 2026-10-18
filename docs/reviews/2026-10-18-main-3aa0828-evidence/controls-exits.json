@@ -1,0 +1,24 @@
+[
+  {
+    "name": "independent-m2-verified",
+    "command": "npx vitest run tests/review/independentM2.test.ts --reporter=verbose",
+    "env": {},
+    "exit_code": 0
+  },
+  {
+    "name": "mutation-f5",
+    "command": "npx vitest run tests/review/independentSuspendedCancellation.test.ts --config docs/reviews/2026-10-18-main-3aa0828-evidence/mutation.config.mjs --reporter=verbose",
+    "env": {
+      "REVIEW_M2_MUTATION": "f5"
+    },
+    "exit_code": 1
+  },
+  {
+    "name": "mutation-harness",
+    "command": "npx vitest run tests/review/independentM2.test.ts --config docs/reviews/2026-10-18-main-3aa0828-evidence/mutation.config.mjs --reporter=verbose",
+    "env": {
+      "REVIEW_M2_MUTATION": "harness"
+    },
+    "exit_code": 1
+  }
+]

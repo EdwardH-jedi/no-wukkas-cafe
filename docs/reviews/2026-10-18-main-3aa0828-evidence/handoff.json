@@ -1,0 +1,20 @@
+{
+  "branch": "chore/review-main-3aa0828",
+  "target_head": "3aa082856a2d33a4f13606383955f6ea78c040d3",
+  "review_commit_sha": null,
+  "commit_status": "Awaiting harness; git add/commit forbidden by user",
+  "red_count": 0,
+  "new_tests": 9,
+  "final_files_passed": 101,
+  "final_tests_passed": 833,
+  "final_exit_codes": {
+    "typecheck": 0,
+    "lint": 0,
+    "test": 0
+  },
+  "balance_csv_equal": true,
+  "trace_hashes_equal": 7,
+  "production_diff_exit_code": 0,
+  "status": "?? docs/reviews/2026-10-18-main-3aa0828-evidence/\n?? docs/reviews/2026-10-18-main-3aa0828.md\n?? tests/review/independentM2.test.ts\n",
+  "report": "docs/reviews/2026-10-18-main-3aa0828.md"
+}

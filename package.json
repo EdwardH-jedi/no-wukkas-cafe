@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "vite --open",
     "build": "tsc --noEmit && vite build",
+    "build:clean": "node scripts/build-clean.ts",
+    "deploy": "node scripts/deploy.ts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . && prettier --check .",
@@ -18,6 +20,7 @@
     "test:e2e": "playwright test",
     "balance": "node scripts/balance.ts",
     "pace": "node scripts/day2-pace.ts",
+    "playtest:summary": "node scripts/playtest-summary.ts",
     "voices": "node scripts/voices.ts",
     "voices:check": "node scripts/voices-check.ts",
     "voices:estimate": "node scripts/voices-estimate.ts",

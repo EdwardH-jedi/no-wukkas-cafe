@@ -1,0 +1,18 @@
+[
+  {
+    "command": "git log --stat 157329e..3aa0828",
+    "exit_code": 0
+  },
+  {
+    "command": "grep -rnE Math\\.random|Date\\.now|setTimeout src/sim src/core",
+    "exit_code": 1
+  },
+  {
+    "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+    "exit_code": 0
+  },
+  {
+    "command": "npm run release:check",
+    "exit_code": 1
+  }
+]
