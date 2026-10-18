@@ -1,0 +1,4 @@
+{
+  "command": "npx vitest run tests/review/independentM2.test.ts --reporter=verbose",
+  "exit_code": 1
+}

@@ -1,0 +1,7 @@
+{
+  "command": "node --input-type=module -e 'import { chromium } from \"@playwright/test\"; const b=await chromium.launch({headless:true}); console.log(await b.version()); await b.close();'",
+  "exit_code": 1,
+  "browser": "chromium_headless_shell-1248",
+  "error": "FATAL:base/apple/mach_port_rendezvous_mac.cc:159 bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.60847: Permission denied (1100)",
+  "effect": "Browser did not start; no page, server, E2E suite or layout measurement ran. Not a product failure."
+}

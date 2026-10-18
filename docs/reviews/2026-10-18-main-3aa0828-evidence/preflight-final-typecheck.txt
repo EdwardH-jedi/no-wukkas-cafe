@@ -1,0 +1,6 @@
+
+> no-wukkas-cafe@0.1.0 typecheck
+> tsc --noEmit
+
+tests/review/independentM2.test.ts(58,13): error TS2540: Cannot assign to 'store' because it is a read-only property.
+tests/review/independentM2.test.ts(90,13): error TS2540: Cannot assign to 'store' because it is a read-only property.

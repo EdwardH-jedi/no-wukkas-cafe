@@ -1,0 +1,19 @@
+node:internal/modules/typescript:101
+  validateOneOf(mode, 'options.mode', ['strip']);
+  ^
+
+TypeError [ERR_INVALID_ARG_VALUE]: The property 'options.mode' must be one of: 'strip'. Received 'transform'
+    at stripTypeScriptTypes (node:internal/modules/typescript:101:3)
+    at load (file:///Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-18-main-3aa0828-evidence/baseline-loader.mjs:13:108)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at load (file:///Users/edwardhwang/Desktop/nwc-review-2/scripts/balance.ts:33:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at loadWithHooks (node:internal/modules/customization_hooks:374:18)
+    at #loadSync (node:internal/modules/esm/loader:832:16)
+    at ModuleLoader.load (node:internal/modules/esm/loader:790:26)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:501:31)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:567:36) {
+  code: 'ERR_INVALID_ARG_VALUE'
+}
+
+Node.js v26.7.0

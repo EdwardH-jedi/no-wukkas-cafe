@@ -1,0 +1,21 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v2: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 6ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v3: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 1ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > day2 summary must not persist visits or affinity 0ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > endless summary must not persist visits or affinity 1ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > pause must synchronise all HUDs and audio and prevent a released hold becoming a click 8ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > title pause is a no-op, but a subsequent rush pause must actually suspend audio 0ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > trial: replay captions must wait for resumed audio and target exactly that HUD 10ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > practice: replay captions must wait for resumed audio and target exactly that HUD 4ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > rush: replay captions must wait for resumed audio and target exactly that HUD 4ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  23:38:14
+   Duration  583ms (transform 75%, import 18%, tests 7%, worker 1%)
+
