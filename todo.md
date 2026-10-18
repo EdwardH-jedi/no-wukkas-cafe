@@ -275,7 +275,7 @@ entry; top 10 per board. No names or initials (one device, one player).
 - [x] T4.6 [simple] Placeholder clip for T4.5: `npm run voices -- --only gaz`, commit `src/data/voice/manifest.json`
       only (no audio), empty `AWAITING_RENDER`.
       verify: `npm run voices:check`
-- [ ] T4.7 E2E: after the Monday pass in `tests/e2e/weekUi.spec.ts`, open Scores from the title and assert
+- [x] T4.7 E2E: after the Monday pass in `tests/e2e/weekUi.spec.ts`, open Scores from the title and assert
       Monday's row shows the grade the report showed; screenshot `10-scores.png` into the week-UI evidence dir.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts`
 
