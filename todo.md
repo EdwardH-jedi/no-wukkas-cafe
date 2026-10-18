@@ -205,7 +205,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       they got stuck, pardons per order, walk-outs, "one more shift?" yes/no, quotes). Copy for testers only;
       the metrics list is ROADMAP "Success metrics" + `docs/TODO.md` Phase 5.
       verify: `test -f docs/playtests/README.md && test -f docs/playtests/TEMPLATE.md`
-- [ ] T3.6 `npm run playtest:summary -- <log.json …>`: pure aggregation `src/sim/telemetrySummary.ts` over
+- [x] T3.6 `npm run playtest:summary -- <log.json …>`: pure aggregation `src/sim/telemetrySummary.ts` over
       exported logs (`{version: 1, records}` from `src/sim/telemetry.ts`): sessions, shifts, served, walk-outs by
       stage, accuracy per field, pardons per order, register wait median/max, quit points, trial verdicts; a
       Markdown table from `scripts/playtest-summary.ts`. Fixture `tests/fixtures/telemetry/sample.json` written

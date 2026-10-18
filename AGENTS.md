@@ -47,6 +47,7 @@ npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts   # the same
 POLISH_SHOTS=<dir> POLISH_COMMIT=<sha> npm run test:e2e -- polishEvidence   # opt-in: Phase 1.5 evidence, exact 390×844 + 1024×640 PNGs with JSON sidecars (A11Y_SHOTS=… a11yEvidence: Phase 7 accessibility)
 npm run balance        # headless week 1 × {novice, average, expert} bots × 30 seeds → reports/balance.csv + first-try pass table (~3 min; -- --seeds N, -- --out path)
 npm run pace           # headless Day 2 pacing: seeds 1–10 × {ideal, first-timer} bot × {easy, normal} (-- --detail per seed)
+npm run playtest:summary -- <log.json …>  # exported playtest logs (Settings → Playtest log → Export log) → Markdown tables (sessions, shifts, walk-outs by stage, accuracy per field, pardons per order, register wait, quit points, trial verdicts); refuses other log versions; docs/playtests/README.md
 npm run voices         # macOS only: render placeholder voice clips → voice-cache/ + src/data/voice/manifest.json
 npm run voices -- --segments # macOS only: generated-order segment clips → voice-cache/segments/ (dev only; manifest untouched)
 npm run voices:check   # voice manifest + files: missing audio, duration drift, duplicates, metadata (-- --release for ship checks); also the segment manifest

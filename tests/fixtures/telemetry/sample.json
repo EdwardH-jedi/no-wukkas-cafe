@@ -1,0 +1,563 @@
+{
+  "version": 1,
+  "records": [
+    {
+      "kind": "trial",
+      "id": "2026-10-18T09:00:00.000Z#1",
+      "session": "2026-10-18T09:00:00.000Z",
+      "startedAt": "2026-10-18T09:00:00.000Z",
+      "endedAt": "2026-10-18T09:05:00.000Z",
+      "ending": "finished",
+      "seed": 7,
+      "attempts": [
+        {
+          "total": 40,
+          "art": 18.2,
+          "valid": true,
+          "band": "failed",
+          "fault": "lopsided"
+        },
+        {
+          "total": 20,
+          "art": 9.1,
+          "valid": false,
+          "band": "disaster",
+          "fault": null
+        },
+        {
+          "total": 72,
+          "art": 32.8,
+          "valid": true,
+          "band": "almost",
+          "fault": "lopsided"
+        }
+      ],
+      "verdict": "almost",
+      "score": 72,
+      "seconds": 240,
+      "quit": null
+    },
+    {
+      "kind": "shift",
+      "id": "2026-10-18T09:00:00.000Z#2",
+      "session": "2026-10-18T09:00:00.000Z",
+      "startedAt": "2026-10-18T09:00:00.000Z",
+      "endedAt": "2026-10-18T09:05:00.000Z",
+      "ending": "finished",
+      "mode": "day2",
+      "week": null,
+      "shiftIndex": null,
+      "seed": 3,
+      "difficulty": "normal",
+      "arrived": 6,
+      "customers": 6,
+      "served": 6,
+      "walkouts": 0,
+      "walkoutsAt": {
+        "queue": 0,
+        "register": 0,
+        "ordering": 0,
+        "ticket": 0
+      },
+      "refused": 0,
+      "handedBack": 0,
+      "accuracy": {
+        "drink": {
+          "total": 6,
+          "correct": 6
+        },
+        "milk": {
+          "total": 3,
+          "correct": 3
+        },
+        "temp": {
+          "total": 3,
+          "correct": 3
+        },
+        "heart": {
+          "total": 3,
+          "correct": 3
+        }
+      },
+      "pardons": {
+        "replays": 0,
+        "repeats": 0,
+        "questions": 2
+      },
+      "serveSeconds": {
+        "each": [
+          45.2,
+          64.5,
+          57.9,
+          51.2,
+          60,
+          68.8
+        ],
+        "mean": 57.9,
+        "median": 58.9,
+        "max": 68.8
+      },
+      "registerWait": {
+        "each": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0,
+        "median": 0,
+        "max": 0
+      },
+      "events": [],
+      "grade": "excellent",
+      "satisfaction": 95,
+      "tipsCents": 980,
+      "serviceSeconds": 252.3,
+      "quit": null,
+      "visits": [
+        {
+          "key": "dazza",
+          "line": "dazza.3",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 16.8,
+          "serveSeconds": 45.2,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 1,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 100,
+          "tipCents": 300
+        },
+        {
+          "key": "priya",
+          "line": "priya.3",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 20.5,
+          "serveSeconds": 64.5,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 1,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 97,
+          "tipCents": 200
+        },
+        {
+          "key": "beryl",
+          "line": "beryl.3",
+          "tier": 1,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 11.4,
+          "serveSeconds": 57.9,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 100,
+          "tipCents": 100
+        },
+        {
+          "key": "mei",
+          "line": "mei.3",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 11.3,
+          "serveSeconds": 51.2,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 98,
+          "tipCents": 250
+        },
+        {
+          "key": "jiwoo",
+          "line": "jiwoo.5",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 11.3,
+          "serveSeconds": 60,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 95,
+          "tipCents": 100
+        },
+        {
+          "key": "karen",
+          "line": "karen.1",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 10.4,
+          "serveSeconds": 68.8,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 79,
+          "tipCents": 30
+        }
+      ]
+    },
+    {
+      "kind": "shift",
+      "id": "2026-10-18T09:00:00.000Z#3",
+      "session": "2026-10-18T09:00:00.000Z",
+      "startedAt": "2026-10-18T09:00:00.000Z",
+      "endedAt": "2026-10-18T09:05:00.000Z",
+      "ending": "finished",
+      "mode": "day2",
+      "week": null,
+      "shiftIndex": null,
+      "seed": 8,
+      "difficulty": "normal",
+      "arrived": 6,
+      "customers": 6,
+      "served": 0,
+      "walkouts": 6,
+      "walkoutsAt": {
+        "queue": 0,
+        "register": 6,
+        "ordering": 0,
+        "ticket": 0
+      },
+      "refused": 0,
+      "handedBack": 0,
+      "accuracy": {
+        "drink": {
+          "total": 0,
+          "correct": 0
+        },
+        "milk": {
+          "total": 0,
+          "correct": 0
+        },
+        "temp": {
+          "total": 0,
+          "correct": 0
+        },
+        "heart": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "pardons": {
+        "replays": 0,
+        "repeats": 0,
+        "questions": 0
+      },
+      "serveSeconds": {
+        "each": [],
+        "mean": null,
+        "median": null,
+        "max": null
+      },
+      "registerWait": {
+        "each": [],
+        "mean": null,
+        "median": null,
+        "max": null
+      },
+      "events": [],
+      "grade": "disaster",
+      "satisfaction": 0,
+      "tipsCents": 0,
+      "serviceSeconds": 354.3,
+      "quit": null,
+      "visits": [
+        {
+          "key": "dazza",
+          "line": "dazza.3",
+          "tier": 2,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "priya",
+          "line": "priya.4",
+          "tier": 2,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "beryl",
+          "line": "beryl.3",
+          "tier": 1,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "mei",
+          "line": "mei.2",
+          "tier": 1,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "jiwoo",
+          "line": "jiwoo.1",
+          "tier": 2,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "karen",
+          "line": "karen.1",
+          "tier": 2,
+          "outcome": "walkout",
+          "reached": "register",
+          "registerWait": null,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        }
+      ]
+    },
+    {
+      "kind": "trial",
+      "id": "2026-10-18T10:00:00.000Z#1",
+      "session": "2026-10-18T10:00:00.000Z",
+      "startedAt": "2026-10-18T10:00:00.000Z",
+      "endedAt": "2026-10-18T10:05:00.000Z",
+      "ending": "title",
+      "seed": 9,
+      "attempts": [],
+      "verdict": null,
+      "score": null,
+      "seconds": 100,
+      "quit": {
+        "phase": "steam",
+        "attempt": 1
+      }
+    },
+    {
+      "kind": "shift",
+      "id": "2026-10-18T10:00:00.000Z#2",
+      "session": "2026-10-18T10:00:00.000Z",
+      "startedAt": "2026-10-18T10:00:00.000Z",
+      "endedAt": "2026-10-18T10:05:00.000Z",
+      "ending": "title",
+      "mode": "week",
+      "week": 1,
+      "shiftIndex": 0,
+      "seed": 4,
+      "difficulty": "normal",
+      "arrived": 4,
+      "customers": 2,
+      "served": 2,
+      "walkouts": 0,
+      "walkoutsAt": {
+        "queue": 0,
+        "register": 0,
+        "ordering": 0,
+        "ticket": 0
+      },
+      "refused": 0,
+      "handedBack": 0,
+      "accuracy": {
+        "drink": {
+          "total": 3,
+          "correct": 3
+        },
+        "milk": {
+          "total": 0,
+          "correct": 0
+        },
+        "temp": {
+          "total": 0,
+          "correct": 0
+        },
+        "heart": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "pardons": {
+        "replays": 0,
+        "repeats": 0,
+        "questions": 0
+      },
+      "serveSeconds": {
+        "each": [
+          37.7,
+          40
+        ],
+        "mean": 38.9,
+        "median": 38.9,
+        "max": 40
+      },
+      "registerWait": {
+        "each": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0,
+        "median": 0,
+        "max": 0
+      },
+      "events": [],
+      "grade": null,
+      "satisfaction": null,
+      "tipsCents": 500,
+      "serviceSeconds": 89,
+      "quit": {
+        "phase": "service",
+        "serviceTime": 89,
+        "served": 2,
+        "walkouts": 0,
+        "inCafe": 2,
+        "station": "shot"
+      },
+      "visits": [
+        {
+          "key": "dazza",
+          "line": "gen-4-0-0",
+          "tier": 1,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 9.3,
+          "serveSeconds": 37.7,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 100,
+          "tipCents": 300
+        },
+        {
+          "key": "priya",
+          "line": "gen-4-0-1",
+          "tier": 2,
+          "outcome": "served",
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 11.4,
+          "serveSeconds": 40,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": 100,
+          "tipCents": 200
+        },
+        {
+          "key": "beryl",
+          "line": "beryl.3",
+          "tier": 1,
+          "outcome": null,
+          "reached": "ticket",
+          "registerWait": 0,
+          "ringUpSeconds": 11.4,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": [],
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        },
+        {
+          "key": "mei",
+          "line": "gen-4-0-3",
+          "tier": 2,
+          "outcome": null,
+          "reached": "ordering",
+          "registerWait": 0,
+          "ringUpSeconds": null,
+          "serveSeconds": null,
+          "replays": 0,
+          "repeats": 0,
+          "questions": 0,
+          "wrong": null,
+          "handedBack": 0,
+          "satisfaction": null,
+          "tipCents": null
+        }
+      ]
+    }
+  ]
+}
