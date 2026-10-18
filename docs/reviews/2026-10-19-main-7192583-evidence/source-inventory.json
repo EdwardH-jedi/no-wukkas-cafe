@@ -1,0 +1,29 @@
+{
+  "over600": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 931
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14908
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894
+    }
+  ],
+  "sourceDiff": " src/sim/telemetrySummary.ts | 210 ++++++++++++++++++++++++++++++++++++++++++++\n 1 file changed, 210 insertions(+)\n"
+}

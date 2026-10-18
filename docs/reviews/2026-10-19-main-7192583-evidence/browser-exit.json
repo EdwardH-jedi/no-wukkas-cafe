@@ -1,0 +1,5 @@
+{
+  "command": "E2E_PORT=5202 npx playwright test tests/e2e/perf.spec.ts tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts",
+  "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+  "exit": 1
+}

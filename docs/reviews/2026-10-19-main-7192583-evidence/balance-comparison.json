@@ -1,0 +1,11 @@
+{
+  "base": "3aa0828",
+  "targetAndLocalMain": "7192583",
+  "baseExit": 0,
+  "targetExit": 0,
+  "seeds": 30,
+  "byteIdentical": true,
+  "bytes": 60880,
+  "baseSha256": "c0eb006c733febbe25033d3a7f70bd49e8bcac7651cf870d22c281454a8ae054",
+  "targetSha256": "c0eb006c733febbe25033d3a7f70bd49e8bcac7651cf870d22c281454a8ae054"
+}

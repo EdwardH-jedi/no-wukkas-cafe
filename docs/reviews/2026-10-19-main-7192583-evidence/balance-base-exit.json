@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "balance",
+    "--",
+    "--out",
+    "/Users/edwardhwang/Desktop/no-wukkas-cafe/docs/reviews/2026-10-19-main-7192583-evidence/balance-base.csv"
+  ],
+  "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-balance-base-3aa0828-ky80vx3i",
+  "exit": 0
+}

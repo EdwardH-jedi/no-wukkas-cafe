@@ -1,0 +1,9 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved (3.6m)
+
+  1 passed (3.6m)
