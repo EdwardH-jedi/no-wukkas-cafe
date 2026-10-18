@@ -11,7 +11,7 @@ import type { ShiftReportCallbacks } from '../ui/screens/shiftReport';
 import { renderShiftSelect } from '../ui/screens/shiftSelect';
 import { renderShop } from '../ui/screens/shop';
 import type { App } from './context';
-import { bestOf } from '../sim/scores';
+import { weekBest } from './scores';
 
 const SAVE_NOTE = "Progress won't be saved in this browser.";
 
@@ -25,11 +25,7 @@ export function startShift(app: App): void {
   }
   const week = weekFor(save, app.cooldowns, app.lastEvent);
   // Gaz notices a new best (todo.md M4): the board's best before this shift, if any.
-  week.best = bestOf(app.scores.read(), {
-    mode: 'week',
-    shiftIndex: save.shift,
-    difficulty: listen.difficulty,
-  });
+  week.best = weekBest(app.scores, week, listen.difficulty);
   app.nav.startRush(week, save.seed);
 }
 

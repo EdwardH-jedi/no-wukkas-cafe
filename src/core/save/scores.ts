@@ -24,7 +24,9 @@ export function createScoresStore(storage: KeyValueStorage | null): ScoresStore 
   const read = (): Scores => {
     if (!broken && storage) {
       try {
-        return parseScores(storage.getItem(SCORES_KEY));
+        // Kept: if storage fails later, the scores read so far stay (review 2026-10-19 F3).
+        mem = parseScores(storage.getItem(SCORES_KEY));
+        return mem;
       } catch {
         broken = true;
       }

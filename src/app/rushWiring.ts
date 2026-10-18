@@ -23,6 +23,7 @@ import type { App } from './context';
 import { createRushFrame } from './rushView';
 import { makeIbis, prefetchDay } from './shared';
 import { reportCallbacks } from './weekWiring';
+import { weekBest } from './scores';
 
 export function rushAct(app: App, a: RushAction): void {
   app.sfx.unlock();
@@ -60,8 +61,10 @@ export function createRushView(app: App): RushHud {
   const restart = (): void => {
     app.setPaused(false);
     app.crowd.clear();
-    // A restart picks up a difficulty changed mid-shift.
+    // A restart picks up a difficulty changed mid-shift, and that difficulty's best for Gaz.
     if (app.rush) app.rush.difficulty = app.listen.difficulty;
+    if (app.rush?.week)
+      app.rush.week.best = weekBest(app.scores, app.rush.week, app.listen.difficulty);
     app.sfx.setNoise(DIFFICULTY[app.listen.difficulty].noise);
     // Logged before the restart wipes the shift (a finished one is already closed).
     app.telemetry.end('restarted');
