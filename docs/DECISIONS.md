@@ -6,9 +6,9 @@ An unanswered question is not a blocker: mark the item `[!]` and move on. Format
 ## Answered
 - [x] AFFINITY_RULE (2026-10-17): correct serve to a regular adds +1 affinity → yes
 - [x] SEGMENT_GATE (2026-10-17): placeholder segment fails the build → yes
+- [x] Q1 (2026-10-18, impl): the inverted reviewer test in 7586668 — keep, or have review re-issue it? → review re-issues it, asserting AFFINITY_RULE
 
 ## Open (from RUN3_REPORT, 2026-10-18)
-- [ ] Q1 (impl): the inverted reviewer test in 7586668 — keep, or have review re-issue it? (recommended: review re-issues)
 - [ ] Q2 (impl): delete the 21 merged local branches listed in RUN3_REPORT? (TODO rule says never delete branches)
 - [ ] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build — delete them?
 - [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)?
