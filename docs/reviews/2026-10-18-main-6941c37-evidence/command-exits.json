@@ -1,0 +1,14 @@
+{
+  "baseline_typecheck_lint_test": { "exit": 0, "passedFiles": 97, "passedTests": 797, "failedTests": 0 },
+  "final_typecheck": { "exit": 0 },
+  "final_lint": { "exit": 0 },
+  "final_test": { "exit": 1, "passedFiles": 97, "failedFiles": 2, "passedTests": 798, "failedTests": 4 },
+  "new_regressions": { "exit": 1, "passedTests": 1, "failedTests": 4 },
+  "determinism_grep": { "exit": 1, "hits": 0 },
+  "rush_trace": { "exit": 0, "matchingProfiles": 7 },
+  "build_alternate_output": { "exit": 0, "licensedAudioFiles": 0 },
+  "release_check": { "exit": 1, "errors": 1646, "warnings": 0 },
+  "balance_target": { "exit": 0, "seedsPerProfile": 30, "rows": 650 },
+  "balance_base": { "exit": 0, "seedsPerProfile": 30, "rows": 650 },
+  "git_add_and_commit": { "exit": 128, "stage": "git add", "commitReached": false, "reason": "index.lock: Operation not permitted" }
+}

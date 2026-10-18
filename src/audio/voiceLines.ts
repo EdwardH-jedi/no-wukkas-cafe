@@ -79,6 +79,9 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
    *  to a new generation (the browser voice); it is still the same line with the same hooks. */
   let hooks: VoiceHooks | null = null;
   let hooksStarted = false;
+  /** Generation whose clip was started on a suspended context (paused, or the browser stopped
+   *  audio), or -1: its first sample plays on resume, so its onStart waits for that (update()). */
+  let startDue = -1;
 
   const stopSource = (): void => {
     const ctx = ctxOf();
@@ -105,6 +108,11 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
     if (my !== gen || hooksStarted) return;
     hooksStarted = true;
     hooks?.onStart?.();
+  };
+  /** A clip of generation `my` was just started on `ctx`: audible now, or once the context runs. */
+  const clipStarted = (ctx: BaseAudioContext, my: number): void => {
+    if (ctx.state === 'running') started(my);
+    else startDue = my;
   };
   /** The current line stops (a newer line, stopVoice): tell the caller, and forget its hooks. */
   const dropHooks = (): void => {
@@ -250,7 +258,7 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
           };
           begin(s, g);
           r.segments = i + 1;
-          started(my);
+          clipStarted(c, my);
         };
         board.record(r);
         part(0);
@@ -331,7 +339,7 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
         board.record(r);
         if (board.status === 'fallback' || board.status === 'error')
           board.set('ok', deps.okMessage());
-        started(my);
+        clipStarted(ctx, my);
       },
       (e: unknown) => {
         if (loadingGen === my) loadingGen = -1;
@@ -393,9 +401,16 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
       }
     },
     update() {
+      const ctx = ctxOf();
+      // A clip started while the context was suspended is heard from now: its subtitle with it.
+      // A newer line or stopVoice moved the generation on, and started() ignores the old one.
+      if (startDue >= 0 && ctx?.state === 'running') {
+        const my = startDue;
+        startDue = -1;
+        started(my);
+      }
       // A clip taking too long: the browser voice says its line now, under a new generation so
       // the clip is dropped when it does land (never said twice).
-      const ctx = ctxOf();
       if (ctx && loadingReq && loadingGen === gen && ctx.currentTime - loadingAt > LOAD_TIMEOUT) {
         const req = loadingReq;
         loadingGen = -1;
