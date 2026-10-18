@@ -183,7 +183,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       size (dev server on a free port, `?voice=0`); commit the PNG (≤ 300 kB). Test `tests/scripts/indexMeta.test.ts`
       parses `index.html` and checks the tags and that the file exists.
       verify: `npx vitest run tests/scripts/indexMeta.test.ts`
-- [ ] T3.3 Draw-call budget: `tests/e2e/perf.spec.ts` at 1024×640 and 390×844, Day 2 seed 7 with three customers
+- [x] T3.3 Draw-call budget: `tests/e2e/perf.spec.ts` at 1024×640 and 390×844, Day 2 seed 7 with three customers
       in the café, read `drawCalls` from the `window.__trial` state (`src/app/debug.ts` already exposes
       `renderer.info.render.calls`) and assert < 150; log frame-time median to a JSON sidecar next to the
       evidence dirs. Opt-in like `polishEvidence` is **not** wanted: this runs in the normal suite. If the first
