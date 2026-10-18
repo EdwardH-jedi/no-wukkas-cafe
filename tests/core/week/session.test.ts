@@ -87,6 +87,17 @@ describe('week session', () => {
     expect(JSON.parse(disk.data.get(SAVE_KEY) ?? '{}')).toMatchObject({ shift: 2, cents: 450 });
   });
 
+  it("visits add up beside affinity and a regular's last order is kept", () => {
+    const store = createSaveStore(new CountingStorage(), { seed: 9 });
+    const lastOrder = { type: 'longBlack' as const, milk: null, extraHot: false, heart: false };
+    store.save(onShift(1, { regulars: { dazza: { visits: 3, affinity: 2, lastOrder } } }));
+    const s = finishShift(store, report('good'), { dazza: 1 }, { dazza: 2, mei: 1 });
+    expect(s.regulars).toEqual({
+      dazza: { visits: 5, affinity: 3, lastOrder },
+      mei: { visits: 1, affinity: 0 },
+    });
+  });
+
   it('a disaster keeps the receipt and tips but plays the same shift again', () => {
     const store = createSaveStore(new CountingStorage(), { seed: 9 });
     store.save(onShift(1));

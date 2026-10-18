@@ -70,7 +70,7 @@ export function finishShift(
     const v = visits[id] ?? 0;
     if (!d && !v) continue;
     const m = s.regulars[id] ?? { visits: 0, affinity: 0 };
-    s.regulars[id] = { visits: m.visits + v, affinity: m.affinity + d };
+    s.regulars[id] = { ...m, visits: m.visits + v, affinity: m.affinity + d };
   }
   store.save(s);
   return s;
