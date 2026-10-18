@@ -222,7 +222,7 @@ Discovered:
       keeps the copy that closed last; F2 `readExport` validates every record. 7 red reviewer tests → green
       (`tests/review/independentM3.test.ts`); docs/TODO.md 6.14, 6.15.
       verify: `npx vitest run tests/review/independentM3.test.ts tests/sim/telemetrySummary.test.ts`
-- (flaky, not a regression) `tests/e2e/week.spec.ts:68` waits 240 s of wall clock at 4x for Monday's report; at
+- (fixed at the M4 gate: 480 s wait, 600 s test timeout) `tests/e2e/week.spec.ts:68` waited 240 s of wall clock at 4x for Monday's report; at
       load average ~19 (Finder + Spotlight busy) it timed out in the M3 gate run (35 passed / 1 failed) and passed
       alone in 3.6 min. Give it a game-time budget instead of a wall-clock one (a replan item; not done tonight).
 
@@ -280,7 +280,9 @@ entry; top 10 per board. No names or initials (one device, one player).
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/weekUi.spec.ts --config tests/review/playwright.ipv6.config.ts`
 
 Discovered:
-- (empty)
+- (M4 gate) `tests/e2e/week.spec.ts:68` timed out again in the full run (35 passed / 1 failed, load ~19); its
+      wall-clock wait went from 240 s to 480 s (test timeout 600 s); alone it passes in 3.7 min. A game-time
+      budget would be sturdier (replan item).
 
 Gate (Edward): online leaderboard yes/no (needs a backend; out of scope for the static site).
 Done when: `npx vitest run tests/sim/scores.test.ts tests/core/save/scores.test.ts tests/app/scores.test.ts tests/ui/scores.test.ts`
