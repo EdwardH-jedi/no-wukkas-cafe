@@ -243,7 +243,7 @@ site with no backend, an online board is Edward's call and a different milestone
 grade band, then served, then tips, then fewer walk-outs; Endless = served, then tips; ties keep the earlier
 entry; top 10 per board. No names or initials (one device, one player).
 
-- [ ] T4.1 `src/sim/scores.ts`: `ScoreEntry` (mode day2 | week | endless, week, shiftIndex, seed, difficulty, grade,
+- [x] T4.1 `src/sim/scores.ts`: `ScoreEntry` (mode day2 | week | endless, week, shiftIndex, seed, difficulty, grade,
       served, walkouts, tipsCents, `at` ISO passed in), board key per shift/difficulty and per Endless difficulty,
       `emptyScores`, `parseScores` (corrupt or other version → empty), `insert` (ranking above, cap 10),
       `isNewBest`, `fromSummary(ShiftSummary, ctx)`. Tests `tests/sim/scores.test.ts`: ordering, tie order, cap,
