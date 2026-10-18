@@ -1,7 +1,9 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { USUAL_AFFINITY } from '../../src/data/events';
 import { createSaveStore } from '../../src/core/save/storage';
+import { REGULAR_IDS } from '../../src/sim/contracts/save';
 import { createRush } from '../../src/core/rush';
 import { serve } from '../../src/core/rush/serve';
 import { finishShift, weekFor } from '../../src/core/week/session';
@@ -67,36 +69,70 @@ describe('independent ibis fuzz: 500 seeds per mode', () => {
   }
 });
 
-// Inverted 2026-10-18 with Edward's approval (AFFINITY_RULE = yes, overnight run #3 A5): the
-// review's version asserted the defect itself (regulars stay {} and THE_USUAL never fires), which
-// the approved rule makes false by construction. Same seeds, same saved five-shift loop.
-it('THE_USUAL becomes reachable across 1000 seeds and five consecutive saved shifts', () => {
+// Re-issued 2026-10-18 by the review session (DECISIONS Q1, AFFINITY_RULE = yes), replacing the
+// implementer's inversion in 7586668. Every affinity point a shift writes is accounted for: one per
+// correct serve to a regular, plus THE_USUAL's own +1 (the bot answers "make", so a THE_USUAL that
+// fires is always "remembered"). THE_USUAL may add only for a regular the save already knew to
+// USUAL_AFFINITY at the start of the shift, and the save carries the running total forward.
+it('AFFINITY_RULE: a correct serve to a regular adds +1, the save keeps it, and THE_USUAL becomes reachable', () => {
+  const regulars = REGULAR_IDS as readonly string[];
   let usual = 0;
-  let served = 0;
-  let affinityWrites = 0;
-  /** Shifts that wrote affinity without THE_USUAL firing: it is not the only source. */
-  let withoutUsual = 0;
+  let correctServes = 0;
+  let points = 0;
+  const bad: string[] = [];
   for (let seed = 1; seed <= 1000; seed++) {
     const store = createSaveStore(null, { seed });
+    const running: Partial<Record<(typeof REGULAR_IDS)[number], number>> = {};
     for (let shift = 0; shift < 5; shift++) {
-      const { r } = lifecycleShift(seed + shift * 1009, weekFor(store.load()));
-      expect(r.summary, `seed ${seed}, iteration ${shift}`).not.toBeNull();
+      const week = weekFor(store.load());
+      const known = week.affinity ?? {};
+      const { r } = lifecycleShift(seed + shift * 1009, week);
+      const at = `seed ${seed}, iteration ${shift}`;
+      expect(r.summary, at).not.toBeNull();
       const fired = r.shiftEvents.log.fired.filter((f) => f.id === 'THE_USUAL').length;
+      const delta = r.shiftEvents.affinity;
+      for (const id of Object.keys(delta))
+        if (!regulars.includes(id)) bad.push(`${at}: affinity written for non-regular ${id}`);
+      let extra = 0;
+      for (const id of REGULAR_IDS) {
+        const correct = r.records.filter(
+          (x) => x.customer === id && x.accepted && x.correct,
+        ).length;
+        const d = delta[id] ?? 0;
+        correctServes += correct;
+        points += d;
+        if (d < correct) bad.push(`${at}: ${id} served correctly ${correct}x but affinity +${d}`);
+        if (d > correct) {
+          extra += d - correct;
+          if ((known[id] ?? 0) < USUAL_AFFINITY)
+            bad.push(`${at}: ${id} +${d - correct} beyond serves while known at ${known[id] ?? 0}`);
+        }
+        running[id] = (running[id] ?? 0) + d;
+      }
+      if (extra !== fired)
+        bad.push(`${at}: THE_USUAL fired ${fired}x, affinity beyond serves ${extra}`);
       usual += fired;
-      served += r.records.filter((x) => x.accepted).length;
-      const writes = Object.keys(r.shiftEvents.affinity).length;
-      affinityWrites += writes;
-      if (writes > 0 && fired === 0) withoutUsual++;
-      finishShift(store, r.summary!, r.shiftEvents.affinity);
+      finishShift(store, r.summary!, delta);
+      const saved = store.load().regulars;
+      for (const id of REGULAR_IDS)
+        if ((saved[id]?.affinity ?? 0) !== (running[id] ?? 0))
+          bad.push(`${at}: ${id} saved ${saved[id]?.affinity ?? 0}, expected ${running[id] ?? 0}`);
     }
   }
-  evidence('the-usual', { seeds: 1000, shifts: 5000, served, usual, affinityWrites, withoutUsual });
-  expect(served).toBeGreaterThan(0);
-  expect(withoutUsual).toBeGreaterThan(0);
+  evidence('the-usual', {
+    seeds: 1000,
+    shifts: 5000,
+    correctServes,
+    points,
+    usual,
+    bad: bad.length,
+  });
+  expect(bad.slice(0, 20), `${bad.length} mismatches`).toEqual([]);
+  expect(correctServes).toBeGreaterThan(0);
   expect(usual).toBeGreaterThan(0);
 }, 300_000);
 
-it('PROPOSED RULE awaiting Edward: serving a regular correctly raises affinity by 1', () => {
+it('AFFINITY_RULE (decided 2026-10-17): serving a regular correctly raises affinity by 1', () => {
   const r = createRush(
     7,
     'normal',
