@@ -120,7 +120,7 @@ jsdom.
       390-px phone stays inside the viewport (today 1 px over each side at Medium). Add the case to
       `tests/e2e/phoneHud.spec.ts`: for each text size, `#subs` left ≥ 0 and right ≤ 390 while a line shows.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts -g "subtitle"`
-- [ ] T2.6 Review-harness drift: `tests/review/harness.ts` lines ~390–430 copy boot's `setPaused` / `resumeAll` /
+- [x] T2.6 Review-harness drift: `tests/review/harness.ts` lines ~390–430 copy boot's `setPaused` / `resumeAll` /
       `replay`. Move those three into a small exported module under `src/app/` (B1 did the same for the frame in
       `src/app/frame.ts`), have `boot.ts` and the harness both import it, delete the copy and its "copied, not
       shared" comment. Behaviour identical: rushTrace's seven hashes unchanged
