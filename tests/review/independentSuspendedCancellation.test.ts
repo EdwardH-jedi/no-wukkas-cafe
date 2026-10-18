@@ -46,6 +46,13 @@ class TimelineParam extends FakeParam {
 }
 
 class TimelineCtx extends FakeCtx {
+  override async decodeAudioData(bytes: ArrayBuffer) {
+    const buffer = await super.decodeAudioData(bytes);
+    // Tag network-decoded old speech, excluding the engine's one-second ambience buffers.
+    if (new Float64Array(bytes)[0] === 1) buffer.file = 'review-old-line';
+    return buffer;
+  }
+
   override createGain() {
     const node = Object.assign(new FakeNode('gain'), { gain: new TimelineParam(1) });
     this.nodes.push(node);
@@ -112,7 +119,7 @@ async function queued(kind: 'clip' | 'segments', browser: boolean) {
   expect(h.ctx().state).toBe('suspended');
   expect(onStart).not.toHaveBeenCalled();
   // A fixed implementation may defer source creation until resume. Accept that as well.
-  const oldSources = () => h.ctx().sources.filter((s) => s.buffer?.duration === 1);
+  const oldSources = () => h.ctx().sources.filter((s) => s.buffer?.file === 'review-old-line');
   const oldGain = (time: number) =>
     oldSources().reduce((sum, source) => sum + signalGain(source, h.ctx(), time), 0);
   return { h, oldGain, onStart, onStop };
@@ -121,6 +128,63 @@ async function queued(kind: 'clip' | 'segments', browser: boolean) {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('independent suspended audio cancellation', () => {
+  for (const kind of ['clip', 'segments'] as const) {
+    it(`${kind}: cancelling an already audible line while suspended must silence it on resume`, async () => {
+      const { h, oldGain, onStart, onStop } = await queued(kind, false);
+      h.app.resumeAll();
+      await h.frame(0.1);
+      expect(onStart).toHaveBeenCalledTimes(1);
+      expect(oldGain(h.ctx().currentTime)).toBeGreaterThan(0);
+      await h.ctx().suspend();
+      h.audio.stopVoice();
+      const resumedAt = h.ctx().currentTime;
+      h.audio.unlock();
+      await h.frame(0.001);
+      expect(onStop).toHaveBeenCalledTimes(1);
+      expect(oldGain(resumedAt + 0.03)).toBe(0);
+      await h.run(1.2);
+      expect(oldGain(h.ctx().currentTime)).toBe(0);
+      expect(onStart).toHaveBeenCalledTimes(1);
+    });
+
+    for (const cancel of ['title', 'stopVoice'] as const) {
+      it(`${kind}: ${cancel} during suspension must also silence a previously replaced line still fading`, async () => {
+        const { h, oldGain, onStart, onStop } = await queued(kind, false);
+        h.app.resumeAll();
+        await h.frame(0.1);
+        expect(onStart).toHaveBeenCalledTimes(1);
+        expect(oldGain(h.ctx().currentTime)).toBeGreaterThan(0);
+        // A newer line replaces this audible one. Pause 10 ms later, inside the normal fade.
+        // A fix may cut immediately instead: no assertion requires the old line to keep fading.
+        h.audio.say(nextLine);
+        await h.frame(0.01);
+        h.app.mode = 'rush';
+        h.app.rush = createRush(7);
+        h.app.setPaused(true);
+        expect(h.ctx().state).toBe('suspended');
+        const resumedAt = h.ctx().currentTime;
+        // Waiting in the pause menu cannot consume the remaining audio-time fade.
+        await h.run(0.2);
+        expect(h.ctx().currentTime).toBe(resumedAt);
+        if (cancel === 'title') h.app.nav.toTitle();
+        else {
+          h.audio.stopVoice({ forget: true });
+          h.app.resumeAll();
+        }
+        await h.frame(0.001);
+        expect(h.audio.lastLine).toBeNull();
+        expect(onStop).toHaveBeenCalledTimes(1);
+        expect(onStart).toHaveBeenCalledTimes(1);
+        const gains = [0.001, 0.03, 0.059, 0.08].map((dt) => oldGain(resumedAt + dt));
+        console.log(`${kind} ${cancel} previously fading gains: ${JSON.stringify(gains)}`);
+        expect(
+          gains,
+          'suspended cancellation must silence all old sources, including fading ones',
+        ).toEqual([0, 0, 0, 0]);
+      });
+    }
+  }
+
   it('quitting to title while a decoded line waits must not emit the old game on resume', async () => {
     const { h, oldGain, onStart, onStop } = await queued('clip', false);
     h.app.mode = 'rush';

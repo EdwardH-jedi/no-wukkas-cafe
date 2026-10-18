@@ -1,0 +1,4 @@
+{
+  "command": "npx vitest run tests/review/independentSuspendedCancellation.test.ts tests/review/independentKeys.test.ts tests/review/independentPausedCaptions.test.ts --maxWorkers=1 --reporter=verbose",
+  "exit": 1
+}
