@@ -261,7 +261,7 @@ entry; top 10 per board. No names or initials (one device, one player).
       a summary writes one entry, a worse second run doesn't change the best; `tests/ui/shiftReport.test.ts`:
       the line for new / not new.
       verify: `npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts`
-- [ ] T4.4 Scores screen: `src/ui/screens/scores.ts` (Mon–Fri best per difficulty, Endless top 10 with served and
+- [x] T4.4 Scores screen: `src/ui/screens/scores.ts` (Mon–Fri best per difficulty, Endless top 10 with served and
       tips, "Clear scores" asking twice like Clear log), a "Scores" entry in `MODES` of `src/ui/screens/title.ts`
       wired in `src/app/title.ts`, Esc/Tab loop via `menuKeys` like Settings, no horizontal scroll at 390 px.
       Tests `tests/ui/scores.test.ts` (render from a fixture, rows and cents formatting) and the title button in

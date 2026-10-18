@@ -6,6 +6,9 @@
 import type { Rush } from '../core/rush';
 import type { ScoresStore } from '../core/save/scores';
 import { bestOf, fromSummary, isNewBest, type ScoreMode, type ScoreNote } from '../sim/scores';
+import { focusQuietly } from '../ui/screens/keys';
+import { renderScores } from '../ui/screens/scores';
+import type { App } from './context';
 
 /** Put a finished shift on its board. Null when the rush has no report yet. */
 export function recordScore(store: ScoresStore, r: Rush, at: string): ScoreNote | null {
@@ -23,4 +26,19 @@ export function recordScore(store: ScoresStore, r: Rush, at: string): ScoreNote 
   const newBest = isNewBest(store.read(), entry);
   store.put(entry);
   return { newBest, best: bestOf(store.read(), entry) ?? entry };
+}
+
+/** The Scores screen over the title; Back returns to the title's Scores button. */
+export function openScores(app: App): void {
+  const { sfx, uiRoot, scores } = app;
+  sfx.unlock();
+  sfx.play('click');
+  if (uiRoot.querySelector('.scores-screen')) return;
+  const close = renderScores(uiRoot, () => scores.read(), {
+    clear: () => scores.clear(),
+    back: () => {
+      close();
+      focusQuietly(app.hud1Root.querySelector('#title button[data-act="scores"]'));
+    },
+  });
 }
