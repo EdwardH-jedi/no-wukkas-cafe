@@ -1,5 +1,8 @@
 # No Wukkas Café — TODO (docs/TODO.md)
 
+> Planning moved to `todo.md` (repo root) on 2026-10-18; this file is the evidence archive.
+> Evidence lines still get appended here; tasks, checkboxes for new work and the milestone status live in `todo.md`.
+
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done (only when checks ran) · `[!]` blocked (one line why)
 
 How this file is used: one Claude Code session owns it at a time. The session reads this file,

@@ -126,7 +126,7 @@ jsdom.
       shared" comment. Behaviour identical: rushTrace's seven hashes unchanged
       (`node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts`).
       verify: `npx vitest run tests/review tests/core/rushTrace.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
-- [ ] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
+- [x] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
       on 2026-10-18; this file is the evidence archive, Evidence lines still get appended here") and a Notes line
       in `docs/MILESTONES.md` mapping its M1–M7 to this file's M2–M5. No other text changes.
       verify: `grep -q "Planning moved to" docs/TODO.md && grep -q "todo.md" docs/MILESTONES.md`
