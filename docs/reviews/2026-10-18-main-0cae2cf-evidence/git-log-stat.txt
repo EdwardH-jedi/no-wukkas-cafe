@@ -1,0 +1,164 @@
+commit 0cae2cfbe5b0c8a5e0bf9721eb48069810c8e208
+Merge: 6941c37 d7fc897
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:20:56 2026 +1100
+
+    Merge fix/review-6941c37: review 2026-10-18 F1-F3, 4 reviewer tests green
+
+commit d7fc8979537a40d3c51fa51a5ceaed9235bd764f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:20:55 2026 +1100
+
+    docs(todo): review 2026-10-18 fixes as Phase 6.9-6.11, with evidence
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/TODO.md | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+commit 4d33c2238f221f9e8f4e15f8ee5a94460f28d432
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:52:14 2026 +1100
+
+    fix(audio): a clip started on a suspended context shows its subtitle on resume
+    
+    A clip that finished decoding while the AudioContext was suspended (the
+    game paused, or the browser stopped audio) was started on that context,
+    which plays nothing until it resumes, but its onStart fired at once: the
+    subtitle led the voice by the whole pause (review 2026-10-18 F2, a16fde9,
+    kept through the 1285f00 split). Clip and segment starts now fire onStart
+    only while the context runs; otherwise update() fires it on the first
+    frame the context is running again. started() still drops a generation
+    that a newer line or stopVoice moved past, so a cancelled line never
+    starts.
+    
+    Reviewer test: tests/review/independentPausedCaptions.test.ts, "paused"
+    and "browser-suspended". Regression test in tests/audio/manager.test.ts
+    for the cancel half (a line stopped while queued never starts).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/audio/voiceLines.ts     | 21 ++++++++++++++++++---
+ tests/audio/manager.test.ts | 26 ++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+), 3 deletions(-)
+
+commit 0a52ec4df9d5b57ab3e216eb32f70d23b3e7026a
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:49:36 2026 +1100
+
+    fix(ui): closing Settings mid key change stops waiting for a key
+    
+    bindKeys added a window keydown capture listener when "change key" was
+    clicked and only removed it on the next key press. Done (or the
+    backdrop) closed the panel with the listener still on, so the next
+    gameplay key became the new binding and was preventDefault'ed (review
+    2026-10-18 F1, f955e3d). bindKeys now returns a cancel that close()
+    calls: the listener goes, the label and message go back, nothing saves.
+    
+    Reviewer test: tests/review/independentKeys.test.ts "closing Settings
+    while awaiting a binding must not steal the next gameplay key".
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/ui/audioPanel.ts | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+commit 8ca1287c699152d89dac951560a4317a2324e7df
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:49:15 2026 +1100
+
+    fix(ui): "Usual keys" restores the three key bindings
+    
+    The generic button[data-a] loop ran after bindKeys and replaced the
+    keysReset handler with p.close(), so "Usual keys" only closed Settings
+    (review 2026-10-18 F3, f955e3d). The loop now leaves keysReset to
+    bindKeys.
+    
+    Reviewer test: tests/review/independentKeys.test.ts "Usual keys must
+    restore all three bindings instead of only closing Settings".
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ src/ui/audioPanel.ts | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 84528e22b1f12386b1c77d39ca3ecfe6d9a44119
+Merge: 6941c37 a069698
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:47:13 2026 +1100
+
+    Merge chore/review-main-6941c37: Codex review, 4 red reviewer tests
+
+commit a069698d6e57b729067893fa456f59518f849d78
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:46:30 2026 +1100
+
+    test(review): Codex review of 1a54a00..6941c37, 4 red reviewer tests
+    
+    Verdict FIX: P1 0, P2 2, P3 1 (docs/reviews/2026-10-18-main-6941c37.md).
+    - F1 P2 src/ui/audioPanel.ts:262: closing Settings while a key change is
+      pending leaves the capture listener on; the next gameplay key is taken as
+      the binding and preventDefault'ed (independentKeys.test.ts).
+    - F2 P2 src/audio/voiceLines.ts:334: a clip decoded while the AudioContext is
+      suspended (game paused, or the browser suspended it) fires the subtitle
+      onStart before audio can start (independentPausedCaptions.test.ts, 2 cases).
+    - F3 P3 src/ui/audioPanel.ts:216: the generic button[data-a] handler
+      overwrites the keysReset handler set earlier in bindKeys, so "Usual keys"
+      only closes Settings (independentKeys.test.ts).
+    
+    Codex could not commit (sandbox refused the worktree index.lock); the review
+    session committed its files. codex exec -o overwrote the report with Codex's
+    final message; the full report was restored from the run log (blob d9e7bb4
+    matches the one Codex wrote) and the final message kept as
+    evidence/codex-final-message.md.
+    
+    Checked by the review session on this branch: typecheck 0, lint 0, npm test
+    exit 1 with 798 passed / 4 failed (802), the four failures being exactly the
+    new reviewer tests; src/, scripts/, tests/helpers/ identical to 6941c37.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../balance-1a54a00.csv                            |  651 +++++++++++
+ .../balance-1a54a00.txt                            |   23 +
+ .../balance-6941c37.csv                            |  651 +++++++++++
+ .../balance-6941c37.txt                            |   23 +
+ .../balance-table.diff                             |   27 +
+ .../2026-10-18-main-6941c37-evidence/baseline.txt  |   23 +
+ .../2026-10-18-main-6941c37-evidence/build.txt     |   37 +
+ .../codex-final-message.md                         |   18 +
+ .../command-exits.json                             |   14 +
+ .../full-review-unit.txt                           | 1020 +++++++++++++++++
+ .../git-log-stat.txt                               | 1141 ++++++++++++++++++++
+ .../ibis-day2.json                                 |    9 +
+ .../ibis-week-index-3.json                         |    9 +
+ .../ibis-week-shift-3.json                         |    9 +
+ .../new-regressions.txt                            |  135 +++
+ .../release-check.txt                              |   35 +
+ .../rush-trace.json                                |   30 +
+ .../screenshot-metadata.json                       |  478 ++++++++
+ .../source-checks.py                               |   35 +
+ .../source-checks.txt                              |    6 +
+ .../the-usual.json                                 |    8 +
+ docs/reviews/2026-10-18-main-6941c37.md            |  240 ++++
+ tests/review/independentKeys.test.ts               |  136 +++
+ tests/review/independentPausedCaptions.test.ts     |   36 +
+ 24 files changed, 4794 insertions(+)
+
+commit 28eb1b4a418473c6d35dd7ac4802eba357262f23
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:31:03 2026 +1100
+
+    test(review): re-issue the THE_USUAL test as an AFFINITY_RULE test (DECISIONS Q1)
+    
+    Replaces the implementer's inversion in 7586668, per Edward's answer to Q1.
+    Same 1,000 seeds x five saved shifts, now an exact accounting: each shift's
+    affinity delta per regular equals its correct serves plus THE_USUAL's own +1;
+    THE_USUAL adds only for a regular already at USUAL_AFFINITY when the shift
+    starts; nothing is written for non-regulars; the save carries the running
+    total. On 6941c37: 35,113 correct serves + 888 THE_USUAL = 36,001 points,
+    0 mismatches (green, as expected: the rule is implemented).
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/review/independentFuzz.test.ts | 74 +++++++++++++++++++++++++++---------
+ 1 file changed, 55 insertions(+), 19 deletions(-)

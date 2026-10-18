@@ -90,11 +90,14 @@ export function createVoiceLines(deps: VoiceDeps): VoiceLines {
       const r = board.current;
       if (r && r.via === 'clip' && r.endedAt === null) r.interrupted = true;
       const t = ctx.currentTime;
+      // Suspended (paused, or the browser stopped audio): nothing is heard now, and a fade would
+      // only begin on resume, so the cancelled line would still play for it. Cut it here instead.
+      const now = ctx.state !== 'running';
       sourceGain.gain.cancelScheduledValues(t);
-      sourceGain.gain.setValueAtTime(sourceGain.gain.value, t);
-      sourceGain.gain.linearRampToValueAtTime(0, t + 0.06);
+      sourceGain.gain.setValueAtTime(now ? 0 : sourceGain.gain.value, t);
+      if (!now) sourceGain.gain.linearRampToValueAtTime(0, t + 0.06);
       try {
-        source.stop(t + 0.07);
+        source.stop(now ? t : t + 0.07);
       } catch {
         /* already stopped */
       }

@@ -1,0 +1,30 @@
+{
+  "normal": {
+    "sha1": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+    "withoutGone": "eaef83a72f956f4c5cbda791dae7c489defe6d00"
+  },
+  "hard": {
+    "sha1": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+    "withoutGone": "8e51462770cc9ba21080a78117038504613a64e1"
+  },
+  "easy": {
+    "sha1": "f4065c58885c4122e4c40ca5652e86af91f89348",
+    "withoutGone": "31c58fe4dafb6ee5a80e2520e4fcf788c3821bb4"
+  },
+  "aids": {
+    "sha1": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+    "withoutGone": "124c2c015b904443aca0ffbc5295cbfdd762625d"
+  },
+  "misheard": {
+    "sha1": "9cb0c12941833c576d9f797b618c271d93ddf528",
+    "withoutGone": "1b0257bea377fdcf2749e3e5900fb222d40676fd"
+  },
+  "hurry": {
+    "sha1": "d975462d381d8b61e57311db657d280d7a302bff",
+    "withoutGone": "9963e830531f1c2414fad03100ba99dc51b370e1"
+  },
+  "idle": {
+    "sha1": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+    "withoutGone": "27b8289707a6932c9ab6711e2033a89d28f2472d"
+  }
+}

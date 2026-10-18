@@ -470,6 +470,10 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
       subtitle's onStart on the first frame the context runs, once; a line stopped meanwhile never starts.
 - [x] 6.11 (8ca1287) P3 F3 "Usual keys" restores the three bindings (the generic Settings button loop no longer
       replaces its handler with close).
+- Review 2026-10-18 of 0cae2cf (`docs/reviews/2026-10-18-main-0cae2cf.md`, branch `chore/review-main-0cae2cf`, 6 red):
+- [x] 6.12 (d8be91a) P2 F4 a clip or segment line cancelled while the AudioContext is suspended (stopVoice, quit to
+      title, a customer gone, a newer line) is cut at once instead of fading over 60 ms after resume (`stopSource`,
+      `src/audio/voiceLines.ts`).
 - [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
   - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
@@ -510,6 +514,12 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     (26.7m)`, `17 skipped` (the opt-in evidence specs). Not on a device: iPhone Safari key remap and an iOS audio
     interruption are untested. With the context suspended and the game running, a clip line's caption now waits for
     audio; boot.ts resumes audio on any pointerdown/keydown, as the "blocked sound" toast says.
+  - 6.12 (todo.md T2.1, on `fix/review-0cae2cf` after merging `chore/review-main-0cae2cf`): the six reviewer tests in
+    `tests/review/independentSuspendedCancellation.test.ts` red before, green after (8/8; with independentKeys and
+    independentPausedCaptions 15/15); no reviewer test edited. `npm run typecheck && npm run lint && npm test` at
+    b78c3a4 → exit 0, `Test Files  100 passed (100)` · `Tests  813 passed (813)`. E2E at b78c3a4:
+    `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts` → exit 0, `28 passed
+    (27.8m)`, `17 skipped` (the opt-in evidence specs).
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).

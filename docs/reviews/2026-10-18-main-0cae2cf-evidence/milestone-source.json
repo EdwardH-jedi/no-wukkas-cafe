@@ -1,0 +1,32 @@
+[
+  {
+    "command": "git cat-file -e main:docs/reviews/2026-10-18-main-6941c37.md",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": "git cat-file -e main:docs/reviews/2026-10-18-main-0cae2cf.md",
+    "exit_code": 128,
+    "stdout": "",
+    "stderr": "fatal: path 'docs/reviews/2026-10-18-main-0cae2cf.md' does not exist in 'main'\n"
+  },
+  {
+    "command": "git show main:docs/MILESTONES.md",
+    "exit_code": 0,
+    "stdout": "# Milestones to first release\n\nOne line per milestone, with the test that says it is done and the HUMAN gates in front of it. Detail lives in\ndocs/TODO.md for the **current** milestone only; later ones stay at this level until they are next.\nSessions: `impl` (src/), `review` (tests/, docs/; runs Codex), `plan` (run once per milestone change: `claude -p docs/agents/PLAN_REVIEW.md`).\n\n| # | Milestone | Done when | HUMAN gate before it | Status |\n| --- | --- | --- | --- | --- |\n| M0 | Review fixes from 2026-10-17 | 0 red reviewer tests on main; rushTrace unchanged | \u2014 | done (ce38986) |\n| M1 | Codex re-review of 1a54a00..ce38986 | new review on main, every FAIL has a red test, Q1 re-issued | Edward answers DECISIONS Q1\u2013Q5 | **current** |\n| M2 | Playtest-ready build | M1 green; in-checkout `npm run build` passes (Q3); dev URL on phone | feel-test of `feat/latte-feel` (Edward) | next |\n| M3 | Playtest #1 | docs/playtests/<date>.md with 3+ sessions; Phase 6 list derived | 3\u20135 playtesters, 30 min each (Edward) | \u2014 |\n| M4 | Fixes from playtest | Phase 6 items each with a test; Codex review green | \u2014 | \u2014 |\n| M5 | Voice: licensed clips | `npm run release:check` passes with real clips; listen-through done | paid TTS render + actors' takes + listen-through (Edward) | \u2014 |\n| M6 | Ship prep | Phase 7: perf on 2 devices, a11y done (partly ce38986), STEAM.md decision (Q6), deploy, devlog | device testing, domain, Steam decision (Edward) | \u2014 |\n| M7 | First public web release | static host live; OG image; analytics; tag v0.1.0 | Edward presses go | \u2014 |\n\nRules: a milestone starts only when its HUMAN gate is cleared or explicitly waived in DECISIONS.md. The review session\nnever starts a milestone; it only closes one.\n",
+    "stderr": ""
+  },
+  {
+    "command": "git show main:docs/DECISIONS.md",
+    "exit_code": 0,
+    "stdout": "# Decisions queue\n\nAgents append questions here; Edward answers in place with one line. Agents read this file before asking anything.\nAn unanswered question is not a blocker: mark the item `[!]` and move on. Format: `- [ ] Qn (date, who asks): question` \u2192 Edward replaces `[ ]` with `[x]` and adds `\u2192 answer`.\n\n## Answered\n- [x] AFFINITY_RULE (2026-10-17): correct serve to a regular adds +1 affinity \u2192 yes\n- [x] SEGMENT_GATE (2026-10-17): placeholder segment fails the build \u2192 yes\n- [x] Q1 (2026-10-18, impl): the inverted reviewer test in 7586668 \u2014 keep, or have review re-issue it? \u2192 review re-issues it, asserting AFFINITY_RULE\n\n## Open (from RUN3_REPORT, 2026-10-18)\n- [ ] Q2 (impl): delete the 21 merged local branches listed in RUN3_REPORT? (TODO rule says never delete branches)\n- [ ] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build \u2014 delete them?\n- [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68\u201374 \u00b0C)?\n- [ ] Q5 (impl): Day 1 trial and practice captions get the rush's \"start with the voice\" rule?\n- [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?\n",
+    "stderr": ""
+  },
+  {
+    "command": "git diff --name-only 0cae2cf^2 0cae2cf",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]
