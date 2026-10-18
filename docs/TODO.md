@@ -481,6 +481,11 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
 - [x] 6.13 (todo.md T2.8) P2 F5 a line a newer one was still fading out when audio stopped is taken off the output
       by a cancel on the suspended context (quit to title, stopVoice), so its fade's tail no longer plays on resume
       (`stopSource` disconnects every source in `fading` when the context isn't running, `src/audio/voiceLines.ts`).
+- Review 2026-10-19 of 7192583 (`docs/reviews/2026-10-19-main-7192583.md`, branch `chore/review-main-7192583`, 7 red):
+- [x] 6.14 P2 F1 `npm run playtest:summary`: a record exported twice keeps the copy that closed last (`endedAt`),
+      so an older checkpoint given after the finished export no longer undoes it (`src/sim/telemetrySummary.ts`).
+- [x] 6.15 P2 F2 `readExport` checks every record and every field the summary reads; an unknown kind, a null or
+      incomplete record or a non-count is refused with the record and field named (CLI exit 1, no table).
 - [ ] (playtest fixes, filled from Phase 5)
 - Evidence:
   - Unit: `npm run typecheck && npm run lint && npm test` at ef9071d → exit 0, `Test Files  96 passed (96)` ·
@@ -532,6 +537,10 @@ Source: `docs/reviews/2026-10-17-main-1a54a00.md` (its ten red tests were the ac
     39/39); no reviewer test edited. `npm run typecheck && npm run lint && npm test` → exit 0, `Test Files  100 passed
     (100)` · `Tests  823 passed (823)`. rushTrace's seven hashes unchanged (normal c565b78d…, idle 90a50992…).
     E2E: at the M2 gate.
+  - 6.14 + 6.15 (todo.md M3 gate, on `fix/review-7192583` after merging `chore/review-main-7192583` 97b879b): the seven
+    reviewer tests in `tests/review/independentM3.test.ts` red before (7 failed / 2 passed on 7192583), green after;
+    no reviewer test edited. `npm run typecheck && npm run lint && npm test` → exit 0, `Test Files  105 passed (105)` ·
+    `Tests  861 passed (861)`.
 
 ## Phase 7 — Ship prep  `[ ]`
 - [ ] Performance pass against AGENTS.md §7 on a mid-range Android and an iPhone (Safari audio unlock, pinch).
