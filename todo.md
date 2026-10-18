@@ -98,7 +98,7 @@ jsdom.
       `main` fast-forward; `SendMessage` `review`: "main <sha>, unit N/N, e2e N passed, ready for review". Then
       cut `feat/m2-leftovers` from `main` for the rest of M2.
       verify: `git fetch -q origin && git merge-base --is-ancestor d8be91a origin/main && npx vitest run tests/review/independentSuspendedCancellation.test.ts tests/review/independentKeys.test.ts tests/review/independentPausedCaptions.test.ts`
-- [ ] T2.2 `RegularMemory.visits` is finally written: every serve to a regular in a week shift counts one visit
+- [x] T2.2 `RegularMemory.visits` is finally written: every serve to a regular in a week shift counts one visit
       (correct or not). Hook: `src/core/rush/serve.ts:93` calls `regularServed` (`src/core/rush/events.ts:182`)
       only when `result.correct`; add a visit counter beside it that runs on every serve to a regular, carried
       into the save by `finishShift` like affinity. Affinity rules unchanged. Nothing reads `visits` yet, so the
@@ -132,7 +132,10 @@ jsdom.
       verify: `grep -q "Planning moved to" docs/TODO.md && grep -q "todo.md" docs/MILESTONES.md`
 
 Discovered:
-- (empty)
+- (Edward) T2.1 push pending: everything else in T2.1 is done (checks 813/813, E2E 28 passed, 6.12 in docs/TODO.md,
+      `main` = 157329e merged locally, `review` messaged) but `git push origin main` was denied by the auto-mode
+      permission classifier ("Modify Shared Resources"; AGENTS.md §2 also says never push to main directly).
+      Edward: push it yourself (`! git push origin main`) or allow it, then T2.1's verify can pass.
 
 Gate (Edward): answer `docs/DECISIONS.md` Q2 (delete 21 merged branches?), Q3 (stale renders in
 `public/assets/voice/`), Q4 (milk gauge target 68–74 °C on extra-hot tickets), Q5 (Day 1 / practice captions

@@ -189,6 +189,8 @@ export interface ShiftEvents {
   wasteCents: number;
   reputation: number;
   affinity: Partial<Record<CustomerId, number>>;
+  /** Drinks each regular took away this shift, right or not (RegularMemory.visits). */
+  visits: Partial<Record<CustomerId, number>>;
   refused: number;
 }
 

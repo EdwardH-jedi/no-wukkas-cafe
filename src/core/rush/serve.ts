@@ -90,7 +90,7 @@ export function serve(r: Rush, key: string): void {
   }
   c.outcome = 'served';
   c.result = result;
-  if (result.correct) regularServed(r, c);
+  regularServed(r, c, result.correct);
   setState(c, 'leaving');
   forgetCustomer(r, c, true);
   r.records.push({
