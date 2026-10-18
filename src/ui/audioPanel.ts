@@ -161,7 +161,7 @@ export function createAudioPanel(
     learnChk.onchange =
       setListen;
   const log = cb.log ? bindLogSection(panel, cb.log) : null;
-  if (cb.keys) bindKeys(panel, cb.keys);
+  const cancelKey = cb.keys ? bindKeys(panel, cb.keys) : null;
   pourIn.oninput = () => {
     const v = roundPourSensitivity(Number(pourIn.value));
     pourOut.textContent = pourSensitivityLabel(v);
@@ -261,6 +261,8 @@ export function createAudioPanel(
       });
     },
     close() {
+      // A key change still waiting must not take the next key pressed in the game.
+      cancelKey?.();
       if (panel.classList.contains('hide')) return;
       panel.classList.add('hide');
       // Back to the title's Settings button. In a shift, focus is let go instead: a focused Sound
@@ -284,8 +286,9 @@ export function createAudioPanel(
 }
 
 /** Settings → Keys: click an action's key, press the new one (Escape keeps the old). A key the game
- *  already uses, or another action's, is refused with the reason. */
-function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): void {
+ *  already uses, or another action's, is refused with the reason. Returns `cancel`: stop waiting
+ *  for a key, as Escape does (the panel closed mid-change). */
+function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): void }): () => void {
   const msg = panel.querySelector('.keymsg') as HTMLElement;
   const usual = msg.textContent ?? '';
   const buttons = panel.querySelectorAll<HTMLButtonElement>('button[data-key]');
@@ -338,4 +341,10 @@ function bindKeys(panel: HTMLElement, keys: { get(): KeyMap; set(k: KeyMap): voi
     show();
   };
   show();
+  return () => {
+    if (!stop) return;
+    stop();
+    msg.textContent = usual;
+    show();
+  };
 }
