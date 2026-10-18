@@ -212,7 +212,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       from headless `playRush` records (as `tests/sim/telemetry.test.ts` builds them). Rejects other versions
       with a message, exit 1.
       verify: `npx vitest run tests/sim/telemetrySummary.test.ts && npm run playtest:summary -- tests/fixtures/telemetry/sample.json`
-- [ ] T3.7 [simple] README: how to play (URL once deployed, controls, Space/1–3, phone), the playtest kit link,
+- [x] T3.7 [simple] README: how to play (URL once deployed, controls, Space/1–3, phone), the playtest kit link,
       the commands table pointer to `AGENTS.md` §3, architecture pointer to `docs/DEVLOG.md`. Keep the existing
       sections; add, don't rewrite.
       verify: `grep -q "docs/playtests" README.md && grep -q "DEVLOG" README.md`
