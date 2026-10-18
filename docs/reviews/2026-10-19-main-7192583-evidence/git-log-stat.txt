@@ -1,0 +1,290 @@
+commit 7192583c4a86c0c958db1fb83a9a80344947a466
+Merge: 48f7a51 b62c41f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:02:28 2026 +1100
+
+    Merge feat/m3-playtest-ready: M3 (build:clean, share tags + og.png, draw-call spec, deploy dry run, playtest kit + summary, README)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit b62c41f1a29a20117e19b833d95d982d4417c6ac
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:02:13 2026 +1100
+
+    M3 T3.7: README says how to play, where the playtest kit is, and where the commands live
+    
+    docs: README gains "How to play" (the Pages URL once published, local
+    and phone dev server, what's playable, the controls table, phone note)
+    after Status, and "Playtesting" + "For developers" (AGENTS.md
+    section 3, docs/DEVLOG.md, todo.md, docs/TODO.md) at the end. Existing
+    text untouched. Written by the lite subagent; diff read before commit.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ README.md | 36 ++++++++++++++++++++++++++++++++++++
+ todo.md   |  2 +-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+commit b4429a545f03fabb9bbe9874e96901410f197764
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Mon Oct 19 00:01:25 2026 +1100
+
+    M3 T3.6: npm run playtest:summary adds up exported playtest logs
+    
+    feat(sim): src/sim/telemetrySummary.ts (pure) reads an "Export log"
+    file (readExport: version 1 only; another version, a non-log or broken
+    JSON is refused with the reason, never counted as zero), dedupes records
+    by id across files, and sums sessions, trials (verdicts incl.
+    unfinished), shifts by mode and how many reached the report, customers /
+    served / walk-outs / shown the door, walk-outs by stage, hand-backs,
+    accuracy per field, pardons and pardons per order heard, register wait
+    and time to serve (median / max over every visit), and quit points.
+    summaryMarkdown prints the tables for docs/playtests/<date>.md.
+    
+    scripts/playtest-summary.ts is the CLI (exit 1 naming the bad file).
+    Fixture tests/fixtures/telemetry/sample.json (5 records, 2 sessions)
+    from headless play via tests/fixtures/telemetry/makeSample.ts:
+    first-timer Day 2, idle Day 2, a novice Monday left at 90 s, a finished
+    and an unfinished trial (prettier-ignored: generated).
+    Tests tests/sim/telemetrySummary.test.ts (8). AGENTS.md section 3.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .prettierignore                        |   2 +
+ AGENTS.md                              |   1 +
+ package.json                           |   1 +
+ scripts/playtest-summary.ts            |  56 ++++
+ src/sim/telemetrySummary.ts            | 210 ++++++++++++
+ tests/fixtures/telemetry/makeSample.ts |  87 +++++
+ tests/fixtures/telemetry/sample.json   | 563 +++++++++++++++++++++++++++++++++
+ tests/sim/telemetrySummary.test.ts     | 123 +++++++
+ todo.md                                |   2 +-
+ 9 files changed, 1044 insertions(+), 1 deletion(-)
+
+commit ac57a9a1e67e81df7d692bf23e97931fec098db0
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:58:07 2026 +1100
+
+    M3 T3.5: playtest kit (how to run a session, a notes template)
+    
+    docs: docs/playtests/README.md (plan: 3-5 testers, Trial + Mon-Wed,
+    30 min; the five ROADMAP success metrics; before / during / after;
+    Clear log between testers, Export log at the end, logs go to
+    docs/playtests/logs/<date>-<tester>.json with no real names; what the
+    log records; `npm run playtest:summary`; privacy) and
+    docs/playtests/TEMPLATE.md (session summary + one fill-in section per
+    tester). Written by the lite subagent from facts handed to it; read
+    and checked before commit.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ docs/playtests/README.md   | 94 ++++++++++++++++++++++++++++++++++++++++++++++
+ docs/playtests/TEMPLATE.md | 68 +++++++++++++++++++++++++++++++++
+ todo.md                    |  2 +-
+ 3 files changed, 163 insertions(+), 1 deletion(-)
+
+commit 83eadff7e5155ea8ddd2efe96259fc687fd53bf4
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:56:31 2026 +1100
+
+    M3 T3.4: npm run deploy (GitHub Pages), dry run unless --push
+    
+    feat(scripts): scripts/deploy.ts builds HEAD with build:clean, setting
+    NWC_BASE (Vite's base, now read in vite.config.ts) to /<repo>/ from the
+    origin URL (or / with --domain) and NWC_SITE_URL for the absolute
+    og:image; fetches origin/gh-pages, puts dist/ + .nojekyll (+ CNAME) into
+    a temporary detached worktree of it, commits "deploy <sha>" on top,
+    prints the commit, file count, base and URL, and removes the worktree.
+    Nothing is pushed without --push (the push is Edward's gate). A remote
+    without gh-pages is refused. --dist skips the build (tests). No new
+    dependency. scripts/deploy-url.ts: base + Pages URL from https, ssh or
+    local remotes.
+    
+    Tests tests/scripts/deploy.test.ts (7) on a temp bare repo: dry run
+    leaves the remote untouched and the tree clean, --push replaces the old
+    site (parent = old tip), domain -> CNAME + base /, same build twice
+    pushes nothing, no gh-pages -> exit 1; siteFor/repoOf forms.
+    Real dry run: "deploy: URL https://edwardh-jedi.github.io/no-wukkas-cafe/",
+    origin/gh-pages still db4c056. AGENTS.md section 3 lists the command.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md                    |   1 +
+ package.json                 |   1 +
+ scripts/deploy-url.ts        |  31 ++++++++++
+ scripts/deploy.ts            |  98 +++++++++++++++++++++++++++++
+ tests/scripts/deploy.test.ts | 142 +++++++++++++++++++++++++++++++++++++++++++
+ todo.md                      |   2 +-
+ vite.config.ts               |   3 +
+ 7 files changed, 277 insertions(+), 1 deletion(-)
+
+commit d2c30f3306c68e4e11b0f71254b13dbfe49006f6
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:53:36 2026 +1100
+
+    M3 T3.3: draw-call budget spec, desktop and phone, in the normal suite
+    
+    test(e2e): tests/e2e/perf.spec.ts opens Day 2 (seed 7, no bird), lets
+    the café fill to three customers (nobody served, 4x game speed, then
+    back to 1x), takes the worst renderer.info draw-call count over a
+    second of frames from window.__trial and asserts < 150 (AGENTS.md
+    section 7). Frame times over two seconds are logged to
+    reports/perf/<viewport>.json (gitignored), never asserted: headless
+    Chromium is a proxy, not a device.
+    
+    First run: 1024x640 114 draw calls (median frame 50.1 ms headless),
+    390x844 102 (33.3 ms). Under budget, so no .fixme.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ tests/e2e/perf.spec.ts | 99 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ todo.md                |  2 +-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+
+commit 26ac3a355299742e48fcbad59b1fa47e0d7d8c12
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:50:23 2026 +1100
+
+    M3 T3.2: share tags in index.html and a 1200x630 og.png of the title
+    
+    feat: index.html is titled "No Wukkas Café" (was "Day 1: The Trial"),
+    its description names the week of morning rushes, and it carries
+    og:type/title/description/image (+ width, height, alt) and a
+    summary_large_image Twitter card. og:image is `__NWC_SITE_URL__og.png`;
+    a small Vite plugin (vite.config.ts siteUrl) writes NWC_SITE_URL there,
+    which scripts/deploy.ts will set to the published address (empty
+    elsewhere: a relative path).
+    
+    scripts/og-image.ts starts Vite in-process on a free port, opens the
+    game at 1200x630 with voices off, waits for the title, fonts and a few
+    frames, and screenshots it to public/og.png (re-encoded to a 256-colour
+    PNG with ffmpeg only if over 300 kB). Committed capture: 235,963 bytes.
+    
+    Test tests/scripts/indexMeta.test.ts (4): title, description, the
+    share tags, PNG signature + 1200x630 + <= 300 kB. Red before, green now.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ index.html                      |  20 +++++++++--
+ public/og.png                   | Bin 0 -> 235963 bytes
+ scripts/og-image.ts             |  71 ++++++++++++++++++++++++++++++++++++++++
+ tests/scripts/indexMeta.test.ts |  54 ++++++++++++++++++++++++++++++
+ todo.md                         |   2 +-
+ vite.config.ts                  |  10 +++++-
+ 6 files changed, 153 insertions(+), 4 deletions(-)
+
+commit 4439b94845c949c7f4914268270fedca6f875d69
+Merge: 2f3fcd5 940c0c6
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:47:32 2026 +1100
+
+    Merge chore/review-main-3aa0828: review of 3aa0828, 0 red (9 green M2 guards)
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+commit 2f3fcd53c99f37a8447b468e2d48da72e2ddf0c0
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:47:25 2026 +1100
+
+    M3 T3.1: npm run build:clean builds HEAD from a git archive export
+    
+    feat(scripts): the checkout's build stops at the audio gate on old
+    untracked placeholder renders in public/assets/voice/ (DECISIONS Q3).
+    scripts/build-clean.ts exports HEAD with `git archive` into a scratch
+    dir, links node_modules, runs `npm run build` there, copies dist/ back,
+    prints the audio gate's line and dist/'s bytes without audio, and exits
+    with the build's code or 1 over `--budget` (default 3,000,000, AGENTS.md
+    section 7). The env passes through to the build. AGENTS.md section 3
+    lists it.
+    
+    Verify: `npm run build:clean` exit 0 ("[audio-gate] ok: 0 licensed audio
+    file(s)", 1,318,605 bytes without audio); `-- --budget 1` exit 1.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ AGENTS.md              |   1 +
+ package.json           |   1 +
+ scripts/build-clean.ts | 117 +++++++++++++++++++++++++++++++++++++++++++++++++
+ todo.md                |   2 +-
+ 4 files changed, 120 insertions(+), 1 deletion(-)
+
+commit 940c0c6f62de3bd8f3d31e723f5f24e915fa572f
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:46:33 2026 +1100
+
+    test(review): Codex review of 157329e..3aa0828, 0 red
+    
+    Verdict: no open defects, P1 0 / P2 0 / P3 0
+    (docs/reviews/2026-10-18-main-3aa0828.md). F5 accepted; todo.md M2 T2.2,
+    T2.3, T2.6, T2.7 and T2.8 PASS. T2.4 (phone register) and T2.5 (subtitle
+    bounds) UNVERIFIED: Chromium could not start in the Codex sandbox and the
+    review ran no E2E.
+    
+    New tests/review/independentM2.test.ts, 9 green guards: v2/v3 saves keep
+    lastOrder through a failed-shift autosave and reload (T2.2, b39ca28); Day 2
+    and Endless write no visits; the shared src/app/pause.ts pauses every HUD
+    and the audio, cancels a held press, is a no-op on the title, and replay
+    captions wait for resumed audio and reach only that mode's HUD (T2.6).
+    
+    Checked by the review session on this branch: typecheck 0, lint 0, npm test
+    exit 0 with 833/833 (101 files); src/, scripts/, tests/helpers/ identical
+    to 3aa0828.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .../additional-exits.json                          |  18 +
+ .../balance-base-verified-exit.json                |   4 +
+ .../balance-base-verified.txt                      |  27 +
+ .../balance-base.csv                               | 651 ++++++++++++++
+ .../balance-base.txt                               |  19 +
+ .../balance-current.csv                            | 651 ++++++++++++++
+ .../balance-current.txt                            |  23 +
+ .../balance-exits.json                             |  10 +
+ .../baseline-exits.json                            |  14 +
+ .../baseline-lint.txt                              |   6 +
+ .../baseline-loader.mjs                            |  15 +
+ .../baseline-test.txt                              |  18 +
+ .../baseline-typecheck.txt                         |   4 +
+ .../browser-launch.json                            |   7 +
+ .../codex-final-message.md                         |  28 +
+ .../controls-exits.json                            |  24 +
+ .../determinism.txt                                |   0
+ .../final-exits.json                               |  14 +
+ .../final-lint.txt                                 |   6 +
+ .../final-test-counts.json                         | 103 +++
+ .../final-test.txt                                 | 957 +++++++++++++++++++++
+ .../final-typecheck.txt                            |   4 +
+ .../git-log-stat.txt                               | 332 +++++++
+ .../2026-10-18-main-3aa0828-evidence/handoff.json  |  20 +
+ .../independent-m2-exit.json                       |   4 +
+ .../independent-m2-verified.txt                    |  21 +
+ .../independent-m2.txt                             |  41 +
+ .../inventory.json                                 |  41 +
+ .../2026-10-18-main-3aa0828-evidence/inventory.py  |  27 +
+ .../mutation-f5.txt                                |  82 ++
+ .../mutation-harness.txt                           |  61 ++
+ .../mutation.config.mjs                            |  11 +
+ .../preflight-final-exits.json                     |   6 +
+ .../preflight-final-typecheck.txt                  |   6 +
+ .../release-check.txt                              |  35 +
+ .../rush-trace.txt                                 |  30 +
+ .../source-checks.json                             |  85 ++
+ .../2026-10-18-main-3aa0828-evidence/t22.txt       |  12 +
+ .../2026-10-18-main-3aa0828-evidence/t23.txt       |  12 +
+ .../2026-10-18-main-3aa0828-evidence/t26.txt       |  12 +
+ .../2026-10-18-main-3aa0828-evidence/t28.txt       |  12 +
+ .../task-verify-exits.json                         |  22 +
+ docs/reviews/2026-10-18-main-3aa0828.md            | 239 +++++
+ tests/review/independentM2.test.ts                 | 177 ++++
+ 44 files changed, 3891 insertions(+)
+
+commit 48f7a5168354c08398d35c6c373e9015628f49f3
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 23:44:45 2026 +1100
+
+    chore(todo): M2 done, current milestone M3
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ todo.md | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)

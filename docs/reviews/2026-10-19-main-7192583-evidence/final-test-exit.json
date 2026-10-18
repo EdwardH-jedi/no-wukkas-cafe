@@ -1,0 +1,4 @@
+{
+  "command": "npm test -- --reporter=verbose",
+  "exit": 1
+}

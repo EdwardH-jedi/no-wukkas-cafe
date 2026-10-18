@@ -1,0 +1,17 @@
+[
+  {
+    "command": "npm run build:clean",
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+    "exit": 0
+  },
+  {
+    "command": "npm run build:clean -- --budget 1",
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+    "exit": 1
+  },
+  {
+    "command": "npm run deploy",
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-7192583-d9043myx/checkout",
+    "exit": 1
+  }
+]
