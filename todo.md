@@ -199,7 +199,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       dependency. Test `tests/scripts/deploy.test.ts` on a temp bare repo (pattern: temp dirs in
       `tests/scripts/voicesRender.test.ts`): dry run writes nothing to the remote, `--push` updates the branch.
       verify: `npx vitest run tests/scripts/deploy.test.ts && npm run deploy`
-- [ ] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
+- [x] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
       or the deployed URL, Settings → Playtest log → Clear between testers, Export log at the end, where to put
       the file) and `docs/playtests/TEMPLATE.md` (per tester: device/browser, Trial result, shifts played, where
       they got stuck, pardons per order, walk-outs, "one more shift?" yes/no, quotes). Copy for testers only;
