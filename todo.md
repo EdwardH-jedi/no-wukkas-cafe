@@ -110,7 +110,7 @@ jsdom.
       → `done` (the week only advances on a pass); `index > save.shift` → `locked`, even when a week-1 best
       exists (`best` still carries the grade). The UI's `shiftCells` already uses `canPlay`; make the data agree.
       verify: `npx vitest run tests/core/week/progress.test.ts` (new case: week 2, shift 2 with week-1 bests → index 2 is `open`; red before)
-- [ ] T2.4 Phone HUD (390×844): the register panel (`src/ui/pos.ts`, styles in `src/ui/styles/rush.css`) no longer
+- [x] T2.4 Phone HUD (390×844): the register panel (`src/ui/pos.ts`, styles in `src/ui/styles/rush.css`) no longer
       covers the instruction line `#rinstr` while a customer is ordering. New spec `tests/e2e/phoneHud.spec.ts`
       (seed 7, Day 2, drive with `window.__trial` like `polishEvidence.spec.ts`): the two bounding boxes do not
       intersect, in the register state, at 390×844 and 375×667. Keep 1024×640 unchanged (assert the register's

@@ -100,6 +100,13 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const rail = $('#rail');
   const pass = $('#pass');
   const instr = $('#rinstr');
+  // On a phone the register opens under the tickets and the instruction (styles/rush.css reads
+  // --rtl-h), so neither is covered while someone orders. Desktop ignores it (#rtl is contents).
+  const rtl = $('#rtl');
+  if (typeof ResizeObserver !== 'undefined')
+    new ResizeObserver(() => root.style.setProperty('--rtl-h', `${rtl.offsetHeight}px`)).observe(
+      rtl,
+    );
   const actions = $('#ractions');
   const touchPad = $('#rtouchHeight');
   const subs = $('#rsubs');
