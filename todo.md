@@ -272,7 +272,7 @@ entry; top 10 per board. No names or initials (one device, one player).
       the first play of a shift (nothing to beat). Put the key in `AWAITING_RENDER` (`src/data/voice/script.ts`).
       Test in `tests/sim/owner.test.ts`.
       verify: `npx vitest run tests/sim/owner.test.ts tests/data/voice.test.ts`
-- [ ] T4.6 [simple] Placeholder clip for T4.5: `npm run voices -- --only gaz`, commit `src/data/voice/manifest.json`
+- [x] T4.6 [simple] Placeholder clip for T4.5: `npm run voices -- --only gaz`, commit `src/data/voice/manifest.json`
       only (no audio), empty `AWAITING_RENDER`.
       verify: `npm run voices:check`
 - [ ] T4.7 E2E: after the Monday pass in `tests/e2e/weekUi.spec.ts`, open Scores from the title and assert

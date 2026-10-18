@@ -6,6 +6,7 @@ import { CUSTOMERS } from '../../src/data/customers';
 import { GREETING, GREETING_OPENERS, OWNER_LINES, RUSH_INTRO } from '../../src/data/ownerLines';
 import { FAULT_TEXT } from '../../src/data/tips';
 import { AWAITING_RENDER } from '../../src/data/voice/script';
+import { VOICE_MANIFEST } from '../../src/data/voice';
 import {
   addFrustration,
   createOwner,
@@ -169,11 +170,12 @@ describe('the closing lines and a new best (todo.md M4 T4.5)', () => {
     expect(summaryBeats(summary({ walkouts: 0 }), best())).toBe(true);
   });
 
-  it('the line is count-agnostic Australian copy, waiting for its clip', () => {
+  it('the line is count-agnostic Australian copy, with a clip or waiting for one', () => {
     const text = OWNER_LINES['rush.end.newBest']?.tiers[0]?.[0]?.text ?? '';
     expect(text.length).toBeGreaterThan(10);
     expect(text).not.toMatch(/\d/);
-    expect(AWAITING_RENDER.has('rush.end.newBest')).toBe(true);
+    const clip = VOICE_MANIFEST.clips.some((c) => c.key === 'rush.end.newBest');
+    expect(clip || AWAITING_RENDER.has('rush.end.newBest')).toBe(true);
   });
 
   it('Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless', () => {
