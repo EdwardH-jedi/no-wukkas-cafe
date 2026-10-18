@@ -40,10 +40,10 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M3
+current_milestone: M4
 needs_replan: false
 pause_at_gate: true
-branch: `main` = origin/main = 3aa0828 (M2 pushed 2026-10-18 by Edward's go); M3 works on `feat/m3-playtest-ready`.
+branch: `main` = origin/main (M3 + its review fixes pushed 2026-10-19); M4 works on `feat/m4-leaderboard`.
 One implementer session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2`.
 
 ---
@@ -348,3 +348,8 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
   tickets, subtitle box inside 390 px, shared src/app/pause.ts; main 3aa0828 pushed (unit 824, E2E 34 passed at
   c05d257). Discovered: the push of main needs Edward's go (permission classifier), a reviewer oracle encoding old
   behaviour is re-issued by review (fuzzRules), Codex caught lastOrder being dropped (b39ca28).
+- M3 done 2026-10-19: npm run build:clean (HEAD via git archive, 1.56 MB without audio), share tags + og.png,
+  draw-call spec (114 / 102 < 150), npm run deploy (dry run → https://edwardh-jedi.github.io/no-wukkas-cafe/, push
+  is Edward's), playtest kit + npm run playtest:summary, README; main 7192583 pushed (E2E 35 passed + 1 load flake
+  re-run green). Discovered: gate review F1/F2 in the summary (fixed, 7 reviewer tests), week.spec.ts:68 wall-clock
+  budget flakes under load.
