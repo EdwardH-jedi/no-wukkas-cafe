@@ -1,0 +1,7 @@
+
+> no-wukkas-cafe@0.1.0 voices:check
+> node scripts/voices-check.ts
+
+voices:check (development): 597 clips, status "placeholder", 0 error(s), 5 warning(s)
+  warn orphan-file: 5
+voices:check segments: 0/181 segments have a release clip in src/data/voice/segments.manifest.json, 0 error(s), 0 warning(s)

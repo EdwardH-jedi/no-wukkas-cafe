@@ -1,0 +1,254 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/no-wukkas-cafe
+
+ × tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > first Hard run must not be congratulated for beating a Normal score 1189ms
+   → Gaz and the report must agree on the current difficulty board: expected [ { type: 'say', …(2) } ] to have a length of +0 but got 1
+ × tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > a Hard record must not be suppressed by a stronger Normal best 1012ms
+   → Gaz and the report must agree on the current difficulty board: expected [] to have a length of 1 but got +0
+ × tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an inherited Object property is not a grade and must not poison future best comparisons 2ms
+   → expected { mode: 'week', week: 1, …(8) } to be null
+   → expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+ × tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an Easy entry stored under a Hard board must not appear as its best or block a real Hard result 1ms
+   → expected { mode: 'week', week: 1, …(8) } to be null
+   → expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+ × tests/review/independentM4.test.ts > M4 F3: storage fallback must retain scores already read during this session > a later getItem failure must not erase the previously loaded best before recording a worse run 1ms
+   → the last successful read must survive in memory: expected null to deeply equal { mode: 'week', week: 1, …(8) }
+   → expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > day2 writes exactly once before the report callback, and clears the note on restart 15ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > week writes exactly once before the report callback, and clears the note on restart 9ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > endless writes exactly once before the report callback, and clears the note on restart 13ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > valid scores round-trip and a tie remains behind the earlier entry after reloading 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > first Hard run must not be congratulated for beating a Normal score
+AssertionError: Gaz and the report must agree on the current difficulty board: expected [ { type: 'say', …(2) } ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/review/independentM4.test.ts:103:7
+    101|       congratulations,
+    102|       'Gaz and the report must agree on the current difficulty board',
+    103|     ).toHaveLength(hasHardBest ? 1 : 0);
+       |       ^
+    104|   });
+    105| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > a Hard record must not be suppressed by a stronger Normal best
+AssertionError: Gaz and the report must agree on the current difficulty board: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/review/independentM4.test.ts:103:7
+    101|       congratulations,
+    102|       'Gaz and the report must agree on the current difficulty board',
+    103|     ).toHaveLength(hasHardBest ? 1 : 0);
+       |       ^
+    104|   });
+    105| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an inherited Object property is not a grade and must not poison future best comparisons
+AssertionError: expected { mode: 'week', week: 1, …(8) } to be null
+
+- Expected:
+null
+
++ Received:
+{
+  "at": "2026-10-19T01:00:00.000Z",
+  "difficulty": "normal",
+  "grade": "constructor",
+  "mode": "week",
+  "seed": 3,
+  "served": 5,
+  "shiftIndex": 0,
+  "tipsCents": 500,
+  "walkouts": 1,
+  "week": 1,
+}
+
+ ❯ tests/review/independentM4.test.ts:114:44
+    112|       JSON.stringify({ version: 1, boards: { [boardKey(candidate)]: [c…
+    113|     );
+    114|     expect.soft(bestOf(parsed, candidate)).toBeNull();
+       |                                            ^
+    115|     const repaired = insert(parsed, candidate).scores;
+    116|     expect(bestOf(repaired, candidate)).toEqual(candidate);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an inherited Object property is not a grade and must not poison future best comparisons
+AssertionError: expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+
+- Expected
++ Received
+
+  {
+    "at": "2026-10-19T01:00:00.000Z",
+    "difficulty": "normal",
+-   "grade": "excellent",
++   "grade": "constructor",
+    "mode": "week",
+    "seed": 3,
+-   "served": 6,
++   "served": 5,
+    "shiftIndex": 0,
+    "tipsCents": 500,
+    "walkouts": 1,
+    "week": 1,
+  }
+
+ ❯ tests/review/independentM4.test.ts:116:41
+    114|     expect.soft(bestOf(parsed, candidate)).toBeNull();
+    115|     const repaired = insert(parsed, candidate).scores;
+    116|     expect(bestOf(repaired, candidate)).toEqual(candidate);
+       |                                         ^
+    117|     expect(scoresHtml(repaired)).toContain('Excellent · 6 served');
+    118|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an Easy entry stored under a Hard board must not appear as its best or block a real Hard result
+AssertionError: expected { mode: 'week', week: 1, …(8) } to be null
+
+- Expected:
+null
+
++ Received:
+{
+  "at": "2026-10-19T01:00:00.000Z",
+  "difficulty": "easy",
+  "grade": "excellent",
+  "mode": "week",
+  "seed": 3,
+  "served": 6,
+  "shiftIndex": 0,
+  "tipsCents": 500,
+  "walkouts": 1,
+  "week": 1,
+}
+
+ ❯ tests/review/independentM4.test.ts:127:39
+    125|     );
+    126|     // Either discard the corrupt board or re-home its entry; never cr…
+    127|     expect.soft(bestOf(parsed, hard)).toBeNull();
+       |                                       ^
+    128|     expect(bestOf(insert(parsed, hard).scores, hard)).toEqual(hard);
+    129|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an Easy entry stored under a Hard board must not appear as its best or block a real Hard result
+AssertionError: expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+
+- Expected
++ Received
+
+  {
+    "at": "2026-10-19T01:00:00.000Z",
+-   "difficulty": "hard",
+-   "grade": "good",
++   "difficulty": "easy",
++   "grade": "excellent",
+    "mode": "week",
+    "seed": 3,
+-   "served": 5,
++   "served": 6,
+    "shiftIndex": 0,
+    "tipsCents": 500,
+    "walkouts": 1,
+    "week": 1,
+  }
+
+ ❯ tests/review/independentM4.test.ts:128:55
+    126|     // Either discard the corrupt board or re-home its entry; never cr…
+    127|     expect.soft(bestOf(parsed, hard)).toBeNull();
+    128|     expect(bestOf(insert(parsed, hard).scores, hard)).toEqual(hard);
+       |                                                       ^
+    129|   });
+    130| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F3: storage fallback must retain scores already read during this session > a later getItem failure must not erase the previously loaded best before recording a worse run
+AssertionError: the last successful read must survive in memory: expected null to deeply equal { mode: 'week', week: 1, …(8) }
+
+- Expected:
+{
+  "at": "2026-10-19T01:00:00.000Z",
+  "difficulty": "normal",
+  "grade": "excellent",
+  "mode": "week",
+  "seed": 3,
+  "served": 6,
+  "shiftIndex": 0,
+  "tipsCents": 500,
+  "walkouts": 1,
+  "week": 1,
+}
+
++ Received:
+null
+
+ ❯ tests/review/independentM4.test.ts:142:8
+    140|     expect
+    141|       .soft(bestOf(reloaded.read(), best), 'the last successful read m…
+    142|       .toEqual(best);
+       |        ^
+    143|     expect(reloaded.memoryOnly).toBe(true);
+    144|     reloaded.put(entry({ grade: 'poor', served: 1 }));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  tests/review/independentM4.test.ts > M4 F3: storage fallback must retain scores already read during this session > a later getItem failure must not erase the previously loaded best before recording a worse run
+AssertionError: expected { mode: 'week', week: 1, …(8) } to deeply equal { mode: 'week', week: 1, …(8) }
+
+- Expected
++ Received
+
+  {
+    "at": "2026-10-19T01:00:00.000Z",
+    "difficulty": "normal",
+-   "grade": "excellent",
++   "grade": "poor",
+    "mode": "week",
+    "seed": 3,
+-   "served": 6,
++   "served": 1,
+    "shiftIndex": 0,
+    "tipsCents": 500,
+    "walkouts": 1,
+    "week": 1,
+  }
+
+ ❯ tests/review/independentM4.test.ts:145:43
+    143|     expect(reloaded.memoryOnly).toBe(true);
+    144|     reloaded.put(entry({ grade: 'poor', served: 1 }));
+    145|     expect(bestOf(reloaded.read(), best)).toEqual(best);
+       |                                           ^
+    146|     // The failed backend must not be overwritten by the memory-only r…
+    147|     expect(bestOf(parseScores(disk.data.get(SCORES_KEY)), best)).toEqu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  01:54:56
+   Duration  2.79s (tests 83%, transform 14%, import 3%)
+

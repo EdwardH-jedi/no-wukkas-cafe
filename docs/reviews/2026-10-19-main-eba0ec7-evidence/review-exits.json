@@ -1,0 +1,52 @@
+[
+  {
+    "name": "t41",
+    "command": "npx vitest run tests/sim/scores.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "t42",
+    "command": "npx vitest run tests/core/save/scores.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "t43",
+    "command": "npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "t44",
+    "command": "npx vitest run tests/ui/scores.test.ts tests/ui/screens.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "t45",
+    "command": "npx vitest run tests/sim/owner.test.ts tests/data/voice.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "done-units",
+    "command": "npx vitest run tests/sim/scores.test.ts tests/core/save/scores.test.ts tests/app/scores.test.ts tests/ui/scores.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "m3-fixes",
+    "command": "npx vitest run tests/review/independentM3.test.ts tests/sim/telemetrySummary.test.ts",
+    "exit": 0
+  },
+  {
+    "name": "review-typecheck",
+    "command": "npm run typecheck",
+    "exit": 0
+  },
+  {
+    "name": "review-lint",
+    "command": "npm run lint",
+    "exit": 0
+  },
+  {
+    "name": "final-test",
+    "command": "npm test -- --reporter=verbose",
+    "exit": 1
+  }
+]
