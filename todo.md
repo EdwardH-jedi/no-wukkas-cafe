@@ -177,7 +177,7 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       total bytes of non-audio files; exit with the build's code; `--budget <bytes>` (default 3,000,000) fails
       over budget. Add the script to `package.json` and one line to `AGENTS.md` §3.
       verify: `npm run build:clean` exits 0 (no script today) and `npm run build:clean -- --budget 1` exits 1
-- [ ] T3.2 `index.html` for sharing: `<title>No Wukkas Café</title>` (today "Day 1: The Trial"), description that
+- [x] T3.2 `index.html` for sharing: `<title>No Wukkas Café</title>` (today "Day 1: The Trial"), description that
       names the week, `og:title` / `og:description` / `og:image` / `og:type`, `twitter:card`. OG image
       `public/og.png` 1200×630: a Playwright script `scripts/og-image.ts` screenshots the title screen at that
       size (dev server on a free port, `?voice=0`); commit the PNG (≤ 300 kB). Test `tests/scripts/indexMeta.test.ts`
