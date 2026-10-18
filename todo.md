@@ -249,7 +249,7 @@ entry; top 10 per board. No names or initials (one device, one player).
       `isNewBest`, `fromSummary(ShiftSummary, ctx)`. Tests `tests/sim/scores.test.ts`: ordering, tie order, cap,
       parse corrupt, Endless vs shift keys.
       verify: `npx vitest run tests/sim/scores.test.ts`
-- [ ] T4.2 [simple] `src/core/save/scores.ts`: `ScoresStore` (`read` / `put` / `clear`, `memoryOnly`) copying
+- [x] T4.2 [simple] `src/core/save/scores.ts`: `ScoresStore` (`read` / `put` / `clear`, `memoryOnly`) copying
       `src/core/save/telemetry.ts` line for line with the new key and types; tests
       `tests/core/save/scores.test.ts` copying `tests/core/save/telemetry.test.ts`.
       verify: `npx vitest run tests/core/save/scores.test.ts`
