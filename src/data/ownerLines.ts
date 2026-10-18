@@ -884,6 +884,12 @@ export const OWNER_LINES: LineBook = {
     mood: 'furious',
     gesture: 'facepalm',
   },
+  // After the grade's line, when a week shift beats its best on the Scores board (todo.md M4).
+  'rush.end.newBest': {
+    tiers: [[{ text: "And that's your best go at this shift yet. Don't let it go to your head." }]],
+    mood: 'pleased',
+    gesture: 'thumbsUp',
+  },
   'verdict.disaster': {
     tiers: [
       [

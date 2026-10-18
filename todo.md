@@ -267,7 +267,7 @@ entry; top 10 per board. No names or initials (one device, one player).
       Tests `tests/ui/scores.test.ts` (render from a fixture, rows and cents formatting) and the title button in
       `tests/ui/screens.test.ts`.
       verify: `npx vitest run tests/ui/scores.test.ts tests/ui/screens.test.ts`
-- [ ] T4.5 Gaz on a new best in a **week** shift: one line key `rush.end.newBest` in `src/data/ownerLines.ts`,
+- [x] T4.5 Gaz on a new best in a **week** shift: one line key `rush.end.newBest` in `src/data/ownerLines.ts`,
       picked in `src/sim/owner.ts` after the grade line, count-agnostic copy, never in Endless or Day 2, never on
       the first play of a shift (nothing to beat). Put the key in `AWAITING_RENDER` (`src/data/voice/script.ts`).
       Test in `tests/sim/owner.test.ts`.

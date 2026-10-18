@@ -9,6 +9,7 @@ import type { VoiceRef } from '../../sim/contracts/voice';
 import type { StationParams } from '../../sim/shop';
 import type { EventLog } from '../../sim/events/scheduler';
 import type { Difficulty, ListenRecord, OrderField, OrderLine } from '../../sim/listening';
+import type { ScoreEntry } from '../../sim/scores';
 import type { Mood, OwnerState } from '../../sim/owner';
 import type {
   DrinkType,
@@ -168,6 +169,9 @@ export interface RushWeek {
   lastEvent?: ShiftEventId | null;
   /** How well each regular knows the player (Save.regulars). */
   affinity?: Partial<Record<CustomerId, number>>;
+  /** This shift's best on the Scores board before it (app/weekWiring.ts), for Gaz's "new best";
+   *  null or absent on a first play (nothing to beat). */
+  best?: ScoreEntry | null;
   /** The station the café's upgrades give (Save.upgrades); today's station without. */
   station?: StationParams;
 }

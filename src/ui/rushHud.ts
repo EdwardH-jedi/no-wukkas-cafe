@@ -206,7 +206,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       root.classList.toggle('hide', !on);
     },
     onSay(line) {
-      if (line.key.startsWith('rush.end.')) endQuote = line.text;
+      if (line.key.startsWith('rush.end.') && line.key !== 'rush.end.newBest') endQuote = line.text;
       listenLine = line.listen ? line : null;
       listenShown = null;
       showLine(line.speaker, line.listen ? '' : line.text);

@@ -34,7 +34,7 @@ export const SLOW_RATE = 0.8;
  * these lines only, and the coverage tests allow exactly these to be missing (plus the old clips
  * they replace, including a line split into per-drink keys). Empty this once they're rendered.
  */
-export const AWAITING_RENDER: ReadonlySet<string> = new Set<string>([]);
+export const AWAITING_RENDER: ReadonlySet<string> = new Set<string>(['rush.end.newBest']);
 
 /** Is this line (a script or runtime key, or the manifest key of a clip it replaces) awaiting a
  *  render? An entry covers its own key and the keys under it ('dazza.3' covers 'dazza.3.slow',

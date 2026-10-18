@@ -11,8 +11,9 @@ import { ENDLESS_INTRO, RUSH_INTRO, WEEK_INTRO } from '../../data/ownerLines';
 import { PATIENCE_SCALE } from '../../data/week';
 import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
 import { generateOrders } from '../../sim/listening/generate';
-import { createOwner, type LineDef } from '../../sim/owner';
+import { createOwner, endLines, type LineDef } from '../../sim/owner';
 import { summariseShift } from '../../sim/rush';
+import { summaryBeats } from '../../sim/scores';
 import {
   binDrink,
   createBarista,
@@ -305,7 +306,11 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
         for (const c of r.customers)
           if (c.outcome === 'served' || c.outcome === 'walkout') counted++;
         r.summary = summariseShift(r.records, counted, wasted);
-        gaz(r, `rush.end.${r.summary.grade}`, 'react');
+        // A week shift that beats its best on the Scores board gets a second line (Day 2, Endless and
+        // a first play have nothing to beat).
+        const best = r.week && !r.week.endless ? r.week.best : null;
+        const newBest = !!best && summaryBeats(r.summary, best);
+        for (const key of endLines(r.summary.grade, newBest)) gaz(r, key, 'react');
         if (r.barista.ready) gaz(r, 'rush.wasteLeft', 'react');
       }
       break;

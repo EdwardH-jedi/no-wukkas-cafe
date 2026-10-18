@@ -87,6 +87,19 @@ export function insert(
 export const bestOf = (s: Scores, e: Pick<ScoreEntry, 'mode' | 'shiftIndex' | 'difficulty'>) =>
   s.boards[boardKey(e)]?.[0] ?? null;
 
+/** A shift's report beats `best` on its board's ranking (Gaz's "new best" at the end of a week
+ *  shift, decided in core before the report exists as an entry). */
+export function summaryBeats(s: ShiftSummary, best: ScoreEntry): boolean {
+  const e: ScoreEntry = {
+    ...best,
+    grade: s.grade,
+    served: s.ordersCompleted,
+    walkouts: s.walkouts,
+    tipsCents: s.tipsCents,
+  };
+  return compare(e, best) < 0;
+}
+
 /** `e` beats a best that is already there (a first score on a board has nothing to beat). */
 export function isNewBest(s: Scores, e: ScoreEntry): boolean {
   const best = bestOf(s, e);
