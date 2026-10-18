@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "command": "git diff --exit-code 157329e -- src scripts tests/helpers",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "command": "git status --short",
+      "exit": 0,
+      "output": " M tests/review/independentSuspendedCancellation.test.ts\n?? docs/reviews/2026-10-18-main-157329e-evidence/\n?? docs/reviews/2026-10-18-main-157329e.md\n"
+    },
+    {
+      "command": "git rev-parse HEAD",
+      "exit": 0,
+      "output": "157329e0d78b1ddda6fbc18727fc9975ec30bd8d\n"
+    },
+    {
+      "command": "git branch --show-current",
+      "exit": 0,
+      "output": "chore/review-main-157329e\n"
+    }
+  ],
+  "sha256": {
+    "tests/review/independentSuspendedCancellation.test.ts": "077d88975b568254a4c11da976829ab53dddbda0acccc1375954a4418411dbce",
+    "docs/reviews/2026-10-18-main-157329e.md": "057fe898d8f21b78b05f35295059cae3885dda32f557ffa6b83eaa0b26e5a5ac"
+  },
+  "reviewer_red_count": 4,
+  "review_commit": null,
+  "commit_owner": "harness"
+}
