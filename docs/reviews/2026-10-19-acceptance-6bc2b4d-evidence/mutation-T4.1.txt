@@ -1,0 +1,43 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/sim/scores.test.ts (10 tests | 1 failed) 5ms
+   ❯ insert (5)
+     × a week shift ranks by grade, then served, then tips, then fewer walk-outs 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sim/scores.test.ts > insert > a week shift ranks by grade, then served, then tips, then fewer walk-outs
+AssertionError: expected [ 2, 3, 4, 1, 5 ] to deeply equal [ 2, 4, 3, 1, 5 ]
+
+- Expected
++ Received
+
+  [
+    2,
+-   4,
+    3,
++   4,
+    1,
+    5,
+  ]
+
+ ❯ tests/sim/scores.test.ts:61:49
+     59|       week({ seed: 5, grade: 'disaster', served: 9 }),
+     60|     ]);
+     61|     expect(board(s, week()).map((e) => e.seed)).toEqual([2, 4, 3, 1, 5…
+       |                                                 ^
+     62|   });
+     63|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  12:35:53
+   Duration  74ms (transform 55%, tests 22%, import 17%, worker 5%)
+

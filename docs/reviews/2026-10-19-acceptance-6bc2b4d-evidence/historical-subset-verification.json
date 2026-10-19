@@ -1,0 +1,32 @@
+{
+  "method": "Read declarations and static loop/case arrays in each exact git revision, then corroborate with the already completed full green historical unit run at that revision; no additional suite run during E2E.",
+  "ef9071d": {
+    "independentPrune": 2,
+    "independentSlowAudio": 8,
+    "independentFuzzIbisSubset": 3,
+    "independentFuzzTotal": 5,
+    "independentGate": 5
+  },
+  "b78c3a4": {
+    "independentSuspendedCancellation": 8,
+    "independentKeys": 5,
+    "independentPausedCaptions": 2,
+    "combined": 15
+  },
+  "4c4d72d": {
+    "independentSuspendedCancellation": 14,
+    "audioManager": 25,
+    "combined": 39
+  },
+  "historicalPreFixReds": {
+    "status": "UNVERIFIED",
+    "claims": [
+      4,
+      6,
+      4,
+      7,
+      5
+    ],
+    "reason": "Old red execution counts were not independently rerun; only final/fixed historical snapshots and current controls were run."
+  }
+}

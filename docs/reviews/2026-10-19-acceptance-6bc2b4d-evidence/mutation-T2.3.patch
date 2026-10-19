@@ -1,0 +1,13 @@
+diff --git a/src/core/week/progress.ts b/src/core/week/progress.ts
+index a1416ac..4643f0f 100644
+--- a/src/core/week/progress.ts
++++ b/src/core/week/progress.ts
+@@ -77,7 +77,7 @@ export function shiftRows(save: Save): ShiftRow[] {
+     day: d.day,
+     customers: d.customers,
+     unlocks: [...d.unlocks],
+-    status: d.index < save.shift ? 'done' : d.index === save.shift ? 'open' : 'locked',
++    status: bestGrade(save, d.index) ? 'done' : d.index === save.shift ? 'open' : 'locked',
+     best: bestGrade(save, d.index),
+   }));
+ }

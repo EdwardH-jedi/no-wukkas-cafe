@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "vitest",
+    "run",
+    "tests/review/independentAcceptanceStorage.test.ts",
+    "tests/review/independentAcceptanceContracts.test.ts",
+    "tests/review/independentAcceptanceBuild.test.ts",
+    "tests/review/independentAcceptanceBrowser.test.ts",
+    "--reporter=verbose",
+    "--maxWorkers=1"
+  ],
+  "exit": 1
+}

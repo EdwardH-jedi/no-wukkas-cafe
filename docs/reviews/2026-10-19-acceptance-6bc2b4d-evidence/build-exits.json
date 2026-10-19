@@ -1,0 +1,91 @@
+[
+  {
+    "name": "clean-build",
+    "command": [
+      "npm",
+      "run",
+      "build:clean"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "budget-one",
+    "command": [
+      "npm",
+      "run",
+      "build:clean",
+      "--",
+      "--budget",
+      "1"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 1
+  },
+  {
+    "name": "pages-before",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "gh-pages"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "deploy-dry",
+    "command": [
+      "npm",
+      "run",
+      "deploy"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "pages-after",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "gh-pages"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "deploy-domain-dry",
+    "command": [
+      "npm",
+      "run",
+      "deploy",
+      "--",
+      "--domain",
+      "cafe.example.com"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "pages-after-domain",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "gh-pages"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 0
+  },
+  {
+    "name": "release-check",
+    "command": [
+      "npm",
+      "run",
+      "release:check"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation",
+    "exit": 1
+  }
+]

@@ -1,0 +1,98 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/review/independentAcceptanceContracts.test.ts (11 tests | 3 failed) 817ms
+   ❯ independent acceptance: production summary dispatch (7)
+     × day2 records before the report is called 19ms
+     × week records before the report is called 9ms
+     × endless records before the report is called 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > day2 records before the report is called
+AssertionError: expected [] to deeply equal [ ObjectContaining{…} ]
+
+- Expected
++ Received
+
+- [
+-   ObjectContaining {
+-     "mode": "day2",
+-     "served": 0,
+-   },
+- ]
++ []
+
+ ❯ Object.<anonymous> tests/review/independentAcceptanceContracts.test.ts:80:68
+     78|       const draw = vi.spyOn(h.app.rushHud, 'onPhase').mockImplementati…
+     79|         if (phase === 'summary')
+     80|           expect(Object.values(h.app.scores.read().boards).flat()).toE…
+       |                                                                    ^
+     81|             expect.objectContaining({ mode, served: r.summary!.ordersC…
+     82|           ]);
+ ❯ rushFrame src/app/rushView.ts:67:17
+ ❯ tests/review/independentAcceptanceContracts.test.ts:84:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > week records before the report is called
+AssertionError: expected [] to deeply equal [ ObjectContaining{…} ]
+
+- Expected
++ Received
+
+- [
+-   ObjectContaining {
+-     "mode": "week",
+-     "served": 0,
+-   },
+- ]
++ []
+
+ ❯ Object.<anonymous> tests/review/independentAcceptanceContracts.test.ts:80:68
+     78|       const draw = vi.spyOn(h.app.rushHud, 'onPhase').mockImplementati…
+     79|         if (phase === 'summary')
+     80|           expect(Object.values(h.app.scores.read().boards).flat()).toE…
+       |                                                                    ^
+     81|             expect.objectContaining({ mode, served: r.summary!.ordersC…
+     82|           ]);
+ ❯ rushFrame src/app/rushView.ts:67:17
+ ❯ tests/review/independentAcceptanceContracts.test.ts:84:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > endless records before the report is called
+AssertionError: expected [] to deeply equal [ ObjectContaining{…} ]
+
+- Expected
++ Received
+
+- [
+-   ObjectContaining {
+-     "mode": "endless",
+-     "served": 0,
+-   },
+- ]
++ []
+
+ ❯ Object.<anonymous> tests/review/independentAcceptanceContracts.test.ts:80:68
+     78|       const draw = vi.spyOn(h.app.rushHud, 'onPhase').mockImplementati…
+     79|         if (phase === 'summary')
+     80|           expect(Object.values(h.app.scores.read().boards).flat()).toE…
+       |                                                                    ^
+     81|             expect.objectContaining({ mode, served: r.summary!.ordersC…
+     82|           ]);
+ ❯ rushFrame src/app/rushView.ts:67:17
+ ❯ tests/review/independentAcceptanceContracts.test.ts:84:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 8 passed (11)
+   Start at  12:35:56
+   Duration  1.18s (tests 72%, transform 22%, import 6%)
+

@@ -1,0 +1,39 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/review/independentAcceptanceBuild.test.ts (3 tests | 1 failed) 2836ms
+   × deploy passes the actual build its base and site URL ([]) 248ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceBuild.test.ts > deploy passes the actual build its base and site URL ([])
+AssertionError: expected { base: '/', …(1) } to deeply equal { base: '/no-wukkas-cafe/', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "base": "/no-wukkas-cafe/",
++   "base": "/",
+    "url": "https://edwardh-jedi.github.io/no-wukkas-cafe/",
+  }
+
+ ❯ tests/review/independentAcceptanceBuild.test.ts:75:61
+     73|   const line = run.stdout.split('\n').find((x) => x.startsWith('ACCEPT…
+     74|   expect(line).toBeDefined();
+     75|   expect(JSON.parse(line!.slice('ACCEPTANCE_ENV='.length))).toEqual({ …
+       |                                                             ^
+     76| });
+     77|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  12:35:50
+   Duration  2.90s (tests 99%)
+

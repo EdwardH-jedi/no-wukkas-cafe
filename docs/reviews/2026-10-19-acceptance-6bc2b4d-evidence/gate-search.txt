@@ -1,0 +1,11 @@
+src/dev/takes.ts:20:      const r = await fetch(url);
+src/dev/devui.ts:37:    const r = await fetch(`/__dev/load/${kind}`, { cache: 'no-store' });
+src/dev/devui.ts:47:    const r = await fetch(`/__dev/save/${kind}`, {
+src/dev/offlineMix.ts:90:  const r = await fetch(url);
+src/audio/clips.ts:28:  prefetch(reqs: readonly VoiceRequest[]): void;
+src/audio/clips.ts:41:      p = fetch(base + file).then((r) => {
+src/audio/clips.ts:76:    prefetch(reqs) {
+src/dev/casting.ts:302:    const r = await fetch(`${AUDITIONS_ROOT}index.json`, { cache: 'no-store' });
+src/app/shared.ts:14:  if (day === 1) audio.prefetch([...GREETING_OPENERS, ...GREETING].map((d) => asReq(d.text)));
+src/app/shared.ts:15:  audio.prefetch(
+src/audio/types.ts:88:  prefetch(reqs: readonly VoiceRequest[]): void;

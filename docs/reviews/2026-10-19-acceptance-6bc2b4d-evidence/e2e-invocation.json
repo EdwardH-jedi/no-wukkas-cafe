@@ -1,0 +1,12 @@
+{
+  "command": "E2E_PORT=5203 npx playwright test --config tests/review/playwright.ipv6.config.ts",
+  "argv": [
+    "npx",
+    "playwright",
+    "test",
+    "--config",
+    "tests/review/playwright.ipv6.config.ts"
+  ],
+  "WEEK_UI_SHOTS": "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/week-ui",
+  "startedAt": "2026-10-19T04:02:41.264919+00:00"
+}

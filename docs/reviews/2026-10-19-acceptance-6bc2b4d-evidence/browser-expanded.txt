@@ -1,0 +1,204 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 's',
+  box: {
+    x: 33.8125,
+    y: 759.5685424804688,
+    width: 322.375,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s 4945ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'm',
+  box: { x: 16, y: 751.609375, width: 358, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m 2767ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 733.5531005859375,
+    width: 357.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l 2805ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 's',
+  box: {
+    x: 33.0625,
+    y: 583.6687622070312,
+    width: 308.875,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s 3175ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'm',
+  box: { x: 16, y: 574.609375, width: 343, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m 3174ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 556.5531005859375,
+    width: 342.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l 3283ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 's',
+  pos: { x: 14.390625, y: 114.296875, width: 361.21875, height: 304.40625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: {
+    x: 33.8125,
+    y: 756.5225830078125,
+    width: 322.375,
+    height: 67.140625
+  }
+}
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 'm',
+  pos: { x: 16, y: 132, width: 358, height: 373.390625 },
+  instr: { x: 16, y: 70, width: 132, height: 54.34375 },
+  subs: { x: 16, y: 743.609375, width: 358, height: 74.390625 }
+}
+
+ × tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s 8709ms
+   → expected true to be false // Object.is equality
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m 8474ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 'l',
+  pos: { x: 19.1875, y: 171.59375, width: 351.625, height: 532.234375 },
+  instr: { x: 16, y: 70, width: 157.390625, height: 64.78125 },
+  subs: { x: 16.21875, y: 723.953125, width: 357.5625, height: 88.859375 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l 8422ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 's',
+  pos: { x: 14.390625, y: 114.296875, width: 346.21875, height: 335.90625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: { x: 33.0625, y: 576.46875, width: 308.875, height: 67.140625 }
+}
+
+ × tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s 8790ms
+   → expected true to be false // Object.is equality
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 'm',
+  pos: { x: 16, y: 132, width: 343, height: 373.390625 },
+  instr: { x: 16, y: 70, width: 132, height: 54.34375 },
+  subs: { x: 16, y: 566.609375, width: 343, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m 8854ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 'l',
+  pos: { x: 19.1875, y: 171.59375, width: 336.625, height: 456.1875 },
+  instr: { x: 16, y: 70, width: 157.390625, height: 64.78125 },
+  subs: { x: 16.21875, y: 546.953125, width: 342.5625, height: 88.859375 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l 8903ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click
+acceptance-scores { width: 390, scroll: 390, right: 390, left: 0, overflowing: [] }
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click 2990ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/review/independentAcceptanceBrowser.test.ts:137:27
+    135|             pos!.y < instr!.y + instr!.height &&
+    136|             instr!.y < pos!.y + pos!.height;
+    137|           expect(overlap).toBe(false);
+       |                           ^
+    138|           expect(subs!.x).toBeGreaterThanOrEqual(0);
+    139|           expect(subs!.x + subs!.width).toBeLessThanOrEqual(width!);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/review/independentAcceptanceBrowser.test.ts:137:27
+    135|             pos!.y < instr!.y + instr!.height &&
+    136|             instr!.y < pos!.y + pos!.height;
+    137|           expect(overlap).toBe(false);
+       |                           ^
+    138|           expect(subs!.x).toBeGreaterThanOrEqual(0);
+    139|           expect(subs!.x + subs!.width).toBeLessThanOrEqual(width!);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 11 passed (13)
+   Start at  12:38:37
+   Duration  75.84s (tests 100%)
+

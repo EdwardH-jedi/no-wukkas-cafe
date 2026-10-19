@@ -1,0 +1,254 @@
+[
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:50:3"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\nCall Log:\n- Timeout 20000ms exceeded while waiting on the predicate",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\nCall Log:\n- Timeout 20000ms exceeded while waiting on the predicate\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:54:10"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audioSmoke-voice-on-a-cust-75fde-ce-the-order-still-moves-on-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"dazza\"\u001b[39m\nReceived: \u001b[31m\"gaz\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"dazza\"\u001b[39m\nReceived: \u001b[31m\"gaz\"\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:249:5"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audioSmoke-voice-on-a-cust-75fde-ce-the-order-still-moves-on-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:256:76"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audioSmoke-voice-on-a-cust-2d61a-s-replay-interruption-pause-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"clip\"\u001b[39m\nReceived: \u001b[31m\"tts\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"clip\"\u001b[39m\nReceived: \u001b[31m\"tts\"\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:164:23"
+    }
+  },
+  {
+    "trace": "tests/review/.e2e-results/audioSmoke-voice-on-owner--5058a-he-audio-output-path-active-chromium/trace.zip",
+    "type": "after",
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"clip\"\u001b[39m\nReceived: \u001b[31m\"tts\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"clip\"\u001b[39m\nReceived: \u001b[31m\"tts\"\u001b[39m\n    at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:114:23"
+    }
+  }
+]

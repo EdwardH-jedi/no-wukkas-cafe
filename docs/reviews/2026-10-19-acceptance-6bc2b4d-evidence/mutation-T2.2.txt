@@ -1,0 +1,62 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/core/regularAffinity.test.ts (6 tests | 2 failed) 7ms
+   ❯ a regular who takes a drink away (3)
+     × counts a visit for every served drink, right or not 3ms
+     × two shifts, one served wrong: the save says two visits, one affinity 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/core/regularAffinity.test.ts > a regular who takes a drink away > counts a visit for every served drink, right or not
+AssertionError: expected {} to deeply equal { dazza: 1 }
+
+- Expected
++ Received
+
+- {
+-   "dazza": 1,
+- }
++ {}
+
+ ❯ tests/core/regularAffinity.test.ts:88:38
+     86|     expect(b.outcome).toBe('served');
+     87|     expect(b.result?.correct).toBe(false);
+     88|     expect(wrong.shiftEvents.visits).toEqual({ dazza: 1 });
+       |                                      ^
+     89|     expect(wrong.shiftEvents.affinity).toEqual({});
+     90|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/core/regularAffinity.test.ts > a regular who takes a drink away > two shifts, one served wrong: the save says two visits, one affinity
+AssertionError: expected { visits: 1, affinity: 1 } to deeply equal { visits: 2, affinity: 1 }
+
+- Expected
++ Received
+
+  {
+    "affinity": 1,
+-   "visits": 2,
++   "visits": 1,
+  }
+
+ ❯ tests/core/regularAffinity.test.ts:128:41
+    126|       );
+    127|     }
+    128|     expect(store.load().regulars.dazza).toEqual({ visits: 2, affinity:…
+       |                                         ^
+    129|   });
+    130| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  12:35:14
+   Duration  386ms (transform 78%, import 19%, tests 2%, worker 1%)
+

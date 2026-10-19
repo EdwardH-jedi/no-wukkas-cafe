@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--import",
+    "./tests/review/nodeReviewLoader.mjs",
+    "tests/fixtures/telemetry/makeSample.ts"
+  ],
+  "exit": 0,
+  "identical": true,
+  "sha256": "b586d5449a7d5beab22220e08980d3e854cf64dec7fdd3f6cb34c698309bed98"
+}

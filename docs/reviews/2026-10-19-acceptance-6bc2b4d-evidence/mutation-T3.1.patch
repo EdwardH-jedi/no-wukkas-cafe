@@ -1,0 +1,13 @@
+diff --git a/scripts/build-clean.ts b/scripts/build-clean.ts
+index 0b4b348..4fc8544 100644
+--- a/scripts/build-clean.ts
++++ b/scripts/build-clean.ts
+@@ -77,6 +77,8 @@ try {
+     stdio: 'inherit',
+   });
+   if (exported.status !== 0) throw new Error('git archive | tar failed');
++  cpSync(join(ROOT, 'src'), join(work, 'src'), {recursive:true});
++  cpSync(join(ROOT, 'index.html'), join(work, 'index.html'));
+   symlinkSync(join(ROOT, 'node_modules'), modules, 'dir');
+   const build = spawnSync('npm', ['run', 'build'], {
+     cwd: work,

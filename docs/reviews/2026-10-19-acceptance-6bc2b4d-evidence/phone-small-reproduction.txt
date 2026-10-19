@@ -1,0 +1,72 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 's',
+  pos: { x: 14.390625, y: 114.296875, width: 361.21875, height: 304.40625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: { x: 33.8125, y: 753.46875, width: 322.375, height: 67.140625 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l
+ × tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s 14018ms
+   → expected true to be false // Object.is equality
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 's',
+  pos: { x: 14.390625, y: 114.296875, width: 346.21875, height: 335.90625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: { x: 33.0625, y: 576.46875, width: 308.875, height: 67.140625 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ × tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s 17464ms
+   → expected true to be false // Object.is equality
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+ FAIL  tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/review/independentAcceptanceBrowser.test.ts:149:27
+    147|               path: `${process.env.REVIEW_EVIDENCE_DIR}/register-${wid…
+    148|             });
+    149|           expect(overlap).toBe(false);
+       |                           ^
+    150|           expect(subs!.x).toBeGreaterThanOrEqual(0);
+    151|           expect(subs!.x + subs!.width).toBeLessThanOrEqual(width!);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 11 skipped (13)
+   Start at  12:41:15
+   Duration  32.12s (tests 99%)
+

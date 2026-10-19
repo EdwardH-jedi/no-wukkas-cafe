@@ -1,0 +1,124 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-detail http://[::1]:5214 {
+  text: '\n' +
+    '    RegisterDazzawhat did they order?\n' +
+    '    DrinkFlat whiteLong black\n' +
+    '    MilkFull creamOatSoyAlmond\n' +
+    '    TempNormalExtra hot\n' +
+    '    ArtNo heartHeart\n' +
+    '    ↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left\n' +
+    '    AskDrink?Milk?Hot?Heart?−3 s each\n' +
+    '    \n' +
+    '    Ring it up Enter',
+  font: '16px Figtree, system-ui, -apple-system, "Segoe UI", sans-serif',
+  rows: [
+    {
+      cls: 'ph',
+      height: 19,
+      text: 'RegisterDazzawhat did they order?'
+    },
+    { cls: 'row', height: 30, text: 'DrinkFlat whiteLong black' },
+    { cls: 'row', height: 30, text: 'MilkFull creamOatSoyAlmond' },
+    { cls: 'row', height: 30, text: 'TempNormalExtra hot' },
+    { cls: 'row', height: 30, text: 'ArtNo heartHeart' },
+    {
+      cls: 'row ask',
+      height: 65,
+      text: '↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left'
+    },
+    {
+      cls: 'row ask',
+      height: 46,
+      text: 'AskDrink?Milk?Hot?Heart?−3 s each'
+    },
+    { cls: 'asked', height: 14.390625, text: '' },
+    { cls: 'btn small ring', height: 34, text: 'Ring it up Enter' }
+  ]
+}
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-detail http://[::1]:5213 {
+  text: '\n' +
+    '    RegisterDazzawhat did they order?\n' +
+    '    DrinkFlat whiteLong black\n' +
+    '    MilkFull creamOatSoyAlmond\n' +
+    '    TempNormalExtra hot\n' +
+    '    ArtNo heartHeart\n' +
+    '    ↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left\n' +
+    '    AskDrink?Milk?Hot?Heart?−3 s each\n' +
+    '    \n' +
+    '    Ring it up Enter',
+  font: '16px Figtree, system-ui, -apple-system, "Segoe UI", sans-serif',
+  rows: [
+    {
+      cls: 'ph',
+      height: 22,
+      text: 'RegisterDazzawhat did they order?'
+    },
+    { cls: 'row', height: 30, text: 'DrinkFlat whiteLong black' },
+    { cls: 'row', height: 30, text: 'MilkFull creamOatSoyAlmond' },
+    { cls: 'row', height: 30, text: 'TempNormalExtra hot' },
+    { cls: 'row', height: 30, text: 'ArtNo heartHeart' },
+    {
+      cls: 'row ask',
+      height: 65,
+      text: '↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left'
+    },
+    {
+      cls: 'row ask',
+      height: 46,
+      text: 'AskDrink?Milk?Hot?Heart?−3 s each'
+    },
+    { cls: 'asked', height: 14.390625, text: '' },
+    { cls: 'btn small ring', height: 35, text: 'Ring it up Enter' }
+  ]
+}
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-pre-post [
+  { x: 662, y: 135.3046875, width: 346, height: 369.390625 },
+  { x: 662, y: 133.3046875, width: 346, height: 373.390625 }
+]
+
+ × tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px 32608ms
+   → expected 4 to be less than or equal to 2
+ ↓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+AssertionError: expected 4 to be less than or equal to 2
+ ❯ tests/review/independentAcceptanceBrowser.test.ts:255:59
+    253|       expect(boxes[1]).not.toBeNull();
+    254|       for (const key of ['x', 'y', 'width', 'height'] as const)
+    255|         expect(Math.abs(boxes[0]![key] - boxes[1]![key])).toBeLessThan…
+       |                                                           ^
+    256|     } finally {
+    257|       oldServer.kill('SIGTERM');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 skipped (14)
+   Start at  12:59:14
+   Duration  33.31s (tests 99%)
+

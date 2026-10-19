@@ -1,0 +1,20 @@
+[
+  {
+    "name": "final-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "final-lint",
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "exit": 1
+  }
+]

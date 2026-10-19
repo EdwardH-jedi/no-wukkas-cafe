@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npx",
+    "vitest",
+    "run",
+    "tests/review/independentPrune.test.ts",
+    "tests/review/independentGate.test.ts",
+    "tests/review/independentM2.test.ts",
+    "--reporter=verbose"
+  ],
+  "exit": 0
+}

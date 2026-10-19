@@ -1,0 +1,7 @@
+tests/review/harness.ts:16:import { replayLast, resumeAll, setPaused } from '../../src/app/pause';
+src/app/boot.ts:29:import { replayLast, resumeAll, setPaused } from './pause';
+src/app/boot.ts:100:  // These read `app` only when called (from DOM events, after boot() returns): src/app/pause.ts.
+src/app/pause.ts:10:export function setPaused(app: App, p: boolean): void {
+src/app/pause.ts:25:/** Unpause everything together: game clock, menus and audio (A1: switching days from the pause
+src/app/pause.ts:27:export function resumeAll(app: App): void {
+src/app/pause.ts:36:export function replayLast(app: App): void {

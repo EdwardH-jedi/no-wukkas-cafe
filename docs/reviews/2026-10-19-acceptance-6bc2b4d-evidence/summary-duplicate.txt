@@ -1,0 +1,34 @@
+
+> no-wukkas-cafe@0.1.0 playtest:summary
+> node scripts/playtest-summary.ts tests/fixtures/telemetry/sample.json tests/fixtures/telemetry/sample.json
+
+## Playtest summary
+
+| | |
+| --- | --- |
+| Logs · sessions | 2 · 2 |
+| Day 1 trials | 2: hired 0, almost 1, failed 0, disaster 0, unfinished 1 |
+| Shifts | 3 (Day 2 2, week 1, Endless 0), 2 to the report |
+| Customers · served · walk-outs · shown the door | 14 · 8 · 6 · 0 |
+| Walk-outs by stage | queue 0 · register 6 · ordering 0 · ticket 0 |
+| Drinks handed back | 0 |
+| Pardons (replays · repeats · questions) | 0 · 0 · 2 |
+| Pardons per order | 0.2 (10 orders heard) |
+| Register wait (median · max) | 0 s · 0 s |
+| Time to serve (median · max) | 54.6 s · 68.8 s |
+
+### Accuracy per field (what was rung up vs. what was said)
+
+| Field | Right | Heard | |
+| --- | --- | --- | --- |
+| drink | 9 | 9 | 100 % |
+| milk | 3 | 3 | 100 % |
+| temp | 3 | 3 | 100 % |
+| heart | 3 | 3 | 100 % |
+
+### Quit points
+
+| Record | Ending | Where |
+| --- | --- | --- |
+| trial 2026-10-18T10:00:00.000Z#1 | title | steam, attempt 1 |
+| shift 2026-10-18T10:00:00.000Z#2 | title | week shift 1: service at 89 s, station shot, 2 served, 2 in the café |

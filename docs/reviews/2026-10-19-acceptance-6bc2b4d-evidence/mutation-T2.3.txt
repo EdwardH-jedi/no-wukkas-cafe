@@ -1,0 +1,71 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/core/week/progress.test.ts (11 tests | 2 failed) 6ms
+   ❯ progression (6)
+     × lists shifts as locked ahead, open now, done with the best grade 3ms
+     × in week 2 the current shift is open and later ones locked, whatever week 1 left 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/core/week/progress.test.ts > progression > lists shifts as locked ahead, open now, done with the best grade
+AssertionError: expected [ 'done', 'done', 'locked', …(2) ] to deeply equal [ 'done', 'open', 'locked', …(2) ]
+
+- Expected
++ Received
+
+  [
+    "done",
+-   "open",
++   "done",
+    "locked",
+    "locked",
+    "locked",
+  ]
+
+ ❯ tests/core/week/progress.test.ts:130:39
+    128|     s = nextShift(s, report('disaster'));
+    129|     const rows = shiftRows(s);
+    130|     expect(rows.map((r) => r.status)).toEqual(['done', 'open', 'locked…
+       |                                       ^
+    131|     expect(rows[0]?.best).toBe('okay');
+    132|     expect(rows[1]?.best).toBe('disaster');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/core/week/progress.test.ts > progression > in week 2 the current shift is open and later ones locked, whatever week 1 left
+AssertionError: expected [ Array(5) ] to deeply equal [ 'done', 'done', 'open', …(2) ]
+
+- Expected
++ Received
+
+  [
+    "done",
+    "done",
+-   "open",
+-   "locked",
+-   "locked",
++   "done",
++   "done",
++   "done",
+  ]
+
+ ❯ tests/core/week/progress.test.ts:144:39
+    142|     expect([s.week, s.shift]).toEqual([2, 2]);
+    143|     const rows = shiftRows(s);
+    144|     expect(rows.map((r) => r.status)).toEqual(['done', 'done', 'open',…
+       |                                       ^
+    145|     expect(rows.map((r) => r.best)).toEqual(['good', 'good', 'good', '…
+    146|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 9 passed (11)
+   Start at  12:35:14
+   Duration  101ms (transform 56%, import 28%, tests 13%, worker 3%)
+

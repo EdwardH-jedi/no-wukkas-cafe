@@ -1,0 +1,13 @@
+diff --git a/src/core/rush/serve.ts b/src/core/rush/serve.ts
+index d650833..6e5748e 100644
+--- a/src/core/rush/serve.ts
++++ b/src/core/rush/serve.ts
+@@ -90,7 +90,7 @@ export function serve(r: Rush, key: string): void {
+   }
+   c.outcome = 'served';
+   c.result = result;
+-  regularServed(r, c, result.correct);
++  if (result.correct) regularServed(r, c, result.correct);
+   setState(c, 'leaving');
+   forgetCustomer(r, c, true);
+   r.records.push({

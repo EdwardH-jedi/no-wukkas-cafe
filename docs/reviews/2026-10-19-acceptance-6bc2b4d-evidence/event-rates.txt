@@ -1,0 +1,55 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing
+{"scale":1,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech
+{"scale":1,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > Web Audio advances by wall time, including a long RAF gap, and freezes on pause 7ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 1: the order must be heard before ticketing 61ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 1: subtitle dispatch must not lead audible speech 17ms
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing
+{"scale":2,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech
+{"scale":2,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing
+{"scale":3,"heard":true,"starts":[{"speaker":"dazza","text":"Morning. Long black, cheers, mate. Big day on the tools.","via":"tts","at":18.050000000000257,"customerState":"ordering"}],"ticket":1,"outcome":null}
+
+stdout | tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech
+{"scale":3,"captionAt":16.05000000000037,"soundAt":16.05000000000037}
+
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 2: the order must be heard before ticketing 52ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 2: subtitle dispatch must not lead audible speech 10ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 25 s load at timeScale 3: the order must be heard before ticketing 50ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > 10 s load at timeScale 3: subtitle dispatch must not lead audible speech 10ms
+ ✓ tests/review/independentSlowAudio.test.ts > independent audio clock and order guarantees > legacy scaled audio clock masks the timeScale 3 timeout ordering defect 49ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-day2: {"seeds":500,"scheduled":134,"appeared":134,"honks":634,"orders":3000,"answers":3000,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > day2: no honk overlaps orders/answers and 25-35% of shifts get a bird 1924ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-shift-3: {"seeds":500,"scheduled":159,"appeared":159,"honks":427,"orders":4000,"answers":4000,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-shift-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 1633ms
+stdout | tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird
+ibis-week-index-3: {"seeds":500,"scheduled":159,"appeared":159,"honks":408,"orders":4500,"answers":4500,"overlaps":[],"overlapCount":0}
+
+ ✓ tests/review/independentFuzz.test.ts > independent ibis fuzz: 500 seeds per mode > week-index-3: no honk overlaps orders/answers and 25-35% of shifts get a bird 1333ms
+stdout | tests/review/independentFuzz.test.ts > AFFINITY_RULE: a correct serve to a regular adds +1, the save keeps it, and THE_USUAL becomes reachable
+the-usual: {"seeds":1000,"shifts":5000,"correctServes":35113,"points":36001,"usual":888,"bad":0}
+
+ ✓ tests/review/independentFuzz.test.ts > AFFINITY_RULE: a correct serve to a regular adds +1, the save keeps it, and THE_USUAL becomes reachable 14347ms
+ ✓ tests/review/independentFuzz.test.ts > AFFINITY_RULE (decided 2026-10-17): serving a regular correctly raises affinity by 1 0ms
+
+ Test Files  2 passed (2)
+      Tests  13 passed (13)
+   Start at  12:39:58
+   Duration  19.55s (tests 97%, transform 2%, import 1%)
+

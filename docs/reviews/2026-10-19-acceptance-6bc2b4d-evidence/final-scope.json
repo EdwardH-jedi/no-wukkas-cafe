@@ -1,0 +1,10 @@
+{
+  "targetHead": "6bc2b4d",
+  "reviewBranch": "chore/review-acceptance-6bc2b4d",
+  "trackedChangesBeforeStaging": "",
+  "remainingOwnedScratchWorktrees": [],
+  "trackedAudioFiles": [],
+  "ghPages": "db4c0567f5ba00ec9bf6078da44a8c78b5a17ef0\trefs/heads/gh-pages",
+  "reviewerRedTests": 4,
+  "e2eFailedTests": 9
+}

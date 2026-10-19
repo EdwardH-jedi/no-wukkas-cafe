@@ -1,0 +1,88 @@
+[
+  {
+    "task": "T2.2",
+    "file": "src/core/rush/serve.ts",
+    "replacement": [
+      "regularServed(r, c, result.correct);",
+      "if (result.correct) regularServed(r, c, result.correct);"
+    ],
+    "verify": "npx vitest run tests/core/regularAffinity.test.ts",
+    "exit": 1
+  },
+  {
+    "task": "T2.3",
+    "file": "src/core/week/progress.ts",
+    "replacement": [
+      "status: d.index < save.shift ? 'done' : d.index === save.shift ? 'open' : 'locked',",
+      "status: bestGrade(save, d.index) ? 'done' : d.index === save.shift ? 'open' : 'locked',"
+    ],
+    "verify": "npx vitest run tests/core/week/progress.test.ts",
+    "exit": 1
+  },
+  {
+    "task": "T2.6",
+    "file": "src/app/boot.ts",
+    "replacement": [
+      "from './pause';",
+      "from './pauseDuplicate';"
+    ],
+    "verify": "npx vitest run tests/review tests/core/rushTrace.test.ts && ! grep -q \"copied, not shared\" tests/review/harness.ts",
+    "exit": 0,
+    "guardExit": 1
+  },
+  {
+    "task": "T3.1",
+    "file": "scripts/build-clean.ts",
+    "replacement": [
+      "  symlinkSync(join(ROOT, 'node_modules'), modules, 'dir');",
+      "  cpSync(join(ROOT, 'src'), join(work, 'src'), {recursive:true});\n  cpSync(join(ROOT, 'index.html'), join(work, 'index.html'));\n  symlinkSync(join(ROOT, 'node_modules'), modules, 'dir');"
+    ],
+    "verify": "npm run build:clean",
+    "exit": 0,
+    "budgetExit": 1,
+    "guardExit": 1
+  },
+  {
+    "task": "T3.4",
+    "file": "scripts/deploy.ts",
+    "replacement": [
+      "NWC_BASE: site.base",
+      "NWC_BASE: \"/\""
+    ],
+    "verify": "npx vitest run tests/scripts/deploy.test.ts && npm run deploy",
+    "exit": 0,
+    "guardExit": 1
+  },
+  {
+    "task": "T4.1",
+    "file": "src/sim/scores.ts",
+    "replacement": [
+      "return a.mode === 'endless' ? 0 : a.walkouts - b.walkouts;",
+      "return 0;"
+    ],
+    "verify": "npx vitest run tests/sim/scores.test.ts",
+    "exit": 1
+  },
+  {
+    "task": "T4.3",
+    "file": "src/app/rushView.ts",
+    "replacement": [
+      "app.scoreNote = recordScore(app.scores, r, new Date().toISOString());",
+      "app.scoreNote = null;"
+    ],
+    "verify": "npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts",
+    "exit": 0,
+    "guardExit": 1
+  },
+  {
+    "task": "T4.5",
+    "file": "src/core/rush/machine.ts",
+    "replacement": [
+      "const newBest = !!best && summaryBeats(r.summary, best);",
+      "const newBest = true;"
+    ],
+    "verify": "npx vitest run tests/sim/owner.test.ts tests/data/voice.test.ts",
+    "exit": 1,
+    "guardExit": 1
+  }
+]

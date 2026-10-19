@@ -1,0 +1,13 @@
+diff --git a/src/core/rush/machine.ts b/src/core/rush/machine.ts
+index a158b31..906ac10 100644
+--- a/src/core/rush/machine.ts
++++ b/src/core/rush/machine.ts
+@@ -309,7 +309,7 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
+         // A week shift that beats its best on the Scores board gets a second line (Day 2, Endless and
+         // a first play have nothing to beat).
+         const best = r.week && !r.week.endless ? r.week.best : null;
+-        const newBest = !!best && summaryBeats(r.summary, best);
++        const newBest = true;
+         for (const key of endLines(r.summary.grade, newBest)) gaz(r, key, 'react');
+         if (r.barista.ready) gaz(r, 'rush.wasteLeft', 'react');
+       }

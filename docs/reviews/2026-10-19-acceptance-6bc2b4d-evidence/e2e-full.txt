@@ -1,0 +1,352 @@
+[WebServer] (node:67785) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:67811) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 53 tests using 1 worker
+
+  -   1 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 390x844
+  -   2 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 390x844
+  -   3 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 390x844
+  -   4 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 390x844
+  -   5 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 390x844
+  -   6 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 1024x640
+  -   7 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 1024x640
+  -   8 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 1024x640
+  -   9 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 1024x640
+  -  10 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 1024x640
+(node:67819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 [chromium] › tests/e2e/audio.spec.ts:38:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work (26.1s)
+(node:68631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 [chromium] › tests/e2e/audio.spec.ts:124:1 › a voice clip that fails to load is reported, not silent (5.7s)
+  ✘  13 [chromium] › tests/e2e/audioSmoke.spec.ts:105:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active (16.0s)
+(node:69728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  14 [chromium] › tests/e2e/audioSmoke.spec.ts:154:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause (19.1s)
+(node:70325) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  15 [chromium] › tests/e2e/audioSmoke.spec.ts:237:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on (12.9s)
+(node:70969) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  16 [chromium] › tests/e2e/audioState.spec.ts:89:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running (26.1s)
+(node:71611) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  17 [chromium] › tests/e2e/audioState.spec.ts:114:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks (13.3s)
+(node:72777) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  18 [chromium] › tests/e2e/audioState.spec.ts:147:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard (31.5s)
+(node:72928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  19 [chromium] › tests/e2e/audioState.spec.ts:191:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume (12.9s)
+(node:72989) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  20 [chromium] › tests/e2e/casting.spec.ts:156:1 › casting page: identity cards, missing assets, waveforms, one take at a time, decisions (9.6s)
+  ✓  21 [chromium] › tests/e2e/ibis.spec.ts:45:3 › bin chicken › three presses of I see it out; Gaz reacts; draw calls stay in budget (37.8s)
+  ✓  22 [chromium] › tests/e2e/ibis.spec.ts:66:3 › bin chicken › clicking the bird shoos it too (29.5s)
+perfect pour: {"art":0.895224460910075,"findings":["textbook"],"rows":{"Heart":83,"Symmetry":100,"Centred":100,"Crisp":100,"White":35},"verdict":"Proper heart"}
+  ✓  23 [chromium] › tests/e2e/latteRegression.spec.ts:136:1 › latte regression: a recorded perfect pour keeps its score band (1.2m)
+duck under an order 0.28, under chat 0.55
+  ✘  24 [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes (20.6s)
+(node:75622) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+opening: -20.1 LUFS, -4.1 dBTP, DC 0.00000; worst case -3.0 dBTP, 0 clipped
+rush: -20.5 LUFS, -2.5 dBTP, DC 0.00000; worst case -1.6 dBTP, 0 clipped
+afternoon: -20.3 LUFS, -1.4 dBTP, DC 0.00001; worst case -0.3 dBTP, 0 clipped
+  ✓  25 [chromium] › tests/e2e/listening.spec.ts:176:1 › the three moods: no clipping, no DC offset, even loudness, orders above the music (7.7s)
+opening: master RMS peak with only music audible 0.1335
+rush: music ducked to 0.28 under Dazza's order, then recovered
+  ✓  26 [chromium] › tests/e2e/music.spec.ts:25:1 › music plays, follows the day and ducks under an order (24.7s)
+perf 1024x640: 114 draw calls, 3 in the café, median frame 50.0 ms
+  ✓  27 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 1024x640 (48.6s)
+perf 390x844: 102 draw calls, 3 in the café, median frame 33.3 ms
+  ✓  28 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 390x844 (31.7s)
+  ✓  29 [chromium] › tests/e2e/phoneHud.spec.ts:96:5 › phone HUD › register clear of the instruction at 390x844 (14.0s)
+  ✓  30 [chromium] › tests/e2e/phoneHud.spec.ts:96:5 › phone HUD › register clear of the instruction at 375x667 (13.9s)
+  ✓  31 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size s (390x844) (27.7s)
+  ✓  32 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size m (390x844) (27.7s)
+  ✓  33 [chromium] › tests/e2e/phoneHud.spec.ts:114:5 › phone HUD › subtitle box inside the screen at text size l (390x844) (27.6s)
+  ✓  34 [chromium] › tests/e2e/phoneHud.spec.ts:137:3 › phone HUD › the desktop register keeps its place at 1024x640 (14.2s)
+  -  35 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 390x844
+  -  36 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 390x844
+  -  37 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 390x844
+  -  38 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 1024x640
+  -  39 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 1024x640
+  -  40 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 1024x640
+  -  41 [chromium] › tests/e2e/polishEvidence.spec.ts:458:3 › Phase 1.5 evidence › 1.5.4 the closing line after a whole Day 2 (1024x640, the report again at 390x844)
+  ✓  42 [chromium] › tests/e2e/practice.spec.ts:112:1 › latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz (1.4m)
+  ✓  43 [chromium] › tests/e2e/rush.spec.ts:316:1 › Day 2 morning rush: listening at the register, a misheard ticket, walk-outs, report (4.5m)
+  -  44 [chromium] › tests/e2e/segments.spec.ts:45:1 › a generated order plays two or more segment clips as one line
+  ✓  45 [chromium] › tests/e2e/trial.spec.ts:234:1 › Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart (2.8m)
+  ✓  46 [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved (3.4m)
+  ✓  47 [chromium] › tests/e2e/week.spec.ts:120:3 › the week › a save on Wednesday opens Wednesday only, and Endless Rush (4.8s)
+  ✓  48 [chromium] › tests/e2e/week.spec.ts:144:3 › the week › Day 2 from the title is still Day 2 (3.8s)
+  ✓  49 [chromium] › tests/e2e/week.spec.ts:152:3 › the week › the title lists every mode; Endless Rush unlocks on the way back (4.5s)
+  ✓  50 [chromium] › tests/e2e/week.spec.ts:200:3 › the week › the shop sells what the till covers and says why it refuses the rest (4.5s)
+  ✓  51 [chromium] › tests/e2e/weekUi.spec.ts:77:3 › the week UI › title → the week → shop → a passed Monday → next shift (2.9m)
+  ✓  52 [chromium] › tests/e2e/weekUi.spec.ts:237:3 › the week UI › Day 2: the bot plays the whole morning rush to its report (3.8m)
+  ✓  53 [chromium] › tests/e2e/weekUi.spec.ts:269:3 › the week UI › a shift event is answered with the number key 1 (12.7s)
+
+
+  1) [chromium] › tests/e2e/audio.spec.ts:38:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+    Call Log:
+    - Timeout 20000ms exceeded while waiting on the predicate
+
+      52 |       timeout: 20_000,
+      53 |     })
+    > 54 |     .not.toBeNull();
+         |          ^
+      55 |   const a = await audio(page);
+      56 |   expect(a.contextState).toBe('running');
+      57 |   expect(a.status).toBe('ok');
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audio.spec.ts:54:10
+
+    Error Context: tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audio-pressing-Start-makes-6aa28-y-and-failure-feedback-work-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/audioSmoke.spec.ts:105:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "clip"
+    Received: "tts"
+
+      112 |     const a = await audio(page);
+      113 |     const first = a.history[0]!;
+    > 114 |     expect(first.via).toBe('clip');
+          |                       ^
+      115 |     expect(Math.abs(first.bufferDuration - first.manifestDuration)).toBeLessThan(0.05);
+      116 |     expect(first.endedAt).not.toBeNull();
+      117 |     expect(first.interrupted).toBe(false);
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:114:23
+
+    Error Context: tests/review/.e2e-results/audioSmoke-voice-on-owner--5058a-he-audio-output-path-active-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioSmoke-voice-on-owner--5058a-he-audio-output-path-active-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioSmoke-voice-on-owner--5058a-he-audio-output-path-active-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/e2e/audioSmoke.spec.ts:154:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "clip"
+    Received: "tts"
+
+      162 |     let a = await audio(page);
+      163 |     const order = a.history.find((h) => h.speaker === 'dazza')!;
+    > 164 |     expect(order.via).toBe('clip');
+          |                       ^
+      165 |     expect(Math.abs(order.bufferDuration - order.manifestDuration)).toBeLessThan(0.05);
+      166 |     expect(order.endedAt).not.toBeNull();
+      167 |     expect(order.maxRms).toBeGreaterThan(0.02);
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:164:23
+
+    Error Context: tests/review/.e2e-results/audioSmoke-voice-on-a-cust-2d61a-s-replay-interruption-pause-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioSmoke-voice-on-a-cust-2d61a-s-replay-interruption-pause-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioSmoke-voice-on-a-cust-2d61a-s-replay-interruption-pause-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/e2e/audioSmoke.spec.ts:237:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      254 |     await expect(page.locator('#audioToast')).toBeVisible();
+      255 |     // Gaz's lines still came from clips.
+    > 256 |     expect(a.history.some((h) => h.speaker === 'gaz' && h.via === 'clip')).toBe(true);
+          |                                                                            ^
+      257 |     // The sim doesn't wait for audio: the register opens on the line's own timing.
+      258 |     await expect
+      259 |       .poll(async () => (await rush(page))!.customers.find((c) => c.id === 'dazza')!.state, {
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioSmoke.spec.ts:256:76
+
+    Error Context: tests/review/.e2e-results/audioSmoke-voice-on-a-cust-75fde-ce-the-order-still-moves-on-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioSmoke-voice-on-a-cust-75fde-ce-the-order-still-moves-on-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioSmoke-voice-on-a-cust-75fde-ce-the-order-still-moves-on-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests/e2e/audioState.spec.ts:89:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+    Call Log:
+    - Timeout 20000ms exceeded while waiting on the predicate
+
+      109 |         },
+      110 |       )
+    > 111 |       .not.toBeNull();
+          |            ^
+      112 |   });
+      113 |
+      114 |   test('A2: a clip that fails while paused waits for resume before the browser voice speaks', async ({
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioState.spec.ts:111:12
+
+    Error Context: tests/review/.e2e-results/audioState-audio-state-Cod-675e5-ain-keeps-the-audio-running-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioState-audio-state-Cod-675e5-ain-keeps-the-audio-running-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioState-audio-state-Cod-675e5-ain-keeps-the-audio-running-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests/e2e/audioState.spec.ts:114:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      137 |     const dazzaText = (await audio(page)).history.at(-1)!.text;
+      138 |     await page.waitForTimeout(800);
+    > 139 |     expect((await spoken(page)).some((s) => s.text.includes(dazzaText.slice(0, 12)))).toBe(false);
+          |                                                                                       ^
+      140 |     // Resume: now it speaks.
+      141 |     await page.keyboard.press('Escape');
+      142 |     await expect
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioState.spec.ts:139:87
+
+    Error Context: tests/review/.e2e-results/audioState-audio-state-Cod-e6984-re-the-browser-voice-speaks-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioState-audio-state-Cod-e6984-re-the-browser-voice-speaks-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioState-audio-state-Cod-e6984-re-the-browser-voice-speaks-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests/e2e/audioState.spec.ts:147:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+      176 |         },
+      177 |       )
+    > 178 |       .not.toBeNull();
+          |            ^
+      179 |     const order = (await audio(page)).history.find(
+      180 |       (h) => h.speaker === 'dazza' && h.via === 'clip',
+      181 |     )!;
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioState.spec.ts:178:12
+
+    Error Context: tests/review/.e2e-results/audioState-audio-state-Cod-e739b-il-the-order-has-been-heard-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioState-audio-state-Cod-e739b-il-the-order-has-been-heard-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioState-audio-state-Cod-e739b-il-the-order-has-been-heard-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests/e2e/audioState.spec.ts:191:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume 
+
+    Error: expect(received).toBeCloseTo(expected, precision)
+
+    Expected: 0.4
+    Received: 1
+
+    Expected precision:    5
+    Expected difference: < 0.000005
+    Received difference:   0.6
+
+      205 |       .toBeGreaterThan(0);
+      206 |     const s = (await spoken(page)).at(-1)!;
+    > 207 |     expect(s.volume).toBeCloseTo(0.4, 5);
+          |                      ^
+      208 |   });
+      209 | });
+      210 |
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/audioState.spec.ts:207:22
+
+    Error Context: tests/review/.e2e-results/audioState-audio-state-Cod-bb147-back-uses-the-Voices-volume-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/audioState-audio-state-Cod-bb147-back-uses-the-Voices-volume-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/audioState-audio-state-Cod-bb147-back-uses-the-Voices-volume-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 2
+    Received:    0
+
+      127 |   expect(underChat).toBeLessThan(0.65);
+      128 |   a = await lab(page);
+    > 129 |   expect(a.history.filter((h) => h.via === 'clip').length).toBeGreaterThanOrEqual(2);
+          |                                                            ^
+      130 |
+      131 |   // Three lines fired quickly: each cuts the one before, never two audible at once.
+      132 |   await page.getByRole('button', { name: '3 lines, fast' }).click();
+        at /Users/edwardhwang/Desktop/nwc-review-2/tests/e2e/listening.spec.ts:129:60
+
+    Error Context: tests/review/.e2e-results/listening-sound-lab-moods--05319-logue-one-voice-pause-notes-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/review/.e2e-results/listening-sound-lab-moods--05319-logue-one-voice-pause-notes-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/review/.e2e-results/listening-sound-lab-moods--05319-logue-one-voice-pause-notes-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: [chromium] › tests/e2e/weekUi.spec.ts (6.9m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  9 failed
+    [chromium] › tests/e2e/audio.spec.ts:38:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work 
+    [chromium] › tests/e2e/audioSmoke.spec.ts:105:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active 
+    [chromium] › tests/e2e/audioSmoke.spec.ts:154:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause 
+    [chromium] › tests/e2e/audioSmoke.spec.ts:237:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on 
+    [chromium] › tests/e2e/audioState.spec.ts:89:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running 
+    [chromium] › tests/e2e/audioState.spec.ts:114:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks 
+    [chromium] › tests/e2e/audioState.spec.ts:147:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard 
+    [chromium] › tests/e2e/audioState.spec.ts:191:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume 
+    [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes 
+  18 skipped
+  26 passed (29.0m)
