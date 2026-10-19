@@ -3,7 +3,7 @@
 // temporary worktree is always removed. scripts/deploy-url.ts: Vite's base and the Pages address.
 
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -115,6 +115,52 @@ describe('npm run deploy', () => {
     const r = deploy();
     expect(r.status).toBe(1);
     expect(r.stderr).toMatch(/has no gh-pages branch/);
+  });
+});
+
+// Without --dist the script runs the real build. A copy of deploy.ts sits beside a stub build-clean
+// that reports the environment it receives (and fails, so nothing is fetched or pushed): the base
+// and site address handed to the build are what Vite serves the game under (acceptance F6).
+describe('npm run deploy → the build it starts', () => {
+  const stubbed = (...a: string[]) => {
+    const scripts = join(dir, 'tool/scripts');
+    mkdirSync(scripts, { recursive: true });
+    for (const f of ['deploy.ts', 'deploy-url.ts'])
+      copyFileSync(join(import.meta.dirname, '../../scripts', f), join(scripts, f));
+    writeFileSync(
+      join(scripts, 'build-clean.ts'),
+      'console.log("BUILD_ENV=" + JSON.stringify({ base: process.env.NWC_BASE, url: process.env.NWC_SITE_URL }));\nprocess.exit(19);\n',
+    );
+    const r = spawnSync(process.execPath, [join(scripts, 'deploy.ts'), ...a], {
+      cwd: work,
+      encoding: 'utf8',
+      env: { ...ENV, NWC_BASE: 'stale', NWC_SITE_URL: 'stale' },
+    });
+    const line = r.stdout.split('\n').find((l) => l.startsWith('BUILD_ENV='));
+    return { r, env: line ? JSON.parse(line.slice('BUILD_ENV='.length)) : null };
+  };
+
+  it('a repository deploy builds for /<repo>/ with the Pages address', () => {
+    git(work, 'remote', 'set-url', 'origin', 'https://github.com/EdwardH-jedi/no-wukkas-cafe.git');
+    const { r, env } = stubbed();
+    expect(r.status).toBe(1);
+    expect(r.stderr).toMatch(/the build failed \(exit 19\); nothing deployed/);
+    expect(env).toEqual({
+      base: '/no-wukkas-cafe/',
+      url: 'https://edwardh-jedi.github.io/no-wukkas-cafe/',
+    });
+  });
+
+  it('a repository deploy off GitHub builds for /<repo>/ with no address', () => {
+    expect(stubbed().env).toEqual({ base: '/no-wukkas-cafe/', url: '' });
+  });
+
+  it('--domain builds for / at that domain', () => {
+    git(work, 'remote', 'set-url', 'origin', 'https://github.com/EdwardH-jedi/no-wukkas-cafe.git');
+    expect(stubbed('--domain', 'cafe.example.com').env).toEqual({
+      base: '/',
+      url: 'https://cafe.example.com/',
+    });
   });
 });
 

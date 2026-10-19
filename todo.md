@@ -205,7 +205,9 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       (read from an env the script sets). No new
       dependency. Test `tests/scripts/deploy.test.ts` on a temp bare repo (pattern: temp dirs in
       `tests/scripts/voicesRender.test.ts`): dry run writes nothing to the remote, `--push` updates the branch.
-      verify: `npx vitest run tests/scripts/deploy.test.ts && npm run deploy`
+      verify: `npx vitest run tests/scripts/deploy.test.ts && npx vitest run tests/review/independentAcceptanceBuild.test.ts -t "deploy passes the actual build" && npm run deploy`
+      (acceptance F6: `--dist` fixtures never start the build; these cases read the NWC_BASE / NWC_SITE_URL
+      the build subprocess receives: `/<repo>/` for a repository deploy, `/` with `--domain`)
 - [x] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
       or the deployed URL, Settings → Playtest log → Clear between testers, Export log at the end, where to put
       the file) and `docs/playtests/TEMPLATE.md` (per tester: device/browser, Trial result, shifts played, where
