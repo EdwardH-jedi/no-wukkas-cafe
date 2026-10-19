@@ -24,7 +24,7 @@ describe('bestLine', () => {
     expect(bestLine({ newBest: true, best: best() })).toBe('New best!');
   });
 
-  it('otherwise the best so far: grade and served for a shift, served and tips for Endless', () => {
+  it('otherwise the best so far: grade and served, in every mode (T4.3 wording)', () => {
     expect(bestLine({ newBest: false, best: best() })).toBe('Best so far: Good, 6 served');
     expect(bestLine({ newBest: false, best: best({ served: 1, grade: 'disaster' }) })).toBe(
       'Best so far: Disaster, 1 served',
@@ -34,7 +34,7 @@ describe('bestLine', () => {
         newBest: false,
         best: best({ mode: 'endless', week: null, shiftIndex: null, served: 14, tipsCents: 2150 }),
       }),
-    ).toBe('Best so far: 14 served, $21.50 in tips');
+    ).toBe('Best so far: Good, 14 served');
   });
 
   it('no note (nothing recorded), no line', () => {
