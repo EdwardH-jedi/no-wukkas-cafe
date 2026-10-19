@@ -101,6 +101,18 @@ describe('telemetry store', () => {
     expect(createTelemetryStore(s).read().records).toEqual([]);
   });
 
+  it('keeps the records it read when a later read throws (acceptance F2)', () => {
+    const s = new FakeStorage();
+    const first = createTelemetryStore(s);
+    for (const id of ['a', 'b', 'c', 'd', 'e']) first.put(rec(id));
+    const store = createTelemetryStore(s);
+    expect(store.read().records).toHaveLength(5);
+    s.failGet = true;
+    store.put(rec('f'));
+    expect(store.memoryOnly).toBe(true);
+    expect(store.read().records.map((r) => r.id)).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+  });
+
   it('blocked or full storage falls back to memory for the session (never throws)', () => {
     const full = new FakeStorage();
     full.failSet = true;
