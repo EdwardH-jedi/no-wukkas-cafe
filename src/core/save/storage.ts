@@ -33,7 +33,11 @@ export function createSaveStore(
       if (!broken && storage) {
         try {
           const raw = storage.getItem(SAVE_KEY);
-          if (raw !== null) return migrate(raw, defaults);
+          if (raw !== null) {
+            // Kept: if storage fails later, the progress read so far stays (acceptance audit F1).
+            mem = migrate(raw, defaults);
+            return mem;
+          }
         } catch {
           broken = true;
         }
