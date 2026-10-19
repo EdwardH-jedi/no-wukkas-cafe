@@ -18,12 +18,12 @@ Node v26.7.0 (the documented target is Node 24).
 | F6 | P2 | `tests/scripts/deploy.test.ts`: three cases run a copy of the real `deploy.ts` beside a stub `build-clean` and read the `NWC_BASE`/`NWC_SITE_URL` the build receives (`/no-wukkas-cafe/` + Pages URL, `/no-wukkas-cafe/` with no address, `/` + `https://<host>/` with `--domain`). T3.4 verify line extended. | Mutation below. | FIXED |
 | F7 | P2 | New `tests/app/rushSummaryScores.test.ts`: summary events of a Day 2, week and Endless shift go through `createRushFrame`; exactly one entry, on that mode's board, before the report draws, still one after a second frame. T4.3 verify line extended. | Mutation below. | FIXED |
 | F8 | P3 | `tests/e2e/helpers/voiceProbe.ts` (status 200 **and** `audio/*`) used by the preflights in `audio.spec.ts`, `audioSmoke.spec.ts`, `audioState.spec.ts`; unit test `tests/helpers/voiceProbe.test.ts`. | See "F8 detail". | Preflight FIXED; real-clip acceptance VERIFIED here with development placeholder clips only (not release audio) |
-| F9 | P2 | `phoneHud.spec.ts`: literal Day 1 `#subs` check, 390×844 and 375×667 × Small/Medium/Large, inside the viewport. The `#rsubs` test stays. | 6/6 green; with the Large `#subs` width rule removed the 390×844 Large case fails (`#subs left −39.98`). | FIXED |
+| F9 | P2 | `phoneHud.spec.ts`: literal Day 1 `#subs` check, 390×844 and 375×667 × Small/Medium/Large, inside the viewport. The `#rsubs` test stays. | 6/6 green; with the Large `#subs` width rule removed the 390×844 Large case fails (`#subs left −39.98`). T2.5's named verify (`-g "subtitle"`) first selected only the 3 `#rsubs` cases, so the Day 1 titles were changed (`2cde948`); it now selects and passes 9 (6 Day 1 `#subs` + 3 `#rsubs`), exit 0. | FIXED |
 | F10 | P3 | `src/ui/screens/shiftReport.ts` and `tests/ui/shiftReport.test.ts`: a non-new-best Endless report reads `Best so far: Good, 14 served`. Endless ranking untouched. | `shiftReport` tests green. | FIXED |
 
-Commits (one per finding, F1 first; HEAD before this report `7722499`):
+Commits (one per finding, F1 first):
 `9e953ff` F1 · `ec44c4f` F2 · `45d7082` F3 · `d480ef5` F9 · `7312acc` F10 · `805833d` F4 · `dcb05a1` F5 ·
-`6d4b229` F6 · `d5511a4` F7 · `7722499` F8. This report and the evidence folder are one further commit.
+`6d4b229` F6 · `d5511a4` F7 · `7722499` F8 · `2cde948` F9 follow-up (test titles) · then this report and the evidence folder.
 
 ## F8 detail
 
@@ -73,6 +73,8 @@ in the line so a narrowed filter cannot drop it.
 | `npm run lint` | 0 | eslint + prettier clean |
 | `npm test` | 0 | **120 files, 954 passed, 0 failed** (audit: 116 files, 927 passed, 4 failed) |
 | `git diff eea9fe8 -- 'tests/review/independent*' docs/reviews` | 0 | empty (0 bytes, 0 files) |
+| `git diff --name-only 6bc2b4d eea9fe8 \| xargs git diff --quiet eea9fe8 --` | 0 | all 187 files the audit commit added or changed are identical to `eea9fe8` |
+| `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts -g "subtitle"` (T2.5 verify, run after the title change `2cde948`) | 0 | 9 passed, 0 failed |
 | rushTrace recompute | 0 | 7 of 7 SHA-1s equal the table in `docs/reviews/2026-10-17-main-1a54a00.md` |
 | `npm run build:clean` | 0 | HEAD 7722499; `[audio-gate] ok: 0 licensed audio file(s) in the build`; 1,562,596 bytes without audio (budget 3,000,000) |
 | `npm run build:clean -- --budget 1` | 1 | over budget by 1,562,595 bytes |
@@ -90,7 +92,8 @@ left alone. Discovered count rose from 53 to 63: `phoneHud.spec.ts` went from 6 
 evidence specs. Per file (pass/fail/skip): audio 2/0/0, audioSmoke 3/0/0, audioState 4/0/0, casting 1/0/0,
 ibis 2/0/0, latteRegression 1/0/0, listening 2/0/0, music 1/0/0, perf 2/0/0, phoneHud 16/0/0,
 practice 1/0/0, rush 1/0/0, segments 1/0/0, trial 1/0/0, week 5/0/0, weekUi 3/0/0. `week.spec.ts` passed in
-this run, so no separate re-run was needed.
+this run, so no separate re-run was needed. The full run predates `2cde948`, which only renamed six test
+titles; the 9-test T2.5 subset above is the evidence after it.
 
 ## Remaining limits and decisions for Edward
 
@@ -102,7 +105,12 @@ this run, so no separate re-run was needed.
 - **F8 / release:** dev placeholder clips only; licensed voices, `release:check`, and the question in
   `docs/DECISIONS.md` Q3 (the stale `public/assets/voice` renders) are still yours.
 - **F10:** the Endless report line no longer shows tips (the Scores screen still ranks and shows them).
-- **Environment:** Node 26.7.0 rather than 24; Chromium CSS-viewport emulation, not iPhone Safari or Android.
+- **iPhone Safari (open, yours to do):** AGENTS.md §10 requires a Safari check for layout changes. F3 is a
+  layout change and was measured only in Chromium CSS-viewport emulation (and `zoom` behaves differently
+  across engines), so on-device Small-text register placement is UNVERIFIED.
+- **Environment:** Node 26.7.0 rather than 24; no iPhone Safari or Android hardware.
+- **Worktree:** the `voice-cache` and `public/assets/` symlinks are still in `~/Desktop/nwc-fix-acceptance`,
+  untracked (the `.gitignore` directory patterns do not match symlinks). A `git add -A` there would stage them.
 - **Not touched, by instruction:** M5 work, version, analytics, online leaderboard, paid TTS, audio in git,
   `docs/DECISIONS.md`, save schema/version/key, balance (no `sim/` or economy change, so no balance table).
   `todo.md`: only the four verify lines (T2.6, T3.1, T3.4, T4.3) were edited; no checkbox was ticked.
