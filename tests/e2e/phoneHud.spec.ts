@@ -132,7 +132,30 @@ test.describe('phone HUD', () => {
     }
   }
 
-  // One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is the one measured.
+  // The literal Day 1 #subs (todo.md T2.5; acceptance audit F9) on both phones at every text size.
+  // The screen's own width bounds it, not a hard-coded 390, so 375 is checked against 375.
+  for (const [name, opts] of Object.entries(PHONES)) {
+    for (const size of SIZES) {
+      test(`Day 1 #subs inside the screen at ${name}, text size ${size}`, async ({ browser }) => {
+        test.setTimeout(120_000);
+        const { ctx, page } = await open(browser, opts);
+        await setTextSize(page, size);
+        await page.goto('/?voice=0&seed=7');
+        await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();
+        await page.locator('#subs:not(.gone)').waitFor({ state: 'visible', timeout: 30_000 });
+        const b = await box(page, '#subs');
+        expect(b, '#subs shows').not.toBeNull();
+        const { width: W, height: H } = page.viewportSize()!;
+        expect(b!.x, `#subs left ${b!.x}`).toBeGreaterThanOrEqual(0);
+        expect(b!.x + b!.width, `#subs right ${b!.x + b!.width}`).toBeLessThanOrEqual(W);
+        expect(b!.y, `#subs top ${b!.y}`).toBeGreaterThanOrEqual(0);
+        expect(b!.y + b!.height, `#subs bottom ${b!.y + b!.height}`).toBeLessThanOrEqual(H);
+        await ctx.close();
+      });
+    }
+  }
+
+  // One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is measured below.
   for (const size of SIZES) {
     test(`subtitle box inside the screen at text size ${size} (390x844)`, async ({ browser }) => {
       test.setTimeout(180_000);
