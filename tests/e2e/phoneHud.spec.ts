@@ -136,7 +136,9 @@ test.describe('phone HUD', () => {
   // The screen's own width bounds it, not a hard-coded 390, so 375 is checked against 375.
   for (const [name, opts] of Object.entries(PHONES)) {
     for (const size of SIZES) {
-      test(`Day 1 #subs inside the screen at ${name}, text size ${size}`, async ({ browser }) => {
+      test(`Day 1 subtitle box #subs inside the screen at ${name}, text size ${size}`, async ({
+        browser,
+      }) => {
         test.setTimeout(120_000);
         const { ctx, page } = await open(browser, opts);
         await setTextSize(page, size);
