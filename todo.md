@@ -127,7 +127,9 @@ jsdom.
       `src/app/frame.ts`), have `boot.ts` and the harness both import it, delete the copy and its "copied, not
       shared" comment. Behaviour identical: rushTrace's seven hashes unchanged
       (`node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts`).
-      verify: `npx vitest run tests/review tests/core/rushTrace.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
+      verify: `npx vitest run tests/review tests/core/rushTrace.test.ts tests/app/pauseShared.test.ts tests/review/independentAcceptanceContracts.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
+      (acceptance F4: `pauseShared` resolves boot's and the harness's imports to the same module; the
+      independent contract test is named so a narrowed `tests/review` filter cannot drop it)
 - [x] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
       on 2026-10-18; this file is the evidence archive, Evidence lines still get appended here") and a Notes line
       in `docs/MILESTONES.md` mapping its M1–M7 to this file's M2–M5. No other text changes.
