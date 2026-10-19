@@ -1,0 +1,46 @@
+
+> no-wukkas-cafe@0.1.0 build:clean
+> node scripts/build-clean.ts --budget 1
+
+build:clean: building HEAD d5511a4; uncommitted changes are NOT in this build
+
+> no-wukkas-cafe@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 136 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                              2.07 kB │ gzip:   0.91 kB
+dist/assets/figtree-latin-ext-400-normal-CXAzuTZb.woff2      6.18 kB
+dist/assets/figtree-latin-ext-800-normal-DLIuazCv.woff2      6.22 kB
+dist/assets/figtree-latin-ext-600-normal-DJlfifZj.woff2      6.24 kB
+dist/assets/figtree-latin-ext-800-normal-Cp4dEvwL.woff       8.33 kB
+dist/assets/figtree-latin-ext-400-normal-Gbh-3PTk.woff       8.33 kB
+dist/assets/figtree-latin-ext-600-normal-CQqsimlV.woff       8.36 kB
+dist/assets/figtree-latin-400-normal-g7Dtegnw.woff2         11.38 kB
+dist/assets/figtree-latin-800-normal-30yxI7TZ.woff2         11.39 kB
+dist/assets/figtree-latin-600-normal-Cv_xCTDl.woff2         11.54 kB
+dist/assets/figtree-latin-400-normal-BD4aNku5.woff          15.03 kB
+dist/assets/figtree-latin-800-normal-B7vj2UK8.woff          15.17 kB
+dist/assets/figtree-latin-600-normal-BM_oTo4n.woff          15.21 kB
+dist/assets/bowlby-one-latin-400-normal-BlBlciR_.woff2      21.53 kB
+dist/assets/bowlby-one-latin-400-normal-DAczUCp_.woff       26.04 kB
+dist/assets/index-eJ98E_Mt.css                              36.64 kB │ gzip:   8.12 kB
+dist/assets/index-6E8vm96x.js                            1,116.91 kB │ gzip: 280.09 kB
+
+✓ built in 119ms
+[audio-gate] ok: 0 licensed audio file(s) in the build
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 900 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+[audio-gate] ok: 0 licensed audio file(s) in the build
+build:clean: dist/ 1,562,596 bytes without audio (budget 1)
+build:clean: over budget by 1,562,595 bytes

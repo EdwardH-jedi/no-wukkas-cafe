@@ -1,0 +1,79 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-mut-T2.6
+
+ ❯ tests/app/pauseShared.test.ts (7 tests | 6 failed) 12ms
+   ❯ one pause module for boot and the review harness (7)
+     × setPaused is imported once by each, from the same module 4ms
+     × resumeAll is imported once by each, from the same module 0ms
+     × replayLast is imported once by each, from the same module 0ms
+     × setPaused has exactly one exported definition under src/app/ 4ms
+     × resumeAll has exactly one exported definition under src/app/ 1ms
+     × replayLast has exactly one exported definition under src/app/ 1ms
+ ❯ tests/review/independentAcceptanceContracts.test.ts (11 tests | 1 failed) 1539ms
+   ❯ independent acceptance: shared pause implementation (1)
+     × boot and the harness import the same three lifecycle implementations 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > setPaused is imported once by each, from the same module
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > resumeAll is imported once by each, from the same module
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > replayLast is imported once by each, from the same module
+AssertionError: expected '/Users/edwardhwang/Desktop/nwc-mut-T2…' to be '/Users/edwardhwang/Desktop/nwc-mut-T2…' // Object.is equality
+
+Expected: "/Users/edwardhwang/Desktop/nwc-mut-T2.6/src/app/pause"
+Received: "/Users/edwardhwang/Desktop/nwc-mut-T2.6/src/app/pauseDuplicate"
+
+ ❯ tests/app/pauseShared.test.ts:33:28
+     31|     expect(boot[name], `boot imports ${name}`).toHaveLength(1);
+     32|     expect(harness[name], `the harness imports ${name}`).toHaveLength(…
+     33|     expect(boot[name]![0]).toBe(harness[name]![0]);
+       |                            ^
+     34|     expect(boot[name]![0]).toBe(join(ROOT, 'src/app/pause'));
+     35|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > setPaused has exactly one exported definition under src/app/
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > resumeAll has exactly one exported definition under src/app/
+ FAIL  tests/app/pauseShared.test.ts > one pause module for boot and the review harness > replayLast has exactly one exported definition under src/app/
+AssertionError: expected [ 'pause.ts', 'pauseDuplicate.ts' ] to deeply equal [ 'pause.ts' ]
+
+- Expected
++ Received
+
+  [
+    "pause.ts",
++   "pauseDuplicate.ts",
+  ]
+
+ ❯ tests/app/pauseShared.test.ts:45:22
+     43|         ),
+     44|       );
+     45|     expect(definers).toEqual(['pause.ts']);
+       |                      ^
+     46|   });
+     47|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/review/independentAcceptanceContracts.test.ts > independent acceptance: shared pause implementation > boot and the harness import the same three lifecycle implementations
+AssertionError: src/app/boot.ts: expected null not to be null
+ ❯ tests/review/independentAcceptanceContracts.test.ts:22:34
+     20|       const source = readFileSync(new URL(`../../${name}`, import.meta…
+     21|       const imported = source.match(/import\s*\{([^}]+)\}\s*from\s*['"…
+     22|       expect(imported, name).not.toBeNull();
+       |                                  ^
+     23|       for (const fn of ['setPaused', 'resumeAll', 'replayLast']) expec…
+     24|       expect(source).not.toContain('copied, not shared');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+
+ Test Files  2 failed | 24 passed (26)
+      Tests  7 failed | 142 passed (149)
+   Start at  16:23:48
+   Duration  111.86s (tests 97%, transform 2%, import 1%)
+

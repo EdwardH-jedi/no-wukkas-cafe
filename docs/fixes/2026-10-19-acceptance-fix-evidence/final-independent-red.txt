@@ -1,0 +1,252 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-fix-acceptance
+
+ ✓ tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves an advanced save and autosaves the next shift in the same session after getItem fails 2ms
+ ✓ tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves previously exported records when a later read fails before the next log write 1ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 's',
+  box: {
+    x: 33.8125,
+    y: 760.6687622070312,
+    width: 322.375,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s 4336ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'm',
+  box: { x: 16, y: 751.609375, width: 358, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m 2908ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 733.5531005859375,
+    width: 357.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l 2924ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 's',
+  box: {
+    x: 33.0625,
+    y: 583.6687622070312,
+    width: 308.875,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s 3263ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'm',
+  box: { x: 16, y: 574.609375, width: 343, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m 3221ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 556.5531005859375,
+    width: 342.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l 3177ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 's',
+  pos: { x: 14.390625, y: 127, width: 361.21875, height: 304.40625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: {
+    x: 33.8125,
+    y: 756.5222778320312,
+    width: 322.375,
+    height: 67.140625
+  },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at s 9131ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 'm',
+  pos: { x: 16, y: 132, width: 358, height: 373.390625 },
+  instr: { x: 16, y: 70, width: 132, height: 54.34375 },
+  subs: { x: 16, y: 743.609375, width: 358, height: 74.390625 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at m 8624ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l
+acceptance-register {
+  width: 390,
+  height: 844,
+  size: 'l',
+  pos: { x: 19.1875, y: 143, width: 351.625, height: 532.234375 },
+  instr: { x: 16, y: 70, width: 157.390625, height: 64.78125 },
+  subs: { x: 16.21875, y: 723.953125, width: 357.5625, height: 88.859375 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 390x844 at l 8869ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 's',
+  pos: { x: 14.390625, y: 127, width: 346.21875, height: 335.90625 },
+  instr: { x: 16, y: 70, width: 118.296875, height: 49.078125 },
+  subs: { x: 33.0625, y: 576.46875, width: 308.875, height: 67.140625 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at s 8930ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 'm',
+  pos: { x: 16, y: 132, width: 343, height: 373.390625 },
+  instr: { x: 16, y: 70, width: 132, height: 54.34375 },
+  subs: { x: 16, y: 566.609375, width: 343, height: 74.390625 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at m 9461ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l
+acceptance-register {
+  width: 375,
+  height: 667,
+  size: 'l',
+  pos: { x: 19.1875, y: 143, width: 336.625, height: 385.390625 },
+  instr: { x: 16, y: 70, width: 157.390625, height: 64.78125 },
+  subs: { x: 16.21875, y: 546.953125, width: 342.5625, height: 88.859375 },
+  instruction: 'TAKE THE ORDER\nListen to Dazza…'
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > register and rush subtitle fit 375x667 at l 9100ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-detail http://[::1]:5214 {
+  text: '\n' +
+    '    RegisterDazzawhat did they order?\n' +
+    '    DrinkFlat whiteLong black\n' +
+    '    MilkFull creamOatSoyAlmond\n' +
+    '    TempNormalExtra hot\n' +
+    '    ArtNo heartHeart\n' +
+    '    ↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left\n' +
+    '    AskDrink?Milk?Hot?Heart?−3 s each\n' +
+    '    \n' +
+    '    Ring it up Enter',
+  font: '16px Figtree, system-ui, -apple-system, "Segoe UI", sans-serif',
+  rows: [
+    {
+      cls: 'ph',
+      height: 22,
+      text: 'RegisterDazzawhat did they order?'
+    },
+    { cls: 'row', height: 30, text: 'DrinkFlat whiteLong black' },
+    { cls: 'row', height: 30, text: 'MilkFull creamOatSoyAlmond' },
+    { cls: 'row', height: 30, text: 'TempNormalExtra hot' },
+    { cls: 'row', height: 30, text: 'ArtNo heartHeart' },
+    {
+      cls: 'row ask',
+      height: 65,
+      text: '↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left'
+    },
+    {
+      cls: 'row ask',
+      height: 46,
+      text: 'AskDrink?Milk?Hot?Heart?−3 s each'
+    },
+    { cls: 'asked', height: 14.390625, text: '' },
+    { cls: 'btn small ring', height: 35, text: 'Ring it up Enter' }
+  ]
+}
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-detail http://[::1]:5213 {
+  text: '\n' +
+    '    RegisterDazzawhat did they order?\n' +
+    '    DrinkFlat whiteLong black\n' +
+    '    MilkFull creamOatSoyAlmond\n' +
+    '    TempNormalExtra hot\n' +
+    '    ArtNo heartHeart\n' +
+    '    ↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left\n' +
+    '    AskDrink?Milk?Hot?Heart?−3 s each\n' +
+    '    \n' +
+    '    Ring it up Enter',
+  font: '16px Figtree, system-ui, -apple-system, "Segoe UI", sans-serif',
+  rows: [
+    {
+      cls: 'ph',
+      height: 22,
+      text: 'RegisterDazzawhat did they order?'
+    },
+    { cls: 'row', height: 30, text: 'DrinkFlat whiteLong black' },
+    { cls: 'row', height: 30, text: 'MilkFull creamOatSoyAlmond' },
+    { cls: 'row', height: 30, text: 'TempNormalExtra hot' },
+    { cls: 'row', height: 30, text: 'ArtNo heartHeart' },
+    {
+      cls: 'row ask',
+      height: 65,
+      text: '↻ Replay −1 s“Sorry, could you repeat that?” −6 s · 2 left'
+    },
+    {
+      cls: 'row ask',
+      height: 46,
+      text: 'AskDrink?Milk?Hot?Heart?−3 s each'
+    },
+    { cls: 'asked', height: 14.390625, text: '' },
+    { cls: 'btn small ring', height: 35, text: 'Ring it up Enter' }
+  ]
+}
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px
+acceptance-desktop-pre-post [
+  { x: 662, y: 133.3046875, width: 346, height: 373.390625 },
+  { x: 662, y: 133.3046875, width: 346, height: 373.390625 }
+]
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > desktop register matches the actual pre-T2.4 tree within 2px 27783ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click
+acceptance-scores { width: 390, scroll: 390, right: 390, left: 0, overflowing: [] }
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click 3146ms
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+   Start at  16:28:20
+   Duration  105.46s (tests 100%)
+

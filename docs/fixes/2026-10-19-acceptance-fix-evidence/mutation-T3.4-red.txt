@@ -1,0 +1,63 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-mut-T3.4
+
+ ❯ tests/scripts/deploy.test.ts (10 tests | 2 failed) 2837ms
+   ❯ npm run deploy → the build it starts (3)
+     × a repository deploy builds for /<repo>/ with the Pages address 266ms
+     × a repository deploy off GitHub builds for /<repo>/ with no address 247ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/scripts/deploy.test.ts > npm run deploy → the build it starts > a repository deploy builds for /<repo>/ with the Pages address
+AssertionError: expected { base: '/', …(1) } to deeply equal { base: '/no-wukkas-cafe/', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "base": "/no-wukkas-cafe/",
++   "base": "/",
+    "url": "https://edwardh-jedi.github.io/no-wukkas-cafe/",
+  }
+
+ ❯ tests/scripts/deploy.test.ts:148:17
+    146|     expect(r.status).toBe(1);
+    147|     expect(r.stderr).toMatch(/the build failed \(exit 19\); nothing de…
+    148|     expect(env).toEqual({
+       |                 ^
+    149|       base: '/no-wukkas-cafe/',
+    150|       url: 'https://edwardh-jedi.github.io/no-wukkas-cafe/',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/scripts/deploy.test.ts > npm run deploy → the build it starts > a repository deploy off GitHub builds for /<repo>/ with no address
+AssertionError: expected { base: '/', url: '' } to deeply equal { base: '/no-wukkas-cafe/', url: '' }
+
+- Expected
++ Received
+
+  {
+-   "base": "/no-wukkas-cafe/",
++   "base": "/",
+    "url": "",
+  }
+
+ ❯ tests/scripts/deploy.test.ts:155:27
+    153|
+    154|   it('a repository deploy off GitHub builds for /<repo>/ with no addre…
+    155|     expect(stubbed().env).toEqual({ base: '/no-wukkas-cafe/', url: '' …
+       |                           ^
+    156|   });
+    157|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 8 passed (10)
+   Start at  16:23:16
+   Duration  2.94s (tests 99%, transform 1%)
+
