@@ -8,6 +8,7 @@
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { clipServed } from './helpers/voiceProbe';
 
 interface PlayRecord {
   speaker: string;
@@ -62,10 +63,7 @@ async function recordSpeech(page: Page): Promise<void> {
 
 async function needClips(page: Page): Promise<void> {
   const c = manifest.clips.find((x) => x.characterId === 'gaz')!;
-  test.skip(
-    !(await page.request.get(`/${c.file}`)).ok(),
-    'voice clips not rendered (npm run voices)',
-  );
+  test.skip(!(await clipServed(page.request, c.file)), 'voice clips not rendered (npm run voices)');
 }
 
 async function toDazzaAtRegister(page: Page): Promise<void> {

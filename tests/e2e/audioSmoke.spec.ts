@@ -8,6 +8,7 @@
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { clipServed } from './helpers/voiceProbe';
 
 interface PlayRecord {
   id: string;
@@ -78,7 +79,7 @@ const sample = (page: Page, ms: number): Promise<Tick[]> =>
 async function needClips(page: Page): Promise<void> {
   for (const who of ['gaz', 'dazza']) {
     const c = manifest.clips.find((x) => x.characterId === who);
-    const ok = c ? (await page.request.get(`/${c.file}`)).ok() : false;
+    const ok = c ? await clipServed(page.request, c.file) : false;
     test.skip(!ok, 'voice clips not rendered on this machine (run `npm run voices`)');
   }
 }
