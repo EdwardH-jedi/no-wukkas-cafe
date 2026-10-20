@@ -1,0 +1,5 @@
+{
+  "command": "npm run release:check",
+  "exit": 1,
+  "seconds": 1.84
+}

@@ -1,0 +1,5 @@
+{
+  "command": "git branch -avv; git worktree list --porcelain; git branch --merged main; git for-each-ref refs/remotes/origin --format=\"%(refname) %(objectname)\"",
+  "exit": 0,
+  "seconds": 0.08
+}

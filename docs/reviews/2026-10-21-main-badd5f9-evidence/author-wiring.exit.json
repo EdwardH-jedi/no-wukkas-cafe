@@ -1,0 +1,4 @@
+{
+  "command": "npx vitest run tests/app/soundHold.test.ts tests/app/trialCaptions.test.ts --configLoader native --no-cache",
+  "exit": 0
+}

@@ -1,0 +1,5 @@
+{
+  "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-review-badd5f9-9yr5wuh4/tree",
+  "command": "E2E_PORT=5203 npx playwright test tests/e2e/trial.spec.ts tests/e2e/practice.spec.ts tests/e2e/trialCaptions.spec.ts tests/e2e/soundHold.spec.ts --config tests/review/playwright.ipv6.config.ts --output /private/tmp/claude-501/-Users-edwardhwang-Desktop-no-wukkas-cafe/be1fe759-d16a-43b9-b829-153e26643f4b/scratchpad/review-badd5f9/docs/reviews/2026-10-21-main-badd5f9-evidence/browser-results",
+  "exit": 1
+}
