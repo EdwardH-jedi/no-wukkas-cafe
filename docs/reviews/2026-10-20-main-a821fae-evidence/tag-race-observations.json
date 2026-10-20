@@ -1,0 +1,23 @@
+[
+  {
+    "fixture": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-m5-CQUzJ4",
+    "main": "640cd13dcbcb8c7842a8199c1f397a05c615fe6f",
+    "remote_main": "640cd13dcbcb8c7842a8199c1f397a05c615fe6f",
+    "tag": "640cd13dcbcb8c7842a8199c1f397a05c615fe6f",
+    "status": "M game.txt"
+  },
+  {
+    "fixture": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-m5-kw7Pc2",
+    "main": "bd2fcff2bafcb50883e3e6fa861d95c97278aa50",
+    "remote_main": "1de285d892a8669771b7d1b95df6754162c41f2a",
+    "tag": "bd2fcff2bafcb50883e3e6fa861d95c97278aa50",
+    "status": ""
+  },
+  {
+    "fixture": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-independent-m5-srQTQv",
+    "main": "1de285d892a8669771b7d1b95df6754162c41f2a",
+    "remote_main": "17d01e2b242db8c3c1fbcfad14abd2712f5b49e2",
+    "tag": "1de285d892a8669771b7d1b95df6754162c41f2a",
+    "status": ""
+  }
+]
