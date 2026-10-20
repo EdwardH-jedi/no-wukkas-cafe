@@ -343,7 +343,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
       Replace with a game-time budget: poll the sim clock exposed on `window.__trial` and stop when Monday's shift
       time is spent, not when the wall clock is; the test timeout stays 600 s as a backstop. Same assertion as today.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/week.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T5.6 F3's second register rule ("drink on the pass while someone orders", `src/ui/styles/rush.css` second
+- [x] T5.6 F3's second register rule ("drink on the pass while someone orders", `src/ui/styles/rush.css` second
       phone `#pos` block) was fixed with the same formula but never measured. Add that state to
       `tests/e2e/phoneHud.spec.ts` (both phones × three text sizes): `#pos` top ≥ `#rinstr` bottom.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts`
