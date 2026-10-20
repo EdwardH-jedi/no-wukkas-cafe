@@ -320,7 +320,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
 - [x] T5.0 Voice pipeline: provenance + build gate (4cdb399), cast + budget (fdda4a6), Google adapter (6d26a90),
       `voices:estimate` / `voices:render` / `voices:sheet` (6428542, 230d7de, e9d9c67), ship segments
       (`feat/ship-segments`); `docs/STEAM.md` research (cbd465b); `docs/DEVLOG.md` architecture (e2c9c94).
-- [ ] T5.1 `npm run release:check` ends with a readable summary instead of 1,026 raw errors: per speaker, how many
+- [x] T5.1 `npm run release:check` ends with a readable summary instead of 1,026 raw errors: per speaker, how many
       clips are placeholders and which HUMAN step clears them (paid render for the TTS cast, `--import` of takes
       for Gaz/Jiwoo/Mei), then the build line. Errors stay listed above it; exit code unchanged.
       (`scripts/voices-check.ts`; test case in `tests/scripts/voicesCheck.test.ts`.)

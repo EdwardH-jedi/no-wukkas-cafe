@@ -4,11 +4,12 @@
 // the sandbox, so these tests look at the segment report, not at the totals.
 
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { segmentFile, type SegmentClip } from '../../src/data/voice/manifest';
+import { CAST } from '../../src/data/voice/casting';
+import { segmentFile, type SegmentClip, type VoiceManifest } from '../../src/data/voice/manifest';
 import { SEGMENT_INVENTORY } from '../../src/data/voice/segments';
 
 const root = join(import.meta.dirname, '..', '..');
@@ -140,5 +141,85 @@ describe('npm run voices:check: the segment manifest', () => {
     s.cached('gaz/0badf00d.mp3'); // a line clip the manifest doesn't list
     const r = s.run();
     expect(r.stdout).toMatch(/^ {2}warn orphan-file: 1$/m);
+  });
+});
+
+describe('npm run release:check: the per-speaker summary', () => {
+  // The committed line manifest with Karen's clips licensed, so one row reads "ready".
+  const committed = JSON.parse(
+    readFileSync(join(root, 'src/data/voice/manifest.json'), 'utf8'),
+  ) as VoiceManifest;
+  const manifest: VoiceManifest = {
+    ...committed,
+    clips: committed.clips.map((c) =>
+      c.characterId === 'karen'
+        ? {
+            ...c,
+            source: {
+              ...c.source,
+              placeholder: false,
+              licence: 'test',
+              provenance: 'licensed_tts' as const,
+            },
+          }
+        : c,
+    ),
+  };
+  const dir = mkdtempSync(join(tmpdir(), 'nwc-release-summary-'));
+  writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest));
+  writeFileSync(join(dir, 'segments.manifest.json'), JSON.stringify({ version: 1, clips: [] }));
+  const run = (...args: string[]) =>
+    spawnSync(process.execPath, [join(root, 'scripts/voices-check.ts'), ...args], {
+      cwd: root,
+      env: {
+        ...process.env,
+        VOICES_MANIFEST: join(dir, 'manifest.json'),
+        VOICES_SEGMENT_MANIFEST: join(dir, 'segments.manifest.json'),
+      },
+      encoding: 'utf8',
+      timeout: 60_000,
+    });
+
+  it('ends with each speaker, their placeholder clips and the HUMAN step, then the build line', () => {
+    const r = run('--release', '--manifest-only');
+    expect(r.status).toBe(1); // exit code unchanged: placeholders fail the release check
+    expect(r.stderr).toMatch(/^ {2}placeholder-in-release: \w+:\w+ /m); // errors still listed
+    const out = r.stdout.trimEnd().split('\n');
+    const head = out.indexOf('release:check: what clears the voice gate, per speaker');
+    expect(head).toBeGreaterThan(0);
+    const rows = out.slice(head + 1);
+    expect(rows.at(-1)).toMatch(
+      /^ {2}build: not run; npm run build .* runs only after this check exits 0$/,
+    );
+
+    const speakers = [...new Set(manifest.clips.map((c) => c.characterId))];
+    expect(rows).toHaveLength(speakers.length + 1);
+    for (const s of speakers) {
+      const clips = manifest.clips.filter((c) => c.characterId === s);
+      const held = clips.filter((c) => c.source.placeholder !== false).length;
+      const row = rows.find((l) => l.startsWith(`  ${s} `)) ?? '';
+      expect(row, s).toMatch(new RegExp(` ${held} of +${clips.length} clips are placeholders → `));
+      if (!held) expect(row, s).toMatch(/→ ready$/);
+      else if (CAST[s]?.provider === 'google')
+        expect(row, s).toMatch(
+          new RegExp(
+            `→ paid TTS render: npm run voices:render -- --allow-paid, then -- --promote \\(Google ${CAST[s]!.voice}\\)$`,
+          ),
+        );
+      else
+        expect(row, s).toMatch(
+          /→ actor's takes: npm run voices:render -- --import <dir> \(.+-actor\/, licence pending\)$/,
+        );
+    }
+    // Both kinds of HUMAN step are on the board today.
+    expect(rows.join('\n')).toMatch(/^ {2}gaz .*--import <dir>/m);
+    expect(rows.join('\n')).toMatch(/^ {2}dazza .*--allow-paid/m);
+    expect(rows.join('\n')).toMatch(/^ {2}karen .*→ ready$/m);
+  });
+
+  it('prints no release summary outside --release', () => {
+    const r = run('--manifest-only');
+    expect(r.stdout).not.toMatch(/release:check: what clears the voice gate/);
+    expect(r.stdout).not.toMatch(/build: not run/);
   });
 });
