@@ -443,7 +443,9 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     audioPanel: { buttonsHtml: '', bind: noop, open: noop, close: noop },
     hud: {
       onPhase: noop,
+      onLine: noop,
       onSay: noop,
+      onStop: noop,
       onReplay: noop,
       setPaused: noop,
       update: noop,
@@ -462,7 +464,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       ringUp: noop,
       show: noop,
     },
-    practiceHud: { setPaused: noop, onReplay: noop },
+    practiceHud: { setPaused: noop, onReplay: noop, onSay: noop, onStop: noop },
     nav: {
       toTitle: () => toTitle(app),
       startRush: (w: Parameters<typeof startRush>[1], s: number) => startRush(app, w, s),

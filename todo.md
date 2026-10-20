@@ -383,7 +383,7 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
       instead of the flat-white `TARGET_TEMP`; scoring in `src/sim/rush.ts` already uses 68–74, so only the card
       changes. Test in `tests/ui/gauges.test.ts` (extra-hot ticket → 68–74 label; normal → 55–65).
       verify: `npx vitest run tests/ui/gauges.test.ts`
-- [ ] T6.2 (Q5 = yes) Day 1 trial and practice captions start with the voice (the rush rule from A2):
+- [x] T6.2 (Q5 = yes) Day 1 trial and practice captions start with the voice (the rush rule from A2):
       `src/app/trialWiring.ts` hud.onSay and `src/app/practiceWiring.ts` practiceHud.onSay bind the subtitle to the
       confirmed clip/TTS start and cancel with it. Add the trial case to the caption probes
       (`tests/review/playwright.probes.config.ts` pattern, implementer-owned copy under `tests/e2e/`).

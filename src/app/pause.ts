@@ -46,6 +46,8 @@ export function replayLast(app: App): void {
     },
     onStop: () => {
       if (mode === 'rush') app.rushHud.onStop();
+      else if (mode === 'practice') app.practiceHud.onStop();
+      else app.hud.onStop();
     },
   });
 }

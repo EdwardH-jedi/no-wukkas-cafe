@@ -68,9 +68,20 @@ export function trialFrame(app: App, dt: number): void {
   const { viewTime, pointer } = app;
   for (const ev of trial.events) {
     if (ev.type === 'say') {
-      hud.onSay(ev.line);
-      owner.onSay(ev.line, viewTime);
-      audio.say({ speaker: 'gaz', text: ev.line.text });
+      const line = ev.line;
+      hud.onLine(line);
+      // The words (and Gaz's gesture) start when the voice does, not when the line is asked
+      // for, as in the rush (Q5): a clip can take seconds to load. A line stopped first never shows.
+      audio.say(
+        { speaker: 'gaz', text: line.text },
+        {
+          onStart: () => {
+            hud.onSay(line);
+            owner.onSay(line, app.viewTime);
+          },
+          onStop: () => hud.onStop(),
+        },
+      );
     } else if (ev.type === 'phase') {
       hud.onPhase(ev.phase, trial);
       app.canvas.classList.toggle('aim', ev.phase === 'pour');

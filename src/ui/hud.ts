@@ -26,7 +26,13 @@ export interface HudCallbacks {
 
 export interface Hud {
   readonly touch: boolean;
+  /** Gaz asked for a line: the verdict card keeps his words even if the voice never starts. */
+  onLine(line: SpokenLine): void;
+  /** The line is audible now (or never will be: voice off, no speech), so its subtitle starts.
+   *  Not when the line is asked for: a clip can take seconds to load. */
   onSay(line: SpokenLine): void;
+  /** The line being said (or still loading) was stopped: its subtitle goes with it. */
+  onStop(): void;
   /** Show a replayed line for `seconds`. */
   onReplay(text: string, seconds: number): void;
   onPhase(phase: Phase, t: Trial): void;
@@ -119,15 +125,25 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
 
   return {
     touch,
-    onSay(line) {
-      subFull = line.text;
-      subShown = 0;
-      subHideIn = 0;
+    onLine(line) {
       lastQuote =
         line.key.startsWith('verdict.') && line.key !== 'verdict.hiredAfter'
           ? line.text
           : lastQuote;
+    },
+    onSay(line) {
+      subFull = line.text;
+      subShown = 0;
+      subHideIn = 0;
       subs.classList.remove('gone');
+    },
+    onStop() {
+      replayHold = 0;
+      subFull = '';
+      subShown = 0;
+      subHideIn = 0;
+      subsText.textContent = '';
+      subs.classList.add('gone');
     },
     onReplay(text, seconds) {
       subFull = text;

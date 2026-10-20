@@ -30,7 +30,10 @@ export interface PracticeHudCallbacks {
 }
 
 export interface PracticeHud {
+  /** The line is audible now (or never will be), so its subtitle starts: not when it's asked for. */
   onSay(line: SpokenLine): void;
+  /** The line being said (or still loading) was stopped: its subtitle goes with it. */
+  onStop(): void;
   onReplay(text: string, seconds: number): void;
   onPhase(p: Practice): void;
   setPaused(p: boolean): void;
@@ -226,6 +229,14 @@ export function createPracticeHud(root: HTMLElement, cb: PracticeHudCallbacks): 
       subShown = 0;
       subHideIn = 0;
       subs.classList.remove('gone');
+    },
+    onStop() {
+      replayHold = 0;
+      subFull = '';
+      subShown = 0;
+      subHideIn = 0;
+      subsText.textContent = '';
+      subs.classList.add('gone');
     },
     onReplay(text, seconds) {
       subFull = text;
