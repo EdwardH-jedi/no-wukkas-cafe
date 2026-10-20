@@ -43,10 +43,11 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 current_milestone: M5
 needs_replan: false
 pause_at_gate: true
-branch: `main` = origin/main (M2, M3, M4 and their gate-review fixes pushed by 2026-10-19 02:20).
-**Do not start M5 until Edward says so** (2026-10-19). Next real input is the playtest (M3 gate below): when
-`docs/playtests/<date>.md` lands, `/plan replan`. One implementer session only, in this checkout; the review session
-lives in `~/Desktop/nwc-review-2` and never edits `src/`.
+branch: `main` = origin/main = 731274f (acceptance audit eea9fe8 fixed F1–F10, merged 2026-10-20 21:35).
+**M5 is released for the agent from 2026-10-20** (Edward). Order: T5.1 → T5.2 → T5.3 → T5.4 → T5.5 → T5.6, then
+M6 only for the Qs answered in `docs/DECISIONS.md` (never build on an unanswered one). Playtest findings still arrive by
+`/plan replan` and go above T5.1. One implementer session only, in this checkout; the review session lives in
+`~/Desktop/nwc-review-2` and never edits `src/`.
 
 ---
 
@@ -338,9 +339,21 @@ findings arrive by `/plan replan` and go **above** T5.1.
       `main` equals `origin/main`, then tags `v<package version>` locally and prints the push command (never
       pushes). Test on a temp repo.
       verify: `npx vitest run tests/scripts/releaseTag.test.ts`
+- [ ] T5.5 `tests/e2e/week.spec.ts:68` waits 480 s of wall clock for Monday's report (flaked twice under load ~19).
+      Replace with a game-time budget: poll the sim clock exposed on `window.__trial` and stop when Monday's shift
+      time is spent, not when the wall clock is; the test timeout stays 600 s as a backstop. Same assertion as today.
+      verify: `E2E_PORT=5202 npx playwright test tests/e2e/week.spec.ts --config tests/review/playwright.ipv6.config.ts`
+- [ ] T5.6 F3's second register rule ("drink on the pass while someone orders", `src/ui/styles/rush.css` second
+      phone `#pos` block) was fixed with the same formula but never measured. Add that state to
+      `tests/e2e/phoneHud.spec.ts` (both phones × three text sizes): `#pos` top ≥ `#rinstr` bottom.
+      verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts`
 
 Discovered:
-- (empty)
+- (2026-10-20) Acceptance audit eea9fe8 (Codex, M2–M4 vs todo.md): FIX, P1 1 / P2 7 / P3 2, red 4 → fixed on
+  `fix/acceptance-eea9fe8`, merged 731274f: save + telemetry keep the last good read, phone Small-text register,
+  Endless "Best so far" wording, four verifier guards (T2.6/T3.1/T3.4/T4.3 verify lines strengthened), audio
+  preflight requires `audio/*`. Report `docs/fixes/2026-10-19-acceptance-fix.md`. Still Edward's: iPhone Safari
+  check of the Small-text register (AGENTS §10), `release:check` with licensed audio.
 
 Gate (Edward): paid Google TTS render (`npm run voices:render -- --allow-paid`, AU$20 cap) + listen-through with
 Korean / Mandarin / Indian-English speakers; actors' takes for Gaz, Jiwoo, Mei imported with
@@ -351,9 +364,44 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
 
 ---
 
+## M6 — Decision fixes (each task starts only when its Q in `docs/DECISIONS.md` is answered)
+
+Goal: the small src/ changes that have waited on one-line answers since 2026-10-18. Each task names its Q; an
+unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-decisions`, one commit per task.
+
+- [ ] T6.1 (Q4 = yes) Milk gauge target follows the ticket: extra-hot orders show 68–74 °C in `src/ui/gauges.ts`
+      instead of the flat-white `TARGET_TEMP`; scoring in `src/sim/rush.ts` already uses 68–74, so only the card
+      changes. Test in `tests/ui/gauges.test.ts` (extra-hot ticket → 68–74 label; normal → 55–65).
+      verify: `npx vitest run tests/ui/gauges.test.ts`
+- [ ] T6.2 (Q5 = yes) Day 1 trial and practice captions start with the voice (the rush rule from A2):
+      `src/app/trialWiring.ts` hud.onSay and `src/app/practiceWiring.ts` practiceHud.onSay bind the subtitle to the
+      confirmed clip/TTS start and cancel with it. Add the trial case to the caption probes
+      (`tests/review/playwright.probes.config.ts` pattern, implementer-owned copy under `tests/e2e/`).
+      verify: `E2E_PORT=5202 npx playwright test tests/e2e/trial.spec.ts --config tests/review/playwright.ipv6.config.ts`
+- [ ] T6.3 (Q7) Captions while the browser suspends audio: implement the answer Edward writes in DECISIONS Q7
+      (pause the game until sound resumes / show captions at once / keep waiting). Keep one caption authority
+      (`src/audio/voiceLines.ts`); `independentPausedCaptions` and `independentSuspendedCancellation` stay green.
+      verify: `npx vitest run tests/review/independentPausedCaptions.test.ts tests/review/independentSuspendedCancellation.test.ts tests/audio`
+- [ ] T6.4 [simple] (Q3 = delete) Remove the nine stale untracked renders in `public/assets/voice/` **only if Q3 says
+      so** (they are gitignored; `voice-cache/` holds all 597 manifest clips, verified 2026-10-19). Then `npm run
+      build` in this checkout must pass without `build:clean`. Update AGENTS.md §3 and the Rules line above.
+      verify: `npm run build`
+- [ ] T6.5 [simple] (Q2 = yes) Delete only the merged local branches listed in `docs/integration/RUN3_REPORT.md`
+      that are **not** checked out in a worktree (`git worktree list` first). Record the list in the commit body.
+      Never touch `origin`. Lift the "never delete branches" rule in Rules to "never delete an unmerged branch".
+      verify: `git branch --merged main | wc -l` smaller than before, every remaining branch either unmerged or in a worktree
+
+Discovered:
+- (empty)
+
+Gate (Edward): answer Q2–Q5, Q7 in `docs/DECISIONS.md` (Q6 Steam is M7+).
+Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
+
+---
+
 ## Gates (Edward) — in the order they unblock work
 
-Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-19 02:20.
+Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-20 21:40.
 
 1. Decisions (`docs/DECISIONS.md`, all still open): Q2 delete the 21 merged local branches; Q3 the nine stale untracked
    renders in `public/assets/voice/` (until then use `npm run build:clean`); Q4 milk gauge target 68–74 °C on
@@ -373,8 +421,9 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
    Google Service Terms §20(d) check.
 9. Q6 Steam (first release or later port; Tauri or Electron; Steam features).
 10. Domain, then press go on v0.1.0 (`git push origin v0.1.0` once M5's tag script exists).
-11. Review loop from 2026-10-19: restart the `review` session in `~/Desktop/nwc-review-2` (it stood down tonight;
-    `chore/review-main-157329e` and `-3aa0828` are merged into main, so nothing of it is left to push).
+11. iPhone Safari check of the Small-text register fix (acceptance F3, `rush.css` `#pos` / `--text-scale`): open Day 2
+    on a phone at Settings → Text size Small and confirm the register sits under the instruction line (AGENTS §10;
+    measured only in Chromium emulation so far).
 
 ## Parked (not before v0.1.0)
 - Jasmine Rush / tea queue, branches as levels, Karen as recurring boss, rival café, staff, seasonal events,
@@ -397,3 +446,7 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
   Scores screen from the title, Gaz's new-best line (+ placeholder clip), weekUi e2e step. Discovered: gate review
   F1–F3 (restart board, score parsing, last good read; fixed, 5 reviewer tests), week.spec wall-clock budget widened,
   the telemetry and save stores share F3's read flaw (replan). Main pushed; M5 not started (Edward).
+- 2026-10-20: acceptance audit of M2–M4 against this file (Codex, eea9fe8): FIX → all ten findings fixed on
+  `fix/acceptance-eea9fe8` and merged 731274f (unit 954/954, E2E 46 passed / 0 failed / 17 opt-in skipped, rushTrace
+  unchanged, gh-pages untouched). M5 released to the agent; M6 added for the DECISIONS-gated fixes; Gates #11 is now
+  the Safari check.
