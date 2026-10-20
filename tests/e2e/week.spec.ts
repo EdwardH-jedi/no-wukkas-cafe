@@ -4,11 +4,13 @@
 // around it: the title's menu (keyboard, Endless Rush unlocking) and the café upgrade shop.
 
 import { expect, test, type Page } from '@playwright/test';
+import { MONDAY_UNSERVED_SECONDS } from './helpers/budgets';
 
 interface Dbg {
   timeScale: number;
   rush: {
     phase: string;
+    serviceTime: number;
     week: { week: number; shiftIndex: number; endless: boolean } | null;
     customers: Array<{ key: string }>;
   } | null;
@@ -66,9 +68,9 @@ test.describe('the week', () => {
   test.setTimeout(300_000);
 
   test('a fresh save plays Monday in week mode; the report is saved', async ({ page }) => {
-    // Waiting out a whole shift at 4x still depends on the frame rate: headless software WebGL
-    // under a busy machine (load ~19) needed 3.6 of the old 4 minutes alone and timed out in the
-    // full suite (todo.md M3/M4 gates). The game time it waits for is unchanged.
+    // Waiting out a whole shift at 4x depends on the frame rate (each frame advances at most 0.1 s
+    // of game time): headless software WebGL under a busy machine (load ~19) is slow. So the wait
+    // below is a game-time budget read from the sim clock; this timeout is only the backstop.
     test.setTimeout(600_000);
     await page.goto('/?voice=0&seed=7&ibis=0');
     await page.getByRole('button', { name: 'The week: shifts' }).click();
@@ -91,12 +93,13 @@ test.describe('the week', () => {
     await expect(page.locator('#rday')).toContainText('Monday');
 
     // Nobody is served: everyone walks out, a disaster. The receipt is kept, the shift isn't.
-    // About 300 s of game time: the same budget as the Day 2 spec's wait for its report.
+    // Wait until the report, or until Monday's service time (with a margin) is spent on the
+    // game's clock, however long that takes on the wall clock.
     await setScale(page, 4);
-    const deadline = Date.now() + 480_000;
-    while (Date.now() < deadline) {
+    for (;;) {
       const d = await dbg(page);
-      if (d.rush?.phase === 'summary') break;
+      if (d.rush?.phase === 'summary' || (d.rush?.serviceTime ?? 0) > MONDAY_UNSERVED_SECONDS)
+        break;
       if (d.rush?.phase === 'intro') await page.mouse.click(640, 300);
       await page.waitForTimeout(250);
     }

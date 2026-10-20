@@ -339,7 +339,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
       `main` equals `origin/main`, then tags `v<package version>` locally and prints the push command (never
       pushes). Test on a temp repo.
       verify: `npx vitest run tests/scripts/releaseTag.test.ts`
-- [ ] T5.5 `tests/e2e/week.spec.ts:68` waits 480 s of wall clock for Monday's report (flaked twice under load ~19).
+- [x] T5.5 `tests/e2e/week.spec.ts:68` waits 480 s of wall clock for Monday's report (flaked twice under load ~19).
       Replace with a game-time budget: poll the sim clock exposed on `window.__trial` and stop when Monday's shift
       time is spent, not when the wall clock is; the test timeout stays 600 s as a backstop. Same assertion as today.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/week.spec.ts --config tests/review/playwright.ipv6.config.ts`
