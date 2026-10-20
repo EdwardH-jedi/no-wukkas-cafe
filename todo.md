@@ -43,9 +43,9 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 current_milestone: M6
 needs_replan: false
 pause_at_gate: true
-branch: local `main` = M5 merge a402c2a + this note, **not pushed** (origin/main = a7b7bb8; the push is Edward's call).
-M5 done 2026-10-20 (T5.1–T5.6, gate review a821fae fixed). M6: every T6.x waits on an open Q in `docs/DECISIONS.md`
-(Q2, Q3, Q4, Q5, Q7), so nothing was built and no `feat/m6-decisions` branch exists. Playtest findings still arrive by
+branch: `main` = origin/main = 87c3f09 (M5 merge a402c2a + the M5 note), pushed.
+M5 done 2026-10-20 (T5.1–T5.6, gate review a821fae fixed). M6: Q2, Q3, Q4, Q5, Q7 answered in `docs/DECISIONS.md`
+(2026-10-20), so T6.1–T6.5 go on `feat/m6-decisions` cut from the commit that records them. Playtest findings still arrive by
 `/plan replan`. One implementer session only, in this checkout; the review session lives in
 `~/Desktop/nwc-review-2` and never edits `src/`.
 

@@ -9,6 +9,141 @@
             "command": "node .claude/hooks/guard-review-tests.mjs"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 1,
+            "command": "curl -s -o /dev/null -m 0.2 -H 'Content-Type: application/json' -H \"X-Agent-Office-Sent: $(perl -MTime::HiRes=time -e 'print int(time*1000)' 2>/dev/null || date +%s000)\" --data-binary @- http://127.0.0.1:4178/ingest || true"
+          }
+        ]
       }
     ]
   }
