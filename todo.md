@@ -434,7 +434,7 @@ untracked run files decided, the two planning docs agreeing. Nothing here needs 
 - [x] T7.2 [simple] `docs/TODO.md` Phase 2 and `docs/integration/balance-hook.md` say "509 events"; the CSV holds 599
       (M5 gate F3). Fix both numbers, nothing else in those files.
       verify: `! grep -rn "509 events" docs/TODO.md docs/integration/balance-hook.md`
-- [ ] T7.3 [simple] Untracked run files: move `OVERNIGHT_TODO_3.md`, `WEEK1_TODO_2.md` to `docs/runs/` and track them;
+- [x] T7.3 [simple] Untracked run files: move `OVERNIGHT_TODO_3.md`, `WEEK1_TODO_2.md` to `docs/runs/` and track them;
       track `docs/integration/RUN2_REPORT.md`, `RUN3_REPORT.md`, `docs/agents/ACCEPTANCE_AUDIT_PROMPT.md`; add
       `.claude/settings.json.pre-agent-office.bak` to `.gitignore`. `git status --short` must be empty afterwards
       (release:tag refuses a dirty tree).

@@ -20,3 +20,6 @@ voice-auditions/
 .autopilot
 .autopilot.count
 STATUS.md
+
+# The agent-office hook installer's backup of the old settings (local only)
+.claude/settings.json.pre-agent-office.bak
