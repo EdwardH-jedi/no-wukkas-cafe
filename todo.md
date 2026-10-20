@@ -379,7 +379,7 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
 Goal: the small src/ changes that have waited on one-line answers since 2026-10-18. Each task names its Q; an
 unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-decisions`, one commit per task.
 
-- [ ] T6.1 (Q4 = yes) Milk gauge target follows the ticket: extra-hot orders show 68–74 °C in `src/ui/gauges.ts`
+- [x] T6.1 (Q4 = yes) Milk gauge target follows the ticket: extra-hot orders show 68–74 °C in `src/ui/gauges.ts`
       instead of the flat-white `TARGET_TEMP`; scoring in `src/sim/rush.ts` already uses 68–74, so only the card
       changes. Test in `tests/ui/gauges.test.ts` (extra-hot ticket → 68–74 label; normal → 55–65).
       verify: `npx vitest run tests/ui/gauges.test.ts`

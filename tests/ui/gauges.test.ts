@@ -1,8 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import { STEP } from '../../src/core/clock';
+import { createRush, emptyRushInput, stepRush } from '../../src/core/rush';
 import { createEspresso } from '../../src/sim/espresso';
-import { MILK_NAME, type Milk } from '../../src/sim/rush';
-import { createSteam } from '../../src/sim/steam';
-import { HANDS_TEXT, handsState, MILK_ICON, milkTag } from '../../src/ui/gauges';
+import { EXTRA_HOT, MILK_NAME, type Milk } from '../../src/sim/rush';
+import { createSteam, TARGET_TEMP } from '../../src/sim/steam';
+import {
+  HANDS_TEXT,
+  handsState,
+  MILK_ICON,
+  milkTag,
+  milkTarget,
+  milkTargetLabel,
+} from '../../src/ui/gauges';
 
 const MILKS = Object.keys(MILK_NAME) as Milk[];
 
@@ -17,6 +26,33 @@ describe('the milk label', () => {
   it('is empty where no carton is chosen (Day 1, practice)', () => {
     expect(milkTag(undefined)).toBe('');
     expect(milkTag(null)).toBe('');
+  });
+});
+
+describe('the milk target (Q4)', () => {
+  it('follows an extra-hot ticket: 68–74 °C, otherwise 55–65 °C', () => {
+    expect(milkTargetLabel(true)).toBe('68–74 °C');
+    expect(milkTargetLabel(false)).toBe('55–65 °C');
+    expect(milkTargetLabel(undefined)).toBe('55–65 °C'); // Day 1 and practice
+    expect(milkTarget(true)).toEqual(EXTRA_HOT);
+    expect(milkTarget(false)).toEqual(TARGET_TEMP);
+  });
+
+  it("reaches the station from the ticket's make action (flat whites only)", () => {
+    const make = (drink: 'flatWhite' | 'longBlack', extraHot?: boolean): boolean => {
+      const r = createRush(3);
+      const i = emptyRushInput();
+      for (let s = 0; s < 2000 && r.phase !== 'service'; s++) stepRush(r, i, STEP);
+      expect(r.phase).toBe('service');
+      i.action = { type: 'make', drink, milk: 'full', extraHot };
+      stepRush(r, i, STEP);
+      expect(r.barista.drink).toBe(drink);
+      return r.barista.extraHot;
+    };
+    expect(make('flatWhite', true)).toBe(true);
+    expect(make('flatWhite', false)).toBe(false);
+    expect(make('flatWhite')).toBe(false);
+    expect(make('longBlack', true)).toBe(false);
   });
 });
 

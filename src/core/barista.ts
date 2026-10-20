@@ -158,6 +158,8 @@ export interface Barista {
   drink: DrinkType | null;
   /** Carton in the jug for this flat white (from the ticket being made). */
   milkType: Milk | null;
+  /** This flat white's ticket says extra hot: the milk gauge's target follows it (68–74 °C). */
+  extraHot: boolean;
   espresso: EspressoState;
   espressoScore: EspressoScore | null;
   steam: SteamState;
@@ -195,6 +197,7 @@ export function createBarista(station: Readonly<StationParams> = BASE_STATION): 
     phaseTime: 0,
     drink: null,
     milkType: null,
+    extraHot: false,
     espresso: createEspresso(),
     espressoScore: null,
     steam: createSteam(),
@@ -260,10 +263,12 @@ export function startDrink(
   type: DrinkType,
   out: BaristaEvent[],
   milk: Milk = 'full',
+  extraHot = false,
 ): boolean {
   if (b.phase !== 'idle' || b.ready) return false;
   b.drink = type;
   b.milkType = type === 'flatWhite' ? milk : null;
+  b.extraHot = type === 'flatWhite' && extraHot;
   b.espresso = createEspresso();
   b.espressoScore = null;
   b.steam = createSteam(); // a cold jug: the milk gauge shows during a flat white's shot

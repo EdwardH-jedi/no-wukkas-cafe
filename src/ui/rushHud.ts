@@ -169,7 +169,13 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   let passDrink: MadeDrink | null = null;
   let passDeg = -1;
   const makeFor = (c: RushCustomer | null): void => {
-    if (c?.heard) cb.action({ type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
+    if (c?.heard)
+      cb.action({
+        type: 'make',
+        drink: c.heard.type,
+        milk: c.heard.milk ?? 'full',
+        extraHot: c.heard.extraHot,
+      });
   };
 
   const railView = createRail(rail, touch, {
