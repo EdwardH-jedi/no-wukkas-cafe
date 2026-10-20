@@ -2,7 +2,7 @@
 
 Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; that file stays as the
 **evidence archive** (every sha, count and screenshot path quoted below is written out there in full).
-`docs/MILESTONES.md` numbers milestones differently (its M1 "Codex re-review" = this file's T2.1).
+`docs/MILESTONES.md` keeps a one-line status per milestone in this file's numbering (its old M0–M7 table is retired).
 
 ## Rules
 
@@ -439,7 +439,7 @@ untracked run files decided, the two planning docs agreeing. Nothing here needs 
       `.claude/settings.json.pre-agent-office.bak` to `.gitignore`. `git status --short` must be empty afterwards
       (release:tag refuses a dirty tree).
       verify: `test -z "$(git status --short)"`
-- [ ] T7.4 [simple] `docs/MILESTONES.md`: replace its M0–M7 table with a pointer to this file's M1–M7 and a one-line
+- [x] T7.4 [simple] `docs/MILESTONES.md`: replace its M0–M7 table with a pointer to this file's M1–M7 and a one-line
       status per milestone (done / current / Edward gate); keep its "Rules" paragraph.
       verify: `grep -q "todo.md" docs/MILESTONES.md && ! grep -q "Codex re-review of 1a54a00" docs/MILESTONES.md`
 - [ ] T7.5 `npm run build` and `npm run build:clean` both exit 0 in this checkout; `npm run deploy` dry run prints the
