@@ -123,10 +123,22 @@ export function createPracticeLoop(app: App): PracticeLoop {
     const { practiceHud, viewTime } = app;
     for (const ev of p.events) {
       if (ev.type === 'say') {
-        practiceHud.onSay(ev.line);
-        owner.onSay(ev.line, viewTime);
-        audio.say({ speaker: 'gaz', text: ev.line.text });
+        const line = ev.line;
+        // The words (and Gaz's gesture) start when the voice does, as in the rush (Q5).
+        audio.say(
+          { speaker: 'gaz', text: line.text },
+          {
+            onStart: () => {
+              practiceHud.onSay(line);
+              owner.onSay(line, app.viewTime);
+            },
+            onStop: () => practiceHud.onStop(),
+          },
+        );
       } else if (ev.type === 'phase') {
+        // Leaving Gaz's demo (skipped, or over) takes his narration with it: a line still loading
+        // must not start, words and all, once you're back at your own cup.
+        if (ev.prev === 'demo') audio.stopVoice();
         practiceHud.onPhase(p);
         canvas.classList.toggle('aim', ev.phase === 'pour');
       } else if (ev.type === 'sfx') sfx.play(ev.id);

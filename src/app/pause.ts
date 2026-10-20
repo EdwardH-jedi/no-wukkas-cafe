@@ -14,12 +14,26 @@ export function setPaused(app: App, p: boolean): void {
   app.rushHud.setPaused(p);
   app.practiceHud.setPaused(p);
   app.audio.setPaused(p);
-  if (p) {
-    app.held = false;
-    app.spaceHeld = false;
-    // A button let go while paused must not read as a click on resume (it would stop the shot).
-    if (app.rush) cancelPress(app.rush.barista);
-  }
+  if (p) releaseHands(app);
+}
+
+/** Let go of everything the player's hands were doing (a held button or Space, a shot press under
+ *  way), as a pause or the sound hold begins or ends. */
+export function releaseHands(app: App): void {
+  app.held = false;
+  app.spaceHeld = false;
+  // A button let go while paused must not read as a click on resume (it would stop the shot).
+  if (app.rush) cancelPress(app.rush.barista);
+}
+
+/** Q7: the browser has sound stopped (autoplay policy, an iOS interruption) while the game runs
+ *  with voices on, so the game holds as if paused: in a listening game patience must never drain
+ *  in silence, and captions keep waiting for the audio. Not the player's pause (the clock's own
+ *  flag and the menu stay as they are), and never on the title screen, where nothing runs down.
+ *  It ends by itself when sound comes back (any click or key asks for it: boot.ts). */
+export function soundHeld(app: App): boolean {
+  if (app.mode === 'trial' && app.trial.phase === 'title') return false;
+  return app.audio.interrupted && app.audio.voiceEnabled && !app.clock.paused;
 }
 
 /** Unpause everything together: game clock, menus and audio (A1: switching days from the pause
@@ -46,6 +60,8 @@ export function replayLast(app: App): void {
     },
     onStop: () => {
       if (mode === 'rush') app.rushHud.onStop();
+      else if (mode === 'practice') app.practiceHud.onStop();
+      else app.hud.onStop();
     },
   });
 }

@@ -99,7 +99,8 @@ export type RushAction =
   | { type: 'clarify'; field: OrderField }
   /** Print the ticket with what the player heard. */
   | { type: 'ringUp'; order: Order }
-  | { type: 'make'; drink: DrinkType; milk?: Milk }
+  /** Make a ticket's drink: its carton, and whether it says extra hot (the milk gauge's target). */
+  | { type: 'make'; drink: DrinkType; milk?: Milk; extraHot?: boolean }
   | { type: 'serve'; customer: string }
   | { type: 'bin' }
   | { type: 'next' }

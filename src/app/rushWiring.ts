@@ -109,7 +109,13 @@ export function rushKey(app: App, r: Rush, k: string, e: KeyboardEvent): void {
   else if (k === 'f' || k === 'l') {
     // Make the oldest ticket (F) or the oldest long black (L), with the milk it says.
     const c = nextTicket(r, k === 'l' ? 'longBlack' : undefined);
-    if (c?.heard) rushAct(app, { type: 'make', drink: c.heard.type, milk: c.heard.milk ?? 'full' });
+    if (c?.heard)
+      rushAct(app, {
+        type: 'make',
+        drink: c.heard.type,
+        milk: c.heard.milk ?? 'full',
+        extraHot: c.heard.extraHot,
+      });
   } else if (k === 'b') rushAct(app, { type: 'bin' });
   else if (k === 'i' && ibisPresent(app.ibis)) app.ibisShoo = true;
   else if (eventOwnsKey(r, k)) {

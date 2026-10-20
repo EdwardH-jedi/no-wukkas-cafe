@@ -1,0 +1,37 @@
+{
+  "normal": {
+    "current": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+    "previous": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+    "matches": true
+  },
+  "hard": {
+    "current": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+    "previous": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+    "matches": true
+  },
+  "easy": {
+    "current": "f4065c58885c4122e4c40ca5652e86af91f89348",
+    "previous": "f4065c58885c4122e4c40ca5652e86af91f89348",
+    "matches": true
+  },
+  "aids": {
+    "current": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+    "previous": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+    "matches": true
+  },
+  "misheard": {
+    "current": "9cb0c12941833c576d9f797b618c271d93ddf528",
+    "previous": "9cb0c12941833c576d9f797b618c271d93ddf528",
+    "matches": true
+  },
+  "hurry": {
+    "current": "d975462d381d8b61e57311db657d280d7a302bff",
+    "previous": "d975462d381d8b61e57311db657d280d7a302bff",
+    "matches": true
+  },
+  "idle": {
+    "current": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+    "previous": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+    "matches": true
+  }
+}

@@ -7,7 +7,7 @@
 import { DOSE_TARGET, SHOT_TARGET, type EspressoState } from '../sim/espresso';
 import { SURF_HIGH, SURF_LOW, type PourState } from '../sim/latte/field';
 import { HEIGHT_MAX, PITCHER_MILK, pitcherFlow, type PitcherState } from '../sim/latte/pitcher';
-import { LONG_BLACK_WATER, MILK_NAME, type Milk } from '../sim/rush';
+import { EXTRA_HOT, LONG_BLACK_WATER, MILK_NAME, type Milk } from '../sim/rush';
 import { AERATION_TARGET, TARGET_TEMP, type SteamState } from '../sim/steam';
 
 export type GaugeMode = '' | 'grind' | 'shot' | 'shotSteam' | 'steam' | 'pour' | 'water';
@@ -21,6 +21,20 @@ export interface GaugeView {
   water?: number;
   /** Day 2: the carton in the jug for this flat white (from the ticket being made). */
   milkType?: Milk | null;
+  /** Day 2: the ticket being made says extra hot, so the milk's target is 68–74 °C. */
+  extraHot?: boolean;
+}
+
+/** The milk gauge's target zone: an extra-hot ticket's (what that drink is scored against),
+ *  otherwise the flat white's. Day 1 and practice never ask for extra hot. */
+export function milkTarget(extraHot: boolean | undefined): readonly [number, number] {
+  return extraHot ? EXTRA_HOT : TARGET_TEMP;
+}
+
+/** The milk card's target as it reads: "55–65 °C", or "68–74 °C" on an extra-hot ticket. */
+export function milkTargetLabel(extraHot: boolean | undefined): string {
+  const [lo, hi] = milkTarget(extraHot);
+  return `${lo}–${hi} °C`;
 }
 
 /** A shape for each carton, so the milk reads without colour (and without reading the word). */
@@ -67,12 +81,15 @@ const shotCard = (
 ): string => `<div class="gauge"><div class="k"><span>Shot timer</span><span>25–31 s</span></div><div class="v" data-g="sv">0<small>s</small></div>
         <div class="bar"><div class="zone" style="left:${pct(SHOT_TARGET[0], 0, 45)}%;width:${pct(SHOT_TARGET[1], 0, 45) - pct(SHOT_TARGET[0], 0, 45)}%"></div><div class="needle" data-g="sn"></div></div>
         <div class="tagRow"><div class="tag" data-g="st"></div><button type="button" class="gstop hide" data-g="ss">${touch ? 'Stop' : 'Stop · Enter'}</button></div></div>`;
-const MILK_CARD = `<div class="gauge"><div class="k"><span>Milk<span data-g="mk"></span></span><span>55–65 °C</span></div>
-        <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:${pct(TARGET_TEMP[0], 0, 85)}%;height:${pct(TARGET_TEMP[1], 0, 85) - pct(TARGET_TEMP[0], 0, 85)}%"></div><div class="needle" data-g="mtn"></div></div>
+const milkCard = (extraHot: boolean): string => {
+  const [lo, hi] = milkTarget(extraHot);
+  return `<div class="gauge"><div class="k"><span>Milk<span data-g="mk"></span></span><span>${milkTargetLabel(extraHot)}</span></div>
+        <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:${pct(lo, 0, 85)}%;height:${pct(hi, 0, 85) - pct(lo, 0, 85)}%"></div><div class="needle" data-g="mtn"></div></div>
         <div style="flex:1"><div class="v" data-g="mv">5<small>°C</small></div>
         <div class="k" style="margin-top:6px"><span>Foam</span><span>silky</span></div>
         <div class="bar"><div class="zone" style="left:${AERATION_TARGET[0] * 100}%;width:${(AERATION_TARGET[1] - AERATION_TARGET[0]) * 100}%"></div><div class="needle" data-g="mfn"></div></div>
         <div class="tag" data-g="mt"></div></div></div></div>`;
+};
 
 /** `onStop`: the shot card's Stop button was pressed (Day 2 two hands). */
 export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => void): Gauges {
@@ -81,8 +98,11 @@ export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => voi
   // What the milk label and the two-hands strip show (null: rebuilt, write on the next update).
   let milkShown: Milk | '' | null = null;
   let handsShown: Hands | null = null;
-  const build = (mode: GaugeMode): void => {
+  // The ticket's extra hot the cards were built for (the milk card's target follows it).
+  let hotBuilt = false;
+  const build = (mode: GaugeMode, hot: boolean): void => {
     gaugeMode = mode;
+    hotBuilt = hot;
     milkShown = null;
     handsShown = null;
     let html = '';
@@ -92,8 +112,8 @@ export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => voi
         <div class="tag" data-g="t"></div></div>`;
     else if (mode === 'shot') html = shotCard(touch);
     else if (mode === 'shotSteam')
-      html = `<div class="hands" role="status" data-g="hands"></div>${shotCard(touch)}${MILK_CARD}`;
-    else if (mode === 'steam') html = MILK_CARD;
+      html = `<div class="hands" role="status" data-g="hands"></div>${shotCard(touch)}${milkCard(hot)}`;
+    else if (mode === 'steam') html = milkCard(hot);
     else if (mode === 'pour')
       html = `<div class="gauge"><div class="k"><span>Jug height</span><span data-g="hv"></span></div>
         <div class="vgauge"><div class="vbar"><div class="zone" style="bottom:0;height:${pct(SURF_LOW, 0, HEIGHT_MAX)}%"></div><div class="zone mid" style="bottom:${pct(SURF_LOW, 0, HEIGHT_MAX)}%;height:${pct(SURF_HIGH, 0, HEIGHT_MAX) - pct(SURF_LOW, 0, HEIGHT_MAX)}%"></div><div class="needle" data-g="hn"></div></div>
@@ -130,7 +150,8 @@ export function createGauges(el: HTMLElement, touch: boolean, onStop?: () => voi
 
   return {
     update(mode, v, stoppable = false) {
-      if (mode !== gaugeMode) build(mode);
+      const hot = v.extraHot === true;
+      if (mode !== gaugeMode || hot !== hotBuilt) build(mode, hot);
       const e = v.espresso;
       if (mode === 'grind') {
         setText('v', `${e.dose.toFixed(1)}<small>g</small>`);

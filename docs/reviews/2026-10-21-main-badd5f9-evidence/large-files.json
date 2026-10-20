@@ -1,0 +1,26 @@
+[
+  {
+    "file": "src/core/trial.ts",
+    "lines": 687
+  },
+  {
+    "file": "src/world/station.ts",
+    "lines": 894
+  },
+  {
+    "file": "src/world/owner.ts",
+    "lines": 623
+  },
+  {
+    "file": "src/dev/dev.css",
+    "lines": 839
+  },
+  {
+    "file": "src/data/ownerLines.ts",
+    "lines": 937
+  },
+  {
+    "file": "src/data/voice/manifest.json",
+    "lines": 14933
+  }
+]

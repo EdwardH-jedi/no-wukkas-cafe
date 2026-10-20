@@ -284,7 +284,7 @@ export function stepRush(r: Rush, input: RushInput, dt: number): void {
       else if (a?.type === 'replay' || a?.type === 'repeat' || a?.type === 'clarify')
         listenAction(r, a);
       else if (a?.type === 'ringUp') ringUp(r, a.order);
-      else if (a?.type === 'make') startDrink(r.barista, a.drink, baristaOut, a.milk);
+      else if (a?.type === 'make') startDrink(r.barista, a.drink, baristaOut, a.milk, a.extraHot);
       else if (a?.type === 'serve') serve(r, a.customer);
       else if (a?.type === 'bin') {
         if (binDrink(r.barista, baristaOut)) gaz(r, 'rush.binned', 'react');

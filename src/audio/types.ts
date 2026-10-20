@@ -84,6 +84,9 @@ export interface AudioManager {
   stopSpeaker(speaker: string): void;
   setPaused(p: boolean): void;
   readonly paused: boolean;
+  /** The browser has sound stopped (autoplay policy, an iOS interruption) while the game isn't
+   *  paused, after the first unlock. Any click or key asks for it back (boot.ts). */
+  readonly interrupted: boolean;
   /** Download clips ahead of time (not decoded until played). */
   prefetch(reqs: readonly VoiceRequest[]): void;
   volume(bus: Bus): number;

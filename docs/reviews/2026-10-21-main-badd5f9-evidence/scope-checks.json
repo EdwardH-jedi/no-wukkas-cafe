@@ -1,0 +1,9 @@
+{
+  "src_and_scripts_mismatches_against_target": [],
+  "main_audio_unchanged_during_review": true,
+  "asset_snapshot_matches_main": true,
+  "target": "badd5f949d36440519688cf4b104ab3d806e3c9e",
+  "non_audio_dist_bytes": 1563838,
+  "review_test_sha256": "e19133ee3f50985499fca7f8622ef406cc043c73e9c9c2ece64845c057bfc46c",
+  "review_test_copy_identical": true
+}

@@ -1,0 +1,5 @@
+{
+  "command": "npx vitest run tests/scripts/audioGate.test.ts tests/review/audioGateBuild.test.ts --configLoader native --no-cache",
+  "exit": 0,
+  "seconds": 0.81
+}

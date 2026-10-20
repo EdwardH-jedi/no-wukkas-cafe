@@ -1,0 +1,5 @@
+{
+  "command": "grep -rnE 'Math\\.random|Date\\.now|setTimeout' src/sim src/core",
+  "exit": 1,
+  "seconds": 0.02
+}

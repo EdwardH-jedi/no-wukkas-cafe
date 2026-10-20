@@ -9,6 +9,7 @@ import { consumeFrame, STEP, tickStep } from '../core/clock';
 import { stepTrial } from '../core/trial';
 import type { App } from './context';
 import { clearEdges } from './input';
+import { releaseHands, soundHeld } from './pause';
 import { createPracticeLoop } from './practiceWiring';
 import { createRushLoop } from './rushWiring';
 import { trialFrame } from './trialWiring';
@@ -24,10 +25,23 @@ export function createFrameDriver(app: App, sampleInput: () => void): FrameDrive
   const { clock, audio, music, input, trial } = app;
   const rushLoop = createRushLoop(app);
   const practiceLoop = createPracticeLoop(app);
+  let heldShown = false;
 
   return {
     frame(elapsed) {
       const real = Math.min(0.1, Math.max(0, elapsed)) * app.timeScale;
+      // Q7: while the browser has sound stopped the game holds (no steps, a still view) and its
+      // "Sound stopped" card shows. As it begins or ends the hands let go (a press under way
+      // mustn't end as a click), and input given meanwhile or on the frame it ends is dropped: the
+      // click or key that brought the sound back is not also a move.
+      const held = soundHeld(app);
+      const ended = heldShown && !held;
+      if (held !== heldShown) {
+        heldShown = held;
+        app.soundHint.classList.toggle('hide', !held);
+        releaseHands(app);
+      }
+      if (held || ended) clearEdges(app);
       // While the current line's clip is still downloading/decoding, hold that line's clock (A3).
       // One deadline, on the audio clock: the manager gives a clip LOAD_TIMEOUT of AudioContext
       // time (frozen while paused) and then hands the line to the browser voice, so `loading`
@@ -35,7 +49,7 @@ export function createFrameDriver(app: App, sampleInput: () => void): FrameDrive
       // freeze the game. No second cap on the (scaled) game clock: one ran out first and let a
       // newer line drop the order.
       input.voiceHold = audio.loading && !clock.paused;
-      const steps = consumeFrame(clock, real);
+      const steps = held ? 0 : consumeFrame(clock, real);
       for (let i = 0; i < steps; i++) {
         sampleInput();
         if (app.mode === 'rush' && app.rush) rushLoop.step(app.rush);
@@ -44,7 +58,7 @@ export function createFrameDriver(app: App, sampleInput: () => void): FrameDrive
         clearEdges(app);
         tickStep(clock);
       }
-      const dt = clock.paused ? 0 : real;
+      const dt = clock.paused || held ? 0 : real;
       app.viewTime += dt;
       app.voiceLevel = audio.voiceLevel();
       audio.update();

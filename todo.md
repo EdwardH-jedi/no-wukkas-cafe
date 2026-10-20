@@ -13,7 +13,7 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
   caller still runs the verify.
 - Branches: each milestone works on `feat/m<n>-<slug>` cut from `main` (T2.1 is the exception: it lands an
   existing branch). The milestone gate merges `--no-ff` into `main`, runs the full E2E, pushes `main`
-  **fast-forward only**. Never force-push, never delete branches, never `pull --rebase` onto main.
+  **fast-forward only**. Never force-push, never delete an unmerged branch (Q2), never `pull --rebase` onto main.
 - Hook-denied paths (`.claude/hooks/guard-review-tests.mjs`): `tests/review/independent*.ts`,
   `tests/review/*.browser.ts`, `tests/review/playwright.*.config.ts`, `tests/fuzz/**`. Make them green from
   `src/`; if one asserts something `docs/DECISIONS.md` now makes false, `SendMessage` the `review` session.
@@ -24,9 +24,8 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
   milestone gate: `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts`
   (~30 min, run in the background; 127.0.0.1:5196 is held by a foreign server; never edit `src/` while it runs).
   The task that started the E2E waits for it to finish before merging or ticking; the next task never starts while it runs.
-- `npm run build` in this checkout fails on nine stale untracked renders in `public/assets/voice/` (Q3). A build
-  verify uses a clean export (`git archive HEAD | tar -x -C <scratch>` + symlinked `node_modules`) until Q3 is
-  answered; T3.1 scripts that.
+- `npm run build` works in this checkout again (Q3: T6.4 deleted the nine stale untracked renders in
+  `public/assets/voice/`). `npm run build:clean` (T3.1) still builds HEAD alone from a `git archive` export.
 - Voice placeholders: any task that edits a spoken line (`src/data/ownerLines.ts`, `src/data/customers.ts`,
   `src/data/dialogue/gazEvents.ts`, `src/data/voice/script.ts`) puts the new key in `AWAITING_RENDER` and is
   followed by a `[simple]` task: `npm run voices -- --only <speaker>` (macOS), commit the **manifest only**
@@ -379,31 +378,40 @@ exits 0 and `npm run release:check` prints the per-speaker summary and exits 1 f
 Goal: the small src/ changes that have waited on one-line answers since 2026-10-18. Each task names its Q; an
 unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-decisions`, one commit per task.
 
-- [ ] T6.1 (Q4 = yes) Milk gauge target follows the ticket: extra-hot orders show 68–74 °C in `src/ui/gauges.ts`
+- [x] T6.1 (Q4 = yes) Milk gauge target follows the ticket: extra-hot orders show 68–74 °C in `src/ui/gauges.ts`
       instead of the flat-white `TARGET_TEMP`; scoring in `src/sim/rush.ts` already uses 68–74, so only the card
       changes. Test in `tests/ui/gauges.test.ts` (extra-hot ticket → 68–74 label; normal → 55–65).
       verify: `npx vitest run tests/ui/gauges.test.ts`
-- [ ] T6.2 (Q5 = yes) Day 1 trial and practice captions start with the voice (the rush rule from A2):
+- [x] T6.2 (Q5 = yes) Day 1 trial and practice captions start with the voice (the rush rule from A2):
       `src/app/trialWiring.ts` hud.onSay and `src/app/practiceWiring.ts` practiceHud.onSay bind the subtitle to the
       confirmed clip/TTS start and cancel with it. Add the trial case to the caption probes
       (`tests/review/playwright.probes.config.ts` pattern, implementer-owned copy under `tests/e2e/`).
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/trial.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T6.3 (Q7) Captions while the browser suspends audio: implement the answer Edward writes in DECISIONS Q7
+- [x] T6.3 (Q7) Captions while the browser suspends audio: implement the answer Edward writes in DECISIONS Q7
       (pause the game until sound resumes / show captions at once / keep waiting). Keep one caption authority
       (`src/audio/voiceLines.ts`); `independentPausedCaptions` and `independentSuspendedCancellation` stay green.
       verify: `npx vitest run tests/review/independentPausedCaptions.test.ts tests/review/independentSuspendedCancellation.test.ts tests/audio`
-- [ ] T6.4 [simple] (Q3 = delete) Remove the nine stale untracked renders in `public/assets/voice/` **only if Q3 says
+- [x] T6.4 [simple] (Q3 = delete) Remove the nine stale untracked renders in `public/assets/voice/` **only if Q3 says
       so** (they are gitignored; `voice-cache/` holds all 597 manifest clips, verified 2026-10-19). Then `npm run
       build` in this checkout must pass without `build:clean`. Update AGENTS.md §3 and the Rules line above.
       verify: `npm run build`
-- [ ] T6.5 [simple] (Q2 = yes) Delete only the merged local branches listed in `docs/integration/RUN3_REPORT.md`
+- [x] T6.5 [simple] (Q2 = yes) Delete only the merged local branches listed in `docs/integration/RUN3_REPORT.md`
       that are **not** checked out in a worktree (`git worktree list` first). Record the list in the commit body.
       Never touch `origin`. Lift the "never delete branches" rule in Rules to "never delete an unmerged branch".
-      verify: `git branch --merged main | wc -l` smaller than before, every remaining branch either unmerged or in a worktree
+      verify: `git branch --merged main | wc -l` smaller than before (59 → 38), and none of Q2's 21 names is a local
+      branch any more (the gate review's F4 narrowed this to what Q2 answered; newer branches are a separate Q)
 
 Discovered:
 - (2026-10-20) Skipped this run, nothing built: T6.1 (Q4), T6.2 (Q5), T6.3 (Q7), T6.4 (Q3), T6.5 (Q2). Every one of
   those Qs is still `[ ]` in `docs/DECISIONS.md`.
+- (2026-10-21) Q2–Q5, Q7 answered; T6.1–T6.5 built. T6.5 deleted Q2's list only (the 21 in RUN3_REPORT). 16 newer
+  local branches are also merged into main and in no worktree: chore/decisions-q1,
+  chore/review-main-{0cae2cf,157329e,3aa0828,6941c37,7192583,eba0ec7}, feat/m2-leftovers, feat/m3-playtest-ready,
+  feat/m4-leaderboard, feat/m5-release-prep, fix/m4-gate, fix/review-{0cae2cf,6941c37,7192583,eba0ec7}.
+- Q for Edward (not Q2's scope): delete those 16 merged branches too, same rules (no worktree, never origin)?
+- (2026-10-21) T6.3 judgement call: the sound hold applies with voices on only (voices off, captions show at once and
+  nothing waits on sound). Device check of the "Sound stopped" card on iPhone Safari (a call or Siri mid-shift) is
+  Edward's (Gates #5).
 
 Gate (Edward): answer Q2–Q5, Q7 in `docs/DECISIONS.md` (Q6 Steam is M7+).
 Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
