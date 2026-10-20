@@ -13,6 +13,7 @@ An unanswered question is not a blocker: mark the item `[!]` and move on. Format
 - [x] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build — delete them? → yes, delete (voice-cache/ holds all 597 manifest clips, verified 2026-10-19) (2026-10-20)
 - [x] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)? → yes (2026-10-20)
 - [x] Q5 (impl): Day 1 trial and practice captions get the rush's "start with the voice" rule? → yes (2026-10-20)
+- [x] Q8 (impl, 2026-10-21): delete the 16 newer merged local branches listed under todo.md M6 Discovered, same rules as Q2? → yes, same rules (no worktree, never origin)
 - [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?
 
 ## Open (independent review of 0cae2cf, 2026-10-18)

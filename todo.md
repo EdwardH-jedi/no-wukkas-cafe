@@ -39,13 +39,13 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: none (M6 was the last; next work comes from the Gates below or `/plan replan`)
+current_milestone: M7
 needs_replan: false
 pause_at_gate: true
-branch: local `main` = M6 merge be3f7fc + this note, **not pushed** (origin/main = 87c3f09; the push is Edward's call).
-M6 done 2026-10-21 (T6.1–T6.5 on `feat/m6-decisions`, gate review 9a9262c fixed). Playtest findings still arrive by
-`/plan replan`. One implementer session only, in this checkout; the review session lives in
-`~/Desktop/nwc-review-2` and never edits `src/`.
+branch: local `main` = 665534a, **not pushed** (origin/main = 87c3f09, 13 ahead; Edward pushes). M6 done 2026-10-21
+(T6.1–T6.5, gate review 9a9262c fixed, full E2E green). M7 is housekeeping only: no `src/` change, no new feature.
+After M7 the agent backlog is empty until the playtest lands (`/plan replan`) or Edward opens a gate. One implementer
+session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2` and never edits `src/`.
 
 ---
 
@@ -417,12 +417,44 @@ Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
 
 ---
 
+## M7 — Housekeeping before the playtest build (no src/ changes)
+
+Goal: a clean repo for `npm run deploy -- --push` and `npm run release:tag`: stale numbers fixed, merged branches gone,
+untracked run files decided, the two planning docs agreeing. Nothing here needs a Codex gate review; `npm test` and
+`npm run build` by exit code are the gate. Branch `chore/m7-housekeeping`, one commit per task.
+
+- [ ] T7.1 [simple] (Q8 = yes) Delete the 16 merged local branches listed under M6 Discovered, same rules as T6.5 (merged
+      into main, not in any worktree, never origin); list them in the commit body. Then `git worktree prune`.
+      verify: `git branch --merged main | grep -vE '^\*|main' | while read b; do git worktree list | grep -q " \[$b\]" || echo "LEFT $b"; done` prints nothing
+- [ ] T7.2 [simple] `docs/TODO.md` Phase 2 and `docs/integration/balance-hook.md` say "509 events"; the CSV holds 599
+      (M5 gate F3). Fix both numbers, nothing else in those files.
+      verify: `! grep -rn "509 events" docs/TODO.md docs/integration/balance-hook.md`
+- [ ] T7.3 [simple] Untracked run files: move `OVERNIGHT_TODO_3.md`, `WEEK1_TODO_2.md` to `docs/runs/` and track them;
+      track `docs/integration/RUN2_REPORT.md`, `RUN3_REPORT.md`, `docs/agents/ACCEPTANCE_AUDIT_PROMPT.md`; add
+      `.claude/settings.json.pre-agent-office.bak` to `.gitignore`. `git status --short` must be empty afterwards
+      (release:tag refuses a dirty tree).
+      verify: `test -z "$(git status --short)"`
+- [ ] T7.4 [simple] `docs/MILESTONES.md`: replace its M0–M7 table with a pointer to this file's M1–M7 and a one-line
+      status per milestone (done / current / Edward gate); keep its "Rules" paragraph.
+      verify: `grep -q "todo.md" docs/MILESTONES.md && ! grep -q "Codex re-review of 1a54a00" docs/MILESTONES.md`
+- [ ] T7.5 `npm run build` and `npm run build:clean` both exit 0 in this checkout; `npm run deploy` dry run prints the
+      Pages URL and the file count; `npm run release:tag` refuses with the **voice** reason only (not a dirty tree).
+      Paste the four exit codes and the refusal line into the commit body of the todo tick.
+      verify: `npm run build && npm run build:clean && npm run deploy && (npm run release:tag; test $? -eq 1)`
+
+Discovered:
+- (empty)
+
+Gate (Edward): push `main`; then Gates 2–11 below.
+Done when: `git status --short` empty, `npm test` green, every T7.x ticked.
+
+---
+
 ## Gates (Edward) — in the order they unblock work
 
-Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-20 21:40.
+Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-21 03:55.
 
-1. Decisions: Q2–Q5, Q7 answered 2026-10-20 and built in M6. Open: delete the 16 newer merged local branches listed
-   under M6 Discovered too (not Q2's scope)? Push local `main` (be3f7fc) and, if wanted, `chore/review-main-badd5f9`.
+1. Push local `main` (665534a → after M7, its tip). Q8 (the 16 newer merged branches) answered yes 2026-10-21 → T7.1.
 2. Feel-test `feat/latte-feel` (`cd ../nwc-p1c && npx vite --port 5195 --strictPort`) so 1C can merge; decide 1.5.6
    (pull-through thins only at ≥ 3.0 cm).
 3. Publish the playtest build: `npm run deploy -- --push` (dry run prints https://edwardh-jedi.github.io/no-wukkas-cafe/;
@@ -484,3 +516,6 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
   stops Gaz's voice, F4 T6.5's verify narrowed to Q2). Merged --no-ff into local main be3f7fc (unit 127 files / 991
   tests, full E2E 55 passed / 17 opt-in skipped / 0 failed in 38.5 min), not pushed. Discovered: 16 newer merged
   branches (Q for Edward).
+- 2026-10-21: M6 done (gauge 68–74 on extra-hot, Day 1/practice captions with the voice, "Sound stopped" hold, nine
+  stale renders gone so `npm run build` works in the checkout, 21 branches deleted; gate review 4 red → fixed; full
+  E2E green). Agent backlog after this: M7 housekeeping only. Everything else is a Gate (Edward).
