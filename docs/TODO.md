@@ -245,7 +245,7 @@ Goal: `npm run balance` is real and the week has a curve. Owns `src/data/{week,u
   - Exit on dd40dba: `npm run typecheck && npm run lint && npm test` exit 0: `Test Files  64 passed (64)` ·
     `Tests  544 passed (544)`. `E2E_PORT=5179 npm run test:e2e` on 6af8048: `1 failed · 27 passed (29.2m)`, the
     shop spec still buying at $450/$150 (`week.spec.ts:210`), fixed in 2ae2cbf. On dd40dba: `28 passed (24.1m)`, exit 0.
-  - Findings, not done: (1) QUEUE_JUMP fired 0 times in 509 events. Not the cap (an extra poll slot was tried
+  - Findings, not done: (1) QUEUE_JUMP fired 0 times in 599 events. Not the cap (an extra poll slot was tried
     and changed nothing, so it wasn't shipped): the bots press "Take order" the moment someone steps up, so no
     line forms (`queue` ≥ 2 at 0 of 347 polls). A bot that doesn't take orders mid-drink sees it in ~10–15 % of
     events. Edward's call, balance-hook.md §2: bot register reaction time + retune, or wait for playtest numbers

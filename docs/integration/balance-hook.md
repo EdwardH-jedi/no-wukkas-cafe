@@ -41,7 +41,7 @@ before), plus tests that the last event carries into the next shift and is never
 
 ## 2. QUEUE_JUMP never fires in the balance runs (finding, not a Phase 2 target)
 
-In `docs/balance/2026-10-16.csv` (90 weeks, 509 events) QUEUE_JUMP fired 0 times: JUST_COFFEE 159,
+In `docs/balance/2026-10-16.csv` (90 weeks, 599 events) QUEUE_JUMP fired 0 times: JUST_COFFEE 159,
 THE_NAME 155, CHANGE_MIND 148, RARE_BIRD 96, CALL_MANAGER 39, WRONG_MILK 2, THE_USUAL 0. THE_USUAL
 is expected (week 1 never reaches affinity 2). QUEUE_JUMP isn't.
 
