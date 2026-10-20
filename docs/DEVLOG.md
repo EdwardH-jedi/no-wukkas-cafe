@@ -88,7 +88,7 @@ First-try pass rate per shift, from that CSV:
 | average | 100 % | 100 % | 100 % | 80 % | 60 % |
 | expert | 100 % | 100 % | 100 % | 100 % | 100 % |
 
-- **No line ever forms at the register, so QUEUE_JUMP never fires.** It fired 0 times in 509 events. The bots press
+- **No line ever forms at the register, so QUEUE_JUMP never fires.** It fired 0 times in 599 events. The bots press
   "Take order" the moment someone steps up, so the backlog builds up as tickets and never as a queue; QUEUE_JUMP needs
   two people in the queue. A bot that leaves the register alone while its hands are busy sees it in about one event in
   ten (10–15 %, `docs/integration/balance-hook.md` §2). Edward chose to let the playtest measure how long real players leave
