@@ -1,0 +1,5 @@
+{
+  "command": "git log --stat --format=fuller 26beded..badd5f9",
+  "exit": 0,
+  "seconds": 0.03
+}

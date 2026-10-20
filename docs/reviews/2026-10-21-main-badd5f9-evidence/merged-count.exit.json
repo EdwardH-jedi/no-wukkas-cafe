@@ -1,0 +1,4 @@
+{
+  "command": "git branch --merged main | wc -l",
+  "exit": 0
+}

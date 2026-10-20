@@ -1,0 +1,4 @@
+{
+  "command": "git diff 26beded..badd5f9 -- src",
+  "exit": 0
+}

@@ -1,0 +1,4 @@
+{
+  "command": "rg -n '(^import.*(world/|ui/|audio/|three)|\\b(window|document)\\b)' src/sim; git diff --name-only 26beded..badd5f9 -- src/sim src/core/save; git status --short; node --version; npm --version",
+  "exit": 0
+}

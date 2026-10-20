@@ -1,0 +1,206 @@
+{
+  "main": "26bededc2bf0b363af92c1e972b0f3bd549ed7e4",
+  "merged_local_count": 38,
+  "worktree_branches": [
+    "chore/merge-day1-pull-through",
+    "chore/p1-ownership",
+    "chore/review-acceptance-6bc2b4d",
+    "chore/review-main-a821fae",
+    "chore/split-main",
+    "chore/split-styles",
+    "feat/audio-qa-hardening",
+    "feat/bin-chicken",
+    "feat/day1-replay",
+    "feat/day2-orders",
+    "feat/latte-art-polish",
+    "feat/latte-feel",
+    "feat/m6-decisions",
+    "feat/service-hud",
+    "feat/shell-screens",
+    "feat/ship-segments",
+    "feat/telemetry",
+    "feat/voice-audition-v2",
+    "feat/voice-release",
+    "fix/acceptance-eea9fe8",
+    "fix/event-hooks",
+    "fix/p4-audio",
+    "fix/p4-gate",
+    "fix/review03",
+    "integrate/week1",
+    "overnight/2026-10-15",
+    "qa/cross-browser",
+    "test/phase4-review",
+    "test/week-ui-e2e",
+    "worktree-agent-a91596cb9c1df665f",
+    "worktree-agent-ae2bad2e4e8198058"
+  ],
+  "merged_without_worktree": [
+    "chore/decisions-q1",
+    "chore/review-main-0cae2cf",
+    "chore/review-main-157329e",
+    "chore/review-main-3aa0828",
+    "chore/review-main-6941c37",
+    "chore/review-main-7192583",
+    "chore/review-main-eba0ec7",
+    "feat/m2-leftovers",
+    "feat/m3-playtest-ready",
+    "feat/m4-leaderboard",
+    "feat/m5-release-prep",
+    "fix/m4-gate",
+    "fix/review-0cae2cf",
+    "fix/review-6941c37",
+    "fix/review-7192583",
+    "fix/review-eba0ec7",
+    "main"
+  ],
+  "approved_deletions": [
+    {
+      "branch": "balance/week1",
+      "tip": "5484d87",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "chore/review-main-1a54a00",
+      "tip": "8333240",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "chore/worktrees",
+      "tip": "c5e10d5",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "claude/recursing-perlman-d9d838",
+      "tip": "a47f701",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "docs/devlog",
+      "tip": "b3fd5ee",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "docs/queue-jump-decision",
+      "tip": "9b77c8e",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "docs/steam-spike",
+      "tip": "79fc8cb",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "docs/todo-phase4-5-evidence",
+      "tip": "1a54a00",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/a11y",
+      "tip": "5aa1d4a",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/cafe-bgm",
+      "tip": "a068305",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/day1-barista-trial",
+      "tip": "5b92312",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/day2-morning-rush",
+      "tip": "6b8e0ae",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/voice-casting",
+      "tip": "b962a04",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "feat/voice-listening",
+      "tip": "70ca3fd",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "fix/audio-integration",
+      "tip": "9338436",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "fix/day1-pull-through",
+      "tip": "4718592",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "fix/day2-first-shift",
+      "tip": "6c1be7f",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "fix/phase1-5-polish",
+      "tip": "7d4cd01",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "refactor/audio-manager",
+      "tip": "89a8e98",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "refactor/frame-driver",
+      "tip": "4c8467d",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    },
+    {
+      "branch": "voice/phase3",
+      "tip": "e7bcb46",
+      "exists": false,
+      "in_worktree": false,
+      "tip_ancestor_of_main": true
+    }
+  ],
+  "stale_upstream": "1b9c74b34b12c41f473878045885bdabbca77ae8"
+}

@@ -1,0 +1,5 @@
+{
+  "command": "node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts",
+  "exit": 0,
+  "seconds": 4.25
+}
