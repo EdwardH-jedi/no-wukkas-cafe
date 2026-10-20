@@ -431,7 +431,7 @@ untracked run files decided, the two planning docs agreeing. Nothing here needs 
       (was: `git branch --merged main | grep -vE '^\*|main' | while read b; …` prints nothing. That printed every
       branch checked out in another worktree as LEFT, because `git branch` marks them `+ `, and its `main` filter
       dropped every `chore/review-main-*` name, so it could never pass and never checked 6 of the 16)
-- [ ] T7.2 [simple] `docs/TODO.md` Phase 2 and `docs/integration/balance-hook.md` say "509 events"; the CSV holds 599
+- [x] T7.2 [simple] `docs/TODO.md` Phase 2 and `docs/integration/balance-hook.md` say "509 events"; the CSV holds 599
       (M5 gate F3). Fix both numbers, nothing else in those files.
       verify: `! grep -rn "509 events" docs/TODO.md docs/integration/balance-hook.md`
 - [ ] T7.3 [simple] Untracked run files: move `OVERNIGHT_TODO_3.md`, `WEEK1_TODO_2.md` to `docs/runs/` and track them;
