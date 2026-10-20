@@ -39,12 +39,11 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M6
+current_milestone: none (M6 was the last; next work comes from the Gates below or `/plan replan`)
 needs_replan: false
 pause_at_gate: true
-branch: `main` = origin/main = 87c3f09 (M5 merge a402c2a + the M5 note), pushed.
-M5 done 2026-10-20 (T5.1–T5.6, gate review a821fae fixed). M6: Q2, Q3, Q4, Q5, Q7 answered in `docs/DECISIONS.md`
-(2026-10-20), so T6.1–T6.5 go on `feat/m6-decisions` cut from the commit that records them. Playtest findings still arrive by
+branch: local `main` = M6 merge be3f7fc + this note, **not pushed** (origin/main = 87c3f09; the push is Edward's call).
+M6 done 2026-10-21 (T6.1–T6.5 on `feat/m6-decisions`, gate review 9a9262c fixed). Playtest findings still arrive by
 `/plan replan`. One implementer session only, in this checkout; the review session lives in
 `~/Desktop/nwc-review-2` and never edits `src/`.
 
@@ -422,16 +421,16 @@ Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
 
 Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-20 21:40.
 
-1. Decisions (`docs/DECISIONS.md`, all still open): Q2 delete the 21 merged local branches; Q3 the nine stale untracked
-   renders in `public/assets/voice/` (until then use `npm run build:clean`); Q4 milk gauge target 68–74 °C on
-   extra-hot tickets; Q5 Day 1 / practice captions start with the voice; Q7 captions while the browser suspends audio.
+1. Decisions: Q2–Q5, Q7 answered 2026-10-20 and built in M6. Open: delete the 16 newer merged local branches listed
+   under M6 Discovered too (not Q2's scope)? Push local `main` (be3f7fc) and, if wanted, `chore/review-main-badd5f9`.
 2. Feel-test `feat/latte-feel` (`cd ../nwc-p1c && npx vite --port 5195 --strictPort`) so 1C can merge; decide 1.5.6
    (pull-through thins only at ≥ 3.0 cm).
 3. Publish the playtest build: `npm run deploy -- --push` (dry run prints https://edwardh-jedi.github.io/no-wukkas-cafe/;
    `origin/gh-pages` today is the old db4c056 site) — or pick another host / a custom domain (`-- --domain <host>`).
 4. Privacy-friendly analytics: which provider, or none (nothing is wired).
 5. Device pass: iPhone Safari + a mid-range Android (audio unlock, pinch, key remap, Export log download, the phone
-   register and subtitle layout from M2, the Scores screen).
+   register and subtitle layout from M2, the Scores screen; M6: the "Sound stopped" card after a call or Siri
+   mid-shift, and the extra-hot milk card).
 6. Playtest: 3–5 testers with `docs/playtests/README.md`; notes in `docs/playtests/<date>.md`, logs in
    `docs/playtests/logs/`; then `npm run playtest:summary -- docs/playtests/logs/*.json` and `/plan replan`.
 7. Online leaderboard yes/no (needs a backend; M4 is local only).
@@ -477,3 +476,11 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
   errors (fixed), balance-hook.md and docs/TODO.md say 509 events where the CSV has 599, release:tag refuses here
   until the untracked reports and the outside .claude/settings.json change are dealt with. M6 skipped whole: Q2, Q3,
   Q4, Q5, Q7 still open.
+- M6 done 2026-10-21: Edward answered Q2–Q5, Q7 (26beded, with the agent-office hooks). T6.1 milk card follows an
+  extra-hot ticket (68–74 °C); T6.2 Day 1 and practice subtitles start with the voice (+ Day 1 caption probe); T6.3 the
+  game holds under a "Sound stopped" card while the browser has sound stopped (voices on, not on the title); T6.4 the
+  nine stale renders deleted, `npm run build` works in this checkout; T6.5 Q2's 21 merged branches deleted. Gate review
+  9a9262c (Codex): P2 3 / P3 1, 4 red, all fixed (F1–F2 hands let go at both edges of the hold, F3 leaving the demo
+  stops Gaz's voice, F4 T6.5's verify narrowed to Q2). Merged --no-ff into local main be3f7fc (unit 127 files / 991
+  tests, full E2E 55 passed / 17 opt-in skipped / 0 failed in 38.5 min), not pushed. Discovered: 16 newer merged
+  branches (Q for Edward).
