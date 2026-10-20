@@ -6,7 +6,9 @@
 //      it for a tree that isn't the one being tagged;
 //   2. HEAD is main, and main equals origin/main after a fetch;
 //   3. the tag doesn't exist yet and the version is plain semver;
-//   4. `npm run release:check` passes (every voice clip licensed, then the build with the audio gate).
+//   4. `npm run release:check` passes (every voice clip licensed, then the build with the audio gate);
+//   5. after the check, 1 and 2 still hold and main is still the commit that was checked. The tag
+//      goes on that commit.
 //
 //   npm run release:tag
 //
@@ -32,19 +34,25 @@ function git(a: readonly string[]): { ok: boolean; out: string; err: string } {
   return { ok: r.status === 0, out: r.stdout.trimEnd(), err: r.stderr.trim() };
 }
 
-const status = git(['status', '--porcelain', '--untracked-files=all']);
-if (!status.ok) refuse(`git status failed: ${status.err}`);
-if (status.out)
-  refuse(`the working tree is not clean (commit, move or ignore these):\n${status.out}`);
+/** Gates 1 and 2; returns the commit main is on. `when` names the pass in a refusal. */
+function preflight(when: string): string {
+  const no = (msg: string): never => refuse(`${msg}${when}`);
+  const status = git(['status', '--porcelain', '--untracked-files=all']);
+  if (!status.ok) no(`git status failed: ${status.err}`);
+  if (status.out)
+    no(`the working tree is not clean (commit, move or ignore these)${when}:\n${status.out}`);
+  const head = git(['symbolic-ref', '--quiet', '--short', 'HEAD']).out;
+  if (head !== BRANCH) no(`HEAD is ${head || 'detached'}, not ${BRANCH}`);
+  const fetched = git(['fetch', '--quiet', REMOTE, `${BRANCH}:refs/remotes/${REMOTE}/${BRANCH}`]);
+  if (!fetched.ok) no(`could not fetch ${REMOTE} ${BRANCH}: ${fetched.err}`);
+  const local = git(['rev-parse', `${BRANCH}^{commit}`]).out;
+  const remote = git(['rev-parse', `${REMOTE}/${BRANCH}^{commit}`]).out;
+  if (local !== remote)
+    no(`${BRANCH} (${local.slice(0, 7)}) is not ${REMOTE}/${BRANCH} (${remote.slice(0, 7)})`);
+  return local;
+}
 
-const head = git(['symbolic-ref', '--quiet', '--short', 'HEAD']).out;
-if (head !== BRANCH) refuse(`HEAD is ${head || 'detached'}, not ${BRANCH}`);
-const fetched = git(['fetch', '--quiet', REMOTE, `${BRANCH}:refs/remotes/${REMOTE}/${BRANCH}`]);
-if (!fetched.ok) refuse(`could not fetch ${REMOTE} ${BRANCH}: ${fetched.err}`);
-const local = git(['rev-parse', BRANCH]).out;
-const remote = git(['rev-parse', `${REMOTE}/${BRANCH}`]).out;
-if (local !== remote)
-  refuse(`${BRANCH} (${local.slice(0, 7)}) is not ${REMOTE}/${BRANCH} (${remote.slice(0, 7)})`);
+const checked = preflight('');
 
 const { version } = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
   version?: unknown;
@@ -59,7 +67,14 @@ console.log(`release:tag: ${CHECK}`);
 const check = spawnSync(CHECK, { cwd, shell: true, stdio: 'inherit' });
 if (check.status !== 0) refuse(`the release check failed (exit ${check.status}); nothing tagged`);
 
-const tagged = git(['tag', '-a', tag, '-m', `No Wukkas Café ${version as string}`, BRANCH]);
+// The check takes minutes, and the tree, main or origin/main can move meanwhile: run the gates again
+// and tag the commit that was checked, never the branch name (todo.md M5 gate review F1).
+const now = preflight(' after the release check; nothing tagged');
+if (now !== checked)
+  refuse(
+    `${BRANCH} moved during the release check (${checked.slice(0, 7)} → ${now.slice(0, 7)}); nothing tagged`,
+  );
+const tagged = git(['tag', '-a', tag, '-m', `No Wukkas Café ${version as string}`, checked]);
 if (!tagged.ok) refuse(`git tag failed: ${tagged.err}`);
-console.log(`release:tag: tagged ${tag} at ${local.slice(0, 7)} (local only, nothing pushed)`);
+console.log(`release:tag: tagged ${tag} at ${checked.slice(0, 7)} (local only, nothing pushed)`);
 console.log(`release:tag: to publish it: git push ${REMOTE} ${tag}`);
