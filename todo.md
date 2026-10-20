@@ -325,7 +325,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
       for Gaz/Jiwoo/Mei), then the build line. Errors stay listed above it; exit code unchanged.
       (`scripts/voices-check.ts`; test case in `tests/scripts/voicesCheck.test.ts`.)
       verify: `npx vitest run tests/scripts/voicesCheck.test.ts`
-- [ ] T5.2 Version and changelog: `package.json` version `0.1.0`; `CHANGELOG.md` with one section
+- [x] T5.2 Version and changelog: `package.json` version `0.1.0`; `CHANGELOG.md` with one section
       "0.1.0 (unreleased)" listing the user-visible items of M2–M4 and the Phases in `docs/TODO.md` (one line
       each, no shas; curating that list is judgement, so not `[simple]`). Test `tests/scripts/version.test.ts`:
       version matches `^\d+\.\d+\.\d+$` and the changelog names it.
