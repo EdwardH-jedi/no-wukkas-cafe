@@ -63,7 +63,7 @@ Voice clips are **placeholders** (Apple system voices, personal-use only): they 
 
 **Audio review pages (dev server only, never built):** `/dev/casting.html` (voice casting: auditions side by side, ratings, decisions → JSON; docs/VOICE_CASTING.md) and `/dev/listening.html` (café sound lab: the three music moods on the real engine, bus volumes, ducking under real dialogue, loudness/true-peak/clipping/DC measurement, listening notes → `reports/listening-notes.json`; docs/AUDIO_PROVENANCE.md).
 
-**Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder line clips are removed, while a placeholder listed in the segment manifest fails the build. `npm run release:check` (fails while any placeholder voice remains) is the ship check.
+**Audio release gate:** every production build scans `dist/` and fails if any audio file has no verified licence (`docs/AUDIO_PROVENANCE.md`); placeholder line clips are removed, while a placeholder listed in the segment manifest fails the build. So does any clip in the gitignored `public/assets/voice/` that no manifest or `provenance.json` names: delete it (Q3, 2026-10-21: the nine stale renders that broke `npm run build` in a checkout are gone; `build:clean` still builds HEAD alone). `npm run release:check` (fails while any placeholder voice remains) is the ship check.
 
 Prototype only: `npx serve prototype` then open `/game.html` (needs internet for the Three.js CDN).
 

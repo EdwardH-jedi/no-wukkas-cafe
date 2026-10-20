@@ -24,9 +24,8 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
   milestone gate: `E2E_PORT=5202 npm run test:e2e -- --config tests/review/playwright.ipv6.config.ts`
   (~30 min, run in the background; 127.0.0.1:5196 is held by a foreign server; never edit `src/` while it runs).
   The task that started the E2E waits for it to finish before merging or ticking; the next task never starts while it runs.
-- `npm run build` in this checkout fails on nine stale untracked renders in `public/assets/voice/` (Q3). A build
-  verify uses a clean export (`git archive HEAD | tar -x -C <scratch>` + symlinked `node_modules`) until Q3 is
-  answered; T3.1 scripts that.
+- `npm run build` works in this checkout again (Q3: T6.4 deleted the nine stale untracked renders in
+  `public/assets/voice/`). `npm run build:clean` (T3.1) still builds HEAD alone from a `git archive` export.
 - Voice placeholders: any task that edits a spoken line (`src/data/ownerLines.ts`, `src/data/customers.ts`,
   `src/data/dialogue/gazEvents.ts`, `src/data/voice/script.ts`) puts the new key in `AWAITING_RENDER` and is
   followed by a `[simple]` task: `npm run voices -- --only <speaker>` (macOS), commit the **manifest only**
@@ -392,7 +391,7 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
       (pause the game until sound resumes / show captions at once / keep waiting). Keep one caption authority
       (`src/audio/voiceLines.ts`); `independentPausedCaptions` and `independentSuspendedCancellation` stay green.
       verify: `npx vitest run tests/review/independentPausedCaptions.test.ts tests/review/independentSuspendedCancellation.test.ts tests/audio`
-- [ ] T6.4 [simple] (Q3 = delete) Remove the nine stale untracked renders in `public/assets/voice/` **only if Q3 says
+- [x] T6.4 [simple] (Q3 = delete) Remove the nine stale untracked renders in `public/assets/voice/` **only if Q3 says
       so** (they are gitignored; `voice-cache/` holds all 597 manifest clips, verified 2026-10-19). Then `npm run
       build` in this checkout must pass without `build:clean`. Update AGENTS.md §3 and the Rules line above.
       verify: `npm run build`
