@@ -14,12 +14,16 @@ export function setPaused(app: App, p: boolean): void {
   app.rushHud.setPaused(p);
   app.practiceHud.setPaused(p);
   app.audio.setPaused(p);
-  if (p) {
-    app.held = false;
-    app.spaceHeld = false;
-    // A button let go while paused must not read as a click on resume (it would stop the shot).
-    if (app.rush) cancelPress(app.rush.barista);
-  }
+  if (p) releaseHands(app);
+}
+
+/** Let go of everything the player's hands were doing (a held button or Space, a shot press under
+ *  way), as a pause or the sound hold begins or ends. */
+export function releaseHands(app: App): void {
+  app.held = false;
+  app.spaceHeld = false;
+  // A button let go while paused must not read as a click on resume (it would stop the shot).
+  if (app.rush) cancelPress(app.rush.barista);
 }
 
 /** Q7: the browser has sound stopped (autoplay policy, an iOS interruption) while the game runs

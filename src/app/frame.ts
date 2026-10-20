@@ -9,7 +9,7 @@ import { consumeFrame, STEP, tickStep } from '../core/clock';
 import { stepTrial } from '../core/trial';
 import type { App } from './context';
 import { clearEdges } from './input';
-import { soundHeld } from './pause';
+import { releaseHands, soundHeld } from './pause';
 import { createPracticeLoop } from './practiceWiring';
 import { createRushLoop } from './rushWiring';
 import { trialFrame } from './trialWiring';
@@ -31,14 +31,17 @@ export function createFrameDriver(app: App, sampleInput: () => void): FrameDrive
     frame(elapsed) {
       const real = Math.min(0.1, Math.max(0, elapsed)) * app.timeScale;
       // Q7: while the browser has sound stopped the game holds (no steps, a still view) and its
-      // "Sound stopped" card shows. Input given meanwhile is dropped: the click or key that brings
-      // sound back is not also a move.
+      // "Sound stopped" card shows. As it begins or ends the hands let go (a press under way
+      // mustn't end as a click), and input given meanwhile or on the frame it ends is dropped: the
+      // click or key that brought the sound back is not also a move.
       const held = soundHeld(app);
+      const ended = heldShown && !held;
       if (held !== heldShown) {
         heldShown = held;
         app.soundHint.classList.toggle('hide', !held);
+        releaseHands(app);
       }
-      if (held) clearEdges(app);
+      if (held || ended) clearEdges(app);
       // While the current line's clip is still downloading/decoding, hold that line's clock (A3).
       // One deadline, on the audio clock: the manager gives a clip LOAD_TIMEOUT of AudioContext
       // time (frozen while paused) and then hands the line to the browser voice, so `loading`
