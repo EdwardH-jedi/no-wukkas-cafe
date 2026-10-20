@@ -185,9 +185,16 @@ if (release) {
     const clips = m.clips.filter((c) => c.characterId === s);
     const held = clips.filter((c) => c.source?.placeholder !== false).length;
     const [a, b] = [held, clips.length].map((x) => String(x).padStart(digits));
+    // No placeholders isn't ready on its own: the speaker's clips must pass the release checks too.
+    const codes = new Map<string, number>();
+    for (const i of issues)
+      if (i.level === 'error' && i.id?.startsWith(`${s}:`))
+        codes.set(i.code, (codes.get(i.code) ?? 0) + 1);
+    const errors = [...codes.values()].reduce((t, n) => t + n, 0);
+    const list = [...codes].map(([k, n]) => `${k} ${n}`).join(', ');
     console.log(
       `  ${s.padEnd(width)}  ${a} of ${b} clips are placeholders → ` +
-        (held ? step(CAST[s]) : 'ready'),
+        (held ? step(CAST[s]) : errors ? `not ready: ${errors} error(s) (${list})` : 'ready'),
     );
   }
   console.log(

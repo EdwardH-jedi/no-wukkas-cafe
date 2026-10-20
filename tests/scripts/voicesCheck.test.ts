@@ -145,7 +145,9 @@ describe('npm run voices:check: the segment manifest', () => {
 });
 
 describe('npm run release:check: the per-speaker summary', () => {
-  // The committed line manifest with Karen's clips licensed, so one row reads "ready".
+  // The committed line manifest with Karen's clips as licensed release audio (her Google voice, no
+  // pitch shift), so one row reads "ready"; a speaker without placeholders but with release errors
+  // is not ready (tests/review/independentM5.test.ts).
   const committed = JSON.parse(
     readFileSync(join(root, 'src/data/voice/manifest.json'), 'utf8'),
   ) as VoiceManifest;
@@ -157,6 +159,9 @@ describe('npm run release:check: the per-speaker summary', () => {
             ...c,
             source: {
               ...c.source,
+              engine: 'google-tts',
+              voice: CAST.karen!.voice,
+              pitch: 1,
               placeholder: false,
               licence: 'test',
               provenance: 'licensed_tts' as const,
