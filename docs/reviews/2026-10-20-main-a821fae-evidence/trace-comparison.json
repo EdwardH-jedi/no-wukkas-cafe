@@ -1,0 +1,76 @@
+{
+  "2026-10-19-acceptance-6bc2b4d": {
+    "normal": {
+      "sha1": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "hard": {
+      "sha1": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "easy": {
+      "sha1": "f4065c58885c4122e4c40ca5652e86af91f89348",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "aids": {
+      "sha1": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "misheard": {
+      "sha1": "9cb0c12941833c576d9f797b618c271d93ddf528",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "hurry": {
+      "sha1": "d975462d381d8b61e57311db657d280d7a302bff",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "idle": {
+      "sha1": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+      "same": true,
+      "same_withoutGone": true
+    }
+  },
+  "2026-10-19-main-eba0ec7": {
+    "normal": {
+      "sha1": "c565b78d766c5ba56ecd8392abd023854b279cd1",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "hard": {
+      "sha1": "884d6e217f4bd585a5f9b6978bc98a006cf38905",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "easy": {
+      "sha1": "f4065c58885c4122e4c40ca5652e86af91f89348",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "aids": {
+      "sha1": "dbbb564067f0e0c74eb796726e3686f27618ada8",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "misheard": {
+      "sha1": "9cb0c12941833c576d9f797b618c271d93ddf528",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "hurry": {
+      "sha1": "d975462d381d8b61e57311db657d280d7a302bff",
+      "same": true,
+      "same_withoutGone": true
+    },
+    "idle": {
+      "sha1": "90a50992c8d385091bb9c22a3e4455d5d9b93c2f",
+      "same": true,
+      "same_withoutGone": true
+    }
+  }
+}
