@@ -330,7 +330,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
       each, no shas; curating that list is judgement, so not `[simple]`). Test `tests/scripts/version.test.ts`:
       version matches `^\d+\.\d+\.\d+$` and the changelog names it.
       verify: `npx vitest run tests/scripts/version.test.ts`
-- [ ] T5.3 Devlog: `docs/DEVLOG.md` gains "What the bots got wrong" from the data already in the repo: the
+- [x] T5.3 Devlog: `docs/DEVLOG.md` gains "What the bots got wrong" from the data already in the repo: the
       balance curve vs the Phase 2 findings (QUEUE_JUMP never fires for instant bots, novice drop-off, failed
       shifts still pay tips) and how `npm run playtest:summary` closes the loop; playtest numbers are added by
       the replan when they exist.

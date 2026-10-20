@@ -73,6 +73,41 @@ shift: first-try pass rate, walk-outs, satisfaction, tips, serve time, events pe
 Because the sim is pure and seeded, a change's effect on the week is the diff of two runs, and economy or event
 changes ship with that diff in the commit. `npm run pace` does the same for Day 2's pacing.
 
+## What the bots got wrong
+
+The bots are guesses until people play. The novice skill is the latency measured from a first-time player; average
+and expert are made up (`tests/helpers/rushBot.ts` `SKILLS`). Phase 2 tuned Thursday, Friday and the upgrade prices
+against them (`docs/TODO.md` Phase 2), and the run it ended on, `docs/balance/2026-10-16.csv` (30 seeds × 3 profiles),
+already shows three places where the bots and the game disagree.
+
+First-try pass rate per shift, from that CSV:
+
+| | Mon | Tue | Wed | Thu | Fri |
+| --- | --- | --- | --- | --- | --- |
+| novice | 90 % | 63 % | 37 % | 0 % | 0 % |
+| average | 100 % | 100 % | 100 % | 80 % | 60 % |
+| expert | 100 % | 100 % | 100 % | 100 % | 100 % |
+
+- **No line ever forms at the register, so QUEUE_JUMP never fires.** It fired 0 times in 509 events. The bots press
+  "Take order" the moment someone steps up, so the backlog builds up as tickets and never as a queue; QUEUE_JUMP needs
+  two people in the queue. A bot that leaves the register alone while its hands are busy sees it in about one event in
+  ten (10–15 %, `docs/integration/balance-hook.md` §2). Edward chose to let the playtest measure how long real players leave
+  someone standing there instead of guessing a second number. Until then the balance runs say nothing about queue
+  patience.
+- **The novice curve falls off a cliff.** 90 % on Monday, 37 % by Wednesday, nobody passes Thursday or Friday first
+  try. Either the novice guess is too slow or the middle of the week is too steep for a first-timer, and the bots
+  can't tell which.
+- **A failed shift still pays its tips, so failing pays.** Over the week the novice bot earns $70.82 in tips on
+  average, $51.77 of it in shifts it failed, against $52.24 for the average bot, which rarely fails and plays fewer
+  shifts (10.8 attempts against 5.8). Replaying a failed shift is a tip farm.
+
+`npm run playtest:summary` is how the playtest answers these (`docs/playtests/README.md`). Each tester exports the
+playtest log from Settings, and the summary adds the files up: the register wait (median and max, seconds before
+"Take order") and walk-outs at the register give the reaction time the bots lack; walk-outs by stage and the quit
+points show where real players give up in the week; accuracy per field and pardons per order check the bots' mishear
+rates. Tips and grades aren't in the summary tables yet, but every shift record in the exported log carries its grade
+and tips, so the failed-shift tips can be read from the same files. Playtest numbers go here once there are some.
+
 ## Tests at four levels
 
 - **Unit and seeded fuzz (Vitest):** sim rules, core state machines, save migration, generated content; the fuzz
