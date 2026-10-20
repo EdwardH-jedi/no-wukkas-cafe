@@ -1,0 +1,31 @@
+
+> no-wukkas-cafe@0.1.0 playtest:summary
+> node scripts/playtest-summary.ts /Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-empty.json
+
+## Playtest summary
+
+| | |
+| --- | --- |
+| Logs · sessions | 1 · 0 |
+| Day 1 trials | 0: hired 0, almost 0, failed 0, disaster 0, unfinished 0 |
+| Shifts | 0 (Day 2 0, week 0, Endless 0), 0 to the report |
+| Customers · served · walk-outs · shown the door | 0 · 0 · 0 · 0 |
+| Walk-outs by stage | queue 0 · register 0 · ordering 0 · ticket 0 |
+| Drinks handed back | 0 |
+| Pardons (replays · repeats · questions) | 0 · 0 · 0 |
+| Pardons per order | – (0 orders heard) |
+| Register wait (median · max) | – · – |
+| Time to serve (median · max) | – · – |
+
+### Accuracy per field (what was rung up vs. what was said)
+
+| Field | Right | Heard | |
+| --- | --- | --- | --- |
+| drink | 0 | 0 | – |
+| milk | 0 | 0 | – |
+| temp | 0 | 0 | – |
+| heart | 0 | 0 | – |
+
+### Quit points
+
+None: every record ran to its end.

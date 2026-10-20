@@ -1,0 +1,13 @@
+diff --git a/scripts/deploy.ts b/scripts/deploy.ts
+index d7e50e8..44cd073 100644
+--- a/scripts/deploy.ts
++++ b/scripts/deploy.ts
+@@ -53,7 +53,7 @@ else {
+   const b = spawnSync(process.execPath, [join(ROOT, 'scripts/build-clean.ts')], {
+     cwd: ROOT,
+     stdio: 'inherit',
+-    env: { ...process.env, NWC_BASE: site.base, NWC_SITE_URL: site.url ?? '' },
++    env: { ...process.env, NWC_BASE: "/", NWC_SITE_URL: site.url ?? '' },
+   });
+   if (b.status !== 0) fail(`the build failed (exit ${b.status}); nothing deployed`);
+   dist = join(ROOT, 'dist');

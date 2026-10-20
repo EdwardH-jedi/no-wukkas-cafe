@@ -1,0 +1,318 @@
+[
+  {
+    "name": "browser-expanded",
+    "command": [
+      "npx",
+      "vitest",
+      "run",
+      "tests/review/independentAcceptanceBrowser.test.ts",
+      "--reporter=verbose"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 1
+  },
+  {
+    "name": "new-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "voice-files",
+    "command": [
+      "npm",
+      "run",
+      "voices:check"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 1
+  },
+  {
+    "name": "rush-trace",
+    "command": [
+      "node",
+      "--import",
+      "./tests/review/nodeReviewLoader.mjs",
+      "tests/review/recomputeRushTrace.ts"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "event-rates",
+    "command": [
+      "npx",
+      "vitest",
+      "run",
+      "tests/review/independentFuzz.test.ts",
+      "tests/review/independentSlowAudio.test.ts",
+      "--reporter=verbose"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "task-verifiers",
+    "command": [
+      "npx",
+      "vitest",
+      "run",
+      "tests/core/regularAffinity.test.ts",
+      "tests/core/week/progress.test.ts",
+      "tests/review/independentSuspendedCancellation.test.ts",
+      "tests/review/independentKeys.test.ts",
+      "tests/review/independentPausedCaptions.test.ts",
+      "tests/audio/manager.test.ts",
+      "tests/scripts/indexMeta.test.ts",
+      "tests/scripts/deploy.test.ts",
+      "tests/sim/telemetrySummary.test.ts",
+      "tests/review/independentM3.test.ts",
+      "tests/review/independentM4.test.ts",
+      "tests/sim/scores.test.ts",
+      "tests/core/save/scores.test.ts",
+      "tests/app/scores.test.ts",
+      "tests/ui/scores.test.ts",
+      "tests/ui/screens.test.ts",
+      "tests/ui/shiftReport.test.ts",
+      "tests/sim/owner.test.ts",
+      "tests/data/voice.test.ts",
+      "--reporter=verbose"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "summary-sample",
+    "command": [
+      "npm",
+      "run",
+      "playtest:summary",
+      "--",
+      "tests/fixtures/telemetry/sample.json"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "summary-duplicate",
+    "command": [
+      "npm",
+      "run",
+      "playtest:summary",
+      "--",
+      "tests/fixtures/telemetry/sample.json",
+      "tests/fixtures/telemetry/sample.json"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "summary-empty",
+    "command": [
+      "npm",
+      "run",
+      "playtest:summary",
+      "--",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-empty.json"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 0
+  },
+  {
+    "name": "summary-version",
+    "command": [
+      "npm",
+      "run",
+      "playtest:summary",
+      "--",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-version.json"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 1
+  },
+  {
+    "name": "summary-corrupt",
+    "command": [
+      "npm",
+      "run",
+      "playtest:summary",
+      "--",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-corrupt.json"
+    ],
+    "cwd": "/Users/edwardhwang/Desktop/nwc-review-2",
+    "exit": 1
+  },
+  {
+    "name": "historical-unit-8333240",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/8333240",
+    "exit": 1
+  },
+  {
+    "name": "historical-unit-ef9071d",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/ef9071d",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-4d33c22",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/4d33c22",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-b78c3a4",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/b78c3a4",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-4c4d72d",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/4c4d72d",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-c05d257",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/c05d257",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-8320cad",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/8320cad",
+    "exit": 0
+  },
+  {
+    "name": "historical-unit-4282cf1",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/4282cf1",
+    "exit": 0
+  },
+  {
+    "name": "balance3-3aa0828-parent",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--seeds",
+      "3",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance3-3aa0828-parent.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/3aa0828-parent",
+    "exit": 0
+  },
+  {
+    "name": "balance3-6bc2b4d",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--seeds",
+      "3",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance3-6bc2b4d.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/6bc2b4d",
+    "exit": 0
+  },
+  {
+    "name": "balance3-932563d-parent",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--seeds",
+      "3",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance3-932563d-parent.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/932563d-parent",
+    "exit": 0
+  },
+  {
+    "name": "balance30-14827e0-parent",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance30-14827e0-parent.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/14827e0-parent",
+    "exit": 0
+  },
+  {
+    "name": "balance30-14827e0",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance30-14827e0.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/14827e0",
+    "exit": 0
+  },
+  {
+    "name": "balance30-7586668-parent",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance30-7586668-parent.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/7586668-parent",
+    "exit": 0
+  },
+  {
+    "name": "balance30-7586668",
+    "command": [
+      "npm",
+      "run",
+      "balance",
+      "--",
+      "--out",
+      "/Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/balance30-7586668.csv"
+    ],
+    "cwd": "/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-archives-0ehpm76e/7586668",
+    "exit": 0
+  }
+]

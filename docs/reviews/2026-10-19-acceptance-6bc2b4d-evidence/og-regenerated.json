@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "scripts/og-image.ts"
+  ],
+  "exit": 0,
+  "dimensions": [
+    1200,
+    630
+  ],
+  "bytes": 242869,
+  "sha256": "6597599849354f79bb9cc03b5ece0866b1592e07dc9862420585ffe29299576d"
+}

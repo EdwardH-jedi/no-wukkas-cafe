@@ -1,0 +1,274 @@
+{
+  "counts": {
+    "-": 18,
+    "\u2718": 9,
+    "\u2713": 26
+  },
+  "tests": [
+    {
+      "status": "-",
+      "number": 1,
+      "test": "tests/e2e/a11yEvidence.spec.ts:124:5 \u203a Phase 7 accessibility evidence \u203a d: reduced motion is respected at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 2,
+      "test": "tests/e2e/a11yEvidence.spec.ts:150:5 \u203a Phase 7 accessibility evidence \u203a a: subtitles on (default) and off at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 3,
+      "test": "tests/e2e/a11yEvidence.spec.ts:191:5 \u203a Phase 7 accessibility evidence \u203a b: text size small, medium, large at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 4,
+      "test": "tests/e2e/a11yEvidence.spec.ts:258:5 \u203a Phase 7 accessibility evidence \u203a c: milk on tickets and the pass, not colour alone, at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 5,
+      "test": "tests/e2e/a11yEvidence.spec.ts:320:5 \u203a Phase 7 accessibility evidence \u203a e: remap the main action key, saved in the v3 save, at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 6,
+      "test": "tests/e2e/a11yEvidence.spec.ts:124:5 \u203a Phase 7 accessibility evidence \u203a d: reduced motion is respected at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 7,
+      "test": "tests/e2e/a11yEvidence.spec.ts:150:5 \u203a Phase 7 accessibility evidence \u203a a: subtitles on (default) and off at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 8,
+      "test": "tests/e2e/a11yEvidence.spec.ts:191:5 \u203a Phase 7 accessibility evidence \u203a b: text size small, medium, large at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 9,
+      "test": "tests/e2e/a11yEvidence.spec.ts:258:5 \u203a Phase 7 accessibility evidence \u203a c: milk on tickets and the pass, not colour alone, at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 10,
+      "test": "tests/e2e/a11yEvidence.spec.ts:320:5 \u203a Phase 7 accessibility evidence \u203a e: remap the main action key, saved in the v3 save, at 1024x640"
+    },
+    {
+      "status": "\u2718",
+      "number": 11,
+      "test": "tests/e2e/audio.spec.ts:38:1 \u203a pressing Start makes Gaz audibly speak; pause, replay and failure feedback work (26.1s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 12,
+      "test": "tests/e2e/audio.spec.ts:124:1 \u203a a voice clip that fails to load is reported, not silent (5.7s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 13,
+      "test": "tests/e2e/audioSmoke.spec.ts:105:3 \u203a voice on \u203a owner speaks after Start; subtitles and the sim follow the audio; output path active (16.0s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 14,
+      "test": "tests/e2e/audioSmoke.spec.ts:154:3 \u203a voice on \u203a a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause (19.1s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 15,
+      "test": "tests/e2e/audioSmoke.spec.ts:237:3 \u203a voice on \u203a a customer clip that fails to load falls back to the browser voice; the order still moves on (12.9s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 16,
+      "test": "tests/e2e/audioState.spec.ts:89:3 \u203a audio state (Codex A1, A2, A3, A7) \u203a A1: pausing, going to the title and starting again keeps the audio running (26.1s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 17,
+      "test": "tests/e2e/audioState.spec.ts:114:3 \u203a audio state (Codex A1, A2, A3, A7) \u203a A2: a clip that fails while paused waits for resume before the browser voice speaks (13.3s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 18,
+      "test": "tests/e2e/audioState.spec.ts:147:3 \u203a audio state (Codex A1, A2, A3, A7) \u203a A3: a slow order clip holds the register until the order has been heard (31.5s)"
+    },
+    {
+      "status": "\u2718",
+      "number": 19,
+      "test": "tests/e2e/audioState.spec.ts:191:3 \u203a audio state (Codex A1, A2, A3, A7) \u203a A7: the browser-voice fallback uses the Voices volume (12.9s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 20,
+      "test": "tests/e2e/casting.spec.ts:156:1 \u203a casting page: identity cards, missing assets, waveforms, one take at a time, decisions (9.6s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 21,
+      "test": "tests/e2e/ibis.spec.ts:45:3 \u203a bin chicken \u203a three presses of I see it out; Gaz reacts; draw calls stay in budget (37.8s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 22,
+      "test": "tests/e2e/ibis.spec.ts:66:3 \u203a bin chicken \u203a clicking the bird shoos it too (29.5s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 23,
+      "test": "tests/e2e/latteRegression.spec.ts:136:1 \u203a latte regression: a recorded perfect pour keeps its score band (1.2m)"
+    },
+    {
+      "status": "\u2718",
+      "number": 24,
+      "test": "tests/e2e/listening.spec.ts:87:1 \u203a sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes (20.6s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 25,
+      "test": "tests/e2e/listening.spec.ts:176:1 \u203a the three moods: no clipping, no DC offset, even loudness, orders above the music (7.7s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 26,
+      "test": "tests/e2e/music.spec.ts:25:1 \u203a music plays, follows the day and ducks under an order (24.7s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 27,
+      "test": "tests/e2e/perf.spec.ts:41:3 \u203a fewer than 150 draw calls with three customers in the caf\u00e9 at 1024x640 (48.6s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 28,
+      "test": "tests/e2e/perf.spec.ts:41:3 \u203a fewer than 150 draw calls with three customers in the caf\u00e9 at 390x844 (31.7s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 29,
+      "test": "tests/e2e/phoneHud.spec.ts:96:5 \u203a phone HUD \u203a register clear of the instruction at 390x844 (14.0s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 30,
+      "test": "tests/e2e/phoneHud.spec.ts:96:5 \u203a phone HUD \u203a register clear of the instruction at 375x667 (13.9s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 31,
+      "test": "tests/e2e/phoneHud.spec.ts:114:5 \u203a phone HUD \u203a subtitle box inside the screen at text size s (390x844) (27.7s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 32,
+      "test": "tests/e2e/phoneHud.spec.ts:114:5 \u203a phone HUD \u203a subtitle box inside the screen at text size m (390x844) (27.7s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 33,
+      "test": "tests/e2e/phoneHud.spec.ts:114:5 \u203a phone HUD \u203a subtitle box inside the screen at text size l (390x844) (27.6s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 34,
+      "test": "tests/e2e/phoneHud.spec.ts:137:3 \u203a phone HUD \u203a the desktop register keeps its place at 1024x640 (14.2s)"
+    },
+    {
+      "status": "-",
+      "number": 35,
+      "test": "tests/e2e/polishEvidence.spec.ts:114:5 \u203a Phase 1.5 evidence \u203a 1.5.1 + 1.5.2 Day 2 HUD at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 36,
+      "test": "tests/e2e/polishEvidence.spec.ts:325:5 \u203a Phase 1.5 evidence \u203a 1.5.3 a later week shift's intro at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 37,
+      "test": "tests/e2e/polishEvidence.spec.ts:396:5 \u203a Phase 1.5 evidence \u203a 1.5.7 Space on a focused control at 390x844"
+    },
+    {
+      "status": "-",
+      "number": 38,
+      "test": "tests/e2e/polishEvidence.spec.ts:114:5 \u203a Phase 1.5 evidence \u203a 1.5.1 + 1.5.2 Day 2 HUD at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 39,
+      "test": "tests/e2e/polishEvidence.spec.ts:325:5 \u203a Phase 1.5 evidence \u203a 1.5.3 a later week shift's intro at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 40,
+      "test": "tests/e2e/polishEvidence.spec.ts:396:5 \u203a Phase 1.5 evidence \u203a 1.5.7 Space on a focused control at 1024x640"
+    },
+    {
+      "status": "-",
+      "number": 41,
+      "test": "tests/e2e/polishEvidence.spec.ts:458:3 \u203a Phase 1.5 evidence \u203a 1.5.4 the closing line after a whole Day 2 (1024x640, the report again at 390x844)"
+    },
+    {
+      "status": "\u2713",
+      "number": 42,
+      "test": "tests/e2e/practice.spec.ts:112:1 \u203a latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz (1.4m)"
+    },
+    {
+      "status": "\u2713",
+      "number": 43,
+      "test": "tests/e2e/rush.spec.ts:316:1 \u203a Day 2 morning rush: listening at the register, a misheard ticket, walk-outs, report (4.5m)"
+    },
+    {
+      "status": "-",
+      "number": 44,
+      "test": "tests/e2e/segments.spec.ts:45:1 \u203a a generated order plays two or more segment clips as one line"
+    },
+    {
+      "status": "\u2713",
+      "number": 45,
+      "test": "tests/e2e/trial.spec.ts:234:1 \u203a Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart (2.8m)"
+    },
+    {
+      "status": "\u2713",
+      "number": 46,
+      "test": "tests/e2e/week.spec.ts:68:3 \u203a the week \u203a a fresh save plays Monday in week mode; the report is saved (3.4m)"
+    },
+    {
+      "status": "\u2713",
+      "number": 47,
+      "test": "tests/e2e/week.spec.ts:120:3 \u203a the week \u203a a save on Wednesday opens Wednesday only, and Endless Rush (4.8s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 48,
+      "test": "tests/e2e/week.spec.ts:144:3 \u203a the week \u203a Day 2 from the title is still Day 2 (3.8s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 49,
+      "test": "tests/e2e/week.spec.ts:152:3 \u203a the week \u203a the title lists every mode; Endless Rush unlocks on the way back (4.5s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 50,
+      "test": "tests/e2e/week.spec.ts:200:3 \u203a the week \u203a the shop sells what the till covers and says why it refuses the rest (4.5s)"
+    },
+    {
+      "status": "\u2713",
+      "number": 51,
+      "test": "tests/e2e/weekUi.spec.ts:77:3 \u203a the week UI \u203a title \u2192 the week \u2192 shop \u2192 a passed Monday \u2192 next shift (2.9m)"
+    },
+    {
+      "status": "\u2713",
+      "number": 52,
+      "test": "tests/e2e/weekUi.spec.ts:237:3 \u203a the week UI \u203a Day 2: the bot plays the whole morning rush to its report (3.8m)"
+    },
+    {
+      "status": "\u2713",
+      "number": 53,
+      "test": "tests/e2e/weekUi.spec.ts:269:3 \u203a the week UI \u203a a shift event is answered with the number key 1 (12.7s)"
+    }
+  ]
+}

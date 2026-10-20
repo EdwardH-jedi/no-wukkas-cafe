@@ -91,6 +91,26 @@ describe('save storage', () => {
     expect(st.load()).toEqual(s);
   });
 
+  it('keeps the progress it read when a later read throws (acceptance F1)', () => {
+    const fs = new FakeStorage();
+    const progress = {
+      ...newSave(D),
+      week: 3,
+      shift: 2,
+      cents: 12500,
+      upgrades: ['grinder' as const],
+    };
+    fs.data.set(SAVE_KEY, JSON.stringify(progress));
+    const st = createSaveStore(fs, D);
+    const loaded = st.load();
+    expect(loaded).toMatchObject({ week: 3, shift: 2, cents: 12500, upgrades: ['grinder'] });
+    fs.failGet = true;
+    expect(st.load()).toEqual(loaded);
+    expect(st.memoryOnly).toBe(true);
+    // The next autosave advances the player's save, not a fresh one.
+    expect(recordShift(st, report)).toMatchObject({ week: 3, shift: 3, upgrades: ['grinder'] });
+  });
+
   it('keeps the latest save in memory when storage is full', () => {
     const fs = new FakeStorage();
     const st = createSaveStore(fs, D);

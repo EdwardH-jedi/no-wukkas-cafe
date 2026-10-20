@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 4ae6a6d..d49d6fe 100644
+--- a/package.json
++++ b/package.json
+@@ -11,6 +11,7 @@
+     "dev": "vite --open",
+     "build": "tsc --noEmit && vite build",
+     "build:clean": "node scripts/build-clean.ts",
++    "deploy": "node scripts/deploy.ts",
+     "preview": "vite preview",
+     "typecheck": "tsc --noEmit",
+     "lint": "eslint . && prettier --check .",

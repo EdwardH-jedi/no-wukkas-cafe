@@ -1,0 +1,100 @@
+commit 265410b48cd42cb54e8338e6d185288c7768e053
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 13:34:19 2026 +1100
+
+    test(review): Codex review of 6941c37..0cae2cf, 6 red reviewer tests
+    
+    Verdict FIX: P1 0, P2 1, P3 0 (docs/reviews/2026-10-18-main-0cae2cf.md).
+    F1-F3 from the previous review are accepted; their four tests are green.
+    
+    - F4 P2 src/audio/voiceLines.ts:95: cancelling a clip or segment line that
+      decoded while the AudioContext was suspended schedules its 60 ms fade and
+      stop from the frozen ctx.currentTime, so on resume the cancelled source
+      still plays at gain 0.98 / 0.5 / 0.02 at 1 / 30 / 59 ms. Reproduced via
+      stopVoice, a newer line, quit to title, and a customer gone mid-line.
+      New tests/review/independentSuspendedCancellation.test.ts: 6 red, 2 green
+      controls (an uncancelled suspended line starts once and stays connected).
+      Its TimelineParam keeps ramp times; the harness FakeParam applies ramps at
+      once, which hid this. Stop, disconnect or mute all satisfy it.
+    - tests/review/independentKeys.test.ts: 2 green controls added (reset during
+      capture; backdrop close then reopen). No existing expectation changed.
+    - docs/DECISIONS.md: Q7, captions vs patience when the browser suspends audio
+      while the game runs.
+    
+    Checked by the review session on this branch: typecheck 0, lint 0, npm test
+    exit 1 with 807 passed / 6 failed (813), the six being exactly the new red
+    tests, each failing on its output-path assertion; src/, scripts/,
+    tests/helpers/ identical to 0cae2cf.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/docs/DECISIONS.md b/docs/DECISIONS.md
+index 8c49df5..3b400d0 100644
+--- a/docs/DECISIONS.md
++++ b/docs/DECISIONS.md
+@@ -14,3 +14,6 @@ An unanswered question is not a blocker: mark the item `[!]` and move on. Format
+ - [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)?
+ - [ ] Q5 (impl): Day 1 trial and practice captions get the rush's "start with the voice" rule?
+ - [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?
++
++## Open (independent review of 0cae2cf, 2026-10-18)
++- [ ] Q7 (review): when the browser suspends audio while the game keeps running, should captions keep waiting for audio while patience drains (current behaviour), show immediately as a fallback, or should the game pause until sound resumes?
+
+commit d1e60da084915f78d4f7fcf1441370d7f7a0707e
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:25:43 2026 +1100
+
+    docs(decisions): Q1 answered, review re-issues the THE_USUAL test
+    
+    Edward, 2026-10-18: the reviewer test inverted in 7586668 is re-issued by
+    the review session as a test of the decided rule (AFFINITY_RULE), not kept
+    as the implementer's inversion.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/docs/DECISIONS.md b/docs/DECISIONS.md
+index 1a18093..8c49df5 100644
+--- a/docs/DECISIONS.md
++++ b/docs/DECISIONS.md
+@@ -6,9 +6,9 @@ An unanswered question is not a blocker: mark the item `[!]` and move on. Format
+ ## Answered
+ - [x] AFFINITY_RULE (2026-10-17): correct serve to a regular adds +1 affinity → yes
+ - [x] SEGMENT_GATE (2026-10-17): placeholder segment fails the build → yes
++- [x] Q1 (2026-10-18, impl): the inverted reviewer test in 7586668 — keep, or have review re-issue it? → review re-issues it, asserting AFFINITY_RULE
+ 
+ ## Open (from RUN3_REPORT, 2026-10-18)
+-- [ ] Q1 (impl): the inverted reviewer test in 7586668 — keep, or have review re-issue it? (recommended: review re-issues)
+ - [ ] Q2 (impl): delete the 21 merged local branches listed in RUN3_REPORT? (TODO rule says never delete branches)
+ - [ ] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build — delete them?
+ - [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)?
+
+commit 416ae775df0daec5ba0e693be066700ab056d6ae
+Author: Soon Hyun Hwang <edwardhwang1223@gmail.com>
+Date:   Sun Oct 18 12:22:26 2026 +1100
+
+    chore(agents): impl/review session loop, decisions queue, milestones
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/docs/DECISIONS.md b/docs/DECISIONS.md
+new file mode 100644
+index 0000000..1a18093
+--- /dev/null
++++ b/docs/DECISIONS.md
+@@ -0,0 +1,16 @@
++# Decisions queue
++
++Agents append questions here; Edward answers in place with one line. Agents read this file before asking anything.
++An unanswered question is not a blocker: mark the item `[!]` and move on. Format: `- [ ] Qn (date, who asks): question` → Edward replaces `[ ]` with `[x]` and adds `→ answer`.
++
++## Answered
++- [x] AFFINITY_RULE (2026-10-17): correct serve to a regular adds +1 affinity → yes
++- [x] SEGMENT_GATE (2026-10-17): placeholder segment fails the build → yes
++
++## Open (from RUN3_REPORT, 2026-10-18)
++- [ ] Q1 (impl): the inverted reviewer test in 7586668 — keep, or have review re-issue it? (recommended: review re-issues)
++- [ ] Q2 (impl): delete the 21 merged local branches listed in RUN3_REPORT? (TODO rule says never delete branches)
++- [ ] Q3 (impl): the nine stale untracked renders in public/assets/voice/ break the in-checkout build — delete them?
++- [ ] Q4 (impl): milk gauge target zone follows the ticket on extra-hot orders (68–74 °C)?
++- [ ] Q5 (impl): Day 1 trial and practice captions get the rush's "start with the voice" rule?
++- [ ] Q6 (docs/STEAM.md): first release or later port; Tauri or Electron; Steam features (none / achievements / Cloud)?

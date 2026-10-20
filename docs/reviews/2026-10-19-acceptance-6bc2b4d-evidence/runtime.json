@@ -1,0 +1,18 @@
+{
+  "node": {
+    "exit": 0,
+    "output": "v26.7.0"
+  },
+  "npm": {
+    "exit": 0,
+    "output": "11.19.0"
+  },
+  "git": {
+    "exit": 0,
+    "output": "git version 2.53.0"
+  },
+  "playwright": {
+    "exit": 0,
+    "output": "Version 1.64.0"
+  }
+}

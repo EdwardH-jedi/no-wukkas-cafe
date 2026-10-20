@@ -1,0 +1,86 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 63 tests using 1 worker
+
+  -   1 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 390x844
+  -   2 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 390x844
+  -   3 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 390x844
+  -   4 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 390x844
+  -   5 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 390x844
+  -   6 [chromium] › tests/e2e/a11yEvidence.spec.ts:124:5 › Phase 7 accessibility evidence › d: reduced motion is respected at 1024x640
+  -   7 [chromium] › tests/e2e/a11yEvidence.spec.ts:150:5 › Phase 7 accessibility evidence › a: subtitles on (default) and off at 1024x640
+  -   8 [chromium] › tests/e2e/a11yEvidence.spec.ts:191:5 › Phase 7 accessibility evidence › b: text size small, medium, large at 1024x640
+  -   9 [chromium] › tests/e2e/a11yEvidence.spec.ts:258:5 › Phase 7 accessibility evidence › c: milk on tickets and the pass, not colour alone, at 1024x640
+  -  10 [chromium] › tests/e2e/a11yEvidence.spec.ts:320:5 › Phase 7 accessibility evidence › e: remap the main action key, saved in the v3 save, at 1024x640
+first line: "Oi. You the trial? You're late. Well, you're not, but I like saying it." decoded 5.002 s (manifest 5.002), played 5.003 s, peak RMS 0.246
+  ✓  11 [chromium] › tests/e2e/audio.spec.ts:39:1 › pressing Start makes Gaz audibly speak; pause, replay and failure feedback work (12.3s)
+  ✓  12 [chromium] › tests/e2e/audio.spec.ts:127:1 › a voice clip that fails to load is reported, not silent (4.1s)
+owner: "Oi. You the trial? You're late. Well, yo…" 5.002 s, voice RMS 0.240, master RMS 0.249, sim moved on 0.576 s after the clip (game time 0.200 s behind audio over the line); output {"state":"running","sampleRate":48000,"baseLatency":0.005333333333333333,"outputLatency":0.024,"destinationChannels":2,"sinkId":""}
+  ✓  13 [chromium] › tests/e2e/audioSmoke.spec.ts:106:3 › voice on › owner speaks after Start; subtitles and the sim follow the audio; output path active (15.8s)
+order: "Morning. Long black, cheers, mate. Big d…" 3.823 s; register opened 0.576 s after the clip (game time 0.269 s behind audio)
+  ✓  14 [chromium] › tests/e2e/audioSmoke.spec.ts:155:3 › voice on › a customer order is voiced; the order moves on when the audio ends; replay, interruption, pause (27.9s)
+  ✓  15 [chromium] › tests/e2e/audioSmoke.spec.ts:238:3 › voice on › a customer clip that fails to load falls back to the browser voice; the order still moves on (14.5s)
+  ✓  16 [chromium] › tests/e2e/audioState.spec.ts:87:3 › audio state (Codex A1, A2, A3, A7) › A1: pausing, going to the title and starting again keeps the audio running (4.2s)
+  ✓  17 [chromium] › tests/e2e/audioState.spec.ts:112:3 › audio state (Codex A1, A2, A3, A7) › A2: a clip that fails while paused waits for resume before the browser voice speaks (12.2s)
+  ✓  18 [chromium] › tests/e2e/audioState.spec.ts:145:3 › audio state (Codex A1, A2, A3, A7) › A3: a slow order clip holds the register until the order has been heard (16.9s)
+  ✓  19 [chromium] › tests/e2e/audioState.spec.ts:189:3 › audio state (Codex A1, A2, A3, A7) › A7: the browser-voice fallback uses the Voices volume (10.2s)
+  ✓  20 [chromium] › tests/e2e/casting.spec.ts:156:1 › casting page: identity cards, missing assets, waveforms, one take at a time, decisions (6.9s)
+  ✓  21 [chromium] › tests/e2e/ibis.spec.ts:45:3 › bin chicken › three presses of I see it out; Gaz reacts; draw calls stay in budget (37.0s)
+  ✓  22 [chromium] › tests/e2e/ibis.spec.ts:66:3 › bin chicken › clicking the bird shoos it too (28.4s)
+perfect pour: {"art":0.9019865137437522,"findings":["textbook"],"rows":{"Heart":84,"Symmetry":100,"Centred":100,"Crisp":100,"White":35},"verdict":"Proper heart"}
+  ✓  23 [chromium] › tests/e2e/latteRegression.spec.ts:136:1 › latte regression: a recorded perfect pour keeps its score band (1.1m)
+duck under an order 0.28, under chat 0.55
+  ✓  24 [chromium] › tests/e2e/listening.spec.ts:87:1 › sound lab: moods, separate buses, ducking under real dialogue, one voice, pause, notes (20.8s)
+opening: -20.1 LUFS, -4.1 dBTP, DC 0.00000; worst case -0.5 dBTP, 0 clipped
+rush: -20.5 LUFS, -2.5 dBTP, DC 0.00000; worst case -0.6 dBTP, 0 clipped
+afternoon: -20.3 LUFS, -1.4 dBTP, DC 0.00001; worst case -0.8 dBTP, 0 clipped
+  ✓  25 [chromium] › tests/e2e/listening.spec.ts:176:1 › the three moods: no clipping, no DC offset, even loudness, orders above the music (7.6s)
+opening: master RMS peak with only music audible 0.1171
+rush: music ducked to 0.28 under Dazza's order, then recovered
+  ✓  26 [chromium] › tests/e2e/music.spec.ts:25:1 › music plays, follows the day and ducks under an order (24.4s)
+perf 1024x640: 114 draw calls, 3 in the café, median frame 66.6 ms
+  ✓  27 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 1024x640 (51.2s)
+perf 390x844: 102 draw calls, 3 in the café, median frame 33.3 ms
+  ✓  28 [chromium] › tests/e2e/perf.spec.ts:41:3 › fewer than 150 draw calls with three customers in the café at 390x844 (32.6s)
+  ✓  29 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 390x844, text size s (14.3s)
+  ✓  30 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 390x844, text size m (14.2s)
+  ✓  31 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 390x844, text size l (14.1s)
+  ✓  32 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 375x667, text size s (14.5s)
+  ✓  33 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 375x667, text size m (14.3s)
+  ✓  34 [chromium] › tests/e2e/phoneHud.spec.ts:115:7 › phone HUD › register clear of the instruction at 375x667, text size l (14.4s)
+  ✓  35 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 390x844, text size s (3.4s)
+  ✓  36 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 390x844, text size m (3.3s)
+  ✓  37 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 390x844, text size l (3.3s)
+  ✓  38 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 375x667, text size s (3.6s)
+  ✓  39 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 375x667, text size m (3.5s)
+  ✓  40 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 #subs inside the screen at 375x667, text size l (3.6s)
+  ✓  41 [chromium] › tests/e2e/phoneHud.spec.ts:160:5 › phone HUD › subtitle box inside the screen at text size s (390x844) (28.0s)
+  ✓  42 [chromium] › tests/e2e/phoneHud.spec.ts:160:5 › phone HUD › subtitle box inside the screen at text size m (390x844) (28.0s)
+  ✓  43 [chromium] › tests/e2e/phoneHud.spec.ts:160:5 › phone HUD › subtitle box inside the screen at text size l (390x844) (28.1s)
+  ✓  44 [chromium] › tests/e2e/phoneHud.spec.ts:176:3 › phone HUD › the desktop register keeps its place at 1024x640 (14.5s)
+  -  45 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 390x844
+  -  46 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 390x844
+  -  47 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 390x844
+  -  48 [chromium] › tests/e2e/polishEvidence.spec.ts:114:5 › Phase 1.5 evidence › 1.5.1 + 1.5.2 Day 2 HUD at 1024x640
+  -  49 [chromium] › tests/e2e/polishEvidence.spec.ts:325:5 › Phase 1.5 evidence › 1.5.3 a later week shift's intro at 1024x640
+  -  50 [chromium] › tests/e2e/polishEvidence.spec.ts:396:5 › Phase 1.5 evidence › 1.5.7 Space on a focused control at 1024x640
+  -  51 [chromium] › tests/e2e/polishEvidence.spec.ts:458:3 › Phase 1.5 evidence › 1.5.4 the closing line after a whole Day 2 (1024x640, the report again at 390x844)
+  ✓  52 [chromium] › tests/e2e/practice.spec.ts:112:1 › latte-art practice: pour, review, retry, reset, guide, blob, watch Gaz (1.5m)
+  ✓  53 [chromium] › tests/e2e/rush.spec.ts:316:1 › Day 2 morning rush: listening at the register, a misheard ticket, walk-outs, report (4.7m)
+  ✓  54 [chromium] › tests/e2e/segments.spec.ts:45:1 › a generated order plays two or more segment clips as one line (14.1s)
+  ✓  55 [chromium] › tests/e2e/trial.spec.ts:234:1 › Day 1 trial: mouse and trackpad-style hearts, Gaz reacts, verdict, restart (2.9m)
+  ✓  56 [chromium] › tests/e2e/week.spec.ts:68:3 › the week › a fresh save plays Monday in week mode; the report is saved (3.9m)
+  ✓  57 [chromium] › tests/e2e/week.spec.ts:120:3 › the week › a save on Wednesday opens Wednesday only, and Endless Rush (4.8s)
+  ✓  58 [chromium] › tests/e2e/week.spec.ts:144:3 › the week › Day 2 from the title is still Day 2 (4.6s)
+  ✓  59 [chromium] › tests/e2e/week.spec.ts:152:3 › the week › the title lists every mode; Endless Rush unlocks on the way back (5.0s)
+  ✓  60 [chromium] › tests/e2e/week.spec.ts:200:3 › the week › the shop sells what the till covers and says why it refuses the rest (5.0s)
+  ✓  61 [chromium] › tests/e2e/weekUi.spec.ts:77:3 › the week UI › title → the week → shop → a passed Monday → next shift (3.0m)
+  ✓  62 [chromium] › tests/e2e/weekUi.spec.ts:237:3 › the week UI › Day 2: the bot plays the whole morning rush to its report (3.8m)
+  ✓  63 [chromium] › tests/e2e/weekUi.spec.ts:269:3 › the week UI › a shift event is answered with the number key 1 (12.2s)
+
+  Slow test file: [chromium] › tests/e2e/weekUi.spec.ts (7.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  17 skipped
+  46 passed (30.6m)

@@ -1,0 +1,190 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+ ✓ tests/sim/scores.test.ts > boardKey > one board per week shift and difficulty, one per Endless and Day 2 difficulty 1ms
+ ✓ tests/sim/scores.test.ts > insert > a week shift ranks by grade, then served, then tips, then fewer walk-outs 0ms
+ ✓ tests/sim/scores.test.ts > insert > Endless ranks by served, then tips; the grade does not count 0ms
+ ✓ tests/sim/scores.test.ts > insert > a tie keeps the earlier entry first 0ms
+ ✓ tests/sim/scores.test.ts > insert > keeps the best 10; one that doesn't make it has no rank 0ms
+ ✓ tests/sim/scores.test.ts > insert > boards are apart, and the input is never changed 0ms
+ ✓ tests/sim/scores.test.ts > isNewBest / bestOf > only when it beats a best that already exists 0ms
+ ✓ tests/sim/scores.test.ts > fromSummary > takes served, walk-outs, tips and the grade from the report 0ms
+ ✓ tests/sim/scores.test.ts > parseScores > round-trips, and reads anything corrupt or of another version as empty 0ms
+ ✓ tests/sim/scores.test.ts > parseScores > drops entries that are not scores, keeping the rest of the board 0ms
+ ✓ tests/core/week/progress.test.ts > week table > is five shifts of 6, 7, 8, 9 and 10 customers 1ms
+ ✓ tests/core/week/progress.test.ts > week table > unlocks every drink exactly once, each one in the recipe table 1ms
+ ✓ tests/core/week/progress.test.ts > week table > has no events on the first shift; Hard is the same table with less patience 0ms
+ ✓ tests/core/week/progress.test.ts > week table > speeds arrivals up through each shift 1ms
+ ✓ tests/core/week/progress.test.ts > progression > plays a full week from a fixed seed, deterministically 1ms
+ ✓ tests/core/week/progress.test.ts > progression > replays a failed shift, never a game over: receipt and tips kept, nothing unlocked 0ms
+ ✓ tests/core/week/progress.test.ts > progression > adds the next shift's drinks as it is reached 0ms
+ ✓ tests/core/week/progress.test.ts > progression > never changes the save it is given 0ms
+ ✓ tests/core/week/progress.test.ts > progression > lists shifts as locked ahead, open now, done with the best grade 0ms
+ ✓ tests/core/week/progress.test.ts > progression > in week 2 the current shift is open and later ones locked, whatever week 1 left 0ms
+ ✓ tests/core/week/progress.test.ts > upgrades > are data only: unique ids, whole-cent prices, a parameter each changes 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > writes its own key, versioned, and reads it back 2ms
+ ✓ tests/core/save/scores.test.ts > scores store > corrupt JSON reads as empty scores, and the next put starts it over 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > put returns 0 for the first entry and null for one that misses the top ten 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > Clear empties it 0ms
+ ✓ tests/core/save/scores.test.ts > scores store > blocked or full storage falls back to memory for the session (never throws) 0ms
+ ✓ tests/data/voice.test.ts > voice ids > are stable across runs and platforms 1ms
+ ✓ tests/data/voice.test.ts > voice ids > differ by speaker, words and delivery 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > expands every template: no {placeholders} left to record 5ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > has a voice profile for every speaker 8ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > every line in the script has a recording in the manifest (or is awaiting its render) 1ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > lines awaiting a render are real script keys (no typos hiding a missing clip) 0ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > manifest entries carry the required fields and look like speech 16ms
+ ✓ tests/data/voice.test.ts > voice script and manifest > placeholder clips are labelled as placeholders 2ms
+ ✓ tests/data/voice.test.ts > spoken duration > holds the floor for the clip plus a beat 0ms
+ ✓ tests/data/voice.test.ts > spoken duration > falls back to reading time without a clip 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > reads a version-1 export 2ms
+ ✓ tests/sim/telemetrySummary.test.ts > readExport > refuses other versions, other JSON and broken files, saying why 3ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > adds up every shift and trial record 4ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > counts a record once when the same log is exported twice 0ms
+ ✓ tests/sim/telemetrySummary.test.ts > summarise > no records: zeros and dashes, not NaN 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > summaryMarkdown > a table per part, with the numbers from the summary 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > prints the summary of the files given 106ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > Usual keys must restore all three bindings instead of only closing Settings 2ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > closing Settings while awaiting a binding must not steal the next gameplay key 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > an explicit key choice still saves; Escape cancels without changing it 0ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > reset during capture cancels the capture, keeps Settings open, and restores every label 1ms
+ ✓ tests/review/independentKeys.test.ts > independent Settings key lifecycle > backdrop close cancels capture and reopening permits a fresh explicit key choice 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > is titled after the game, not Day 1 1ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > describes the week of morning rushes 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > has Open Graph and Twitter card tags 0ms
+ ✓ tests/scripts/indexMeta.test.ts > index.html share tags > ships a 1200×630 PNG under 300 kB as public/og.png 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > nothing yet says so 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > lists each week shift's best for a difficulty played, and the shifts not played 1ms
+ ✓ tests/ui/scores.test.ts > scoresHtml > Day 2's best, and Endless as a ranked top ten of served and tips 1ms
+ ✓ tests/sim/telemetrySummary.test.ts > npm run playtest:summary > stops on a file of another version, naming it 75ms
+ ✓ tests/audio/manager.test.ts > segmented lines > play their segment clips back to back, in order, as one line 7ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a missing segment sends the WHOLE line to the browser voice, never half and half 3ms
+ ✓ tests/audio/manager.test.ts > segmented lines > pausing mid-list freezes it; resuming carries on from the same part 6ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a newer line (the customer has gone) drops the parts not yet played 3ms
+ ✓ tests/audio/manager.test.ts > segmented lines > a slow repeat has no segment takes: the browser voice says it whole 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > still plays when it lands within the timeout 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > past the timeout the browser voice says the line, and the late clip is dropped 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > time spent paused does not count towards the timeout 5ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > once its speaker has left, the line never starts: not the clip, nor the browser voice (200) 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > once its speaker has left, the line never starts: not the clip, nor the browser voice (404) 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > someone else leaving doesn't touch the line 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > a line of theirs already playing stops when they leave 2ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > onStart fires at the clip’s first sample, not when the line is asked for; once 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a line stopped while loading never starts: onStop, and no onStart when the clip lands 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a clip landing while paused starts its subtitle on resume; one stopped meanwhile never does 7ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > a newer line stops the one before (playing or not), then starts on its own 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > turning voices off mid-line stops the sound but keeps the words 3ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > voices off: the subtitle is the line, so it starts at once 1ms
+ ✓ tests/audio/manager.test.ts > a clip slow to load > subtitle hooks (review 2026-10-17 §2: captions led a slow clip by 10 s) > past the timeout, onStart waits for the browser voice’s own start event 45ms
+ ✓ tests/audio/manager.test.ts > stopping the voice > keeps the last line for Replay, unless told to forget it (back to the title) 2ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a line whose segments are all listed as release audio plays its clips 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a line with an unlisted segment is the browser voice, whole; nothing is fetched 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a listed segment without a licence is not served either 2ms
+ ✓ tests/audio/manager.test.ts > segment clips in a production build: only what the segment manifest ships > a slow repeat stays the browser voice even when every segment ships 3ms
+ ✓ tests/audio/manager.test.ts > segment clips in development > every segment is tried, listed or not (placeholders from voice-cache/segments/) 3ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > shows the diagnosis's own fix for a blob, never the generic pull-through line 1ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > matches each art fault to its own finding, and keeps tips for the rest 0ms
+ ✓ tests/ui/screens.test.ts > Day 1 result card > falls back to the fault tip when there is no diagnosis 0ms
+ ✓ tests/ui/screens.test.ts > title screen > has a Scores button between practice and settings 0ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > says "New best!" for a shift that beat the board 1ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > otherwise the best so far: grade and served for a shift, served and tips for Endless 1ms
+ ✓ tests/ui/shiftReport.test.ts > bestLine > no note (nothing recorded), no line 0ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > adds +1 affinity per correct serve in a week shift 3ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > a drink handed back (the wrong one) adds nothing 0ms
+ ✓ tests/core/regularAffinity.test.ts > a correct serve to a regular > Day 2 (no week, nothing saved) keeps no affinity 0ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > counts a visit for every served drink, right or not 0ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > a hand-back is no visit; Day 2 keeps none 0ms
+ ✓ tests/core/regularAffinity.test.ts > a regular who takes a drink away > two shifts, one served wrong: the save says two visits, one affinity 1ms
+ ✓ tests/review/independentPausedCaptions.test.ts > paused: a decoded clip must not dispatch subtitle onStart before audio can start 12ms
+ ✓ tests/review/independentPausedCaptions.test.ts > browser-suspended: a decoded clip must not dispatch subtitle onStart before audio can start 6ms
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading
+clip title previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading
+clip stopVoice previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading
+segments title previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading
+segments stopVoice previously fading gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume
+clip stopVoice cancelled-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume
+clip replaced-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume
+segments stopVoice cancelled-source gains: [0,0,0,0]
+
+stdout | tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume
+segments replaced-source gains: [0,0,0,0]
+
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: cancelling an already audible line while suspended must silence it on resume 10ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: title during suspension must also silence a previously replaced line still fading 6ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice during suspension must also silence a previously replaced line still fading 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: cancelling an already audible line while suspended must silence it on resume 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: title during suspension must also silence a previously replaced line still fading 3ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice during suspension must also silence a previously replaced line still fading 4ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > quitting to title while a decoded line waits must not emit the old game on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > a gone customer whose segments decoded during suspension must stay silent on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: stopVoice while paused must not emit the cancelled line on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: a newer line while browser-suspended must not leak the old line on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > clip: an uncancelled suspended line starts once and remains connected on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: stopVoice while paused must not emit the cancelled line on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: a newer line while browser-suspended must not leak the old line on resume 2ms
+ ✓ tests/review/independentSuspendedCancellation.test.ts > independent suspended audio cancellation > segments: an uncancelled suspended line starts once and remains connected on resume 2ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a dry run commits nothing to the remote and says where it would go 504ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > --push replaces gh-pages with the build and .nojekyll 439ms
+ ✓ tests/app/scores.test.ts > recordScore > writes one entry per finished shift; the first is the best but not a "new best" 839ms
+ ✓ tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older checkpoint must not erase a completed shift and its served customers 834ms
+ ✓ tests/review/independentM3.test.ts > M3 F1: duplicate exports must retain the newest record, regardless of file order > an older trial checkpoint must not replace the later quit point 1ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects unknown record kind instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects null record instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects incomplete shift instead of silently dropping it or crashing in summarise 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > rejects a nonnumeric served count instead of printing a corrupt total 0ms
+ ✓ tests/review/independentM3.test.ts > M3 F2: a version-1 envelope must not make invalid records valid exports > CLI refuses a bad record, names its input file, and emits no partial summary 71ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > pools every register wait, rather than averaging per-shift medians 0ms
+ ✓ tests/review/independentM3.test.ts > M3 independent aggregation controls > deduplicates identical exports without mutating either input 0ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > a custom domain writes CNAME and serves from / 382ms
+ ✓ tests/app/scores.test.ts > recordScore > a worse run leaves the best alone; a better one is a new best 697ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > the same build twice pushes nothing new 493ms
+ ✓ tests/scripts/deploy.test.ts > npm run deploy > refuses without a gh-pages branch on the remote 231ms
+ ✓ tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > first Hard run must not be congratulated for beating a Normal score 1058ms
+ ✓ tests/review/independentM4.test.ts > M4 F1: restarting after a difficulty change must use the new board for Gaz > a Hard record must not be suppressed by a stronger Normal best 879ms
+ ✓ tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an inherited Object property is not a grade and must not poison future best comparisons 1ms
+ ✓ tests/review/independentM4.test.ts > M4 F2: corrupt stored entries must not become leaderboard bests > an Easy entry stored under a Hard board must not appear as its best or block a real Hard result 0ms
+ ✓ tests/review/independentM4.test.ts > M4 F3: storage fallback must retain scores already read during this session > a later getItem failure must not erase the previously loaded best before recording a worse run 0ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > day2 writes exactly once before the report callback, and clears the note on restart 13ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > week writes exactly once before the report callback, and clears the note on restart 8ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > endless writes exactly once before the report callback, and clears the note on restart 11ms
+ ✓ tests/review/independentM4.test.ts > M4 independent integration controls > valid scores round-trip and a tie remains behind the earlier entry after reloading 0ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > GitHub remotes publish under /<repo>/ on <owner>.github.io 154ms
+ ✓ tests/scripts/deploy.test.ts > siteFor > a domain serves from / at that domain; a local remote has no address 153ms
+ ✓ tests/app/scores.test.ts > recordScore > a week shift and Endless go on their own boards; no report, no entry 1043ms
+ ✓ tests/sim/owner.test.ts > pickLine > never repeats a line until the pool is exhausted 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > does not immediately repeat the last line after starting over 1ms
+ ✓ tests/sim/owner.test.ts > pickLine > respects cooldowns 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gets crankier as frustration builds 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > is deterministic for a seed 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > returns null for unknown keys 0ms
+ ✓ tests/sim/owner.test.ts > pickLine > gives longer lines more reading time 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > includes the lines from the brief 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > every pool has at least one line and no empty text 2ms
+ ✓ tests/sim/owner.test.ts > dialogue content > uses Australian spelling 2ms
+ ✓ tests/sim/owner.test.ts > dialogue content > gives every Day 2 customer a full set of lines 0ms
+ ✓ tests/sim/owner.test.ts > dialogue content > has a coaching tip for every fault 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > the grade line, then "new best" only when there is one 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > a new best beats the board on its own ranking (grade, served, tips, walk-outs) 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > the line is count-agnostic Australian copy, with a clip or waiting for one 0ms
+ ✓ tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless 5019ms
+
+ Test Files  19 passed (19)
+      Tests  154 passed (154)
+   Start at  12:40:18
+   Duration  5.46s (tests 77%, transform 17%, import 6%)
+

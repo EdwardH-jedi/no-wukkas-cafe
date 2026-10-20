@@ -393,14 +393,19 @@
 }
 @media (max-width: 720px) {
   /* Under the tickets and the instruction (#rtl, its height in --rtl-h from rushHud.ts); the
-     bottom edge stays where it was (100vh - 170px), and a full rail makes the register scroll. */
+     bottom edge stays where it was (100vh - 170px), and a full rail makes the register scroll.
+     #pos is zoomed by --text-scale (base.css), which scales its own top and max-height too, so
+     both are divided by it to stay in screen units at every text size (acceptance audit F3). */
   #pos {
-    top: calc(70px + env(safe-area-inset-top, 0px) + var(--rtl-h, 0px));
+    top: calc((70px + env(safe-area-inset-top, 0px) + var(--rtl-h, 0px)) / var(--text-scale));
     transform: none;
     left: 16px;
     right: 16px;
     width: auto;
-    max-height: max(180px, calc(100vh - 240px - env(safe-area-inset-top, 0px) - var(--rtl-h, 0px)));
+    max-height: max(
+      180px / var(--text-scale),
+      (100vh - 240px - env(safe-area-inset-top, 0px) - var(--rtl-h, 0px)) / var(--text-scale)
+    );
     overflow-y: auto;
   }
   #posFeedback {
@@ -501,8 +506,11 @@
     margin-left: auto;
   }
   #rbl:has(> #ractions.side:not(:empty)) ~ #pos {
-    top: calc(70px + env(safe-area-inset-top, 0px) + var(--rtl-h, 0px));
-    max-height: max(180px, calc(100vh - 240px - env(safe-area-inset-top, 0px) - var(--rtl-h, 0px)));
+    top: calc((70px + env(safe-area-inset-top, 0px) + var(--rtl-h, 0px)) / var(--text-scale));
+    max-height: max(
+      180px / var(--text-scale),
+      (100vh - 240px - env(safe-area-inset-top, 0px) - var(--rtl-h, 0px)) / var(--text-scale)
+    );
   }
 }
 /* Short phones (iPhone SE, 667 px): tighter gauge cards keep the row below the shot's cup. */

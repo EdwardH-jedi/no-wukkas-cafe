@@ -1,0 +1,32 @@
+
+> no-wukkas-cafe@0.1.0 voices:check
+> node scripts/voices-check.ts
+
+  missing-audio: beryl:07bdba99 no file at voice-cache/beryl/07bdba99-slow.mp3 (run npm run voices)
+  missing-audio: beryl:1e17e9b5 no file at voice-cache/beryl/1e17e9b5.mp3 (run npm run voices)
+  missing-audio: beryl:2a5cf9c0 no file at voice-cache/beryl/2a5cf9c0.mp3 (run npm run voices)
+  missing-audio: beryl:2eaff6a9 no file at voice-cache/beryl/2eaff6a9.mp3 (run npm run voices)
+  missing-audio: beryl:3fea3475 no file at voice-cache/beryl/3fea3475.mp3 (run npm run voices)
+  missing-audio: beryl:4578ffbc no file at voice-cache/beryl/4578ffbc.mp3 (run npm run voices)
+  missing-audio: beryl:5c509233 no file at voice-cache/beryl/5c509233.mp3 (run npm run voices)
+  missing-audio: beryl:5e930ae6 no file at voice-cache/beryl/5e930ae6.mp3 (run npm run voices)
+  missing-audio: beryl:67d6b180 no file at voice-cache/beryl/67d6b180.mp3 (run npm run voices)
+  missing-audio: beryl:6a9eb1e8 no file at voice-cache/beryl/6a9eb1e8.mp3 (run npm run voices)
+  missing-audio: beryl:6ad44db0 no file at voice-cache/beryl/6ad44db0.mp3 (run npm run voices)
+  missing-audio: beryl:6b93255a no file at voice-cache/beryl/6b93255a.mp3 (run npm run voices)
+  missing-audio: beryl:770fb69e no file at voice-cache/beryl/770fb69e.mp3 (run npm run voices)
+  missing-audio: beryl:83641850 no file at voice-cache/beryl/83641850.mp3 (run npm run voices)
+  missing-audio: beryl:8e27654d no file at voice-cache/beryl/8e27654d.mp3 (run npm run voices)
+  missing-audio: beryl:93ddd5a3 no file at voice-cache/beryl/93ddd5a3.mp3 (run npm run voices)
+  missing-audio: beryl:98b13f14 no file at voice-cache/beryl/98b13f14-slow.mp3 (run npm run voices)
+  missing-audio: beryl:9a02f04a no file at voice-cache/beryl/9a02f04a.mp3 (run npm run voices)
+  missing-audio: beryl:a1c6124b no file at voice-cache/beryl/a1c6124b.mp3 (run npm run voices)
+  missing-audio: beryl:a2cbb977 no file at voice-cache/beryl/a2cbb977.mp3 (run npm run voices)
+  missing-audio: beryl:aa29fb14 no file at voice-cache/beryl/aa29fb14.mp3 (run npm run voices)
+  missing-audio: beryl:af96fc19 no file at voice-cache/beryl/af96fc19.mp3 (run npm run voices)
+  missing-audio: beryl:b410b824 no file at voice-cache/beryl/b410b824.mp3 (run npm run voices)
+  missing-audio: beryl:b506987d no file at voice-cache/beryl/b506987d.mp3 (run npm run voices)
+  missing-audio: beryl:ba2b8706 no file at voice-cache/beryl/ba2b8706.mp3 (run npm run voices)
+voices:check (development): 597 clips, status "placeholder", 597 error(s), 0 warning(s)
+  error missing-audio: 597
+voices:check segments: 0/181 segments have a release clip in src/data/voice/segments.manifest.json, 0 error(s), 0 warning(s)

@@ -1,0 +1,17 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 9 tests using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 390x844, text size s (5.1s)
+  ✓  2 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 390x844, text size m (3.1s)
+  ✓  3 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 390x844, text size l (3.2s)
+  ✓  4 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 375x667, text size s (3.5s)
+  ✓  5 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 375x667, text size m (3.4s)
+  ✓  6 [chromium] › tests/e2e/phoneHud.spec.ts:139:7 › phone HUD › Day 1 subtitle box #subs inside the screen at 375x667, text size l (3.6s)
+  ✓  7 [chromium] › tests/e2e/phoneHud.spec.ts:162:5 › phone HUD › subtitle box inside the screen at text size s (390x844) (28.3s)
+  ✓  8 [chromium] › tests/e2e/phoneHud.spec.ts:162:5 › phone HUD › subtitle box inside the screen at text size m (390x844) (28.0s)
+  ✓  9 [chromium] › tests/e2e/phoneHud.spec.ts:162:5 › phone HUD › subtitle box inside the screen at text size l (390x844) (28.7s)
+
+  9 passed (1.8m)

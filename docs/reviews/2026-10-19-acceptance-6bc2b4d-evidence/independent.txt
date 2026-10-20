@@ -1,0 +1,809 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 's',
+  box: {
+    x: 33.8125,
+    y: 753.6447143554688,
+    width: 322.375,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at s 3242ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'm',
+  box: { x: 16, y: 743.9743041992188, width: 358, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at m 2930ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l
+acceptance-subs {
+  width: 390,
+  height: 844,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 724.18701171875,
+    width: 357.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 390x844 at l 2892ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 's',
+  box: {
+    x: 33.0625,
+    y: 577.0095825195312,
+    width: 308.875,
+    height: 67.140625
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at s 3229ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'm',
+  box: { x: 16, y: 567.21044921875, width: 343, height: 74.390625 }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at m 3218ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l
+acceptance-subs {
+  width: 375,
+  height: 667,
+  size: 'l',
+  box: {
+    x: 16.21875,
+    y: 547.6754760742188,
+    width: 342.5625,
+    height: 88.859375
+  }
+}
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Day 1 #subs remains inside 375x667 at l 3190ms
+stdout | tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click
+acceptance-scores { width: 390, scroll: 390, right: 390, left: 0, overflowing: [] }
+
+ ✓ tests/review/independentAcceptanceBrowser.test.ts > independent acceptance: phone layout in actual DOM > Scores at 390px fits, traps Tab, closes with Esc, and clears only on the second click 4064ms
+ ✓ tests/review/independentAcceptanceBuild.test.ts > build:clean excludes an observable uncommitted source change from HEAD output 2671ms
+ ✓ tests/review/independentAcceptanceBuild.test.ts > deploy passes the actual build its base and site URL ([]) 257ms
+ ✓ tests/review/independentAcceptanceBuild.test.ts > deploy passes the actual build its base and site URL (["--domain","cafe.example.com"]) 262ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: shared pause implementation > boot and the harness import the same three lifecycle implementations 1ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: all week row states > week 1 retains every best while locking every future row 1ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: all week row states > week 2 retains every best while locking every future row 0ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: all week row states > week 9 retains every best while locking every future row 0ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > day2 records before the report is called 17ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > week records before the report is called 8ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > endless records before the report is called 9ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > Gaz closing line obeys the day2 restriction through the real machine 693ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > Gaz closing line obeys the endless restriction through the real machine 57ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > Gaz closing line obeys the first-week restriction through the real machine 4ms
+ ✓ tests/review/independentAcceptanceContracts.test.ts > independent acceptance: production summary dispatch > Gaz closing line obeys the record-week restriction through the real machine 4ms
+ × tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves an advanced save and autosaves the next shift in the same session after getItem fails 5ms
+   → last successful disk load must seed memory fallback: expected { version: 3, …(11) } to deeply equal { version: 3, …(11) }
+   → expected { version: 3, …(11) } to match object { week: 3, shift: 3, …(3) }
+(10 matching properties omitted from actual)
+ × tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves previously exported records when a later read fails before the next log write 2ms
+   → expected { version: 1, records: [] } to deeply equal { version: 1, records: [ …(5) ] }
+   → expected [ 'independent-new-session-record' ] to deeply equal [ '2026-10-18T09:00:00.000Z#1', …(5) ]
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves an advanced save and autosaves the next shift in the same session after getItem fails
+AssertionError: last successful disk load must seed memory fallback: expected { version: 3, …(11) } to deeply equal { version: 3, …(11) }
+
+- Expected
++ Received
+
+  {
+-   "cents": 12500,
++   "cents": 0,
+    "createdAt": "1970-01-01T00:00:00.000Z",
+    "difficulty": "normal",
+    "keys": {
+      "action": " ",
+      "replay": "r",
+      "serve": "1",
+    },
+-   "regulars": {
+-     "dazza": {
+-       "affinity": 6,
+-       "visits": 8,
+-     },
+-   },
++   "regulars": {},
+    "reports": [],
+-   "seed": 42,
+-   "shift": 2,
++   "seed": 20261012,
++   "shift": 0,
+    "unlockedDrinks": [
+      "flatWhite",
+      "longBlack",
+    ],
+-   "upgrades": [
+-     "grinder",
+-   ],
++   "upgrades": [],
+    "version": 3,
+-   "week": 3,
++   "week": 1,
+  }
+
+ ❯ tests/review/independentAcceptanceStorage.test.ts:52:8
+     50|     expect
+     51|       .soft(store.load(), 'last successful disk load must seed memory …
+     52|       .toEqual(loaded);
+       |        ^
+     53|     const next = finishShift(store, report, { dazza: 1 }, { dazza: 1 }…
+     54|     expect
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves an advanced save and autosaves the next shift in the same session after getItem fails
+AssertionError: expected { version: 3, …(11) } to match object { week: 3, shift: 3, …(3) }
+(10 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "cents": 13000,
++   "cents": 500,
+    "regulars": {
+      "dazza": {
+-       "affinity": 7,
+-       "visits": 9,
++       "affinity": 1,
++       "visits": 1,
+      },
+    },
+-   "shift": 3,
+-   "upgrades": [
+-     "grinder",
+-   ],
+-   "week": 3,
++   "shift": 1,
++   "upgrades": [],
++   "week": 1,
+  }
+
+ ❯ tests/review/independentAcceptanceStorage.test.ts:56:8
+     54|     expect
+     55|       .soft(next)
+     56|       .toMatchObject({
+       |        ^
+     57|         week: 3,
+     58|         shift: 3,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves previously exported records when a later read fails before the next log write
+AssertionError: expected { version: 1, records: [] } to deeply equal { version: 1, records: [ …(5) ] }
+
+- Expected
++ Received
+
+  {
+-   "records": [
+-     {
+-       "attempts": [
+-         {
+-           "art": 18.2,
+-           "band": "failed",
+-           "fault": "lopsided",
+-           "total": 40,
+-           "valid": true,
+-         },
+-         {
+-           "art": 9.1,
+-           "band": "disaster",
+-           "fault": null,
+-           "total": 20,
+-           "valid": false,
+-         },
+-         {
+-           "art": 32.8,
+-           "band": "almost",
+-           "fault": "lopsided",
+-           "total": 72,
+-           "valid": true,
+-         },
+-       ],
+-       "endedAt": "2026-10-18T09:05:00.000Z",
+-       "ending": "finished",
+-       "id": "2026-10-18T09:00:00.000Z#1",
+-       "kind": "trial",
+-       "quit": null,
+-       "score": 72,
+-       "seconds": 240,
+-       "seed": 7,
+-       "session": "2026-10-18T09:00:00.000Z",
+-       "startedAt": "2026-10-18T09:00:00.000Z",
+-       "verdict": "almost",
+-     },
+-     {
+-       "accuracy": {
+-         "drink": {
+-           "correct": 6,
+-           "total": 6,
+-         },
+-         "heart": {
+-           "correct": 3,
+-           "total": 3,
+-         },
+-         "milk": {
+-           "correct": 3,
+-           "total": 3,
+-         },
+-         "temp": {
+-           "correct": 3,
+-           "total": 3,
+-         },
+-       },
+-       "arrived": 6,
+-       "customers": 6,
+-       "difficulty": "normal",
+-       "endedAt": "2026-10-18T09:05:00.000Z",
+-       "ending": "finished",
+-       "events": [],
+-       "grade": "excellent",
+-       "handedBack": 0,
+-       "id": "2026-10-18T09:00:00.000Z#2",
+-       "kind": "shift",
+-       "mode": "day2",
+-       "pardons": {
+-         "questions": 2,
+-         "repeats": 0,
+-         "replays": 0,
+-       },
+-       "quit": null,
+-       "refused": 0,
+-       "registerWait": {
+-         "each": [
+-           0,
+-           0,
+-           0,
+-           0,
+-           0,
+-           0,
+-         ],
+-         "max": 0,
+-         "mean": 0,
+-         "median": 0,
+-       },
+-       "satisfaction": 95,
+-       "seed": 3,
+-       "serveSeconds": {
+-         "each": [
+-           45.2,
+-           64.5,
+-           57.9,
+-           51.2,
+-           60,
+-           68.8,
+-         ],
+-         "max": 68.8,
+-         "mean": 57.9,
+-         "median": 58.9,
+-       },
+-       "served": 6,
+-       "serviceSeconds": 252.3,
+-       "session": "2026-10-18T09:00:00.000Z",
+-       "shiftIndex": null,
+-       "startedAt": "2026-10-18T09:00:00.000Z",
+-       "tipsCents": 980,
+-       "visits": [
+-         {
+-           "handedBack": 0,
+-           "key": "dazza",
+-           "line": "dazza.3",
+-           "outcome": "served",
+-           "questions": 1,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 16.8,
+-           "satisfaction": 100,
+-           "serveSeconds": 45.2,
+-           "tier": 2,
+-           "tipCents": 300,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "priya",
+-           "line": "priya.3",
+-           "outcome": "served",
+-           "questions": 1,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 20.5,
+-           "satisfaction": 97,
+-           "serveSeconds": 64.5,
+-           "tier": 2,
+-           "tipCents": 200,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "beryl",
+-           "line": "beryl.3",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 11.4,
+-           "satisfaction": 100,
+-           "serveSeconds": 57.9,
+-           "tier": 1,
+-           "tipCents": 100,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "mei",
+-           "line": "mei.3",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 11.3,
+-           "satisfaction": 98,
+-           "serveSeconds": 51.2,
+-           "tier": 2,
+-           "tipCents": 250,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "jiwoo",
+-           "line": "jiwoo.5",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 11.3,
+-           "satisfaction": 95,
+-           "serveSeconds": 60,
+-           "tier": 2,
+-           "tipCents": 100,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "karen",
+-           "line": "karen.1",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 10.4,
+-           "satisfaction": 79,
+-           "serveSeconds": 68.8,
+-           "tier": 2,
+-           "tipCents": 30,
+-           "wrong": [],
+-         },
+-       ],
+-       "walkouts": 0,
+-       "walkoutsAt": {
+-         "ordering": 0,
+-         "queue": 0,
+-         "register": 0,
+-         "ticket": 0,
+-       },
+-       "week": null,
+-     },
+-     {
+-       "accuracy": {
+-         "drink": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-         "heart": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-         "milk": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-         "temp": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-       },
+-       "arrived": 6,
+-       "customers": 6,
+-       "difficulty": "normal",
+-       "endedAt": "2026-10-18T09:05:00.000Z",
+-       "ending": "finished",
+-       "events": [],
+-       "grade": "disaster",
+-       "handedBack": 0,
+-       "id": "2026-10-18T09:00:00.000Z#3",
+-       "kind": "shift",
+-       "mode": "day2",
+-       "pardons": {
+-         "questions": 0,
+-         "repeats": 0,
+-         "replays": 0,
+-       },
+-       "quit": null,
+-       "refused": 0,
+-       "registerWait": {
+-         "each": [],
+-         "max": null,
+-         "mean": null,
+-         "median": null,
+-       },
+-       "satisfaction": 0,
+-       "seed": 8,
+-       "serveSeconds": {
+-         "each": [],
+-         "max": null,
+-         "mean": null,
+-         "median": null,
+-       },
+-       "served": 0,
+-       "serviceSeconds": 354.3,
+-       "session": "2026-10-18T09:00:00.000Z",
+-       "shiftIndex": null,
+-       "startedAt": "2026-10-18T09:00:00.000Z",
+-       "tipsCents": 0,
+-       "visits": [
+-         {
+-           "handedBack": 0,
+-           "key": "dazza",
+-           "line": "dazza.3",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 2,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "priya",
+-           "line": "priya.4",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 2,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "beryl",
+-           "line": "beryl.3",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 1,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "mei",
+-           "line": "mei.2",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 1,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "jiwoo",
+-           "line": "jiwoo.1",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 2,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "karen",
+-           "line": "karen.1",
+-           "outcome": "walkout",
+-           "questions": 0,
+-           "reached": "register",
+-           "registerWait": null,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 2,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-       ],
+-       "walkouts": 6,
+-       "walkoutsAt": {
+-         "ordering": 0,
+-         "queue": 0,
+-         "register": 6,
+-         "ticket": 0,
+-       },
+-       "week": null,
+-     },
+-     {
+-       "attempts": [],
+-       "endedAt": "2026-10-18T10:05:00.000Z",
+-       "ending": "title",
+-       "id": "2026-10-18T10:00:00.000Z#1",
+-       "kind": "trial",
+-       "quit": {
+-         "attempt": 1,
+-         "phase": "steam",
+-       },
+-       "score": null,
+-       "seconds": 100,
+-       "seed": 9,
+-       "session": "2026-10-18T10:00:00.000Z",
+-       "startedAt": "2026-10-18T10:00:00.000Z",
+-       "verdict": null,
+-     },
+-     {
+-       "accuracy": {
+-         "drink": {
+-           "correct": 3,
+-           "total": 3,
+-         },
+-         "heart": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-         "milk": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-         "temp": {
+-           "correct": 0,
+-           "total": 0,
+-         },
+-       },
+-       "arrived": 4,
+-       "customers": 2,
+-       "difficulty": "normal",
+-       "endedAt": "2026-10-18T10:05:00.000Z",
+-       "ending": "title",
+-       "events": [],
+-       "grade": null,
+-       "handedBack": 0,
+-       "id": "2026-10-18T10:00:00.000Z#2",
+-       "kind": "shift",
+-       "mode": "week",
+-       "pardons": {
+-         "questions": 0,
+-         "repeats": 0,
+-         "replays": 0,
+-       },
+-       "quit": {
+-         "inCafe": 2,
+-         "phase": "service",
+-         "served": 2,
+-         "serviceTime": 89,
+-         "station": "shot",
+-         "walkouts": 0,
+-       },
+-       "refused": 0,
+-       "registerWait": {
+-         "each": [
+-           0,
+-           0,
+-           0,
+-           0,
+-         ],
+-         "max": 0,
+-         "mean": 0,
+-         "median": 0,
+-       },
+-       "satisfaction": null,
+-       "seed": 4,
+-       "serveSeconds": {
+-         "each": [
+-           37.7,
+-           40,
+-         ],
+-         "max": 40,
+-         "mean": 38.9,
+-         "median": 38.9,
+-       },
+-       "served": 2,
+-       "serviceSeconds": 89,
+-       "session": "2026-10-18T10:00:00.000Z",
+-       "shiftIndex": 0,
+-       "startedAt": "2026-10-18T10:00:00.000Z",
+-       "tipsCents": 500,
+-       "visits": [
+-         {
+-           "handedBack": 0,
+-           "key": "dazza",
+-           "line": "gen-4-0-0",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 9.3,
+-           "satisfaction": 100,
+-           "serveSeconds": 37.7,
+-           "tier": 1,
+-           "tipCents": 300,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "priya",
+-           "line": "gen-4-0-1",
+-           "outcome": "served",
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 11.4,
+-           "satisfaction": 100,
+-           "serveSeconds": 40,
+-           "tier": 2,
+-           "tipCents": 200,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "beryl",
+-           "line": "beryl.3",
+-           "outcome": null,
+-           "questions": 0,
+-           "reached": "ticket",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": 11.4,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 1,
+-           "tipCents": null,
+-           "wrong": [],
+-         },
+-         {
+-           "handedBack": 0,
+-           "key": "mei",
+-           "line": "gen-4-0-3",
+-           "outcome": null,
+-           "questions": 0,
+-           "reached": "ordering",
+-           "registerWait": 0,
+-           "repeats": 0,
+-           "replays": 0,
+-           "ringUpSeconds": null,
+-           "satisfaction": null,
+-           "serveSeconds": null,
+-           "tier": 2,
+-           "tipCents": null,
+-           "wrong": null,
+-         },
+-       ],
+-       "walkouts": 0,
+-       "walkoutsAt": {
+-         "ordering": 0,
+-         "queue": 0,
+-         "register": 0,
+-         "ticket": 0,
+-       },
+-       "week": 1,
+-     },
+-   ],
++   "records": [],
+    "version": 1,
+  }
+
+ ❯ tests/review/independentAcceptanceStorage.test.ts:74:31
+     72|     expect(loaded.records.length).toBeGreaterThan(0);
+     73|     disk.failRead = true;
+     74|     expect.soft(store.read()).toEqual(loaded);
+       |                               ^
+     75|     const next = { ...loaded.records[0]!, id: 'independent-new-session…
+     76|     store.put(next);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/review/independentAcceptanceStorage.test.ts > independent acceptance: last good storage reads > preserves previously exported records when a later read fails before the next log write
+AssertionError: expected [ 'independent-new-session-record' ] to deeply equal [ '2026-10-18T09:00:00.000Z#1', …(5) ]
+
+- Expected
++ Received
+
+  [
+-   "2026-10-18T09:00:00.000Z#1",
+-   "2026-10-18T09:00:00.000Z#2",
+-   "2026-10-18T09:00:00.000Z#3",
+-   "2026-10-18T10:00:00.000Z#1",
+-   "2026-10-18T10:00:00.000Z#2",
+    "independent-new-session-record",
+  ]
+
+ ❯ tests/review/independentAcceptanceStorage.test.ts:77:51
+     75|     const next = { ...loaded.records[0]!, id: 'independent-new-session…
+     76|     store.put(next);
+     77|     expect(store.read().records.map((r) => r.id)).toEqual([
+       |                                                   ^
+     78|       ...loaded.records.map((r) => r.id),
+     79|       next.id,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  2 failed | 21 passed (23)
+   Start at  12:36:21
+   Duration  27.83s (tests 98%, transform 1%, import 1%)
+

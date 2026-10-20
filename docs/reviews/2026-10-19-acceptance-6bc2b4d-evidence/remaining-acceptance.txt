@@ -1,0 +1,55 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /Users/edwardhwang/Desktop/nwc-review-2
+
+stdout | tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone
+pruned 1 cached clip(s) no longer in the manifest
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public
+public .aif: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  probe.aif: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src
+src .mp3 import: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/probe-Ctu3S1jV.mp3: no provenance: not in the voice manifest, the segment manifest or provenance.json
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache
+{"output":"pruned 1 cached clip(s) no longer in the manifest","outsideSentinelSurvived":true}
+
+ ✓ tests/review/independentPrune.test.ts > pruning is explicitly gated and leaves segment/licensed indexes alone 147ms
+ ✓ tests/review/independentPrune.test.ts > prune must never follow a cache subdirectory symlink and delete a file outside voice-cache 75ms
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing
+missing licence: [audio-gate] 1 audio file(s) in the build have no verified licence:
+  assets/voice/probe.mp3: release voice clip without a licence
+Remove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).
+
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true)
+{"placeholder":true,"error":"[audio-gate] 1 audio file(s) in the build have no verified licence:\n  assets/voice/segments/dazza/probe.mp3: segment clip is a placeholder: the segment manifest lists release audio only\nRemove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).","remainsInBuild":true}
+
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an unlisted .aif in public 40ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects an .mp3 imported from src 50ms
+stdout | tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false)
+{"placeholder":false,"error":"[audio-gate] 1 audio file(s) in the build have no verified licence:\n  assets/voice/segments/dazza/probe.mp3: segment clip is a placeholder: the segment manifest lists release audio only\nRemove them (from public/, or the import that brings them in), or record their licence (docs/AUDIO_PROVENANCE.md).","remainsInBuild":true}
+
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a licensed_tts line clip with the licence field missing 39ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag true) 18ms
+ ✓ tests/review/independentGate.test.ts > independent release build mutations in scratch projects > rejects a segment of provenance placeholder (placeholder flag false) 28ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v2: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 7ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > v3: an incorrect accepted drink survives failed-shift autosave and a fresh reload without losing lastOrder 1ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > day2 summary must not persist visits or affinity 0ms
+ ✓ tests/review/independentM2.test.ts > independent M2 save compatibility and app autosave > endless summary must not persist visits or affinity 1ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > pause must synchronise all HUDs and audio and prevent a released hold becoming a click 11ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > title pause is a no-op, but a subsequent rush pause must actually suspend audio 2ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > trial: replay captions must wait for resumed audio and target exactly that HUD 15ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > practice: replay captions must wait for resumed audio and target exactly that HUD 5ms
+ ✓ tests/review/independentM2.test.ts > independent shared pause harness coverage > rush: replay captions must wait for resumed audio and target exactly that HUD 4ms
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  12:46:19
+   Duration  1.10s (transform 59%, tests 28%, import 12%)
+

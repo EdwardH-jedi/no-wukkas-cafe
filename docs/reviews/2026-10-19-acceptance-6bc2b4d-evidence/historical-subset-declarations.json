@@ -1,0 +1,94 @@
+[
+  {
+    "revision": "ef9071d",
+    "file": "tests/review/independentPrune.test.ts",
+    "directDeclarations": 2,
+    "declarations": [
+      "it('pruning is explicitly gated and leaves segment/licensed indexes alone', () => {",
+      "it('prune must never follow a cache subdirectory symlink and delete a file outside voice-cache', () => {"
+    ]
+  },
+  {
+    "revision": "ef9071d",
+    "file": "tests/review/independentSlowAudio.test.ts",
+    "directDeclarations": 4,
+    "declarations": [
+      "it('Web Audio advances by wall time, including a long RAF gap, and freezes on pause', async () => {",
+      "it(`25 s load at timeScale ${scale}: the order must be heard before ticketing`, async () => {",
+      "it(`10 s load at timeScale ${scale}: subtitle dispatch must not lead audible speech`, async () => {",
+      "it('legacy scaled audio clock masks the timeScale 3 timeout ordering defect', async () => {"
+    ]
+  },
+  {
+    "revision": "ef9071d",
+    "file": "tests/review/independentFuzz.test.ts",
+    "directDeclarations": 3,
+    "declarations": [
+      "it(`${mode}: no honk overlaps orders/answers and 25-35% of shifts get a bird`, () => {",
+      "it('THE_USUAL becomes reachable across 1000 seeds and five consecutive saved shifts', () => {",
+      "it('PROPOSED RULE awaiting Edward: serving a regular correctly raises affinity by 1', () => {"
+    ]
+  },
+  {
+    "revision": "ef9071d",
+    "file": "tests/review/independentGate.test.ts",
+    "directDeclarations": 4,
+    "declarations": [
+      "it('rejects an unlisted .aif in public', async () => {",
+      "it('rejects an .mp3 imported from src', async () => {",
+      "it('rejects a licensed_tts line clip with the licence field missing', async () => {",
+      "it(`rejects a segment of provenance placeholder (placeholder flag ${placeholder})`, async () => {"
+    ]
+  },
+  {
+    "revision": "b78c3a4",
+    "file": "tests/review/independentSuspendedCancellation.test.ts",
+    "directDeclarations": 5,
+    "declarations": [
+      "it('quitting to title while a decoded line waits must not emit the old game on resume', async () => {",
+      "it('a gone customer whose segments decoded during suspension must stay silent on resume', async () => {",
+      "it(`${kind}: stopVoice while paused must not emit the cancelled line on resume`, async () => {",
+      "it(`${kind}: a newer line while browser-suspended must not leak the old line on resume`, async () => {",
+      "it(`${kind}: an uncancelled suspended line starts once and remains connected on resume`, async () => {"
+    ]
+  },
+  {
+    "revision": "b78c3a4",
+    "file": "tests/review/independentKeys.test.ts",
+    "directDeclarations": 5,
+    "declarations": [
+      "it('Usual keys must restore all three bindings instead of only closing Settings', () => {",
+      "it('closing Settings while awaiting a binding must not steal the next gameplay key', () => {",
+      "it('an explicit key choice still saves; Escape cancels without changing it', () => {",
+      "it('reset during capture cancels the capture, keeps Settings open, and restores every label', () => {",
+      "it('backdrop close cancels capture and reopening permits a fresh explicit key choice', () => {"
+    ]
+  },
+  {
+    "revision": "b78c3a4",
+    "file": "tests/review/independentPausedCaptions.test.ts",
+    "directDeclarations": 0,
+    "declarations": [
+      "it.each(['paused', 'browser-suspended'] as const)("
+    ]
+  },
+  {
+    "revision": "4c4d72d",
+    "file": "tests/review/independentSuspendedCancellation.test.ts",
+    "directDeclarations": 7,
+    "declarations": [
+      "it(`${kind}: cancelling an already audible line while suspended must silence it on resume`, async () => {",
+      "it(`${kind}: ${cancel} during suspension must also silence a previously replaced line still fading`, async () => {",
+      "it('quitting to title while a decoded line waits must not emit the old game on resume', async () => {",
+      "it('a gone customer whose segments decoded during suspension must stay silent on resume', async () => {",
+      "it(`${kind}: stopVoice while paused must not emit the cancelled line on resume`, async () => {",
+      "it(`${kind}: a newer line while browser-suspended must not leak the old line on resume`, async () => {",
+      "it(`${kind}: an uncancelled suspended line starts once and remains connected on resume`, async () => {"
+    ]
+  },
+  {
+    "revision": "4c4d72d",
+    "file": "tests/audio/manager.test.ts",
+    "directDeclarations": 23
+  }
+]

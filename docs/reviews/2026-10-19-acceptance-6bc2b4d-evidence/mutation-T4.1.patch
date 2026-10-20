@@ -1,0 +1,13 @@
+diff --git a/src/sim/scores.ts b/src/sim/scores.ts
+index b73d32b..5c90e60 100644
+--- a/src/sim/scores.ts
++++ b/src/sim/scores.ts
+@@ -61,7 +61,7 @@ function compare(a: ScoreEntry, b: ScoreEntry): number {
+   }
+   if (a.served !== b.served) return b.served - a.served;
+   if (a.tipsCents !== b.tipsCents) return b.tipsCents - a.tipsCents;
+-  return a.mode === 'endless' ? 0 : a.walkouts - b.walkouts;
++  return 0;
+ }
+ 
+ /** The scores with `e` on its board, and its place there (0 = best), or null if it didn't make

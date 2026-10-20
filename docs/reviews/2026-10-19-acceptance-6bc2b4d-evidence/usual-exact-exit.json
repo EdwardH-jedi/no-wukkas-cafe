@@ -1,0 +1,4 @@
+{
+  "script": "recompute-usual.mjs evaluated with cwd repo root",
+  "exit": 1
+}

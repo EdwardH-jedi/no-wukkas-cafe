@@ -127,7 +127,9 @@ jsdom.
       `src/app/frame.ts`), have `boot.ts` and the harness both import it, delete the copy and its "copied, not
       shared" comment. Behaviour identical: rushTrace's seven hashes unchanged
       (`node --import ./tests/review/nodeReviewLoader.mjs tests/review/recomputeRushTrace.ts`).
-      verify: `npx vitest run tests/review tests/core/rushTrace.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
+      verify: `npx vitest run tests/review tests/core/rushTrace.test.ts tests/app/pauseShared.test.ts tests/review/independentAcceptanceContracts.test.ts && ! grep -q "copied, not shared" tests/review/harness.ts`
+      (acceptance F4: `pauseShared` resolves boot's and the harness's imports to the same module; the
+      independent contract test is named so a narrowed `tests/review` filter cannot drop it)
 - [x] T2.7 [simple] Docs pointers: a two-line banner at the top of `docs/TODO.md` ("Planning moved to `todo.md`
       on 2026-10-18; this file is the evidence archive, Evidence lines still get appended here") and a Notes line
       in `docs/MILESTONES.md` mapping its M1–M7 to this file's M2–M5. No other text changes.
@@ -179,6 +181,9 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       total bytes of non-audio files; exit with the build's code; `--budget <bytes>` (default 3,000,000) fails
       over budget. Add the script to `package.json` and one line to `AGENTS.md` §3.
       verify: `npm run build:clean` exits 0 (no script today) and `npm run build:clean -- --budget 1` exits 1
+      and `npx vitest run tests/scripts/buildClean.test.ts tests/review/independentAcceptanceBuild.test.ts -t "build:clean"`
+      (acceptance F5: the first two commands stay green when working-tree files leak into the HEAD export;
+      these tests fail on an uncommitted-file sentinel)
 - [x] T3.2 `index.html` for sharing: `<title>No Wukkas Café</title>` (today "Day 1: The Trial"), description that
       names the week, `og:title` / `og:description` / `og:image` / `og:type`, `twitter:card`. OG image
       `public/og.png` 1200×630: a Playwright script `scripts/og-image.ts` screenshots the title screen at that
@@ -200,7 +205,9 @@ in headless Chromium, not a device; frame times there mean nothing and are only 
       (read from an env the script sets). No new
       dependency. Test `tests/scripts/deploy.test.ts` on a temp bare repo (pattern: temp dirs in
       `tests/scripts/voicesRender.test.ts`): dry run writes nothing to the remote, `--push` updates the branch.
-      verify: `npx vitest run tests/scripts/deploy.test.ts && npm run deploy`
+      verify: `npx vitest run tests/scripts/deploy.test.ts && npx vitest run tests/review/independentAcceptanceBuild.test.ts -t "deploy passes the actual build" && npm run deploy`
+      (acceptance F6: `--dist` fixtures never start the build; these cases read the NWC_BASE / NWC_SITE_URL
+      the build subprocess receives: `/<repo>/` for a repository deploy, `/` with `--domain`)
 - [x] T3.5 [simple] Playtest kit: `docs/playtests/README.md` (how to run a 30-min session: `npm run dev -- --host`
       or the deployed URL, Settings → Playtest log → Clear between testers, Export log at the end, where to put
       the file) and `docs/playtests/TEMPLATE.md` (per tester: device/browser, Trial result, shifts played, where
@@ -262,7 +269,9 @@ entry; top 10 per board. No names or initials (one device, one player).
       "Best so far: <grade>, N served". Tests: `tests/app/scores.test.ts` (pattern `tests/app/telemetry.test.ts`):
       a summary writes one entry, a worse second run doesn't change the best; `tests/ui/shiftReport.test.ts`:
       the line for new / not new.
-      verify: `npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts`
+      verify: `npx vitest run tests/app/scores.test.ts tests/ui/shiftReport.test.ts tests/app/rushSummaryScores.test.ts && npx vitest run tests/review/independentAcceptanceContracts.test.ts -t "production summary dispatch"`
+      (acceptance F7: the first two files call `recordScore` directly; `rushSummaryScores` and the independent
+      dispatch test push real summary events through `createRushFrame`, one score each for Day 2 / week / Endless)
 - [x] T4.4 Scores screen: `src/ui/screens/scores.ts` (Mon–Fri best per difficulty, Endless top 10 with served and
       tips, "Clear scores" asking twice like Clear log), a "Scores" entry in `MODES` of `src/ui/screens/title.ts`
       wired in `src/app/title.ts`, Esc/Tab loop via `menuKeys` like Settings, no horizontal scroll at 390 px.

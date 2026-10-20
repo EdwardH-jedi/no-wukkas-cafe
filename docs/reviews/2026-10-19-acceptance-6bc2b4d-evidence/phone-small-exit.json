@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npx",
+    "vitest",
+    "run",
+    "tests/review/independentAcceptanceBrowser.test.ts",
+    "-t",
+    "register and rush subtitle fit .* at s",
+    "--reporter=verbose"
+  ],
+  "exit": 1
+}

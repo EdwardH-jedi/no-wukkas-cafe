@@ -1,0 +1,1164 @@
+[
+  {
+    "task": "T2.1",
+    "id": "T2.1.01",
+    "clause": "Land d8be91a / fix/review-0cae2cf in main",
+    "status": "PASS",
+    "evidence": "source-checks.json ancestry d8be91a=0; git show 157329e (merge parents)"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.02",
+    "clause": "A cancelled suspended-context line is cut rather than faded on resume",
+    "status": "PASS",
+    "evidence": "src/audio/voiceLines.ts:88; task-verifiers.txt: independentSuspendedCancellation and manager tests"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.03",
+    "clause": "Typecheck, lint and units exit 0 on the implementation branch before merge",
+    "status": "UNVERIFIED",
+    "evidence": "Historical unit snapshot b78c3a4 is rerun; old branch timing and historical lint/typecheck execution cannot be recovered from source"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.04",
+    "clause": "Run the full E2E on that branch, before tick/merge",
+    "status": "UNVERIFIED",
+    "evidence": "Historical outcome/timing not independently rerun; only current full E2E is authorised once"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.05",
+    "clause": "Append Phase 6 6.12 with d8be91a, P2 F4 and unit/E2E/reviewer evidence",
+    "status": "PASS",
+    "evidence": "docs/TODO.md:477,536; git show 8fe52d1"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.06",
+    "clause": "Merge with --no-ff, then fast-forward push main",
+    "status": "PASS",
+    "evidence": "157329e has two parents; d8be91a ancestor of freshly fetched origin/main (historical push command itself is not inferable)"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.07",
+    "clause": "Send review the main SHA, unit/E2E counts and ready-for-review message",
+    "status": "UNVERIFIED",
+    "evidence": "No independently accessible message receipt; a planning note is not a receipt"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.08",
+    "clause": "Cut feat/m2-leftovers from main for the remaining tasks",
+    "status": "PASS",
+    "evidence": "git merge-base 932563d 157329e = 157329e; c05d257 merge topology"
+  },
+  {
+    "task": "T2.1",
+    "id": "T2.1.09",
+    "clause": "The exact verify ancestry and three reviewer files succeed now",
+    "status": "PASS",
+    "evidence": "source-checks.json ancestry; task-verifiers.txt, 154/154 selected tests"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.01",
+    "clause": "RegularMemory.visits increases on every accepted regular serve in a week shift, correct or not",
+    "status": "PASS",
+    "evidence": "src/core/rush/serve.ts:93; src/core/rush/events.ts:184; tests/core/regularAffinity.test.ts"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.02",
+    "clause": "A hand-back, Day 2, and non-regular customer do not gain regular visits",
+    "status": "PASS",
+    "evidence": "src/core/rush/events.ts:185; regularAffinity author controls plus independentM2 controls in baseline"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.03",
+    "clause": "finishShift carries visits into the save",
+    "status": "PASS",
+    "evidence": "src/core/week/session.ts:61; src/app/weekWiring.ts:108; regularAffinity two-shift test"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.04",
+    "clause": "Two visits, one wrong yields visits 2 and affinity 1",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt: regularAffinity two-shift assertion"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.05",
+    "clause": "Affinity rules are unchanged",
+    "status": "PASS",
+    "evidence": "events.ts:188; event-rates.txt: 35,113 correct serves + 888 usual points = 36,001, zero mismatches"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.06",
+    "clause": "Nothing reads visits to choose events; event mix / first-try table unchanged",
+    "status": "PASS",
+    "evidence": "balance3 comparison: requested 3aa0828^ versus 6bc2b4d, plus actual pre-change 932563d^; visits use search"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.07",
+    "clause": "Commit body records identical before/after first-try table",
+    "status": "PASS",
+    "evidence": "git show 932563d: novice 90/63/37/0/0, average 100/100/100/80/60, expert 100 each"
+  },
+  {
+    "task": "T2.2",
+    "id": "T2.2.08",
+    "clause": "Verify goes red without the feature",
+    "status": "PASS",
+    "evidence": "mutation-T2.2.txt exit 1, wrong-serve visits and saved total fail"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.01",
+    "clause": "Current index equals save.shift: open in week 1 and week 2+",
+    "status": "PASS",
+    "evidence": "src/core/week/progress.ts:80; independentAcceptanceContracts all 5 indices in weeks 1,2,9"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.02",
+    "clause": "Earlier index: done, irrespective of old best",
+    "status": "PASS",
+    "evidence": "same exhaustive row test; progress.ts:80"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.03",
+    "clause": "Later index: locked, including rows with week-1 bests",
+    "status": "PASS",
+    "evidence": "same exhaustive row test and author week-2 case"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.04",
+    "clause": "best grade is retained even on locked rows",
+    "status": "PASS",
+    "evidence": "progress.ts:81; all 15 row arrays checked"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.05",
+    "clause": "shiftRows agrees with canPlay / shiftCells",
+    "status": "PASS",
+    "evidence": "src/core/week/session.ts:18; src/ui/screens/labels.ts:50; baseline UI screen tests"
+  },
+  {
+    "task": "T2.3",
+    "id": "T2.3.06",
+    "clause": "Verify goes red under old-best-based status",
+    "status": "PASS",
+    "evidence": "mutation-T2.3.txt exit 1"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.01",
+    "clause": "Register implementation and styles live in src/ui/pos.ts and src/ui/styles/rush.css",
+    "status": "PASS",
+    "evidence": "files inspected; rush.css:503 positions the register below measured rail"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.02",
+    "clause": "At seed 7 Day 2, register does not cover #rinstr at 390x844 while ordering",
+    "status": "FAIL",
+    "evidence": "F3: independentAcceptanceBrowser Small case: POS top 114.296875 < instruction bottom 119.078125"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.03",
+    "clause": "The same non-intersection holds at 375x667",
+    "status": "FAIL",
+    "evidence": "F3: same 4.78125px overlap; phone-small-reproduction.txt"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.04",
+    "clause": "Retain a real Playwright phoneHud spec driven by __trial, rather than jsdom",
+    "status": "PASS",
+    "evidence": "tests/e2e/phoneHud.spec.ts:1-180; actual expanded Chromium probes"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.05",
+    "clause": "1024x640 register box unchanged within 2px from its earlier box",
+    "status": "PASS",
+    "evidence": "independentAcceptanceBrowser measures actual ea6fdd4^ versus6bc2b4d at1024x640 after allowing identical bundled fonts: x662/y133.3046875/w346/h373.390625 both, all deltas0px; desktop-reproduction.txt"
+  },
+  {
+    "task": "T2.4",
+    "id": "T2.4.06",
+    "clause": "Named verify passes for its covered cases",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T2.5",
+    "id": "T2.5.01",
+    "clause": "Subtitle rules live in base.css / hud.css and #subs stays inside 390px at Medium",
+    "status": "PASS",
+    "evidence": "independentAcceptanceBrowser actual Day 1 #subs x16 width358"
+  },
+  {
+    "task": "T2.5",
+    "id": "T2.5.02",
+    "clause": "Large #subs stays inside 390px",
+    "status": "PASS",
+    "evidence": "independentAcceptanceBrowser actual Day 1 #subs x16.21875 width357.5625"
+  },
+  {
+    "task": "T2.5",
+    "id": "T2.5.03",
+    "clause": "Small/Medium/Large at both 390x844 and 375x667 stay in viewport",
+    "status": "PASS",
+    "evidence": "final-test.txt: six actual Day 1 #subs assertions; recorded-rsubs-geometry.json independently computes all six Day 2 rectangles inside the viewport from logged measurements"
+  },
+  {
+    "task": "T2.5",
+    "id": "T2.5.04",
+    "clause": "phoneHud.spec.ts adds the specified #subs bounding-box assertion for each text size",
+    "status": "FAIL",
+    "evidence": "F9: phoneHud.spec.ts:112-132 explicitly queries #rsubs only; phone-spec-contract.json literalSubsQuery=false. New independentAcceptanceBrowser covers actual Day 1 #subs and passes"
+  },
+  {
+    "task": "T2.5",
+    "id": "T2.5.05",
+    "clause": "Named subtitle verify runs and passes",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T2.6",
+    "id": "T2.6.01",
+    "clause": "setPaused, resumeAll and replay implementation exist once in a small exported src/app module",
+    "status": "PASS",
+    "evidence": "src/app/pause.ts:10,27,36 (replayLast); 51 lines; source-checks.json"
+  },
+  {
+    "task": "T2.6",
+    "id": "T2.6.02",
+    "clause": "boot imports all three shared functions",
+    "status": "PASS",
+    "evidence": "src/app/boot.ts:29,101,175; independentAcceptanceContracts import test"
+  },
+  {
+    "task": "T2.6",
+    "id": "T2.6.03",
+    "clause": "review harness imports the same functions, copy/comment removed",
+    "status": "PASS",
+    "evidence": "tests/review/harness.ts:16,475; no copied, not shared match"
+  },
+  {
+    "task": "T2.6",
+    "id": "T2.6.04",
+    "clause": "All seven rushTrace hashes remain identical to 2026-10-17-main-1a54a00",
+    "status": "PASS",
+    "evidence": "rush-trace.txt and artifact-checks.json: seven true equalities"
+  },
+  {
+    "task": "T2.6",
+    "id": "T2.6.05",
+    "clause": "The named verify detects drift back to a separate boot copy",
+    "status": "FAIL",
+    "evidence": "F4: mutation-T2.6.txt exits 0 after boot imports pauseDuplicate; new contract test exits 1"
+  },
+  {
+    "task": "T2.7",
+    "id": "T2.7.01",
+    "clause": "Two-line top banner moves planning to todo.md on 2026-10-18 and preserves Evidence archive",
+    "status": "PASS",
+    "evidence": "docs/TODO.md:3-4; git show 0f30d16"
+  },
+  {
+    "task": "T2.7",
+    "id": "T2.7.02",
+    "clause": "MILESTONES Notes maps its M1-M7 to the new M2-M5 including human gates",
+    "status": "PASS",
+    "evidence": "docs/MILESTONES.md:21; git show 0f30d16"
+  },
+  {
+    "task": "T2.7",
+    "id": "T2.7.03",
+    "clause": "No other existing document text changed",
+    "status": "PASS",
+    "evidence": "0f30d16 diff adds banner and Notes only; root todo tick is bookkeeping"
+  },
+  {
+    "task": "T2.7",
+    "id": "T2.7.04",
+    "clause": "Both grep predicates succeed",
+    "status": "PASS",
+    "evidence": "grep -q \"Planning moved to\" docs/TODO.md && grep -q todo.md docs/MILESTONES.md (both predicates true)"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.01",
+    "clause": "Merge local review branch 5b675ce with --no-ff",
+    "status": "PASS",
+    "evidence": "1f0bfa8 merges descendant 0b72172; source-checks.json ancestry"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.02",
+    "clause": "Suspended cancellation also cuts every source in fading, not only current source",
+    "status": "PASS",
+    "evidence": "src/audio/voiceLines.ts:88; independentSuspendedCancellation F5 cases all green"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.03",
+    "clause": "Uncancelled resume and exactly-once onStart preserved",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt suspendedCancellation/manager controls"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.04",
+    "clause": "No later segment starts after cancellation",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt segment cancellation controls"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.05",
+    "clause": "Phase 6 contains 6.13 and Evidence",
+    "status": "PASS",
+    "evidence": "docs/TODO.md:481,542; historical-unit-4c4d72d.txt"
+  },
+  {
+    "task": "T2.8",
+    "id": "T2.8.06",
+    "clause": "Exact two-file verify succeeds",
+    "status": "PASS",
+    "evidence": "same two files included in task-verifiers.txt (39 tests combined)"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.01",
+    "clause": "scripts/build-clean.ts is exposed as npm run build:clean",
+    "status": "PASS",
+    "evidence": "package.json:13; scripts/build-clean.ts:1"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.02",
+    "clause": "Export HEAD via git archive into scratch, never uncommitted source",
+    "status": "PASS",
+    "evidence": "build-clean.ts:75; independentAcceptanceBuild dirty source/HTML sentinel test passes"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.03",
+    "clause": "Symlink node_modules and run the production build in scratch",
+    "status": "PASS",
+    "evidence": "build-clean.ts:80-86; clean-build.txt"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.04",
+    "clause": "Copy built dist back",
+    "status": "PASS",
+    "evidence": "build-clean.ts:93-95; actual output HTML inspected"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.05",
+    "clause": "Print the audio-gate line",
+    "status": "PASS",
+    "evidence": "clean-build.txt: [audio-gate] ok: 0 licensed audio file(s) in the build"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.06",
+    "clause": "Print non-audio bytes and default 3,000,000-byte budget",
+    "status": "PASS",
+    "evidence": "clean-build.txt: 1,562,576 bytes, budget 3,000,000"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.07",
+    "clause": "Preserve build failure exit code",
+    "status": "PASS",
+    "evidence": "independentAcceptanceBuild injects child npm exit23: script returns23 and retains previous dist; final-test.txt"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.08",
+    "clause": "--budget 1 exits 1 on excess",
+    "status": "PASS",
+    "evidence": "budget-one.txt exit 1; over by 1,562,575"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.09",
+    "clause": "AGENTS section 3 documents the command",
+    "status": "PASS",
+    "evidence": "AGENTS.md:39"
+  },
+  {
+    "task": "T3.1",
+    "id": "T3.1.10",
+    "clause": "Named two-command verify detects losing HEAD isolation",
+    "status": "FAIL",
+    "evidence": "F5: mutation-T3.1 smoke=0 / budget=1 despite dirty-tree overlay; independent build sentinel red"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.01",
+    "clause": "Title is No Wukkas Caf\u00e9 and description names the week",
+    "status": "PASS",
+    "evidence": "index.html:11-14; indexMeta.test.ts, 4 passed"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.02",
+    "clause": "og:title, og:description, og:image, og:type and twitter:card exist",
+    "status": "PASS",
+    "evidence": "index.html:18-31; indexMeta.test.ts"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.03",
+    "clause": "public/og.png exists, is 1200x630, at most 300kB",
+    "status": "PASS",
+    "evidence": "source-checks.json: 235,963 bytes and PNG dimensions"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.04",
+    "clause": "scripts/og-image.ts uses Playwright, title screen, 1200x630, free dev port, voice=0",
+    "status": "PASS",
+    "evidence": "scripts/og-image.ts:24-52 source; committed image visually inspected"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.05",
+    "clause": "A fresh run of the screenshot generator produces the claimed image",
+    "status": "PASS",
+    "evidence": "og-regenerated.json: generator rerun in throwaway worktree, exit 0, 1200x630 /242,869 bytes; committed original235,963 bytes restored"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.06",
+    "clause": "PNG is committed and metadata test parses tags / checks file",
+    "status": "PASS",
+    "evidence": "git ls-files public/og.png; task-verifiers.txt"
+  },
+  {
+    "task": "T3.2",
+    "id": "T3.2.07",
+    "clause": "og:image resolves correctly under repository base and domain base",
+    "status": "PASS",
+    "evidence": "artifact-checks.json actual deployed HTML: absolute github.io/no-wukkas-cafe/og.png and cafe.example.com/og.png"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.01",
+    "clause": "tests/e2e/perf.spec.ts runs in normal suite, no opt-in",
+    "status": "PASS",
+    "evidence": "perf.spec.ts has unconditional tests; final E2E discovery"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.02",
+    "clause": "Uses 1024x640 and 390x844",
+    "status": "PASS",
+    "evidence": "perf.spec.ts:11-20"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.03",
+    "clause": "Day 2 seed7 with at least three customers in cafe",
+    "status": "PASS",
+    "evidence": "tests/e2e/perf.spec.ts:48,59; final e2e-full.txt and both perf JSONs confirm3 customers at measurement"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.04",
+    "clause": "Reads real drawCalls from renderer.info.render.calls",
+    "status": "PASS",
+    "evidence": "src/app/debug.ts:213 drawCalls getter; perf.spec.ts:27,66"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.05",
+    "clause": "Asserts strictly fewer than 150 calls, logs median frame time without asserting it",
+    "status": "PASS",
+    "evidence": "perf.spec.ts:89-96"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.06",
+    "clause": "Writes JSON sidecars per viewport",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T3.3",
+    "id": "T3.3.07",
+    "clause": "Both runtime measurements meet budget (or fixme with recorded over-budget result)",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.01",
+    "clause": "scripts/deploy.ts is npm run deploy, calls build:clean",
+    "status": "PASS",
+    "evidence": "package.json:14; deploy.ts:52-59; deploy-dry.txt"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.02",
+    "clause": "Temporary worktree of origin/gh-pages replaces its content with dist",
+    "status": "PASS",
+    "evidence": "deploy.ts:72-77; artifact-checks.json and local bare-repo tests"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.03",
+    "clause": "Adds .nojekyll",
+    "status": "PASS",
+    "evidence": "actual dry-run commit trees and bare-repo --push test"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.04",
+    "clause": "--domain adds CNAME with host",
+    "status": "PASS",
+    "evidence": "artifact-checks.json domain commit: cafe.example.com newline"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.05",
+    "clause": "Commits deploy <sha> and prints would-push destination",
+    "status": "PASS",
+    "evidence": "deploy-dry.txt: deploy 6bc2b4d, origin/gh-pages and URL"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.06",
+    "clause": "Dry run default pushes nothing; remote remains db4c056",
+    "status": "PASS",
+    "evidence": "pages-before/after/after-domain.txt same db4c0567f5ba00ec9bf6078da44a8c78b5a17ef0"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.07",
+    "clause": "--push updates branch, exercised only against temporary bare repos in this audit",
+    "status": "PASS",
+    "evidence": "tests/scripts/deploy.test.ts:37-81 fixture and explicit --push tests; no project push invoked"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.08",
+    "clause": "Repository base /no-wukkas-cafe/ and domain base / are passed via environment",
+    "status": "PASS",
+    "evidence": "artifact-checks.json actual built script URLs; independentAcceptanceBuild environment controls"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.09",
+    "clause": "No dependency added",
+    "status": "PASS",
+    "evidence": "git diff 83eadff^ 83eadff -- package.json package-lock.json adds only the deploy script; deploy-dependency-diff.txt"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.10",
+    "clause": "Temporary repo test covers unchanged dry-run remote / updated pushed branch",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt: deploy 7/7"
+  },
+  {
+    "task": "T3.4",
+    "id": "T3.4.11",
+    "clause": "Named verify detects a broken production build base",
+    "status": "FAIL",
+    "evidence": "F6: mutation-T3.4.txt exit 0 with NWC_BASE=\"/\"; independent child-environment test exit 1"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.01",
+    "clause": "README describes 30-minute session, dev --host or deployed URL",
+    "status": "PASS",
+    "evidence": "docs/playtests/README.md:3,27,28"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.02",
+    "clause": "Clear between testers and Export at end; where files go",
+    "status": "PASS",
+    "evidence": "docs/playtests/README.md:30,57,58,60"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.03",
+    "clause": "Template captures device/browser, Trial result, shifts played and stuck points",
+    "status": "PASS",
+    "evidence": "docs/playtests/TEMPLATE.md:26,27,34,36,40"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.04",
+    "clause": "Template captures pardons/order, walk-outs, one more shift yes/no and quotes",
+    "status": "PASS",
+    "evidence": "docs/playtests/TEMPLATE.md:48,49,53,60"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.05",
+    "clause": "Metrics derive from ROADMAP Success metrics and TODO Phase5; copy instructions only",
+    "status": "PASS",
+    "evidence": "docs/playtests/README.md:14-22; TEMPLATE.md:3; no tester results fabricated"
+  },
+  {
+    "task": "T3.5",
+    "id": "T3.5.06",
+    "clause": "Both required files exist",
+    "status": "PASS",
+    "evidence": "test -f docs/playtests/README.md && test -f docs/playtests/TEMPLATE.md; both read"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.01",
+    "clause": "npm playtest:summary accepts multiple log.json arguments",
+    "status": "PASS",
+    "evidence": "scripts/playtest-summary.ts:38; summary-duplicate.txt"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.02",
+    "clause": "Pure src/sim/telemetrySummary.ts accepts version1 exported records",
+    "status": "PASS",
+    "evidence": "telemetrySummary.ts:100-120; purity baseline and task units"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.03",
+    "clause": "Aggregates sessions and shifts without double-counting repeated same-session records",
+    "status": "PASS",
+    "evidence": "summary-sample/duplicate.txt; independentM3 duplicate checkpoint cases pass"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.04",
+    "clause": "Aggregates served and walk-outs by stage",
+    "status": "PASS",
+    "evidence": "summary-sample.txt: 8 served, 6 register walk-outs; telemetrySummary tests"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.05",
+    "clause": "Aggregates accuracy per field and pardons/order",
+    "status": "PASS",
+    "evidence": "summary-sample.txt and telemetrySummary tests"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.06",
+    "clause": "Aggregates register wait median/max",
+    "status": "PASS",
+    "evidence": "independentM3 pooled-median case and telemetrySummary tests"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.07",
+    "clause": "Aggregates quit points and trial verdicts",
+    "status": "PASS",
+    "evidence": "summary-sample.txt; telemetrySummary tests"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.08",
+    "clause": "CLI emits Markdown tables",
+    "status": "PASS",
+    "evidence": "summary-sample.txt actual output"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.09",
+    "clause": "Fixture tests/fixtures/telemetry/sample.json was generated by headless playRush",
+    "status": "PASS",
+    "evidence": "tests/fixtures/telemetry/makeSample.ts regenerated in scratch: exit 0, byte-identical sample.json (fixture-regeneration.json)"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.10",
+    "clause": "Other versions rejected with diagnostic and exit 1",
+    "status": "PASS",
+    "evidence": "summary-version.txt exit 1: log version2, reads version1"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.11",
+    "clause": "Empty log yields zero/dashes, corrupt record rejected, two same-session logs deduplicated",
+    "status": "PASS",
+    "evidence": "summary-empty exit 0; summary-corrupt exit 1; summary-duplicate and independentM3 tests"
+  },
+  {
+    "task": "T3.6",
+    "id": "T3.6.12",
+    "clause": "Named verifier succeeds",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt + summary-sample.txt"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.01",
+    "clause": "README adds how to play including URL pending publication and phone use",
+    "status": "PASS",
+    "evidence": "README.md:24-48; git show b62c41f -- README.md adds the section"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.02",
+    "clause": "Controls include Space and 1-3",
+    "status": "PASS",
+    "evidence": "README.md:39-40"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.03",
+    "clause": "Links playtest kit",
+    "status": "PASS",
+    "evidence": "README.md:142-144"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.04",
+    "clause": "Points command table to AGENTS section3 and architecture to docs/DEVLOG.md",
+    "status": "PASS",
+    "evidence": "README.md:148-149"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.05",
+    "clause": "Existing sections retained, not rewritten",
+    "status": "PASS",
+    "evidence": "git show b62c41f -- README.md (additions only)"
+  },
+  {
+    "task": "T3.7",
+    "id": "T3.7.06",
+    "clause": "Both grep predicates succeed",
+    "status": "PASS",
+    "evidence": "grep -q docs/playtests README.md && grep -q DEVLOG README.md (both predicates true)"
+  },
+  {
+    "task": "T3.8",
+    "id": "T3.8.01",
+    "clause": "Duplicate record keeps copy that closed last, independent of file order",
+    "status": "PASS",
+    "evidence": "src/sim/telemetrySummary.ts:164-170; independentM3 checkpoint reversal cases green"
+  },
+  {
+    "task": "T3.8",
+    "id": "T3.8.02",
+    "clause": "readExport validates every record before aggregation",
+    "status": "PASS",
+    "evidence": "telemetrySummary.ts:116-119; independentM3 five invalid-record controls green"
+  },
+  {
+    "task": "T3.8",
+    "id": "T3.8.03",
+    "clause": "All seven previous red tests now green",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt independentM3 9/9, including seven previous reds"
+  },
+  {
+    "task": "T3.8",
+    "id": "T3.8.04",
+    "clause": "Phase 6 has 6.14 and 6.15",
+    "status": "PASS",
+    "evidence": "docs/TODO.md:485,487,547"
+  },
+  {
+    "task": "T3.8",
+    "id": "T3.8.05",
+    "clause": "Exact gate verifier succeeds",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt includes independentM3 + telemetrySummary: 17/17"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.01",
+    "clause": "src/sim/scores.ts defines ScoreEntry with mode day2/week/endless, week, shiftIndex, seed, difficulty",
+    "status": "PASS",
+    "evidence": "scores.ts:15; score tests and independent dispatch three modes"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.02",
+    "clause": "Entry grade, served, walkouts, integer tipsCents and passed-in ISO at",
+    "status": "PASS",
+    "evidence": "scores.ts:15,125; fromSummary test"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.03",
+    "clause": "Board keys separate every shift/difficulty and Endless/difficulty",
+    "status": "PASS",
+    "evidence": "scores.ts:50; score key tests"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.04",
+    "clause": "emptyScores and parseScores recover corrupt/other-version data",
+    "status": "PASS",
+    "evidence": "scores.ts:46,164; author parser and independentM4 malformed-grade/cross-board controls green"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.05",
+    "clause": "Week ranking: grade, then served, then tips, then fewer walkouts",
+    "status": "PASS",
+    "evidence": "scores.ts:57; scores.test.ts ordering cases; mutation T4.1 red"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.06",
+    "clause": "Endless ranks served then tips, not grade or walkouts",
+    "status": "PASS",
+    "evidence": "scores.ts:58,64; score Endless test"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.07",
+    "clause": "Ties keep earlier entry",
+    "status": "PASS",
+    "evidence": "scores.ts:77; author tie case + independentM4 reload control"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.08",
+    "clause": "Top ten cap per board",
+    "status": "PASS",
+    "evidence": "scores.ts:11,79; score cap test"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.09",
+    "clause": "insert and isNewBest do not change their input",
+    "status": "PASS",
+    "evidence": "scores.ts:69,104; score tests / independentM4 original equality"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.10",
+    "clause": "fromSummary maps summary and context fields",
+    "status": "PASS",
+    "evidence": "scores.ts:125; author fromSummary test"
+  },
+  {
+    "task": "T4.1",
+    "id": "T4.1.11",
+    "clause": "Named verifier detects a ranking regression",
+    "status": "PASS",
+    "evidence": "mutation-T4.1.txt exit 1 when fewer-walkouts tie-break removed"
+  },
+  {
+    "task": "T4.2",
+    "id": "T4.2.01",
+    "clause": "src/core/save/scores.ts offers read/put/clear and memoryOnly",
+    "status": "PASS",
+    "evidence": "src/core/save/scores.ts:11-18,45-55; tests/core/save/scores.test.ts (5/5)"
+  },
+  {
+    "task": "T4.2",
+    "id": "T4.2.02",
+    "clause": "Own versioned key nwc.scores.v1; outside save, no save migration",
+    "status": "PASS",
+    "evidence": "scores store:9; newSave contract has no scores; key isolation store test"
+  },
+  {
+    "task": "T4.2",
+    "id": "T4.2.03",
+    "clause": "Persistence, clearing and failed storage use telemetry-store pattern",
+    "status": "PASS",
+    "evidence": "score store tests5/5; copy intentionally differs after T4.8 caches last read"
+  },
+  {
+    "task": "T4.2",
+    "id": "T4.2.04",
+    "clause": "Tests at tests/core/save/scores.test.ts cover corresponding store operations",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt"
+  },
+  {
+    "task": "T4.2",
+    "id": "T4.2.05",
+    "clause": "Named verifier succeeds",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt score store5/5"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.01",
+    "clause": "App has scores; harness supplies memory store",
+    "status": "PASS",
+    "evidence": "src/app/context.ts scores; tests/review/harness.ts createScoresStore(null); independent dispatch controls"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.02",
+    "clause": "Every week summary is recorded",
+    "status": "PASS",
+    "evidence": "src/app/rushView.ts:64-65; independentAcceptanceContracts week"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.03",
+    "clause": "Day 2 and Endless summary paths are recorded",
+    "status": "PASS",
+    "evidence": "same event boundary; independentAcceptanceContracts day2/endless"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.04",
+    "clause": "Write happens before report renders and exactly once",
+    "status": "PASS",
+    "evidence": "src/app/rushView.ts:64-67; independentAcceptanceContracts three real frame dispatch cases and tests/app/scores.test.ts"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.05",
+    "clause": "Week and Day 2 reports in src/ui/screens/shiftReport.ts show New best! or Best so far: <grade>, N served",
+    "status": "PASS",
+    "evidence": "src/ui/screens/shiftReport.ts:29-35; tests/ui/shiftReport.test.ts:23-31; separate Endless literal-copy exception is F10"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.06",
+    "clause": "Summary tests cover one entry / worse second run keeps best; UI tests cover both lines",
+    "status": "PASS",
+    "evidence": "tests/app/scores.test.ts; tests/ui/shiftReport.test.ts; 6 tests pass"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.07",
+    "clause": "The named verify detects removing actual report-path score recording",
+    "status": "FAIL",
+    "evidence": "F7: mutation-T4.3 exit 0; independent dispatch tests3 red"
+  },
+  {
+    "task": "T4.3",
+    "id": "T4.3.08",
+    "clause": "Endless also uses the literal specified Best so far: <grade>, N served report line",
+    "status": "FAIL",
+    "evidence": "F10: src/ui/screens/shiftReport.ts:33-35 instead emits served/tips; existing tests/ui/shiftReport.test.ts:34-39 actually verifies Best so far: 14 served, $21.50 in tips (task-verifiers.txt and final-test.txt both passed this test)"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.01",
+    "clause": "src/ui/screens/scores.ts displays Mon-Fri best per played difficulty",
+    "status": "PASS",
+    "evidence": "scores.ts:22; UI fixture tests + populated browser boards"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.02",
+    "clause": "Endless top10 includes served and AUD tips",
+    "status": "PASS",
+    "evidence": "scores.ts:43; browser has30 rows across3 difficulties"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.03",
+    "clause": "Clear scores asks twice and first click preserves stored scores",
+    "status": "PASS",
+    "evidence": "scores.ts:85; actual browser clicks and localStorage comparison"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.04",
+    "clause": "Scores title entry wired in title screen and app/title.ts",
+    "status": "PASS",
+    "evidence": "src/ui/screens/title.ts:61; actual browser title-to-Scores activation"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.05",
+    "clause": "Esc closes, Tab loops, focus returns",
+    "status": "PASS",
+    "evidence": "scores.ts:99; browser Tab/ShiftTab/Escape/focus assertions"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.06",
+    "clause": "No horizontal scroll at390px",
+    "status": "PASS",
+    "evidence": "browser actual full boards at Large: clientWidth=scrollWidth390, no child overflow"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.07",
+    "clause": "Fixture row/cents tests and title-button test exist and pass",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt tests/ui/scores.test.ts + screens.test.ts7/7"
+  },
+  {
+    "task": "T4.4",
+    "id": "T4.4.08",
+    "clause": "Local Scores adds no player name or initials input",
+    "status": "PASS",
+    "evidence": "src/sim/scores.ts:15-26 entry schema; src/ui/screens/scores.ts:22-54,61-103 renders only scores and buttons; populated Scores browser probe"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.01",
+    "clause": "One rush.end.newBest key in src/data/ownerLines.ts",
+    "status": "PASS",
+    "evidence": "ownerLines.ts:888; voice script coverage"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.02",
+    "clause": "src/sim/owner.ts places it after the grade line",
+    "status": "PASS",
+    "evidence": "owner.ts:138-139; endLines test"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.03",
+    "clause": "Copy is count-agnostic Australian English",
+    "status": "PASS",
+    "evidence": "ownerLines.ts:888; author content test"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.04",
+    "clause": "Never said in Endless",
+    "status": "PASS",
+    "evidence": "machine.ts:311; author + independentAcceptanceContracts real machine controls"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.05",
+    "clause": "Never said in Day 2",
+    "status": "PASS",
+    "evidence": "same controls"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.06",
+    "clause": "Never on first play, only beats an existing week best",
+    "status": "PASS",
+    "evidence": "machine.ts:311-313; author + independent controls"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.07",
+    "clause": "New key queued in AWAITING_RENDER before rendering",
+    "status": "PASS",
+    "evidence": "git show 09c6d64 -- src/data/voice/script.ts"
+  },
+  {
+    "task": "T4.5",
+    "id": "T4.5.08",
+    "clause": "Owner/voice tests detect violating mode/first-play restrictions",
+    "status": "PASS",
+    "evidence": "mutation-T4.5.txt exit 1; actual machine test catches always-true newBest"
+  },
+  {
+    "task": "T4.6",
+    "id": "T4.6.01",
+    "clause": "Gaz placeholder new-best clip rendered with voices --only gaz",
+    "status": "UNVERIFIED",
+    "evidence": "No local voice-cache; voices:check exits1 with597 missing files; renderer invocation cannot be proved from manifest alone"
+  },
+  {
+    "task": "T4.6",
+    "id": "T4.6.02",
+    "clause": "Manifest committed, no audio committed",
+    "status": "PASS",
+    "evidence": "f3d85b3 diff adds one gaz manifest clip; git ls-files audio empty"
+  },
+  {
+    "task": "T4.6",
+    "id": "T4.6.03",
+    "clause": "AWAITING_RENDER empty again",
+    "status": "PASS",
+    "evidence": "src/data/voice/script.ts:37 new Set([]); data voice tests"
+  },
+  {
+    "task": "T4.6",
+    "id": "T4.6.04",
+    "clause": "voices:check succeeds with actual file duration",
+    "status": "FAIL",
+    "evidence": "F8 evidence gap: npm run voices:check exits1,597 missing-audio errors,0 warnings; no voice-cache in this checkout"
+  },
+  {
+    "task": "T4.7",
+    "id": "T4.7.01",
+    "clause": "Monday pass in tests/e2e/weekUi.spec.ts followed by title -> Scores",
+    "status": "PASS",
+    "evidence": "weekUi.spec.ts:216-222"
+  },
+  {
+    "task": "T4.7",
+    "id": "T4.7.02",
+    "clause": "Scores Monday grade equals grade displayed by report",
+    "status": "PASS",
+    "evidence": "weekUi.spec.ts:182-186 asserts report .best using s.grade; :226 asserts Scores uses same grade; neither assertion compares report .stamp wording directly"
+  },
+  {
+    "task": "T4.7",
+    "id": "T4.7.03",
+    "clause": "Screenshot10-scores.png into week-UI evidence dir",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T4.7",
+    "id": "T4.7.04",
+    "clause": "Named weekUi verifier completes successfully",
+    "status": "PASS",
+    "evidence": "e2e-full.txt: phoneHud6/6,perf2/2,weekUi3/3 pass; perf JSONs114/102, week-ui/10-scores.png exists and was inspected (whole suite exit 1 due9 audio scenarios)"
+  },
+  {
+    "task": "T4.8",
+    "id": "T4.8.01",
+    "clause": "Restart after difficulty change refreshes weekBest for Gaz",
+    "status": "PASS",
+    "evidence": "src/app/rushWiring.ts:64-67; independentM4 two restart scenarios green"
+  },
+  {
+    "task": "T4.8",
+    "id": "T4.8.02",
+    "clause": "parseScores accepts own-key grades and only entries on their own board",
+    "status": "PASS",
+    "evidence": "scores.ts:154,175; independentM4 parser scenarios green"
+  },
+  {
+    "task": "T4.8",
+    "id": "T4.8.03",
+    "clause": "Scores store caches last good read",
+    "status": "PASS",
+    "evidence": "src/core/save/scores.ts:28-29; independentM4 late failure case green"
+  },
+  {
+    "task": "T4.8",
+    "id": "T4.8.04",
+    "clause": "All5 former red reviewer tests green",
+    "status": "PASS",
+    "evidence": "task-verifiers.txt independentM4 9/9"
+  },
+  {
+    "task": "T4.8",
+    "id": "T4.8.05",
+    "clause": "docs/TODO.md has6.16-6.18; gate verify succeeds",
+    "status": "PASS",
+    "evidence": "docs/TODO.md:490,492,494,551; task-verifiers.txt"
+  }
+]

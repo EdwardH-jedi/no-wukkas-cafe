@@ -1,6 +1,7 @@
 // Phone HUD layout (todo.md T2.4, T2.5): while a customer is ordering, the register panel (#pos)
-// never covers the instruction line (#rinstr) on a phone, and the subtitle box stays inside the
-// viewport at every text size. Measured from element boxes; the desktop register keeps its place.
+// never covers the instruction line (#rinstr) on a phone at any text size, and the subtitle box
+// stays inside the viewport at every text size. Measured from element boxes; the desktop register
+// keeps its place.
 
 import {
   expect,
@@ -66,6 +67,21 @@ async function open(browser: Browser, opts: BrowserContextOptions) {
   return { ctx, page: await ctx.newPage() };
 }
 
+const SIZES = ['s', 'm', 'l'] as const;
+type TextSize = (typeof SIZES)[number];
+
+/** Settings → Text size, stored before the page loads (the HUD zooms by it). */
+async function setTextSize(page: Page, size: TextSize): Promise<void> {
+  await page.addInitScript(
+    (t) =>
+      localStorage.setItem(
+        'nwc.listen.v1',
+        JSON.stringify({ version: 2, difficulty: 'normal', subtitles: 'always', textSize: t }),
+      ),
+    size,
+  );
+}
+
 /** Day 2 (seed 7) to the first customer ordering at the register, the POS open. */
 async function toRegister(page: Page): Promise<void> {
   const { width: W, height: H } = page.viewportSize()!;
@@ -92,36 +108,61 @@ async function toRegister(page: Page): Promise<void> {
 }
 
 test.describe('phone HUD', () => {
+  // #pos is zoomed by the text size, which scales its own `top` too: Small once left it 4.8 px
+  // short of the instruction's bottom edge (acceptance audit F3), so every size is measured.
   for (const [name, opts] of Object.entries(PHONES)) {
-    test(`register clear of the instruction at ${name}`, async ({ browser }) => {
-      test.setTimeout(180_000);
-      const { ctx, page } = await open(browser, opts);
-      await toRegister(page);
-      const pos = await box(page, '#pos');
-      const instr = await box(page, '#rinstr');
-      expect(pos, '#pos is open').not.toBeNull();
-      expect(instr, '#rinstr shows').not.toBeNull();
-      expect(
-        overlap(pos, instr),
-        `#pos ${JSON.stringify(pos)} over #rinstr ${JSON.stringify(instr)}`,
-      ).toBe(false);
-      await ctx.close();
-    });
+    for (const size of SIZES) {
+      test(`register clear of the instruction at ${name}, text size ${size}`, async ({
+        browser,
+      }) => {
+        test.setTimeout(180_000);
+        const { ctx, page } = await open(browser, opts);
+        await setTextSize(page, size);
+        await toRegister(page);
+        const pos = await box(page, '#pos');
+        const instr = await box(page, '#rinstr');
+        expect(pos, '#pos is open').not.toBeNull();
+        expect(instr, '#rinstr shows').not.toBeNull();
+        expect(
+          overlap(pos, instr),
+          `#pos ${JSON.stringify(pos)} over #rinstr ${JSON.stringify(instr)}`,
+        ).toBe(false);
+        await ctx.close();
+      });
+    }
   }
 
-  // One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is the one measured.
-  for (const size of ['s', 'm', 'l'] as const) {
+  // The literal Day 1 #subs (todo.md T2.5; acceptance audit F9) on both phones at every text size.
+  // The screen's own width bounds it, not a hard-coded 390, so 375 is checked against 375.
+  for (const [name, opts] of Object.entries(PHONES)) {
+    for (const size of SIZES) {
+      test(`Day 1 subtitle box #subs inside the screen at ${name}, text size ${size}`, async ({
+        browser,
+      }) => {
+        test.setTimeout(120_000);
+        const { ctx, page } = await open(browser, opts);
+        await setTextSize(page, size);
+        await page.goto('/?voice=0&seed=7');
+        await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();
+        await page.locator('#subs:not(.gone)').waitFor({ state: 'visible', timeout: 30_000 });
+        const b = await box(page, '#subs');
+        expect(b, '#subs shows').not.toBeNull();
+        const { width: W, height: H } = page.viewportSize()!;
+        expect(b!.x, `#subs left ${b!.x}`).toBeGreaterThanOrEqual(0);
+        expect(b!.x + b!.width, `#subs right ${b!.x + b!.width}`).toBeLessThanOrEqual(W);
+        expect(b!.y, `#subs top ${b!.y}`).toBeGreaterThanOrEqual(0);
+        expect(b!.y + b!.height, `#subs bottom ${b!.y + b!.height}`).toBeLessThanOrEqual(H);
+        await ctx.close();
+      });
+    }
+  }
+
+  // One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is measured below.
+  for (const size of SIZES) {
     test(`subtitle box inside the screen at text size ${size} (390x844)`, async ({ browser }) => {
       test.setTimeout(180_000);
       const { ctx, page } = await open(browser, PHONES['390x844']!);
-      await page.addInitScript(
-        (t) =>
-          localStorage.setItem(
-            'nwc.listen.v1',
-            JSON.stringify({ version: 2, difficulty: 'normal', subtitles: 'always', textSize: t }),
-          ),
-        size,
-      );
+      await setTextSize(page, size);
       await toRegister(page);
       await page.locator('#rsubs:not(.gone)').waitFor({ state: 'attached', timeout: 30_000 });
       const b = await page.evaluate(() => {

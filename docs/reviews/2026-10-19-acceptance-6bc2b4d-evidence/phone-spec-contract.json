@@ -1,0 +1,27 @@
+{
+  "path": "tests/e2e/phoneHud.spec.ts",
+  "matches": [
+    {
+      "line": 112,
+      "text": "// One rule sizes #subs, #psubs and #rsubs (hud.css, base.css); Day 2's box is the one measured."
+    },
+    {
+      "line": 126,
+      "text": "await page.locator('#rsubs:not(.gone)').waitFor({ state: 'attached', timeout: 30_000 });"
+    },
+    {
+      "line": 128,
+      "text": "const r = document.querySelector('#rsubs')!.getBoundingClientRect();"
+    },
+    {
+      "line": 131,
+      "text": "expect(b.left, `#rsubs left ${b.left}`).toBeGreaterThanOrEqual(0);"
+    },
+    {
+      "line": 132,
+      "text": "expect(b.right, `#rsubs right ${b.right}`).toBeLessThanOrEqual(390);"
+    }
+  ],
+  "literalSubsQuery": false,
+  "rsubsQuery": true
+}

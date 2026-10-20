@@ -1,0 +1,13 @@
+diff --git a/src/app/boot.ts b/src/app/boot.ts
+index 437c014..e9c30f1 100644
+--- a/src/app/boot.ts
++++ b/src/app/boot.ts
+@@ -26,7 +26,7 @@ import type { App, LateFields } from './context';
+ import { installDebugHandle } from './debug';
+ import { createFrameDriver } from './frame';
+ import { installInput } from './input';
+-import { replayLast, resumeAll, setPaused } from './pause';
++import { replayLast, resumeAll, setPaused } from './pauseDuplicate';
+ import { createPracticeView, startPractice } from './practiceWiring';
+ import { createRushView, rushAct, startDay2, startRush } from './rushWiring';
+ import { makeIbis } from './shared';

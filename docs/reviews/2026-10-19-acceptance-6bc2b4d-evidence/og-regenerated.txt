@@ -1,0 +1,18 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/bowlby-one/files/bowlby-one-latin-400-normal.woff2" is outside of Vite serving allow list.
+
+- /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+- /Users/edwardhwang/Desktop/nwc-review-2/node_modules/vite/dist/client
+
+Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
+
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/bowlby-one/files/bowlby-one-latin-400-normal.woff" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-800-normal.woff2" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff" is outside of Vite serving allow list.
+The request id "/Users/edwardhwang/Desktop/nwc-review-2/node_modules/@fontsource/figtree/files/figtree-latin-800-normal.woff" is outside of Vite serving allow list.
+og-image: /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation/public/og.png 242,869 bytes

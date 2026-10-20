@@ -1,0 +1,13 @@
+diff --git a/src/app/rushView.ts b/src/app/rushView.ts
+index fa0430d..b0024fa 100644
+--- a/src/app/rushView.ts
++++ b/src/app/rushView.ts
+@@ -62,7 +62,7 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
+       } else if (ev.type === 'phase') {
+         // On its board before the report draws, so the report can say "New best!".
+         if (ev.phase === 'summary')
+-          app.scoreNote = recordScore(app.scores, r, new Date().toISOString());
++          app.scoreNote = null;
+         else if (ev.phase === 'intro') app.scoreNote = null;
+         rushHud.onPhase(ev.phase, r);
+         if (ev.phase === 'intro') {

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#16100c" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23f5f0e5%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2222%22 fill=%22%237a4a26%22/%3E%3Cpath d=%22M32 46 20 30a7 7 0 0 1 12-7 7 7 0 0 1 12 7z%22 fill=%22%23fbf3e6%22/%3E%3C/svg%3E"
+    />
+    <title>No Wukkas Café</title>
+    <meta
+      name="description"
+      content="A first-person café sim set in Surry Hills, Sydney. Survive a barista trial with a very grumpy owner, then a week of morning rushes: take orders by ear, pull the shots, pour the hearts."
+    />
+    <!-- Share cards. og:image needs an absolute URL: scripts/deploy.ts sets NWC_SITE_URL and
+         vite.config.ts writes it in place of https://cafe.example.com/ (empty elsewhere). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="No Wukkas Café" />
+    <meta
+      property="og:description"
+      content="A first-person café sim set in Surry Hills, Sydney. Survive a barista trial with a very grumpy owner, then a week of morning rushes: take orders by ear, pull the shots, pour the hearts."
+    />
+    <meta property="og:image" content="https://cafe.example.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The No Wukkas Café title screen: the counter, the machine and the menu."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="module" crossorigin src="/assets/index-Cpr4_Yg2.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DGN7AiHX.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="gl" aria-label="Café counter, first-person view"></canvas>
+      <div id="ui"></div>
+    </div>
+  </body>
+</html>

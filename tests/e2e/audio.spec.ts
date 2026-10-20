@@ -5,6 +5,7 @@
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { clipServed } from './helpers/voiceProbe';
 
 interface PlayRecord {
   id: string;
@@ -40,8 +41,10 @@ test('pressing Start makes Gaz audibly speak; pause, replay and failure feedback
 }) => {
   const first = manifest.clips[0];
   test.skip(!first, 'no voice manifest');
-  const probe = await page.request.get(`/${first!.file}`);
-  test.skip(!probe.ok(), 'voice clips not rendered on this machine (run `npm run voices`)');
+  test.skip(
+    !(await clipServed(page.request, first!.file)),
+    'voice clips not rendered on this machine (run `npm run voices`)',
+  );
 
   await page.goto('/?seed=7&ibis=0');
   await page.getByRole('button', { name: 'Day 1: Start the trial' }).click();

@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "ogImage": "https://edwardh-jedi.github.io/no-wukkas-cafe/og.png",
+    "scripts": [
+      "/no-wukkas-cafe/assets/index-B_pzJW9G.js"
+    ],
+    "unresolvedToken": false,
+    "commit": "f88055b",
+    "files": [
+      ".nojekyll",
+      "assets/bowlby-one-latin-400-normal-BlBlciR_.woff2",
+      "assets/bowlby-one-latin-400-normal-DAczUCp_.woff",
+      "assets/figtree-latin-400-normal-BD4aNku5.woff",
+      "assets/figtree-latin-400-normal-g7Dtegnw.woff2",
+      "assets/figtree-latin-600-normal-BM_oTo4n.woff",
+      "assets/figtree-latin-600-normal-Cv_xCTDl.woff2",
+      "assets/figtree-latin-800-normal-30yxI7TZ.woff2",
+      "assets/figtree-latin-800-normal-B7vj2UK8.woff",
+      "assets/figtree-latin-ext-400-normal-CXAzuTZb.woff2",
+      "assets/figtree-latin-ext-400-normal-Gbh-3PTk.woff",
+      "assets/figtree-latin-ext-600-normal-CQqsimlV.woff",
+      "assets/figtree-latin-ext-600-normal-DJlfifZj.woff2",
+      "assets/figtree-latin-ext-800-normal-Cp4dEvwL.woff",
+      "assets/figtree-latin-ext-800-normal-DLIuazCv.woff2",
+      "assets/index-B_pzJW9G.js",
+      "assets/index-DfT4gPjf.css",
+      "index.html",
+      "og.png"
+    ]
+  },
+  "domain": {
+    "ogImage": "https://cafe.example.com/og.png",
+    "scripts": [
+      "/assets/index-Cpr4_Yg2.js"
+    ],
+    "unresolvedToken": false,
+    "commit": "d9b1ce6",
+    "files": [
+      ".nojekyll",
+      "CNAME",
+      "assets/bowlby-one-latin-400-normal-BlBlciR_.woff2",
+      "assets/bowlby-one-latin-400-normal-DAczUCp_.woff",
+      "assets/figtree-latin-400-normal-BD4aNku5.woff",
+      "assets/figtree-latin-400-normal-g7Dtegnw.woff2",
+      "assets/figtree-latin-600-normal-BM_oTo4n.woff",
+      "assets/figtree-latin-600-normal-Cv_xCTDl.woff2",
+      "assets/figtree-latin-800-normal-30yxI7TZ.woff2",
+      "assets/figtree-latin-800-normal-B7vj2UK8.woff",
+      "assets/figtree-latin-ext-400-normal-CXAzuTZb.woff2",
+      "assets/figtree-latin-ext-400-normal-Gbh-3PTk.woff",
+      "assets/figtree-latin-ext-600-normal-CQqsimlV.woff",
+      "assets/figtree-latin-ext-600-normal-DJlfifZj.woff2",
+      "assets/figtree-latin-ext-800-normal-Cp4dEvwL.woff",
+      "assets/figtree-latin-ext-800-normal-DLIuazCv.woff2",
+      "assets/index-Cpr4_Yg2.js",
+      "assets/index-DGN7AiHX.css",
+      "index.html",
+      "og.png"
+    ],
+    "CNAME": "cafe.example.com\n"
+  },
+  "remoteEqual": true,
+  "traceMatches": {
+    "normal": true,
+    "hard": true,
+    "easy": true,
+    "aids": true,
+    "misheard": true,
+    "hurry": true,
+    "idle": true
+  }
+}

@@ -25,14 +25,14 @@ export interface ShiftReportCallbacks {
   score(): ScoreNote | null;
 }
 
-/** The leaderboard line: "New best!", or the board's best so far (Endless: served and tips). */
+/**
+ * The leaderboard line: "New best!", or "Best so far: <grade>, N served". Endless reads the same
+ * (its ranking is served then tips, but the line keeps the wording of todo.md T4.3).
+ */
 export function bestLine(note: ScoreNote | null): string | null {
   if (!note) return null;
   if (note.newBest) return 'New best!';
-  const b = note.best;
-  return b.mode === 'endless'
-    ? `Best so far: ${b.served} served, ${formatCents(b.tipsCents)} in tips`
-    : `Best so far: ${GRADE_NAME[b.grade]}, ${b.served} served`;
+  return `Best so far: ${GRADE_NAME[note.best.grade]}, ${note.best.served} served`;
 }
 
 const DIFF_NAME = { easy: 'Easy', normal: 'Normal', hard: 'Hard' } as const;

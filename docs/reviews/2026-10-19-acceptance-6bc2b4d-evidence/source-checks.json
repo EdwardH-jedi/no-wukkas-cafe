@@ -1,0 +1,120 @@
+{
+  "determinism": {
+    "command": [
+      "grep",
+      "-rnE",
+      "Math\\.random|Date\\.now|setTimeout",
+      "src/sim",
+      "src/core"
+    ],
+    "exit": 1
+  },
+  "trackedAudio": [],
+  "largeFiles": [
+    {
+      "file": "src/core/trial.ts",
+      "lines": 687
+    },
+    {
+      "file": "src/data/ownerLines.ts",
+      "lines": 937
+    },
+    {
+      "file": "src/data/voice/manifest.json",
+      "lines": 14933
+    },
+    {
+      "file": "src/dev/dev.css",
+      "lines": 839
+    },
+    {
+      "file": "src/world/owner.ts",
+      "lines": 623
+    },
+    {
+      "file": "src/world/station.ts",
+      "lines": 894
+    }
+  ],
+  "productionDiff": {
+    "command": [
+      "git",
+      "diff",
+      "6bc2b4d",
+      "--",
+      "src",
+      "scripts",
+      "package.json",
+      "index.html",
+      "vite.config.ts"
+    ],
+    "exit": 0
+  },
+  "gateSearch": {
+    "command": [
+      "rg",
+      "-n",
+      "analytics|gtag|plausible|posthog|supabase|firebase|sendBeacon|WebSocket|fetch\\(",
+      "src",
+      "index.html",
+      "package.json"
+    ],
+    "exit": 0
+  },
+  "M5Files": {
+    "CHANGELOG.md": false,
+    "tests/scripts/version.test.ts": false,
+    "tests/scripts/releaseTag.test.ts": false,
+    "scripts/release-tag.ts": false
+  },
+  "M5VersionHistory": {
+    "command": [
+      "git",
+      "log",
+      "--all",
+      "-G",
+      "\"version\"",
+      "--format=%h %s",
+      "--",
+      "package.json"
+    ],
+    "exit": 0
+  },
+  "decisionsHistory": {
+    "command": [
+      "git",
+      "log",
+      "-p",
+      "--",
+      "docs/DECISIONS.md"
+    ],
+    "exit": 0
+  },
+  "ancestry": {
+    "d8be91a": 0,
+    "5b675ce": 0,
+    "932563d": 0,
+    "53fdda2": 0,
+    "4c4d72d": 0,
+    "8320cad": 0,
+    "4282cf1": 0
+  },
+  "ogImage": {
+    "size": 235963,
+    "dimensions": [
+      1200,
+      630
+    ],
+    "sha256": "d45b33696b96f652080bc2c76e4b43bad7f3f89c44a42a281a5e8b7696d88acf"
+  },
+  "pauseFunctions": {
+    "command": [
+      "rg",
+      "-n",
+      "export function (setPaused|resumeAll|replayLast)|from.*pause",
+      "src/app",
+      "tests/review/harness.ts"
+    ],
+    "exit": 0
+  }
+}

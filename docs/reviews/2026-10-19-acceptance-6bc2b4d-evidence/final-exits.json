@@ -1,0 +1,31 @@
+[
+  {
+    "name": "final-typecheck",
+    "argv": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "final-lint",
+    "argv": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "final-test",
+    "argv": [
+      "npm",
+      "test",
+      "--",
+      "--reporter=verbose",
+      "--maxWorkers=2"
+    ],
+    "exit": 1
+  }
+]

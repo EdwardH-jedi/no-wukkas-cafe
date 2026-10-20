@@ -1,0 +1,30 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/review/independentAcceptanceContracts.test.ts (11 tests | 1 failed) 787ms
+   ❯ independent acceptance: shared pause implementation (1)
+     × boot and the harness import the same three lifecycle implementations 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/review/independentAcceptanceContracts.test.ts > independent acceptance: shared pause implementation > boot and the harness import the same three lifecycle implementations
+AssertionError: src/app/boot.ts: expected null not to be null
+ ❯ tests/review/independentAcceptanceContracts.test.ts:22:34
+     20|       const source = readFileSync(new URL(`../../${name}`, import.meta…
+     21|       const imported = source.match(/import\s*\{([^}]+)\}\s*from\s*['"…
+     22|       expect(imported, name).not.toBeNull();
+       |                                  ^
+     23|       for (const fn of ['setPaused', 'resumeAll', 'replayLast']) expec…
+     24|       expect(source).not.toContain('copied, not shared');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  12:35:35
+   Duration  1.15s (tests 71%, transform 22%, import 6%)
+

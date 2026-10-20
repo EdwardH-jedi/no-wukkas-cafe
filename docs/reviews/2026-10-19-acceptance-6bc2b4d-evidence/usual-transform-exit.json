@@ -1,0 +1,12 @@
+{
+  "commandPrefix": [
+    "node",
+    "--experimental-transform-types",
+    "--import",
+    "./tests/review/nodeReviewLoader.mjs",
+    "--input-type=module",
+    "-e"
+  ],
+  "script": "recompute-usual.mjs evaluated from repository root",
+  "exit": 9
+}

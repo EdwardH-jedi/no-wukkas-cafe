@@ -30,7 +30,9 @@ export function createTelemetryStore(storage: KeyValueStorage | null): Telemetry
   const read = (): TelemetryLog => {
     if (!broken && storage) {
       try {
-        return parseLog(storage.getItem(TELEMETRY_KEY));
+        // Kept: if storage fails later, the records read so far stay (acceptance audit F2).
+        mem = parseLog(storage.getItem(TELEMETRY_KEY));
+        return mem;
       } catch {
         broken = true;
       }

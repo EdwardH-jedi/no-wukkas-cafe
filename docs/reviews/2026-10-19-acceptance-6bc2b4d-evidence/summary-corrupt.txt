@@ -1,0 +1,5 @@
+
+> no-wukkas-cafe@0.1.0 playtest:summary
+> node scripts/playtest-summary.ts /Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-corrupt.json
+
+playtest:summary: /Users/edwardhwang/Desktop/nwc-review-2/docs/reviews/2026-10-19-acceptance-6bc2b4d-evidence/summary-corrupt.json: record 0 is not an object

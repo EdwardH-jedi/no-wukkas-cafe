@@ -1,0 +1,37 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./auditionIndex" without a file extension (src/data/voice/decision.ts:8:54). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 /private/var/folders/55/tmvqlq7s0zbfb7z81wqhmdmr0000gn/T/nwc-acceptance-qv3hrryk/mutation
+
+ ❯ tests/sim/owner.test.ts (16 tests | 1 failed) 1712ms
+   ❯ the closing lines and a new best (todo.md M4 T4.5) (4)
+     × Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless 1705ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sim/owner.test.ts > the closing lines and a new best (todo.md M4 T4.5) > Gaz says it after a week shift that beats the best, never on a first play, Day 2 or Endless
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/sim/owner.test.ts:196:83
+    194|       true,
+    195|     );
+    196|     expect(saidOn({ ...monday, best: best({ grade: 'excellent', served…
+       |                                                                                   ^
+    197|     expect(saidOn({ ...monday, best: null })).toBe(false);
+    198|     expect(saidOn(monday)).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 25 passed (26)
+   Start at  12:35:57
+   Duration  1.96s (tests 86%, transform 11%, import 3%)
+
