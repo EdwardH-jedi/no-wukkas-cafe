@@ -29,7 +29,7 @@ The first public web build: the Day 1 trial, the Day 2 rush, a playable week and
 - Top chips for the shift, drinks served and walk-outs.
 - Shift report: one screen for Day 2, the week and Endless, with listening and event rows.
 - Spoken dialogue from pre-rendered clips with subtitles; without clips the game uses the browser's voice and says so.
-- Subtitles start when the voice does, not before.
+- In the rush, subtitles start when the voice does, not before.
 
 ### Screens, settings and accessibility
 
