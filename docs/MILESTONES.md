@@ -12,7 +12,7 @@ Status on 2026-10-21, in todo.md's numbering:
 - M4 Leaderboard (local): done. Edward gate open: online leaderboard yes/no.
 - M5 Release prep (v0.1.0): done. Edward gate open: paid TTS render + listen-through, actors' takes, Q6 Steam, domain + analytics, device pass, `git push origin v0.1.0`.
 - M6 Decision fixes (Q2–Q5, Q7): done.
-- M7 Housekeeping before the playtest build: **current**. Edward gate: push `main`.
+- M7 Housekeeping before the playtest build: **current**, merged except T7.1 (branch deletes wait on Edward). Edward gate: push `main`.
 
 Rules: a milestone starts only when its HUMAN gate is cleared or explicitly waived in DECISIONS.md. The review session
 never starts a milestone; it only closes one.

@@ -39,12 +39,12 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M7
+current_milestone: M7 (T7.2–T7.5 done; T7.1 waits on Edward: auto mode denied the branch delete here)
 needs_replan: false
 pause_at_gate: true
-branch: local `main` = 665534a, **not pushed** (origin/main = 87c3f09, 13 ahead; Edward pushes). M6 done 2026-10-21
-(T6.1–T6.5, gate review 9a9262c fixed, full E2E green). M7 is housekeeping only: no `src/` change, no new feature.
-After M7 the agent backlog is empty until the playtest lands (`/plan replan`) or Edward opens a gate. One implementer
+branch: local `main` = M7 merge bbd3d5a + this tick, **not pushed** (origin/main = 87c3f09; Edward pushes). M6 done
+2026-10-21 (gate review 9a9262c fixed, full E2E green); M7 merged 2026-10-21 (no `src/` change, `npm test` green).
+After T7.1 the agent backlog is empty until the playtest lands (`/plan replan`) or Edward opens a gate. One implementer
 session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2` and never edits `src/`.
 
 ---
@@ -442,10 +442,14 @@ untracked run files decided, the two planning docs agreeing. Nothing here needs 
 - [x] T7.4 [simple] `docs/MILESTONES.md`: replace its M0–M7 table with a pointer to this file's M1–M7 and a one-line
       status per milestone (done / current / Edward gate); keep its "Rules" paragraph.
       verify: `grep -q "todo.md" docs/MILESTONES.md && ! grep -q "Codex re-review of 1a54a00" docs/MILESTONES.md`
-- [ ] T7.5 `npm run build` and `npm run build:clean` both exit 0 in this checkout; `npm run deploy` dry run prints the
+- [x] T7.5 `npm run build` and `npm run build:clean` both exit 0 in this checkout; `npm run deploy` dry run prints the
       Pages URL and the file count; `npm run release:tag` refuses with the **voice** reason only (not a dirty tree).
       Paste the four exit codes and the refusal line into the commit body of the todo tick.
       verify: `npm run build && npm run build:clean && npm run deploy && (npm run release:tag; test $? -eq 1)`
+      Done 2026-10-21 on main bbd3d5a: build 0, build:clean 0 (1,563,907 bytes), deploy 0 (19 files,
+      https://edwardh-jedi.github.io/no-wukkas-cafe/, dry run), release:tag 1. Clean-tree gate passed; the refusal is
+      `main (bbd3d5a) is not origin/main (87c3f09)`, the gate before the voice check, so the voice reason shows only
+      after the push (`npm run release:check` alone: exit 1, 597 placeholder clips, build not run).
 
 Discovered:
 - (2026-10-21) T7.1 for Edward (auto mode denies branch deletes here): `git branch -d chore/decisions-q1
@@ -454,6 +458,9 @@ Discovered:
   then T7.1's verify. Tips (restore with `git branch <name> <sha>`) are in the T7.1 commit body.
 - (2026-10-21) Q for Edward: `feat/m6-decisions` is merged into main (be3f7fc) and in no worktree, but not in Q8's
   list. Delete it too, same rules? (`chore/m7-housekeeping` will be in the same state after this merge.)
+- (2026-10-21) T7.5: `release:tag` checks main = origin/main before the voice check, so "voice reason only" can't
+  show while main is ahead of origin; after Edward's push it refuses with "the release check failed". `npm run
+  deploy`'s own `git worktree prune` dropped the stale `wt-before` scratchpad entry (36 worktrees, none prunable).
 
 Gate (Edward): push `main`; then Gates 2–11 below.
 Done when: `git status --short` empty, `npm test` green, every T7.x ticked.
@@ -462,9 +469,10 @@ Done when: `git status --short` empty, `npm test` green, every T7.x ticked.
 
 ## Gates (Edward) — in the order they unblock work
 
-Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-21 03:55.
+Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-21 04:05.
 
-1. Push local `main` (665534a → after M7, its tip). Q8 (the 16 newer merged branches) answered yes 2026-10-21 → T7.1.
+1. Push local `main` (M7 merge bbd3d5a + its tick). T7.1: run the 16-branch delete under M7 Discovered (auto mode
+   denied it in the agent session), and say whether `feat/m6-decisions` goes too.
 2. Feel-test `feat/latte-feel` (`cd ../nwc-p1c && npx vite --port 5195 --strictPort`) so 1C can merge; decide 1.5.6
    (pull-through thins only at ≥ 3.0 cm).
 3. Publish the playtest build: `npm run deploy -- --push` (dry run prints https://edwardh-jedi.github.io/no-wukkas-cafe/;
@@ -529,3 +537,8 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
 - 2026-10-21: M6 done (gauge 68–74 on extra-hot, Day 1/practice captions with the voice, "Sound stopped" hold, nine
   stale renders gone so `npm run build` works in the checkout, 21 branches deleted; gate review 4 red → fixed; full
   E2E green). Agent backlog after this: M7 housekeeping only. Everything else is a Gate (Edward).
+- 2026-10-21: M7 housekeeping on `chore/m7-housekeeping`, merged --no-ff into local main bbd3d5a, not pushed. T7.1
+  skipped (auto mode denied `git branch -d`; its verify could never pass and is fixed; command under M7 Discovered),
+  T7.2 599 events, T7.3 run files tracked + `docs/runs/` + .bak ignored (`git status --short` empty), T7.4
+  MILESTONES.md points here, T7.5 build 0 / build:clean 0 / deploy 0 / release:tag 1 (main ≠ origin/main).
+  `npm test` 127 files / 991 tests.
