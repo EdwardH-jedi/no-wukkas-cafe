@@ -114,6 +114,8 @@ export interface App {
   // DOM roots.
   readonly uiRoot: HTMLElement;
   readonly ibisHint: HTMLElement;
+  /** "Sound stopped": shown while the game holds for the browser's sound (Q7, src/app/frame.ts). */
+  readonly soundHint: HTMLElement;
   readonly hud1Root: HTMLElement;
   readonly hud2Root: HTMLElement;
   readonly hud3Root: HTMLElement;

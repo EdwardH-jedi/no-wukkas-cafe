@@ -106,12 +106,19 @@ export async function boot(): Promise<void> {
   ibisHint.className = 'hide';
   ibisHint.setAttribute('role', 'status');
   ibisHint.innerHTML = '<b>Bin chicken!</b> Shoo it out gently: click it, or press <kbd>I</kbd>.';
+  // Q7: the game holds while the browser has sound stopped; any click or key asks for it back.
+  const soundHint = document.createElement('div');
+  soundHint.id = 'soundHold';
+  soundHint.className = 'hide';
+  soundHint.setAttribute('role', 'alert');
+  soundHint.innerHTML =
+    '<div class="box"><h3>Sound stopped</h3><p>The café waits until you can hear it again.</p><p>Tap or click anywhere, or press any key, to bring the sound back.</p></div>';
   const hud1Root = document.createElement('div');
   const hud2Root = document.createElement('div');
   const hud3Root = document.createElement('div');
   hud2Root.classList.add('hide');
   hud3Root.classList.add('hide');
-  uiRoot.append(hud1Root, hud2Root, hud3Root, ibisHint);
+  uiRoot.append(hud1Root, hud2Root, hud3Root, ibisHint, soundHint);
 
   const core: Omit<App, LateFields> = {
     params,
@@ -157,6 +164,7 @@ export async function boot(): Promise<void> {
     voiceLevel: 0,
     uiRoot,
     ibisHint,
+    soundHint,
     hud1Root,
     hud2Root,
     hud3Root,

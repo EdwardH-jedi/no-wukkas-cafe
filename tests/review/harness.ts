@@ -437,6 +437,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
     voiceLevel: 0,
     uiRoot: el(),
     ibisHint: el(),
+    soundHint: el(),
     hud1Root: el(),
     hud2Root: el(),
     hud3Root: el(),

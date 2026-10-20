@@ -388,7 +388,7 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
       confirmed clip/TTS start and cancel with it. Add the trial case to the caption probes
       (`tests/review/playwright.probes.config.ts` pattern, implementer-owned copy under `tests/e2e/`).
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/trial.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T6.3 (Q7) Captions while the browser suspends audio: implement the answer Edward writes in DECISIONS Q7
+- [x] T6.3 (Q7) Captions while the browser suspends audio: implement the answer Edward writes in DECISIONS Q7
       (pause the game until sound resumes / show captions at once / keep waiting). Keep one caption authority
       (`src/audio/voiceLines.ts`); `independentPausedCaptions` and `independentSuspendedCancellation` stay green.
       verify: `npx vitest run tests/review/independentPausedCaptions.test.ts tests/review/independentSuspendedCancellation.test.ts tests/audio`

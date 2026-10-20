@@ -70,7 +70,8 @@ export function createAudioManager(
     if (graph.ctx.state === 'running') {
       if (status === 'locked' || status === 'blocked')
         board.set(voiceEnabled ? 'ok' : 'off', voiceEnabled ? okMessage() : 'Voice is off.');
-    } else if (!paused && graph.ctx.state === 'suspended' && status !== 'locked') {
+    } else if (!paused && status !== 'locked') {
+      // Suspended, or iOS Safari's "interrupted" (a call, Siri, another app's audio).
       board.set('blocked', 'The browser blocked sound. Click anywhere to turn it on.');
     }
   };
@@ -154,6 +155,11 @@ export function createAudioManager(
     },
     get paused() {
       return paused;
+    },
+    get interrupted() {
+      return (
+        graph !== null && !paused && board.status !== 'locked' && graph.ctx.state !== 'running'
+      );
     },
     prefetch: clips.prefetch,
     volume(b) {
