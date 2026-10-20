@@ -320,30 +320,30 @@ findings arrive by `/plan replan` and go **above** T5.1.
 - [x] T5.0 Voice pipeline: provenance + build gate (4cdb399), cast + budget (fdda4a6), Google adapter (6d26a90),
       `voices:estimate` / `voices:render` / `voices:sheet` (6428542, 230d7de, e9d9c67), ship segments
       (`feat/ship-segments`); `docs/STEAM.md` research (cbd465b); `docs/DEVLOG.md` architecture (e2c9c94).
-- [ ] T5.1 `npm run release:check` ends with a readable summary instead of 1,026 raw errors: per speaker, how many
+- [x] T5.1 `npm run release:check` ends with a readable summary instead of 1,026 raw errors: per speaker, how many
       clips are placeholders and which HUMAN step clears them (paid render for the TTS cast, `--import` of takes
       for Gaz/Jiwoo/Mei), then the build line. Errors stay listed above it; exit code unchanged.
       (`scripts/voices-check.ts`; test case in `tests/scripts/voicesCheck.test.ts`.)
       verify: `npx vitest run tests/scripts/voicesCheck.test.ts`
-- [ ] T5.2 Version and changelog: `package.json` version `0.1.0`; `CHANGELOG.md` with one section
+- [x] T5.2 Version and changelog: `package.json` version `0.1.0`; `CHANGELOG.md` with one section
       "0.1.0 (unreleased)" listing the user-visible items of M2–M4 and the Phases in `docs/TODO.md` (one line
       each, no shas; curating that list is judgement, so not `[simple]`). Test `tests/scripts/version.test.ts`:
       version matches `^\d+\.\d+\.\d+$` and the changelog names it.
       verify: `npx vitest run tests/scripts/version.test.ts`
-- [ ] T5.3 Devlog: `docs/DEVLOG.md` gains "What the bots got wrong" from the data already in the repo: the
+- [x] T5.3 Devlog: `docs/DEVLOG.md` gains "What the bots got wrong" from the data already in the repo: the
       balance curve vs the Phase 2 findings (QUEUE_JUMP never fires for instant bots, novice drop-off, failed
       shifts still pay tips) and how `npm run playtest:summary` closes the loop; playtest numbers are added by
       the replan when they exist.
       verify: `grep -q "What the bots got wrong" docs/DEVLOG.md`
-- [ ] T5.4 Release tag script: `npm run release:tag` refuses unless `release:check` passes, the tree is clean and
+- [x] T5.4 Release tag script: `npm run release:tag` refuses unless `release:check` passes, the tree is clean and
       `main` equals `origin/main`, then tags `v<package version>` locally and prints the push command (never
       pushes). Test on a temp repo.
       verify: `npx vitest run tests/scripts/releaseTag.test.ts`
-- [ ] T5.5 `tests/e2e/week.spec.ts:68` waits 480 s of wall clock for Monday's report (flaked twice under load ~19).
+- [x] T5.5 `tests/e2e/week.spec.ts:68` waits 480 s of wall clock for Monday's report (flaked twice under load ~19).
       Replace with a game-time budget: poll the sim clock exposed on `window.__trial` and stop when Monday's shift
       time is spent, not when the wall clock is; the test timeout stays 600 s as a backstop. Same assertion as today.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/week.spec.ts --config tests/review/playwright.ipv6.config.ts`
-- [ ] T5.6 F3's second register rule ("drink on the pass while someone orders", `src/ui/styles/rush.css` second
+- [x] T5.6 F3's second register rule ("drink on the pass while someone orders", `src/ui/styles/rush.css` second
       phone `#pos` block) was fixed with the same formula but never measured. Add that state to
       `tests/e2e/phoneHud.spec.ts` (both phones × three text sizes): `#pos` top ≥ `#rinstr` bottom.
       verify: `E2E_PORT=5202 npx playwright test tests/e2e/phoneHud.spec.ts --config tests/review/playwright.ipv6.config.ts`

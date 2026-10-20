@@ -15,6 +15,9 @@
 // words, a licence and provenance licensed_tts or recorded, no placeholders); with file checks,
 // each listed clip is in public/assets/voice/segments/ at its measured duration, and no segment
 // clip there is unlisted (the build gate would reject it). Exit code 1 on any error.
+// With --release the output ends with a summary for `npm run release:check` (which runs the build
+// only after this check passes): per speaker, the placeholder clips and the HUMAN step that
+// replaces them (src/data/voice/casting.ts CAST), then the build line.
 
 import { existsSync, readFileSync } from 'node:fs';
 import {
@@ -164,3 +167,39 @@ report(
   () =>
     `voices:check segments: ${listedIds}/${segmentCount} segments have a release clip in ${rel(SEGMENT_MANIFEST)}`,
 );
+
+if (release) {
+  const { CAST } = await import('../src/data/voice/casting.ts');
+  type Cast = import('../src/data/voice/casting.ts').CastEntry;
+  const step = (c: Cast | undefined): string => {
+    if (!c) return 'not in the release cast (src/data/voice/casting.ts CAST)';
+    if (c.provider === 'google')
+      return `paid TTS render: npm run voices:render -- --allow-paid, then -- --promote (Google ${c.voice})`;
+    return `actor's takes: npm run voices:render -- --import <dir> (${c.voice}/${c.pending ? ', licence pending' : ''})`;
+  };
+  const speakers = [...new Set([...Object.keys(CAST), ...m.clips.map((c) => c.characterId)])];
+  const width = Math.max(...speakers.map((s) => s.length));
+  const digits = String(m.clips.length).length;
+  console.log('release:check: what clears the voice gate, per speaker');
+  for (const s of speakers) {
+    const clips = m.clips.filter((c) => c.characterId === s);
+    const held = clips.filter((c) => c.source?.placeholder !== false).length;
+    const [a, b] = [held, clips.length].map((x) => String(x).padStart(digits));
+    // No placeholders isn't ready on its own: the speaker's clips must pass the release checks too.
+    const codes = new Map<string, number>();
+    for (const i of issues)
+      if (i.level === 'error' && i.id?.startsWith(`${s}:`))
+        codes.set(i.code, (codes.get(i.code) ?? 0) + 1);
+    const errors = [...codes.values()].reduce((t, n) => t + n, 0);
+    const list = [...codes].map(([k, n]) => `${k} ${n}`).join(', ');
+    console.log(
+      `  ${s.padEnd(width)}  ${a} of ${b} clips are placeholders → ` +
+        (held ? step(CAST[s]) : errors ? `not ready: ${errors} error(s) (${list})` : 'ready'),
+    );
+  }
+  console.log(
+    process.exitCode
+      ? '  build: not run; npm run build (with the audio release gate) runs only after this check exits 0'
+      : '  build: the voice check passed; npm run build (with the audio release gate) runs next',
+  );
+}

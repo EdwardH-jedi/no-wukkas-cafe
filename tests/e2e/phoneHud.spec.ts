@@ -1,5 +1,6 @@
-// Phone HUD layout (todo.md T2.4, T2.5): while a customer is ordering, the register panel (#pos)
-// never covers the instruction line (#rinstr) on a phone at any text size, and the subtitle box
+// Phone HUD layout (todo.md T2.4, T2.5, T5.6): while a customer is ordering, the register panel (#pos)
+// never covers the instruction line (#rinstr) on a phone at any text size, also with a drink on the
+// pass, and the subtitle box
 // stays inside the viewport at every text size. Measured from element boxes; the desktop register
 // keeps its place.
 
@@ -107,6 +108,71 @@ async function toRegister(page: Page): Promise<void> {
   await page.waitForTimeout(400);
 }
 
+/** Day 2 (seed 7): the first customer's long black made and left on the pass, then the next
+ *  customer ordering at the register with the POS open. The side buttons ("Bin it") are out, so
+ *  rush.css's second phone #pos rule (`#rbl:has(> #ractions.side:not(:empty)) ~ #pos`) applies. */
+async function toPassAndRegister(page: Page): Promise<void> {
+  await toRegister(page);
+  const { width: W, height: H } = page.viewportSize()!;
+  const mid = { x: W / 2, y: H * 0.6 };
+  const first = (await rush(page))!.customers[0]!;
+  expect(first.order.type, "seed 7's first order").toBe('longBlack');
+  await page.locator('#pos').getByRole('button', { name: 'Long black', exact: true }).click();
+  await page.keyboard.press('Enter');
+  await until(
+    () => rush(page),
+    (s) => s.customers[0]?.state === 'waiting',
+  );
+  await page.keyboard.press('f');
+  await until(
+    () => rush(page),
+    (s) => s.station === 'grind',
+  );
+  await page.mouse.move(mid.x, mid.y);
+  await page.mouse.down();
+  await until(
+    () => rush(page),
+    (s) => s.dose >= 18.6,
+  );
+  await page.mouse.up();
+  await page.keyboard.press('Enter');
+  await until(
+    () => rush(page),
+    (s) => s.station === 'water',
+  );
+  await page.mouse.down();
+  await until(
+    () => rush(page),
+    (s) => s.water >= 0.62,
+  );
+  await page.mouse.up();
+  await until(
+    () => rush(page),
+    (s) => s.station === 'shot',
+  );
+  await page.mouse.click(mid.x, mid.y);
+  await until(
+    () => rush(page),
+    (s) => s.shotTime >= 26.5,
+  );
+  await page.mouse.click(mid.x, mid.y);
+  await until(
+    () => rush(page),
+    (s) => s.ready !== null,
+  );
+  await until(
+    () => rush(page),
+    (s) => s.customers.some((c) => c.state === 'register'),
+    120_000,
+  );
+  await page.keyboard.press('t');
+  await until(
+    () => rush(page),
+    (s) => s.customers.some((c) => c.state === 'deciding'),
+  );
+  await page.waitForTimeout(400);
+}
+
 test.describe('phone HUD', () => {
   // #pos is zoomed by the text size, which scales its own `top` too: Small once left it 4.8 px
   // short of the instruction's bottom edge (acceptance audit F3), so every size is measured.
@@ -127,6 +193,32 @@ test.describe('phone HUD', () => {
           overlap(pos, instr),
           `#pos ${JSON.stringify(pos)} over #rinstr ${JSON.stringify(instr)}`,
         ).toBe(false);
+        await ctx.close();
+      });
+    }
+  }
+
+  // A drink on the pass while the next customer orders (todo.md T5.6): the register moves up out of
+  // the side buttons' way by the same formula (acceptance F3), so it is measured the same way.
+  for (const [name, opts] of Object.entries(PHONES)) {
+    for (const size of SIZES) {
+      test(`register under the instruction with a drink on the pass at ${name}, text size ${size}`, async ({
+        browser,
+      }) => {
+        test.setTimeout(240_000);
+        const { ctx, page } = await open(browser, opts);
+        await setTextSize(page, size);
+        await toPassAndRegister(page);
+        expect(await page.locator('#rbl > #ractions.side:not(:empty)').count()).toBe(1);
+        expect(await box(page, '#ractions button[data-a="bin"]'), '"Bin it" shows').not.toBeNull();
+        const pos = await box(page, '#pos');
+        const instr = await box(page, '#rinstr');
+        expect(pos, '#pos is open').not.toBeNull();
+        expect(instr, '#rinstr shows').not.toBeNull();
+        const bottom = instr!.y + instr!.height;
+        expect(pos!.y, `#pos top ${pos!.y} vs #rinstr bottom ${bottom}`).toBeGreaterThanOrEqual(
+          bottom,
+        );
         await ctx.close();
       });
     }

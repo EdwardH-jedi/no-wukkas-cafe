@@ -1,0 +1,32 @@
+{
+  "review": {
+    "cwd": "/private/tmp/claude-501/-Users-edwardhwang-Desktop-no-wukkas-cafe/3c11c854-ea5d-497a-9b6c-15a558650a65/scratchpad/review-a821fae",
+    "production_diff_exit": 0,
+    "production_diff": "",
+    "head": "a821fae06fd94ac6166b8ae06841674d79dc5476"
+  },
+  "isolated": {
+    "cwd": "/private/tmp/nwc-m5-review-ujxqqiug/checkout",
+    "production_diff_exit": 0,
+    "production_diff": "",
+    "head": "a821fae06fd94ac6166b8ae06841674d79dc5476"
+  },
+  "changed_in_range": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "docs/DEVLOG.md",
+    "package.json",
+    "scripts/release-tag.ts",
+    "scripts/voices-check.ts",
+    "tests/e2e/helpers/budgets.ts",
+    "tests/e2e/phoneHud.spec.ts",
+    "tests/e2e/week.spec.ts",
+    "tests/helpers/budgets.test.ts",
+    "tests/scripts/releaseTag.test.ts",
+    "tests/scripts/version.test.ts",
+    "tests/scripts/voicesCheck.test.ts",
+    "todo.md"
+  ],
+  "review_test_sha256": "269a400cddc0020844fca9d7d1b1c0548490655edaa561920aedf13ebfc095fd",
+  "copied_test_identical": true
+}

@@ -1,0 +1,125 @@
+{
+  "audio-gate.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  2 passed (2)",
+      "Tests  13 passed (13)"
+    ]
+  },
+  "browser-isolated.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "browser.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "build-clean-isolated.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "build-clean.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "determinism.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "final-lint.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "final-typecheck.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "final-unit-isolated.log": {
+    "exit_code": 1,
+    "summary_lines": [
+      "Test Files  3 failed | 121 passed (124)",
+      "Tests  7 failed | 952 passed | 14 skipped (973)"
+    ]
+  },
+  "git-log.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "identity.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "independent-m5.log": {
+    "exit_code": 1,
+    "summary_lines": [
+      "Test Files  1 failed (1)",
+      "Tests  6 failed | 1 passed (7)"
+    ]
+  },
+  "lint.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "prior-build-fixture-recheck.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  1 passed (1)",
+      "Tests  4 passed (4)"
+    ]
+  },
+  "release-check.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "t51.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  1 passed (1)",
+      "Tests  6 passed (6)"
+    ]
+  },
+  "t52.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  1 passed (1)",
+      "Tests  2 passed (2)"
+    ]
+  },
+  "t53.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "t54.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  1 passed (1)",
+      "Tests  7 passed (7)"
+    ]
+  },
+  "t55-budget.log": {
+    "exit_code": 0,
+    "summary_lines": [
+      "Test Files  1 passed (1)",
+      "Tests  1 passed (1)"
+    ]
+  },
+  "trace.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "typecheck.log": {
+    "exit_code": 0,
+    "summary_lines": []
+  },
+  "unit-baseline.log": {
+    "exit_code": 1,
+    "summary_lines": []
+  },
+  "unit-native-baseline.log": {
+    "exit_code": 1,
+    "summary_lines": [
+      "Test Files  2 failed | 121 passed (123)",
+      "Tests  4 failed | 948 passed | 14 skipped (966)"
+    ]
+  }
+}
