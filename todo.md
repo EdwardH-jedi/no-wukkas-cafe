@@ -335,7 +335,7 @@ findings arrive by `/plan replan` and go **above** T5.1.
       shifts still pay tips) and how `npm run playtest:summary` closes the loop; playtest numbers are added by
       the replan when they exist.
       verify: `grep -q "What the bots got wrong" docs/DEVLOG.md`
-- [ ] T5.4 Release tag script: `npm run release:tag` refuses unless `release:check` passes, the tree is clean and
+- [x] T5.4 Release tag script: `npm run release:tag` refuses unless `release:check` passes, the tree is clean and
       `main` equals `origin/main`, then tags `v<package version>` locally and prints the push command (never
       pushes). Test on a temp repo.
       verify: `npx vitest run tests/scripts/releaseTag.test.ts`

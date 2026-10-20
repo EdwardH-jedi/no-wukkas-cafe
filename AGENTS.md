@@ -55,7 +55,8 @@ npm run voices:estimate # licensed voice pass: characters + AUD per TTS speaker 
 npm run voices:render  # licensed pass: dry run by default; -- --allow-paid renders the TTS cast (Google; GOOGLE_TTS_ACCESS_TOKEN + GOOGLE_CLOUD_PROJECT) → voice-cache/licensed/; -- --promote (offline) → public/assets/voice/ + manifest (segments → src/data/voice/segments.manifest.json); -- --import <dir> actors' takes (segment takes too); -- --segments, --only
 npm run voices:sheet   # listen-through + recording sheet → voice-auditions/review-sheet.{json,md}: review fields per TTS speaker, file names per line for the actors
 npm run voices:audition # casting auditions → voice-auditions/ + index.json (dry run by default; see docs/VOICE_CASTING.md)
-npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders)
+npm run release:check  # ship gate: every voice clip licensed + build with the audio release gate (fails today: placeholders); ends with what clears the gate per speaker
+npm run release:tag    # tags v<package.json version> on main, locally: refuses unless the tree is clean (untracked files too), main = origin/main and release:check passes; prints the push command, never pushes
 ```
 
 Voice clips are **placeholders** (Apple system voices, personal-use only): they live in the gitignored `voice-cache/`, are served by the dev server only and are stripped from production builds. Run `npm run voices` after cloning and after editing any spoken line; a line written but not yet rendered goes in `AWAITING_RENDER` (`src/data/voice/script.ts`), the only lines the coverage tests let go without a clip (empty it after rendering). `npm test` checks the manifest only (it passes on a clean clone with no audio files); `npm run voices:check` checks the files themselves and fails on missing audio. Without clips the game falls back to browser speech and says so. Rules for release audio: `docs/VOICE_ASSETS.md`.

@@ -27,6 +27,7 @@
     "voices:render": "node scripts/voices-render.ts",
     "voices:sheet": "node scripts/voices-sheet.ts",
     "release:check": "node scripts/voices-check.ts --release && npm run build",
+    "release:tag": "node scripts/release-tag.ts",
     "voices:audition": "node scripts/voices-audition.ts"
   },
   "dependencies": {
