@@ -423,9 +423,14 @@ Goal: a clean repo for `npm run deploy -- --push` and `npm run release:tag`: sta
 untracked run files decided, the two planning docs agreeing. Nothing here needs a Codex gate review; `npm test` and
 `npm run build` by exit code are the gate. Branch `chore/m7-housekeeping`, one commit per task.
 
-- [ ] T7.1 [simple] (Q8 = yes) Delete the 16 merged local branches listed under M6 Discovered, same rules as T6.5 (merged
+- [!] T7.1 [simple] (Q8 = yes) Delete the 16 merged local branches listed under M6 Discovered, same rules as T6.5 (merged
       into main, not in any worktree, never origin); list them in the commit body. Then `git worktree prune`.
-      verify: `git branch --merged main | grep -vE '^\*|main' | while read b; do git worktree list | grep -q " \[$b\]" || echo "LEFT $b"; done` prints nothing
+      Not run (2026-10-21): the session's auto-mode permission classifier denied `git branch -d` (Git Destructive);
+      the command is under Discovered. All 16 were checked first: merged into main, in no worktree.
+      verify: `test -z "$(git branch --list chore/decisions-q1 chore/review-main-{0cae2cf,157329e,3aa0828,6941c37,7192583,eba0ec7} feat/m2-leftovers feat/m3-playtest-ready feat/m4-leaderboard feat/m5-release-prep fix/m4-gate fix/review-{0cae2cf,6941c37,7192583,eba0ec7})"`
+      (was: `git branch --merged main | grep -vE '^\*|main' | while read b; …` prints nothing. That printed every
+      branch checked out in another worktree as LEFT, because `git branch` marks them `+ `, and its `main` filter
+      dropped every `chore/review-main-*` name, so it could never pass and never checked 6 of the 16)
 - [ ] T7.2 [simple] `docs/TODO.md` Phase 2 and `docs/integration/balance-hook.md` say "509 events"; the CSV holds 599
       (M5 gate F3). Fix both numbers, nothing else in those files.
       verify: `! grep -rn "509 events" docs/TODO.md docs/integration/balance-hook.md`
@@ -443,7 +448,12 @@ untracked run files decided, the two planning docs agreeing. Nothing here needs 
       verify: `npm run build && npm run build:clean && npm run deploy && (npm run release:tag; test $? -eq 1)`
 
 Discovered:
-- (empty)
+- (2026-10-21) T7.1 for Edward (auto mode denies branch deletes here): `git branch -d chore/decisions-q1
+  chore/review-main-{0cae2cf,157329e,3aa0828,6941c37,7192583,eba0ec7} feat/m2-leftovers feat/m3-playtest-ready
+  feat/m4-leaderboard feat/m5-release-prep fix/m4-gate fix/review-{0cae2cf,6941c37,7192583,eba0ec7} && git worktree prune`,
+  then T7.1's verify. Tips (restore with `git branch <name> <sha>`) are in the T7.1 commit body.
+- (2026-10-21) Q for Edward: `feat/m6-decisions` is merged into main (be3f7fc) and in no worktree, but not in Q8's
+  list. Delete it too, same rules? (`chore/m7-housekeeping` will be in the same state after this merge.)
 
 Gate (Edward): push `main`; then Gates 2–11 below.
 Done when: `git status --short` empty, `npm test` green, every T7.x ticked.
