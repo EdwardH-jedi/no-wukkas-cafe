@@ -40,13 +40,13 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M5
+current_milestone: M6
 needs_replan: false
 pause_at_gate: true
-branch: `main` = origin/main = 731274f (acceptance audit eea9fe8 fixed F1–F10, merged 2026-10-20 21:35).
-**M5 is released for the agent from 2026-10-20** (Edward). Order: T5.1 → T5.2 → T5.3 → T5.4 → T5.5 → T5.6, then
-M6 only for the Qs answered in `docs/DECISIONS.md` (never build on an unanswered one). Playtest findings still arrive by
-`/plan replan` and go above T5.1. One implementer session only, in this checkout; the review session lives in
+branch: local `main` = M5 merge a402c2a + this note, **not pushed** (origin/main = a7b7bb8; the push is Edward's call).
+M5 done 2026-10-20 (T5.1–T5.6, gate review a821fae fixed). M6: every T6.x waits on an open Q in `docs/DECISIONS.md`
+(Q2, Q3, Q4, Q5, Q7), so nothing was built and no `feat/m6-decisions` branch exists. Playtest findings still arrive by
+`/plan replan`. One implementer session only, in this checkout; the review session lives in
 `~/Desktop/nwc-review-2` and never edits `src/`.
 
 ---
@@ -354,6 +354,16 @@ Discovered:
   Endless "Best so far" wording, four verifier guards (T2.6/T3.1/T3.4/T4.3 verify lines strengthened), audio
   preflight requires `audio/*`. Report `docs/fixes/2026-10-19-acceptance-fix.md`. Still Edward's: iPhone Safari
   check of the Small-text register (AGENTS §10), `release:check` with licensed audio.
+- (2026-10-20) M5 gate review a821fae (Codex, `docs/reviews/2026-10-20-main-a821fae.md`): FIX, P2 2 / P3 2, red 6 →
+  fixed on `feat/m5-release-prep` (a852c10 F1 `release:tag` re-checks its gates after the slow check and tags the
+  checked sha; b52754c F2 summary says `ready` only when the speaker has no release errors; e857d88 F3 devlog 599
+  events; 5de40ef F4 changelog caption line scoped to the rush). Its `*.log` evidence is gitignored (only the JSON
+  evidence is committed). Left as written: `docs/integration/balance-hook.md` and `docs/TODO.md` Phase 2 also say
+  "509 events" (the CSV holds 599).
+- (2026-10-20) `npm run release:tag` refuses in this checkout today because of untracked files (OVERNIGHT_TODO_3.md,
+  WEEK1_TODO_2.md, docs/agents/ACCEPTANCE_AUDIT_PROMPT.md, docs/integration/RUN2_REPORT.md, RUN3_REPORT.md,
+  `.claude/settings.json.pre-agent-office.bak`) and an uncommitted `.claude/settings.json` change made by an outside
+  tool (agent-office hooks posting to 127.0.0.1:4178). Edward: commit, move or ignore them before tagging.
 
 Gate (Edward): paid Google TTS render (`npm run voices:render -- --allow-paid`, AU$20 cap) + listen-through with
 Korean / Mandarin / Indian-English speakers; actors' takes for Gaz, Jiwoo, Mei imported with
@@ -392,7 +402,8 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
       verify: `git branch --merged main | wc -l` smaller than before, every remaining branch either unmerged or in a worktree
 
 Discovered:
-- (empty)
+- (2026-10-20) Skipped this run, nothing built: T6.1 (Q4), T6.2 (Q5), T6.3 (Q7), T6.4 (Q3), T6.5 (Q2). Every one of
+  those Qs is still `[ ]` in `docs/DECISIONS.md`.
 
 Gate (Edward): answer Q2–Q5, Q7 in `docs/DECISIONS.md` (Q6 Steam is M7+).
 Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
@@ -450,3 +461,11 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
   `fix/acceptance-eea9fe8` and merged 731274f (unit 954/954, E2E 46 passed / 0 failed / 17 opt-in skipped, rushTrace
   unchanged, gh-pages untouched). M5 released to the agent; M6 added for the DECISIONS-gated fixes; Gates #11 is now
   the Safari check.
+- M5 done 2026-10-20: release:check ends with a per-speaker voice gate summary, CHANGELOG.md 0.1.0, devlog "What the
+  bots got wrong", npm run release:tag (local tag after the gates, never pushes), week.spec Monday on a game-time
+  budget, phone register measured with a drink on the pass; gate review a821fae (Codex) P2 2 / P3 2, 6 red, all
+  fixed; merged --no-ff into local main a402c2a (unit 124 files / 973 tests, full E2E 52 passed / 17 opt-in skipped /
+  0 failed in 38.0 min), not pushed. Discovered: the slow check left a tag race (fixed), "ready" needed the release
+  errors (fixed), balance-hook.md and docs/TODO.md say 509 events where the CSV has 599, release:tag refuses here
+  until the untracked reports and the outside .claude/settings.json change are dealt with. M6 skipped whole: Q2, Q3,
+  Q4, Q5, Q7 still open.
