@@ -13,7 +13,7 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
   caller still runs the verify.
 - Branches: each milestone works on `feat/m<n>-<slug>` cut from `main` (T2.1 is the exception: it lands an
   existing branch). The milestone gate merges `--no-ff` into `main`, runs the full E2E, pushes `main`
-  **fast-forward only**. Never force-push, never delete branches, never `pull --rebase` onto main.
+  **fast-forward only**. Never force-push, never delete an unmerged branch (Q2), never `pull --rebase` onto main.
 - Hook-denied paths (`.claude/hooks/guard-review-tests.mjs`): `tests/review/independent*.ts`,
   `tests/review/*.browser.ts`, `tests/review/playwright.*.config.ts`, `tests/fuzz/**`. Make them green from
   `src/`; if one asserts something `docs/DECISIONS.md` now makes false, `SendMessage` the `review` session.
@@ -395,7 +395,7 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
       so** (they are gitignored; `voice-cache/` holds all 597 manifest clips, verified 2026-10-19). Then `npm run
       build` in this checkout must pass without `build:clean`. Update AGENTS.md §3 and the Rules line above.
       verify: `npm run build`
-- [ ] T6.5 [simple] (Q2 = yes) Delete only the merged local branches listed in `docs/integration/RUN3_REPORT.md`
+- [x] T6.5 [simple] (Q2 = yes) Delete only the merged local branches listed in `docs/integration/RUN3_REPORT.md`
       that are **not** checked out in a worktree (`git worktree list` first). Record the list in the commit body.
       Never touch `origin`. Lift the "never delete branches" rule in Rules to "never delete an unmerged branch".
       verify: `git branch --merged main | wc -l` smaller than before, every remaining branch either unmerged or in a worktree
@@ -403,6 +403,14 @@ unanswered Q means the task is skipped this run, not guessed. All on `feat/m6-de
 Discovered:
 - (2026-10-20) Skipped this run, nothing built: T6.1 (Q4), T6.2 (Q5), T6.3 (Q7), T6.4 (Q3), T6.5 (Q2). Every one of
   those Qs is still `[ ]` in `docs/DECISIONS.md`.
+- (2026-10-21) Q2–Q5, Q7 answered; T6.1–T6.5 built. T6.5 deleted Q2's list only (the 21 in RUN3_REPORT). 16 newer
+  local branches are also merged into main and in no worktree: chore/decisions-q1,
+  chore/review-main-{0cae2cf,157329e,3aa0828,6941c37,7192583,eba0ec7}, feat/m2-leftovers, feat/m3-playtest-ready,
+  feat/m4-leaderboard, feat/m5-release-prep, fix/m4-gate, fix/review-{0cae2cf,6941c37,7192583,eba0ec7}. Q for
+  Edward: delete those too? (T6.5's verify "every remaining branch unmerged or in a worktree" waits on that.)
+- (2026-10-21) T6.3 judgement call: the sound hold applies with voices on only (voices off, captions show at once and
+  nothing waits on sound). Device check of the "Sound stopped" card on iPhone Safari (a call or Siri mid-shift) is
+  Edward's (Gates #5).
 
 Gate (Edward): answer Q2–Q5, Q7 in `docs/DECISIONS.md` (Q6 Steam is M7+).
 Done when: every T6.x whose Q is answered is ticked and `npm test` is green.
