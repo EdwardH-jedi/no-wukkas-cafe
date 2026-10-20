@@ -136,6 +136,9 @@ export function createPracticeLoop(app: App): PracticeLoop {
           },
         );
       } else if (ev.type === 'phase') {
+        // Leaving Gaz's demo (skipped, or over) takes his narration with it: a line still loading
+        // must not start, words and all, once you're back at your own cup.
+        if (ev.prev === 'demo') audio.stopVoice();
         practiceHud.onPhase(p);
         canvas.classList.toggle('aim', ev.phase === 'pour');
       } else if (ev.type === 'sfx') sfx.play(ev.id);
