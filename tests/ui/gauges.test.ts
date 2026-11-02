@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { STEP } from '../../src/core/clock';
 import { createRush, emptyRushInput, stepRush } from '../../src/core/rush';
-import { createEspresso, SHOT_TARGET, SHOT_TIME_SCALE } from '../../src/sim/espresso';
+import {
+  createEspresso,
+  scoreEspresso,
+  SHOT_TARGET,
+  SHOT_TIME_SCALE,
+} from '../../src/sim/espresso';
 import { EXTRA_HOT, MILK_NAME, type Milk } from '../../src/sim/rush';
 import { createSteam, TARGET_TEMP } from '../../src/sim/steam';
 import {
@@ -76,6 +81,8 @@ describe('two hands', () => {
   });
 });
 
+const PRE = 4; // pre-infusion: the cue names it first
+
 describe("Day 1's shot timer (training)", () => {
   const at = (shotTime: number, state: 'ready' | 'running' | 'done' = 'running') => {
     const e = createEspresso();
@@ -93,8 +100,10 @@ describe("Day 1's shot timer (training)", () => {
     expect(shotCue(at(24.9))).toBe('approach');
     expect(shotCue(at(SHOT_TARGET[0]))).toBe('inRange');
     expect(shotCue(at(28))).toBe('inRange');
-    // 31.6 s reads "31 s" on the timer: still in range, so the words match the number.
-    expect(shotCue(at(31.6))).toBe('inRange');
+    expect(shotCue(at(SHOT_TARGET[1]))).toBe('inRange');
+    // Past 31 s the score starts to drop (Codex review: 31.6 s scored 7.76/8 while it read "in
+    // range"), so the words say so too; the timer shows tenths, so it reads "31.6 s".
+    expect(shotCue(at(31.6))).toBe('over');
     expect(shotCue(at(32))).toBe('over');
     expect(shotCue(at(40))).toBe('over');
     expect(shotCue(at(27, 'done'))).toBe('stopped');
@@ -102,9 +111,20 @@ describe("Day 1's shot timer (training)", () => {
     expect(shotCueText(at(28), false)).toMatch(/stop now/i);
     expect(shotCueText(at(40), false)).toMatch(/over-extracted/i);
     expect(shotCueText(at(0, 'ready'), true)).toMatch(/tap to start/i);
-    expect(shotCueText(at(27.4, 'done'), false)).toBe('Stopped · 27 s · in range');
-    expect(shotCueText(at(19, 'done'), false)).toBe('Stopped · 19 s · too early');
-    expect(shotCueText(at(37, 'done'), false)).toBe('Stopped · 37 s · over-extracted');
+    expect(shotCueText(at(27.4, 'done'), false)).toBe('Stopped · 27.4 s · in range');
+    expect(shotCueText(at(19, 'done'), false)).toBe('Stopped · 19.0 s · too early');
+    expect(shotCueText(at(31.6, 'done'), false)).toBe('Stopped · 31.6 s · over-extracted');
+    expect(shotCueText(at(37, 'done'), false)).toBe('Stopped · 37.0 s · over-extracted');
+  });
+
+  it('says "in range" exactly when stopping now earns full time marks', () => {
+    for (let t = PRE + 0.05; t < 45; t += 0.05) {
+      const running = at(t);
+      const fullMarks = scoreEspresso({ ...running, done: true }).time === 1;
+      expect(shotCue(running) === 'inRange', `${t.toFixed(2)} s`).toBe(fullMarks);
+      const stopped = shotCueText(at(t, 'done'), false);
+      expect(stopped.endsWith('· in range'), `${t.toFixed(2)} s stopped`).toBe(fullMarks);
+    }
   });
 
   it('explains the training clock from the real speed and window (no copied numbers)', () => {

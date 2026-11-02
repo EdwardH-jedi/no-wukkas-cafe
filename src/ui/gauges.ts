@@ -75,22 +75,28 @@ export const HANDS_TEXT: Record<Hands, string> = {
   milk: 'Shot done · now finish the milk',
 };
 
-/** Where Day 1's shot is against the 25–31 s window. Read off the whole seconds the timer shows,
- *  so the words never disagree with the number on screen (31.6 s reads "31 s": still in range). */
+/** Where Day 1's shot is against the 25–31 s window, judged on the shot time itself as the score
+ *  is: "in range" exactly while stopping now earns full time marks (31.6 s is already over). */
 export type ShotCue = 'ready' | 'preinfusion' | 'approach' | 'inRange' | 'over' | 'stopped';
+
+/** The window, as scoreEspresso's time band reads it. */
+const inWindow = (t: number): boolean => t >= SHOT_TARGET[0] && t <= SHOT_TARGET[1];
 
 export function shotCue(e: EspressoState): ShotCue {
   if (e.done) return 'stopped';
   if (!e.extracting) return 'ready';
-  const secs = Math.floor(e.shotTime);
   if (e.shotTime < PRE_INFUSION) return 'preinfusion';
-  if (secs < SHOT_TARGET[0]) return 'approach';
-  return secs <= SHOT_TARGET[1] ? 'inRange' : 'over';
+  if (e.shotTime < SHOT_TARGET[0]) return 'approach';
+  return inWindow(e.shotTime) ? 'inRange' : 'over';
 }
+
+/** Day 1's timer in tenths ("31.6"), cut rather than rounded, so the number never reads inside the
+ *  window when the cue says it's past it (whole seconds would show 31.6 s as "31"). */
+export const trainingSecs = (t: number): string => (Math.floor(t * 10) / 10).toFixed(1);
 
 /** Day 1's shot tag, in words (never colour alone). */
 export function shotCueText(e: EspressoState, touch: boolean): string {
-  const secs = Math.floor(e.shotTime);
+  const t = e.shotTime;
   switch (shotCue(e)) {
     case 'ready':
       return `Ready · ${touch ? 'tap' : 'click'} to start`;
@@ -103,8 +109,8 @@ export function shotCueText(e: EspressoState, touch: boolean): string {
     case 'over':
       return 'Over-extracted · stop it';
     case 'stopped':
-      return `Stopped · ${secs} s · ${
-        secs < SHOT_TARGET[0] ? 'too early' : secs <= SHOT_TARGET[1] ? 'in range' : 'over-extracted'
+      return `Stopped · ${trainingSecs(t)} s · ${
+        t < SHOT_TARGET[0] ? 'too early' : inWindow(t) ? 'in range' : 'over-extracted'
       }`;
   }
 }
@@ -234,8 +240,7 @@ export function createGauges(
         else setTag('t', e.grinding ? 'Grinding…' : '', '');
       }
       if (mode === 'shot' && training) {
-        const secs = Math.floor(e.shotTime);
-        setText('sv', `${secs}<small>s · ${e.yield.toFixed(0)} g out</small>`);
+        setText('sv', `${trainingSecs(e.shotTime)}<small>s · ${e.yield.toFixed(0)} g out</small>`);
         setStyle('sn', 'left', pct(e.shotTime, 0, 45));
         const cue = shotCue(e);
         const tone =
@@ -246,7 +251,7 @@ export function createGauges(
               : cue === 'approach'
                 ? 'warn'
                 : cue === 'stopped'
-                  ? secs >= SHOT_TARGET[0] && secs <= SHOT_TARGET[1]
+                  ? inWindow(e.shotTime)
                     ? 'good'
                     : 'bad'
                   : '';
