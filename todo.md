@@ -39,13 +39,26 @@ Planning file for the `/next` autopilot. Replaces `docs/TODO.md` as the plan; th
 
 ## Status
 
-current_milestone: M7 (T7.2–T7.5 done; T7.1 waits on Edward: auto mode denied the branch delete here)
+current_milestone: M7 (T7.2–T7.5 done; T7.1's 16 branches are gone and its verify exits 0 on 2026-11-03; box left as is)
 needs_replan: false
 pause_at_gate: true
-branch: local `main` = M7 merge bbd3d5a + this tick, **not pushed** (origin/main = 87c3f09; Edward pushes). M6 done
-2026-10-21 (gate review 9a9262c fixed, full E2E green); M7 merged 2026-10-21 (no `src/` change, `npm test` green).
-After T7.1 the agent backlog is empty until the playtest lands (`/plan replan`) or Edward opens a gate. One implementer
-session only, in this checkout; the review session lives in `~/Desktop/nwc-review-2` and never edits `src/`.
+branch: `main` = `origin/main` = 2029744 (M6 and M7 merged 2026-10-21 and pushed). Open work, outside the M-plan:
+`fix/playtest-first-session-20261102` (from 2029744, pushed, PR #3 to `main`, not merged; Edward merges), the fixes
+from Edward's first-session playtest of 2026-11-02:
+- T1 Day 1 shot timer reads approaching / in range / over-extracted with a "Stop now" banner and a training-clock
+  note; Gaz's shot on attempts 2–3 scores full espresso marks, attempt 1 keeps its score.
+- T2 one register/production context (`rushContext`) for the HUD, keys and camera: the register is put away and inert
+  while a drink is made, keeps the waiting customer's choices, and Enter / R never reach it mid-drink.
+- T3 Day 1 pause menu → "Title screen" lets go of held input and starts a clean trial without a reload.
+- Verified: typecheck, lint, test, build; full E2E on d21a45b (56 passed, 17 opt-in skipped; weekUi's 3 cut off by a
+  macOS Desktop-access EPERM, then 3/3 on 3c9f182); firstSession 4/4 + trial 1/1 on 3c9f182 (2026-11-03). Codex
+  review P2 (shot window judged on whole seconds) fixed in 3c9f182. Not run: balance (Day 2 sim unchanged), real
+  devices, audio listening, feel.
+- Follow-ups: the 390×844 Day 1 shot card overlaps the cup edge; `rush.posNag` can fire while the register is put
+  away; the headless balance bot still rings up mid-drink; AGENTS.md's E2E count is stale (76 tests in 21 files).
+
+No dated playtest notes yet (`docs/playtests/` holds README + TEMPLATE only), so no replan. One implementer session
+only, in this checkout; the review session lives in `~/Desktop/_archive/no-wukkas/nwc-review-2` and never edits `src/`.
 
 ---
 
@@ -471,8 +484,9 @@ Done when: `git status --short` empty, `npm test` green, every T7.x ticked.
 
 Every item here is Edward's; none is a checkbox for the autopilot. State on 2026-10-21 04:05.
 
-1. Push local `main` (M7 merge bbd3d5a + its tick). T7.1: run the 16-branch delete under M7 Discovered (auto mode
-   denied it in the agent session), and say whether `feat/m6-decisions` goes too.
+1. Done by 2026-11-02: local `main` (M7 merge bbd3d5a + its ticks) pushed, `origin/main` = 2029744; T7.1's 16-branch
+   delete run (its verify exits 0 on 2026-11-03). Still open: review and merge PR #3
+   (`fix/playtest-first-session-20261102`, first-session fixes T1–T3), and say whether `feat/m6-decisions` goes too.
 2. Feel-test `feat/latte-feel` (`cd ../nwc-p1c && npx vite --port 5195 --strictPort`) so 1C can merge; decide 1.5.6
    (pull-through thins only at ≥ 3.0 cm).
 3. Publish the playtest build: `npm run deploy -- --push` (dry run prints https://edwardh-jedi.github.io/no-wukkas-cafe/;
@@ -542,3 +556,6 @@ Every item here is Edward's; none is a checkbox for the autopilot. State on 2026
   T7.2 599 events, T7.3 run files tracked + `docs/runs/` + .bak ignored (`git status --short` empty), T7.4
   MILESTONES.md points here, T7.5 build 0 / build:clean 0 / deploy 0 / release:tag 1 (main ≠ origin/main).
   `npm test` 127 files / 991 tests.
+- 2026-11-02/03: first-session playtest fixes T1–T3 on `fix/playtest-first-session-20261102` (d9ba89a T1, fb7b478 T2,
+  5a81cf4 T3, 5746649 e2e, d21a45b week bot, 3c9f182 Codex P2), PR #3, not merged. `npm test` 130 files / 1009 tests;
+  E2E evidence in Status. Two E2E runs on 2026-11-02 were void (Clamshell Sleep) and one cut off by TCC EPERM.
