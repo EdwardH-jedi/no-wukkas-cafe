@@ -9,7 +9,10 @@ import { MILK_NAME, orderLabel, type DrinkType, type Milk, type Order } from '..
 import { esc } from './screens';
 
 export interface Pos {
-  update(r: Rush): void;
+  /** `active`: the register is where the player is working (core/rush rushContext). While a drink
+   *  is being made the panel is put away and can't be used, but keeps the customer's choices so far
+   *  for when the drink is done. */
+  update(r: Rush, active?: boolean): void;
   /** The player's question, shown under the buttons. */
   onAsk(text: string): void;
   /** A ticket printed: learning-mode feedback. */
@@ -117,6 +120,8 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
   let sel: Sel = { drink: null, milk: 'full', temp: 'normal', heart: 'no' };
   let forCustomer = '';
   let deciding = false;
+  /** The register is the player's context (see update). Off, nothing on the panel acts. */
+  let active = true;
   let fbUntil = 0;
   let now = 0;
   let stateKey = '';
@@ -140,33 +145,46 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
     });
     const lb = sel.drink === 'longBlack';
     for (const r of Object.values(rows)) r.classList.toggle('off', lb);
-    ring.disabled = !deciding || sel.drink === null;
+    ring.disabled = !active || !deciding || sel.drink === null;
   };
 
   el.querySelectorAll<HTMLButtonElement>('button[data-f]').forEach((b) => {
     b.onclick = () => {
+      if (!active) return;
       const f = b.dataset.f as keyof Sel;
       (sel as unknown as Record<string, string>)[f] = b.dataset.v as string;
       paint();
     };
   });
   el.querySelectorAll<HTMLButtonElement>('button[data-q]').forEach((b) => {
-    b.onclick = () => act({ type: 'clarify', field: b.dataset.q as OrderField });
+    b.onclick = () => {
+      if (active) act({ type: 'clarify', field: b.dataset.q as OrderField });
+    };
   });
-  (el.querySelector('[data-a="replay"]') as HTMLButtonElement).onclick = () =>
-    act({ type: 'replay' });
-  repeatBtn.onclick = () => act({ type: 'repeat' });
+  (el.querySelector('[data-a="replay"]') as HTMLButtonElement).onclick = () => {
+    if (active) act({ type: 'replay' });
+  };
+  repeatBtn.onclick = () => {
+    if (active) act({ type: 'repeat' });
+  };
   const doRing = (): boolean => {
     const o = order();
-    if (!deciding || !o) return false;
+    if (!active || !deciding || !o) return false;
     act({ type: 'ringUp', order: o });
     return true;
   };
   ring.onclick = () => void doRing();
 
   return {
-    update(r) {
+    update(r, on = true) {
       const c = r.phase === 'service' ? atCounter(r) : null;
+      if (on !== active) {
+        active = on;
+        stateKey = ''; // repaint (Ring up's enabled state follows)
+        // Put away with a register button focused: Enter or Space must not press it unseen.
+        if (!on && el.contains(document.activeElement))
+          (document.activeElement as HTMLElement).blur();
+      }
       if (!c) {
         el.classList.add('hide');
         forCustomer = '';
@@ -188,7 +206,8 @@ export function createPos(root: HTMLElement, touch: boolean, act: (a: RushAction
           repeatCostEl.textContent = repeatCost(c.listen.repeats);
           paint();
         }
-        el.classList.remove('hide');
+        // Making a drink: the panel waits, choices kept (forCustomer unchanged), for the register.
+        el.classList.toggle('hide', !active);
       }
       now = r.time;
       if (fbUntil > 0 && now > fbUntil) {

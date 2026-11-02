@@ -14,6 +14,8 @@ import { clipFor } from '../../src/data/voice';
 import { awaitingRender } from '../../src/data/voice/script';
 import { controlsAt, OWNER_DEMO, type TrackKey } from '../../src/sim/latte/demo';
 import { HEIGHT_PRESETS } from '../../src/sim/latte/pitcher';
+import { POINTS, type AttemptResult, type Fault } from '../../src/sim/attempt';
+import { SHOT_TARGET, type EspressoFault, type EspressoScore } from '../../src/sim/espresso';
 
 type Style = 'good' | 'lazy' | 'messy' | 'blob';
 
@@ -269,5 +271,64 @@ describe('trial shift, played headless', () => {
     expect(t.attempt).toBe(0);
     expect(t.owner.frustration).toBe(0);
     expect(t.demoSeen).toBe(false);
+  });
+});
+
+describe("Gaz's shot on the later attempts (playtest 2026-11-02)", () => {
+  const ESPRESSO_FAULTS: readonly EspressoFault[] = [
+    'doseLight',
+    'doseHeavy',
+    'shotShort',
+    'shotLong',
+  ];
+  const espressoFaults = (r: AttemptResult): Fault[] =>
+    r.faults.filter((f) => (ESPRESSO_FAULTS as readonly Fault[]).includes(f));
+
+  it('a deliberately bad first shot keeps its score; Gaz’s shots after it get full credit', () => {
+    const t = createTrial(7);
+    let firstShot: EspressoScore | null = null;
+    let firstResult: string | null = null;
+    for (let n = 0; n < 900 / STEP && t.phase !== 'verdict'; n++) {
+      let i = botInput(t, 'good', n);
+      if (t.phase === 'shot') {
+        // Run the first shot well past the window before stopping it: over-extracted.
+        i = emptyInput();
+        const e = t.espresso;
+        if (!e.extracting && !e.done) i.pressed = n % 20 === 0;
+        if (e.extracting && e.shotTime >= SHOT_TARGET[1] + 9) i.pressed = true;
+      } else if (t.phase === 'feedback') {
+        i = emptyInput();
+        i.action = 'next'; // all three goes, whatever the score
+      }
+      stepTrial(t, i, STEP);
+      t.events.length = 0;
+      if (t.phase === 'steam' && t.attempt === 0 && !firstShot) firstShot = t.espressoScore;
+      if (t.results.length === 1 && !firstResult) firstResult = JSON.stringify(t.results[0]);
+    }
+    expect(t.phase).toBe('verdict');
+    expect(t.results).toHaveLength(3);
+
+    // The first attempt is judged on the player's own (bad) shot, and stays that way.
+    expect(firstShot?.faults).toContain('shotLong');
+    const [first, second, third] = t.results as [AttemptResult, AttemptResult, AttemptResult];
+    expect(first.faults).toContain('shotLong');
+    expect(first.espresso).toBeCloseTo(POINTS.espresso * (firstShot?.total ?? 1), 9);
+    expect(first.espresso).toBeLessThan(POINTS.espresso);
+    expect(JSON.stringify(first)).toBe(firstResult);
+
+    // Gaz pulls the shots for attempts 2 and 3: full espresso marks, none of the first shot's faults.
+    for (const r of [second, third]) {
+      expect(r.espresso).toBe(POINTS.espresso);
+      expect(espressoFaults(r)).toEqual([]);
+    }
+    expect(t.espressoScore).toEqual({ dose: 1, time: 1, total: 1, faults: [] });
+    expect(t.espresso.done).toBe(true);
+    expect(t.espresso.extracting).toBe(false);
+  });
+
+  it('a good first shot is still judged as it was (only later goes get Gaz’s shot)', () => {
+    const { t } = play('good');
+    expect(t.results[0]?.espresso).toBeGreaterThan(0);
+    expect(t.results[0]?.espresso).toBeLessThanOrEqual(POINTS.espresso);
   });
 });

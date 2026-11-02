@@ -2,6 +2,7 @@
 // getter, read when asked, never a copy taken at boot.
 
 import * as THREE from 'three';
+import { rushContext } from '../core/rush';
 import { RIM, GROUP_SPOUT } from '../world/station';
 import type { App } from './context';
 
@@ -115,6 +116,8 @@ export function createDebugHandle(app: App) {
       const b = r.barista;
       return {
         phase: r.phase,
+        /** Register or production (core/rush rushContext): what the HUD and keys act on. */
+        context: rushContext(r),
         serviceTime: r.serviceTime,
         station: b.phase,
         stationTime: b.phaseTime,
@@ -242,10 +245,18 @@ export function createDebugHandle(app: App) {
           band: r.band,
           faults: r.faults,
           art: r.pattern.art,
+          espresso: r.espresso,
         })),
         outcome: trial.outcome,
         line: trial.speech.current?.text ?? null,
         paused: clock.paused,
+        /** What the player is holding (a stuck hold would grind or steam by itself). */
+        input: {
+          held: app.held,
+          spaceHeld: app.spaceHeld,
+          keyHeight: app.keyHeight,
+          touchHeight: app.touchHeight,
+        },
         drawCalls: renderer.info.render.calls,
         triangles: renderer.info.render.triangles,
       };

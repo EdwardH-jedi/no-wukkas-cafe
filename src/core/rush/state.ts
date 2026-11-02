@@ -260,6 +260,30 @@ export const registerBusy = (r: Rush): boolean =>
     (c) => c.state === 'register' || c.state === 'ordering' || c.state === 'deciding',
   );
 
+/** Where the player is working (playtest 2026-11-02): at the register, or on a drink at the
+ *  machine. One at a time. From Make until the drink is on the pass (or binned) it's production:
+ *  the camera is on the station and only the station's controls act. The register panel (options,
+ *  Replay, Repeat, Ask, Ring up) is put away with whatever was chosen on it, and comes back as it
+ *  was once the drink is done. "Take order" stays open, as it always has: a customer can start
+ *  talking while the shot runs (REGISTER_DRAIN_BUSY), and the panel waits. A read-only view of the
+ *  state for the HUD, keys and camera: the sim doesn't gate on it, so the headless bots and the
+ *  Day 2 trace are unchanged. */
+export type RushContext = 'register' | 'production';
+
+const MAKING: ReadonlySet<StationPhase> = new Set<StationPhase>([
+  'grind',
+  'lock',
+  'water',
+  'shot',
+  'shotSteam',
+  'steam',
+  'pour',
+]);
+
+export function rushContext(r: Rush): RushContext {
+  return r.phase === 'service' && MAKING.has(r.barista.phase) ? 'production' : 'register';
+}
+
 /** The customer at the register, if any (waiting for their order to be taken). */
 export function atRegister(r: Rush): RushCustomer | null {
   return r.customers.find((c) => c.state === 'register') ?? null;

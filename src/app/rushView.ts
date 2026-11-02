@@ -1,7 +1,7 @@
 // Day 2, the per-frame view: the rush's events into the HUD, audio, crowd and Gaz, then the station,
 // camera and sounds. Split out of rushWiring.ts with no behaviour change.
 
-import { customerByKey, type Rush } from '../core/rush';
+import { customerByKey, rushContext, type Rush } from '../core/rush';
 import { ibisPresent } from '../sim/ibis';
 import { surfacing } from '../sim/latte/field';
 import { pitcherFlow } from '../sim/latte/pitcher';
@@ -33,7 +33,6 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
     speech: { current: null as unknown },
     owner: { frustration: 0 },
   };
-  const WORKING = new Set(['grind', 'lock', 'shot', 'shotSteam', 'water', 'steam', 'pour']);
   const { look, focus, pointer } = app;
 
   return function rushFrame(r: Rush, dt: number): void {
@@ -126,7 +125,8 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
       customerTalking && audio.clipPlaying ? voiceLevel : -1,
     );
 
-    const working = r.phase === 'service' && WORKING.has(b.phase);
+    // The camera follows the same context as the HUD and keys: on the station while making.
+    const working = rushContext(r) === 'production';
     const gazTalking = r.speech.current?.speaker === 'gaz';
     ownerScene.phase =
       r.phase === 'service'

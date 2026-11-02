@@ -8,7 +8,6 @@ import { createMusic } from '../audio/music';
 import { createSfx } from '../audio/sfx';
 import { createClock } from '../core/clock';
 import { parseSeed } from '../core/rng';
-import { atCounter } from '../core/rush';
 import { createScoresStore } from '../core/save/scores';
 import { browserStorage, createSaveStore } from '../core/save/storage';
 import { createTrial, emptyInput } from '../core/trial';
@@ -28,7 +27,7 @@ import { createFrameDriver } from './frame';
 import { installInput } from './input';
 import { replayLast, resumeAll, setPaused } from './pause';
 import { createPracticeView, startPractice } from './practiceWiring';
-import { createRushView, rushAct, startDay2, startRush } from './rushWiring';
+import { createRushView, rushReplay, startDay2, startRush } from './rushWiring';
 import { makeIbis } from './shared';
 import { createTelemetry, downloadLog, watchPageHide } from './telemetry';
 import { titleCallbacks, toTitle } from './title';
@@ -190,7 +189,7 @@ export async function boot(): Promise<void> {
 
   app.audioPanel = createAudioPanel(uiRoot, audio, {
     replay: () => {
-      if (app.mode === 'rush' && app.rush && atCounter(app.rush)) rushAct(app, { type: 'replay' });
+      if (app.mode === 'rush' && app.rush) rushReplay(app, app.rush);
       else replay();
     },
     test: () => audio.say({ speaker: 'gaz', text: (GREETING[0] as { text: string }).text }),

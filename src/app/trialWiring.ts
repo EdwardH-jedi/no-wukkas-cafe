@@ -34,6 +34,9 @@ export function createTrialHud(app: App, title: Omit<TitleCallbacks, 'start'>): 
       app.setPaused(false);
       act(app, 'restart');
     },
+    // The pause menu's way out: the shared trip home (the playtest log closes the trial as quit
+    // to the title, never as finished; nothing is scored or saved).
+    toTitle: () => app.nav.toTitle(),
     height: (d) => (app.touchHeight = d),
     skip: () => (app.input.skip = true),
   });

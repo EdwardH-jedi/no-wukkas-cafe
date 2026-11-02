@@ -36,6 +36,8 @@ export interface Summary {
 }
 export interface RushState {
   phase: string;
+  /** Register or production (core/rush rushContext): the register panel only works at the register. */
+  context: 'register' | 'production';
   serviceTime: number;
   station: string;
   stationTime: number;
@@ -306,7 +308,9 @@ export async function playShift(page: Page, o: BotOptions = {}): Promise<Played>
         .catch(() => page.keyboard.press('t')); // the button was redrawn under the click: T
       continue;
     }
-    if (counter?.state === 'deciding' && handsFree(s)) {
+    // Ring up only at the register: while a drink is being made its panel waits (playtest
+    // 2026-11-02), so the order is rung up once the drink is on the pass or binned.
+    if (counter?.state === 'deciding' && handsFree(s) && s.context === 'register') {
       await pace(1);
       await o.at?.('ringUp', s);
       say(s, `ring up ${counter.key}: ${JSON.stringify(counter.order)}`);

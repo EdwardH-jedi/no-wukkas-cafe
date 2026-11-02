@@ -9,6 +9,8 @@ export const DOSE_TARGET: readonly [number, number] = [18, 20];
 export const SHOT_TIME_SCALE = 3.4;
 export const SHOT_TARGET: readonly [number, number] = [25, 31];
 export const SHOT_MAX = 60; // the machine gives up (and so does the owner)
+/** Barista seconds of pre-infusion: nothing drips before this. */
+export const PRE_INFUSION = 4;
 
 export interface EspressoState {
   dose: number;
@@ -41,8 +43,23 @@ export function stepShot(e: EspressoState, dt: number): void {
   const bs = dt * SHOT_TIME_SCALE;
   e.shotTime += bs;
   // Pre-infusion: nothing drips for the first ~4 s.
-  if (e.shotTime > 4) e.yield += shotFlow(e.dose) * bs;
+  if (e.shotTime > PRE_INFUSION) e.yield += shotFlow(e.dose) * bs;
   if (e.shotTime >= SHOT_MAX) stopShot(e);
+}
+
+/** The shot the owner pulls himself for the trial's later attempts: a finished one, dosed and
+ *  timed in the middle of both windows (so it scores full marks with no faults). Fresh each call. */
+export function handoffShot(): EspressoState {
+  const dose = (DOSE_TARGET[0] + DOSE_TARGET[1]) / 2;
+  const shotTime = (SHOT_TARGET[0] + SHOT_TARGET[1]) / 2;
+  return {
+    dose,
+    grinding: false,
+    shotTime,
+    extracting: false,
+    yield: shotFlow(dose) * (shotTime - PRE_INFUSION),
+    done: true,
+  };
 }
 
 export function startShot(e: EspressoState): void {
