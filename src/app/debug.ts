@@ -2,6 +2,7 @@
 // getter, read when asked, never a copy taken at boot.
 
 import * as THREE from 'three';
+import { rushContext } from '../core/rush';
 import { RIM, GROUP_SPOUT } from '../world/station';
 import type { App } from './context';
 
@@ -115,6 +116,8 @@ export function createDebugHandle(app: App) {
       const b = r.barista;
       return {
         phase: r.phase,
+        /** Register or production (core/rush rushContext): what the HUD and keys act on. */
+        context: rushContext(r),
         serviceTime: r.serviceTime,
         station: b.phase,
         stationTime: b.phaseTime,

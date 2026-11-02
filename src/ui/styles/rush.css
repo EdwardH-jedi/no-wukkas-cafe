@@ -531,3 +531,11 @@
   font-style: normal;
   margin-right: 2px;
 }
+
+/* A drink being made with someone at the register: the station's instruction leads, and a line
+   under it says their order waits for the register (playtest 2026-11-02). */
+#rinstr .b small.waits {
+  display: block;
+  margin-top: 4px;
+  color: var(--txt-dim);
+}

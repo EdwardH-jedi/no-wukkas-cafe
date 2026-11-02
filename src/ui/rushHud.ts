@@ -7,6 +7,7 @@ import {
   atCounter,
   atRegister,
   presentSpeaker,
+  rushContext,
   type Rush,
   type RushAction,
   type RushCustomer,
@@ -59,7 +60,7 @@ export interface RushHud {
   onTicket(c: RushCustomer): void;
   /** A hand-back set a misheard ticket straight: mark what was misheard on it. */
   onTicketFixed(c: RushCustomer): void;
-  /** Enter at the register: ring up the selection. */
+  /** Enter at the register: ring up the selection (never while a drink is being made). */
   ringUp(): boolean;
   setPaused(p: boolean): void;
   update(r: Rush, dt: number): void;
@@ -299,8 +300,11 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       chips.update(r);
 
       lastRush = r;
+      // One context at a time: while a drink is being made the register panel waits (its choices
+      // kept) and the station's instruction leads.
+      const making = rushContext(r) === 'production';
       railView.update(r);
-      pos.update(r);
+      pos.update(r, !making);
       eventCard.update(r);
       const b = r.barista;
       const reg = r.phase === 'service' ? atRegister(r) : null;
@@ -362,7 +366,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       // Instruction.
       let ins: { title: string; html: string } | null = null;
       if (r.phase === 'service') {
-        if (counter) {
+        if (counter && !making) {
           ins = {
             title: 'Take the order',
             html:
@@ -398,6 +402,18 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
           };
         } else if (b.phase === 'lock') ins = { title: 'Tamp', html: 'Tamping and locking in…' };
         else ins = instruction(b, touch);
+        // Someone at the register while the drink is made: their order waits for it.
+        if (counter && making && ins) {
+          const who = esc(counter.def.callName);
+          ins = {
+            title: ins.title,
+            html: `${ins.html}<small class="waits">${
+              counter.state === 'ordering'
+                ? `Listen to ${who} now; ring it up once this drink's done.`
+                : `${who}'s order waits on the register till this drink's done.`
+            }</small>`,
+          };
+        }
       }
       const ik = ins ? ins.title + ins.html : '';
       if (ik !== instrKey) {

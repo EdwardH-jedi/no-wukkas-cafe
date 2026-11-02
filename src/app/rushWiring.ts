@@ -7,6 +7,7 @@ import {
   atRegister,
   createRush,
   emptyRushInput,
+  rushContext,
   stepRush,
   type Rush,
   type RushAction,
@@ -89,19 +90,31 @@ export function createRushView(app: App): RushHud {
   });
 }
 
+/** Replay (R, the top bar's ↻): at the register it's the counted listening aid; while a drink is
+ *  being made the register's Replay waits with the rest of its panel; otherwise the last line. */
+export function rushReplay(app: App, r: Rush): void {
+  if (!atCounter(r)) app.replay();
+  else if (rushContext(r) === 'register') rushAct(app, { type: 'replay' });
+}
+
 /** Day 2 keys: T take order, R replay, Enter ring up / lock in / hand over, F/L make, B bin,
- *  1–3 answer the event card while it's up, else 1–6 serve or jug height. */
+ *  1–3 answer the event card while it's up, else 1–6 serve or jug height. While a drink is being
+ *  made (rushContext 'production'), Enter is the station's alone: it never rings up or takes an
+ *  order, and R leaves the register alone. */
 export function rushKey(app: App, r: Rush, k: string, e: KeyboardEvent): void {
   const { input } = app;
   const b = r.barista;
+  const making = rushContext(r) === 'production';
   if (k === 'enter') {
     const t = e.target as HTMLElement;
-    // Enter rings up even with a register option focused (it would just re-press it).
-    if (t.tagName === 'BUTTON' && !(t.closest('#pos') && atCounter(r))) return;
+    // Enter rings up even with a register option focused (it would just re-press it); mid-drink a
+    // register button (put away) never takes it either.
+    if (t.tagName === 'BUTTON' && !(t.closest('#pos') && (making || atCounter(r)))) return;
     e.preventDefault();
     // While steaming during the shot, Enter stops the shot (a click would just grab the jug).
     const stopShot = b.phase === 'shotSteam' && b.espresso.extracting;
     if (b.phase === 'grind' || b.phase === 'pour' || stopShot) rushAct(app, { type: 'next' });
+    else if (making) input.skip = true;
     else if (atCounter(r)) app.rushHud.ringUp();
     else if (atRegister(r)) rushAct(app, { type: 'takeOrder' });
     else input.skip = true;
@@ -134,8 +147,7 @@ export function rushKey(app: App, r: Rush, k: string, e: KeyboardEvent): void {
   else if (k === 'v') app.audio.voiceEnabled = !app.audio.voiceEnabled;
   else if (k === 'r') {
     // At the register, Replay is part of listening (counted, costs patience): the sim does it.
-    if (atCounter(r)) rushAct(app, { type: 'replay' });
-    else app.replay();
+    rushReplay(app, r);
   }
 }
 
