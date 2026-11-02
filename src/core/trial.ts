@@ -8,6 +8,7 @@ import { ATTEMPTS, scoreAttempt, trialOutcome, bestValidIndex } from '../sim/att
 import type { AttemptResult, TrialOutcome } from '../sim/attempt';
 import {
   createEspresso,
+  handoffShot,
   scoreEspresso,
   SHOT_MAX,
   SHOT_TARGET,
@@ -326,6 +327,10 @@ function enter(t: Trial, phase: Phase): void {
       t.flags = {};
       if (t.attempt === 0) sayQueue(t, 'steam.intro');
       else {
+        // Gaz pulls a fresh shot for each later go. It's his, so it replaces the player's shot
+        // (and its faults) outright: full espresso marks. Earlier results keep their own score.
+        t.espresso = handoffShot();
+        t.espressoScore = scoreEspresso(t.espresso);
         if (t.attempt === 1) sayQueue(t, 'shot.handoff');
         sayQueue(t, 'steam.again');
       }

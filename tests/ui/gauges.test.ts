@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { STEP } from '../../src/core/clock';
 import { createRush, emptyRushInput, stepRush } from '../../src/core/rush';
-import { createEspresso } from '../../src/sim/espresso';
+import { createEspresso, SHOT_TARGET, SHOT_TIME_SCALE } from '../../src/sim/espresso';
 import { EXTRA_HOT, MILK_NAME, type Milk } from '../../src/sim/rush';
 import { createSteam, TARGET_TEMP } from '../../src/sim/steam';
 import {
@@ -11,6 +11,9 @@ import {
   milkTag,
   milkTarget,
   milkTargetLabel,
+  shotCue,
+  shotCueText,
+  trainingClockNote,
 } from '../../src/ui/gauges';
 
 const MILKS = Object.keys(MILK_NAME) as Milk[];
@@ -70,5 +73,46 @@ describe('two hands', () => {
     expect(handsState(e, s)).toBe('milk');
     for (const t of Object.values(HANDS_TEXT)) expect(t.length).toBeGreaterThan(0);
     expect(HANDS_TEXT.both).toMatch(/shot running \+ steaming/);
+  });
+});
+
+describe("Day 1's shot timer (training)", () => {
+  const at = (shotTime: number, state: 'ready' | 'running' | 'done' = 'running') => {
+    const e = createEspresso();
+    e.dose = 19;
+    e.shotTime = shotTime;
+    e.extracting = state === 'running';
+    e.done = state === 'done';
+    return e;
+  };
+
+  it('says which side of the 25–31 s window the shot is on, in words', () => {
+    expect(shotCue(at(0, 'ready'))).toBe('ready');
+    expect(shotCue(at(2))).toBe('preinfusion');
+    expect(shotCue(at(12))).toBe('approach');
+    expect(shotCue(at(24.9))).toBe('approach');
+    expect(shotCue(at(SHOT_TARGET[0]))).toBe('inRange');
+    expect(shotCue(at(28))).toBe('inRange');
+    // 31.6 s reads "31 s" on the timer: still in range, so the words match the number.
+    expect(shotCue(at(31.6))).toBe('inRange');
+    expect(shotCue(at(32))).toBe('over');
+    expect(shotCue(at(40))).toBe('over');
+    expect(shotCue(at(27, 'done'))).toBe('stopped');
+    expect(shotCueText(at(12), false)).toMatch(/not yet/i);
+    expect(shotCueText(at(28), false)).toMatch(/stop now/i);
+    expect(shotCueText(at(40), false)).toMatch(/over-extracted/i);
+    expect(shotCueText(at(0, 'ready'), true)).toMatch(/tap to start/i);
+    expect(shotCueText(at(27.4, 'done'), false)).toBe('Stopped · 27 s · in range');
+    expect(shotCueText(at(19, 'done'), false)).toBe('Stopped · 19 s · too early');
+    expect(shotCueText(at(37, 'done'), false)).toBe('Stopped · 37 s · over-extracted');
+  });
+
+  it('explains the training clock from the real speed and window (no copied numbers)', () => {
+    const note = trainingClockNote();
+    expect(note).toContain(`${SHOT_TIME_SCALE}×`);
+    expect(note).toContain(`${SHOT_TARGET[0]}–${SHOT_TARGET[1]} s`);
+    const lo = Math.round(SHOT_TARGET[0] / SHOT_TIME_SCALE);
+    const hi = Math.round(SHOT_TARGET[1] / SHOT_TIME_SCALE);
+    expect(note).toContain(`about ${lo}–${hi} real seconds`);
   });
 });

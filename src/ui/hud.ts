@@ -97,7 +97,8 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   let lastQuote = '';
 
   // ---------------------------------------------------------------- gauges + lesson strip
-  const gaugePanel = createGauges(gauges, touch);
+  // The trial's shot timer teaches: the window in words, a Stop banner, the training clock.
+  const gaugePanel = createGauges(gauges, touch, undefined, { training: true });
   const lesson = createLesson(root, touch, 'lesson');
 
   // ---------------------------------------------------------------- action buttons

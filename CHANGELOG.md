@@ -58,6 +58,8 @@ The first public web build: the Day 1 trial, the Day 2 rush, a playable week and
 - After pausing to the title, "Replay last line" no longer replays the old customer's order.
 - The café murmur goes back to its normal level after a Hard shift.
 - The bin chicken waits until nobody is mid-order before it walks in or honks.
+- Day 1's shot timer says whether the shot is approaching, in range or over-extracted, shows a "Stop now" banner in the window, and explains that the training clock runs 3.4× fast.
+- Day 1's second and third goes are judged on Gaz's own shot (full marks), not the first go's shot; the first go keeps its own score.
 - Space no longer gets swallowed when a button has focus.
 - Gaz's end-of-shift praise no longer says "Five for five" after six drinks.
 - A line cut off while the browser has suspended audio stays cut off when sound comes back.

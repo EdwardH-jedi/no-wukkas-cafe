@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   createEspresso,
+  DOSE_TARGET,
   GRIND_RATE,
+  handoffShot,
   scoreEspresso,
   shotFlow,
   SHOT_MAX,
+  SHOT_TARGET,
   SHOT_TIME_SCALE,
   startShot,
   stepGrind,
@@ -55,5 +58,20 @@ describe('espresso', () => {
     stopShot(e);
     expect(e.extracting).toBe(false);
     expect(e.done).toBe(true);
+  });
+
+  it("Gaz's handed-over shot is a finished, textbook one: full marks, no faults", () => {
+    const e = handoffShot();
+    expect(e.done).toBe(true);
+    expect(e.extracting).toBe(false);
+    expect(e.grinding).toBe(false);
+    expect(e.dose).toBeGreaterThanOrEqual(DOSE_TARGET[0]);
+    expect(e.dose).toBeLessThanOrEqual(DOSE_TARGET[1]);
+    expect(e.shotTime).toBeGreaterThanOrEqual(SHOT_TARGET[0]);
+    expect(e.shotTime).toBeLessThanOrEqual(SHOT_TARGET[1]);
+    expect(e.yield).toBeGreaterThan(0); // the cup isn't empty when the milk goes in
+    expect(scoreEspresso(e)).toEqual({ dose: 1, time: 1, total: 1, faults: [] });
+    // A fresh one every time: nothing carries over between attempts.
+    expect(handoffShot()).not.toBe(e);
   });
 });

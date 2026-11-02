@@ -242,6 +242,7 @@ export function createDebugHandle(app: App) {
           band: r.band,
           faults: r.faults,
           art: r.pattern.art,
+          espresso: r.espresso,
         })),
         outcome: trial.outcome,
         line: trial.speech.current?.text ?? null,

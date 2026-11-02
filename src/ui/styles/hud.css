@@ -250,6 +250,65 @@
   border-radius: 999px;
   cursor: pointer;
 }
+/* Day 1's shot timer (training): the stop zone named under the bar, the card's state in its
+   border, a banner while it's time to stop (words and a stop square, never colour alone), and
+   what the sped-up training clock means. */
+.gauge .zoneCap {
+  position: relative;
+  height: 13px;
+  margin-top: 2px;
+}
+.gauge .zoneCap span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gum);
+}
+.gauge.shotTrain[data-state='inRange'] {
+  border-color: var(--gum);
+  box-shadow: 0 0 0 2px var(--gum);
+}
+.gauge.shotTrain[data-state='over'] {
+  border-color: var(--flag);
+  box-shadow: 0 0 0 2px var(--flag);
+}
+.gauge .stopCue {
+  margin-top: 8px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gum);
+}
+.gauge.shotTrain[data-state='inRange'] .stopCue {
+  animation: stopCue 0.5s ease-in-out infinite alternate;
+}
+.gauge.shotTrain[data-state='over'] .stopCue {
+  font-size: 13px;
+  color: var(--paper);
+  background: var(--flag)
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.22) 0 6px, transparent 6px 12px);
+}
+@keyframes stopCue {
+  to {
+    transform: scale(1.04);
+  }
+}
+.gauge .clockNote {
+  margin: 8px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--txt-dim);
+}
 .tag.good {
   color: var(--gum);
 }
