@@ -2,11 +2,12 @@
 // the way back to it.
 
 import { DEFAULT_NOISE } from '../audio/sfx';
-import { createTrial } from '../core/trial';
+import { createTrial, emptyInput } from '../core/trial';
 import { focusQuietly } from '../ui/screens/keys';
 import { endlessReason } from '../ui/screens/labels';
 import { renderTitle, type TitleCallbacks } from '../ui/screens/title';
 import type { App } from './context';
+import { releaseHands } from './pause';
 import { openScores } from './scores';
 import { makeIbis } from './shared';
 import { act } from './trialWiring';
@@ -34,6 +35,14 @@ export function toTitle(app: App): void {
   // Nor keep a shift's crowd (a Hard shift's packed café) through the title and the next Day 1.
   app.sfx.setNoise(DEFAULT_NOISE);
   app.resumeAll();
+  // Nothing the player was holding or had just pressed carries into the title (and the next trial):
+  // a held button or Space, a jug nudge, a press or action still waiting for its step.
+  releaseHands(app);
+  app.keyHeight = 0;
+  app.touchHeight = 0;
+  Object.assign(app.input, emptyInput());
+  app.rushAction = null;
+  app.practiceAction = null;
   app.crowd.clear();
   app.rush = null;
   app.practice = null;

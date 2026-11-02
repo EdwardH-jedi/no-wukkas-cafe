@@ -250,6 +250,13 @@ export function createDebugHandle(app: App) {
         outcome: trial.outcome,
         line: trial.speech.current?.text ?? null,
         paused: clock.paused,
+        /** What the player is holding (a stuck hold would grind or steam by itself). */
+        input: {
+          held: app.held,
+          spaceHeld: app.spaceHeld,
+          keyHeight: app.keyHeight,
+          touchHeight: app.touchHeight,
+        },
         drawCalls: renderer.info.render.calls,
         triangles: renderer.info.render.triangles,
       };

@@ -20,6 +20,8 @@ export interface HudCallbacks {
   bindAudio(el: HTMLElement): void;
   pause(p: boolean): void;
   restart(): void;
+  /** Leave the trial from the pause menu: back to the title screen. */
+  toTitle(): void;
   height(dir: -1 | 0 | 1): void;
   skip(): void;
 }
@@ -60,7 +62,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
     <div id="subs" class="gone" role="status" aria-live="polite"><div class="who">GAZ<small>Owner</small></div><div class="text"></div></div>
     <div id="card" class="hide"></div>
     <div id="verdict" class="hide"></div>
-    <div id="pause" class="hide"><div class="box"><h3>Paused</h3><div class="titleBtns"><button class="btn" id="resumeBtn">Back to it</button><button class="btn ghost" id="restartBtn">Restart trial</button></div></div></div>`;
+    <div id="pause" class="hide"><div class="box"><h3>Paused</h3><div class="titleBtns"><button class="btn" id="resumeBtn">Back to it</button><button class="btn ghost" id="restartBtn">Restart trial</button><button class="btn ghost" id="titleBtn">Title screen</button></div></div></div>`;
   const $ = <T extends HTMLElement>(s: string): T => root.querySelector(s) as T;
   const title = $('#title');
   const topbar = $('#topbar');
@@ -79,6 +81,7 @@ export function createHud(root: HTMLElement, cb: HudCallbacks): Hud {
   $('#pauseBtn').onclick = () => cb.pause(true);
   $('#resumeBtn').onclick = () => cb.pause(false);
   $('#restartBtn').onclick = () => cb.restart();
+  $('#titleBtn').onclick = () => cb.toTitle();
   subs.onclick = () => cb.skip();
   touchHeight.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
     const dir = Number(b.dataset.h) as -1 | 1;
