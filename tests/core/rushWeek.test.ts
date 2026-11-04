@@ -13,7 +13,7 @@ import {
 import { ENDLESS_BATCH } from '../../src/core/rush/machine';
 import { endlessArrival } from '../../src/core/week/endless';
 import { arrivalTimes, shiftDef } from '../../src/core/week/progress';
-import { CUSTOMERS } from '../../src/data/customers';
+import { CUSTOMERS, DAY2_CUSTOMERS, WEEK_CUSTOMERS } from '../../src/data/customers';
 import { PATIENCE_SCALE, WEEK } from '../../src/data/week';
 import { generateOrders } from '../../src/sim/listening/generate';
 import { playRush } from '../helpers/rushBot';
@@ -26,9 +26,9 @@ describe('week mode: generated orders at the register', () => {
     const specs = generateOrders(7, {
       shiftIndex: 0,
       difficulty: 'normal',
-      count: CUSTOMERS.length,
+      count: WEEK_CUSTOMERS.length,
       unlockedDrinks: WEEK0.unlockedDrinks,
-      speakers: CUSTOMERS.map((c) => c.id),
+      speakers: WEEK_CUSTOMERS.map((c) => c.id),
     });
     expect(r.customers.map((c) => c.line.text)).toEqual(specs.map((s) => s.text));
     expect(r.customers.map((c) => c.def.id)).toEqual(specs.map((s) => s.speaker));
@@ -89,7 +89,7 @@ describe('week mode: the week table sets the shift', () => {
       // Regulars come back in longer shifts: each visit has its own key.
       const keys = r.customers.map((c) => c.key);
       expect(new Set(keys).size).toBe(keys.length);
-      expect(keys.slice(0, 6)).toEqual(CUSTOMERS.map((c) => c.id));
+      expect(keys.slice(0, 6)).toEqual(WEEK_CUSTOMERS.map((c) => c.id));
       if (d.customers > 6) expect(keys[6]).toBe(`${r.customers[6]?.def.id}#2`);
     }
   });
@@ -97,7 +97,7 @@ describe('week mode: the week table sets the shift', () => {
   it('Day 2 keeps its own arrivals, patience and keys', () => {
     const r = createRush(7);
     expect(r.customers.map((c) => [c.key, c.arriveAt, c.maxPatience])).toEqual(
-      CUSTOMERS.map((c) => [c.id, c.arriveAt, c.patience]),
+      DAY2_CUSTOMERS.map((c) => [c.id, c.arriveAt, c.patience]),
     );
   });
 
@@ -158,6 +158,21 @@ describe('Endless Rush', () => {
       Array.from({ length: ENDLESS_BATCH }, (_, n) => endlessArrival(n)),
     );
     expect(r.shiftEvents.bird).toBe(false);
+  });
+
+  it('cycles through the whole cast: Kenji (Endless only for now) is the seventh customer', () => {
+    const r = createRush(5, 'normal', {}, ENDLESS);
+    expect(r.customers.slice(0, CUSTOMERS.length).map((c) => c.def.id)).toEqual(
+      CUSTOMERS.map((c) => c.id),
+    );
+    expect(r.customers[6]?.def.id).toBe('kenji');
+    expect(r.customers[6]?.key).toBe('kenji');
+    // The week and Day 2 never see him.
+    for (const d of WEEK)
+      expect(
+        createRush(5, 'normal', {}, at(d.index)).customers.some((c) => c.def.id === 'kenji'),
+      ).toBe(false);
+    expect(createRush(5).customers.some((c) => c.def.id === 'kenji')).toBe(false);
   });
 
   it('ends at the third walk-out, counting only who came in, with no shift events', () => {

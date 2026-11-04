@@ -1,13 +1,14 @@
 // Day 2 customers, in arrival order. Names, looks and personalities come from the prototype CAST
-// (prototype/game.html); Mei is new. What they order is in data/orders.ts, how they sound in
-// data/voice/profiles.ts. AGENTS.md §6: difficult behaviour belongs to a personality (Karen), never
+// (prototype/game.html); Mei is new. Kenji (the prototype's exchange student) is in Endless Rush
+// only for now: Day 2 and the week keep the original six. What they order is in data/orders.ts,
+// how they sound in data/voice/profiles.ts. AGENTS.md §6: difficult behaviour belongs to a personality (Karen), never
 // to a background, and pace, politeness and fluency vary by person, not by accent.
 
 import type { ClarifyAnswers, OrderLine } from '../sim/listening';
 import type { Complaint, DrinkType, Reaction } from '../sim/rush';
 import { CLARIFY_ANSWERS, ORDER_LINES } from './orders';
 
-export type CustomerId = 'dazza' | 'priya' | 'beryl' | 'mei' | 'jiwoo' | 'karen';
+export type CustomerId = 'dazza' | 'priya' | 'beryl' | 'mei' | 'jiwoo' | 'karen' | 'kenji';
 
 export interface CustomerLook {
   skin: string;
@@ -52,8 +53,12 @@ export interface CustomerDef {
   orders: readonly OrderLine[];
   /** Their answers to clarifying questions. */
   answers: ClarifyAnswers;
-  /** Seconds after the doors open that they walk in. */
-  arriveAt: number;
+  /** Seconds after the doors open that they walk in on Day 2, or null: not on Day 2 (they come
+   *  in on week shifts and in Endless Rush, whose arrivals come from the week table). */
+  arriveAt: number | null;
+  /** In the week's rotation: week shifts cycle through these customers in cast order. Endless
+   *  Rush cycles through everyone. */
+  inWeek: boolean;
   /** Seconds of patience from reaching the register. */
   patience: number;
   /** Tip for a perfect, quick drink, cents. */
@@ -89,6 +94,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.dazza as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.dazza as ClarifyAnswers,
     arriveAt: 1,
+    inWeek: true,
     patience: 120,
     tipCents: 300,
     tolerance: 1,
@@ -127,6 +133,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.priya as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.priya as ClarifyAnswers,
     arriveAt: 36,
+    inWeek: true,
     patience: 115,
     tipCents: 200,
     tolerance: 1.05,
@@ -166,6 +173,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.beryl as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.beryl as ClarifyAnswers,
     arriveAt: 71,
+    inWeek: true,
     patience: 130,
     tipCents: 100,
     tolerance: 1.12,
@@ -208,6 +216,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.mei as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.mei as ClarifyAnswers,
     arriveAt: 106,
+    inWeek: true,
     patience: 115,
     tipCents: 250,
     tolerance: 1,
@@ -248,6 +257,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.jiwoo as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.jiwoo as ClarifyAnswers,
     arriveAt: 141,
+    inWeek: true,
     patience: 120,
     tipCents: 100,
     tolerance: 1,
@@ -286,6 +296,7 @@ export const CUSTOMERS: readonly CustomerDef[] = [
     orders: ORDER_LINES.karen as readonly OrderLine[],
     answers: CLARIFY_ANSWERS.karen as ClarifyAnswers,
     arriveAt: 176,
+    inWeek: true,
     patience: 110,
     tipCents: 50,
     tolerance: 0.88,
@@ -307,7 +318,57 @@ export const CUSTOMERS: readonly CustomerDef[] = [
       },
     },
   },
+  {
+    // The prototype's exchange student (prototype/game.html CAST.kenji): name, tag and look kept.
+    // Polite is who he is, not how Japanese speakers are written (AGENTS.md §6).
+    id: 'kenji',
+    callName: 'Kenji',
+    name: 'Kenji 健二',
+    tag: 'Exchange student',
+    look: {
+      skin: '#f0d2b5',
+      hair: 'short',
+      hairC: '#231a14',
+      top: '#3a6b54',
+      legs: '#2a2a30',
+      build: 0.95,
+      height: 1.01,
+      bag: '#4a5568',
+    },
+    orders: ORDER_LINES.kenji as readonly OrderLine[],
+    answers: CLARIFY_ANSWERS.kenji as ClarifyAnswers,
+    arriveAt: null,
+    // Endless Rush only until his week debut is balanced: adding a seventh speaker to the week
+    // changes every shift from Tuesday on (npm run balance) and the review's week snapshots.
+    inWeek: false,
+    patience: 120,
+    tipCents: 150,
+    tolerance: 1.05,
+    lines: {
+      impatient: 'Excuse me, sorry. Is my coffee nearly ready? My lecture starts soon.',
+      angry: "I'm sorry, but I really have to go to class.",
+      happy: anyDrink("It's perfect. Thank you very much!"),
+      okay: 'Thank you very much.',
+      rejected: {
+        flatWhite: "Sorry, I don't think this is mine. I ordered a flat white.",
+        longBlack: "Sorry, I don't think this is mine. I ordered a long black.",
+      },
+      rejectedMilk: 'Sorry, I think this is the wrong milk.',
+      walkout: "I'm sorry, I can't wait any longer. I'll be late for class.",
+      complaint: {
+        lukewarm: "It's a little cold, but it's okay. Thank you.",
+        weak: 'Hmm, a bit weak. Thank you anyway.',
+        noHeart: "Oh, no heart today. That's okay.",
+      },
+    },
+  },
 ];
+
+/** Day 2, the first paid shift: everyone with a Day 2 arrival time, in arrival order. */
+export const DAY2_CUSTOMERS: readonly CustomerDef[] = CUSTOMERS.filter((c) => c.arriveAt !== null);
+
+/** The week's rotation, in cast order (Endless Rush has all of CUSTOMERS). */
+export const WEEK_CUSTOMERS: readonly CustomerDef[] = CUSTOMERS.filter((c) => c.inWeek);
 
 export const customerDef = (id: CustomerId): CustomerDef => {
   const d = CUSTOMERS.find((c) => c.id === id);

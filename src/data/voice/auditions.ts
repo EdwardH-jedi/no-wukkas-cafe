@@ -35,4 +35,5 @@ export const AUDITIONS: Record<string, readonly string[]> = {
   priya: [order('priya.4'), CLARIFY_ANSWERS.priya!.milk.oat],
   jiwoo: [order('jiwoo.1'), customer('jiwoo').happy.heart],
   mei: [order('mei.4'), customer('mei').rejectedMilk],
+  kenji: [order('kenji.4'), customer('kenji').happy.heart],
 };

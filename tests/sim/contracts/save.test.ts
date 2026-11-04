@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CUSTOMERS } from '../../../src/data/customers';
+import { WEEK_CUSTOMERS } from '../../../src/data/customers';
 import {
   DEFAULT_KEYS,
   DEFAULT_SEED,
@@ -154,7 +154,8 @@ describe('migrate', () => {
     expect(s.regulars.dazza).not.toBe(v2.regulars.dazza);
   });
 
-  it('REGULAR_IDS are exactly the Day 2 customers', () => {
-    expect([...REGULAR_IDS].sort()).toEqual(CUSTOMERS.map((c) => c.id).sort());
+  it("REGULAR_IDS are exactly the week's rotation (Kenji, Endless only, is no regular yet)", () => {
+    expect([...REGULAR_IDS].sort()).toEqual(WEEK_CUSTOMERS.map((c) => c.id).sort());
+    expect(REGULAR_IDS as readonly string[]).not.toContain('kenji');
   });
 });

@@ -8,7 +8,7 @@
 // Accent comes from the voice itself (a native Indian-English, Mandarin or Korean voice reading
 // standard English), never from misspelt text. Pace and pitch vary per person, not per accent.
 
-export type Accent = 'australian' | 'indian' | 'korean' | 'chinese';
+export type Accent = 'australian' | 'indian' | 'korean' | 'chinese' | 'japanese';
 
 export interface VoiceProfile {
   speaker: string;
@@ -110,6 +110,18 @@ export const VOICE_PROFILES: Record<string, VoiceProfile> = {
     rate: 178,
     pitch: 1,
     tts: { pitch: 1.05, rate: 1.0, female: true },
+  },
+  kenji: {
+    speaker: 'kenji',
+    accent: 'japanese',
+    locale: 'ja-JP',
+    // No male Japanese system voice is installed by default (Otoya is a download), so the
+    // placeholder falls back to Kyoko, darkened, the way Gaz falls back to Karen.
+    prefer: ['Otoya (Premium)', 'Otoya (Enhanced)', 'Otoya', 'Kyoko (Enhanced)', 'Kyoko'],
+    rate: 168,
+    pitch: 0.86,
+    pitchOnlyFor: 'Kyoko',
+    tts: { pitch: 0.8, rate: 0.95, female: false },
   },
 };
 

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { CUSTOMERS } from '../../src/data/customers';
 import { CLARIFY_ANSWERS, ORDER_LINES } from '../../src/data/orders';
 import { VOICE_PROFILES } from '../../src/data/voice/profiles';
+import { SEGMENT_INVENTORY } from '../../src/data/voice/segments';
 import { DIFFICULTY, normaliseOrder, orderTier, type Tier } from '../../src/sim/listening';
 
 const DRINK_WORDS = { flatWhite: /flat white|flattie/i, longBlack: /long black/i };
@@ -65,7 +66,13 @@ describe('order bank', () => {
       groups.get(accent)!.add(orderTier(o));
       counts.set(accent, (counts.get(accent) ?? 0) + 1);
     }
-    expect([...groups.keys()].sort()).toEqual(['australian', 'chinese', 'indian', 'korean']);
+    expect([...groups.keys()].sort()).toEqual([
+      'australian',
+      'chinese',
+      'indian',
+      'japanese',
+      'korean',
+    ]);
     for (const [accent, tiers] of groups) {
       expect(counts.get(accent), accent).toBeGreaterThanOrEqual(6);
       expect([...tiers].sort(), accent).toEqual([1, 2, 3]);
@@ -95,6 +102,21 @@ describe('order bank', () => {
       for (const t of [...Object.values(c.lines.happy), c.lines.okay])
         expect(t, c.id).not.toMatch(/\bwah\b/i);
     expect(CUSTOMERS.find((c) => c.id === 'jiwoo')?.lines.happy.heart).toMatch(/^와, /);
+  });
+
+  it('Japanese is Japanese: written in kana, never romaji or Engrish respellings', () => {
+    const kenji = CUSTOMERS.find((c) => c.id === 'kenji')!;
+    const said = [
+      ...kenji.orders.map((o) => o.text),
+      ...Object.values(kenji.lines.happy),
+      kenji.lines.okay,
+      ...Object.values(SEGMENT_INVENTORY.kenji).map((s) => s.text),
+    ];
+    for (const t of said) expect(t).not.toMatch(/\b(arigato|domo|sumimasen|ohayo|desu)\b/i);
+    // The one Japanese phrase he uses is the polite "good morning", always followed by English.
+    const jp = said.filter((t) => /[\u3040-\u30ff\u4e00-\u9fff]/.test(t));
+    expect(jp.length).toBeGreaterThan(0);
+    for (const t of jp) expect(t).toMatch(/^おはようございます! Sorry, good morning\. /);
   });
 
   it('clarifying answers name what they answer', () => {

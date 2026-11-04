@@ -5,7 +5,7 @@
 import { createSaveStore } from '../../src/core/save/storage';
 import { passFail, SHIFTS_PER_WEEK, shiftDef } from '../../src/core/week/progress';
 import { finishShift, weekFor, type Cooldowns } from '../../src/core/week/session';
-import { CUSTOMERS, type CustomerId } from '../../src/data/customers';
+import { DAY2_CUSTOMERS, type CustomerId } from '../../src/data/customers';
 import { UPGRADES } from '../../src/data/upgrades';
 import type { ShiftEventId } from '../../src/sim/contracts/events';
 import type { SaveV2 } from '../../src/sim/contracts/save';
@@ -76,11 +76,11 @@ const f0 = (x: number): string => x.toFixed(0);
 export function paceRow(profile: string, runs: PaceRun[]): string {
   const walk = runs.map((x) => x.walkouts.length);
   const early = runs.map(
-    (x) => x.walkouts.filter((id) => CUSTOMERS.findIndex((c) => c.id === id) < 3).length,
+    (x) => x.walkouts.filter((id) => DAY2_CUSTOMERS.findIndex((c) => c.id === id) < 3).length,
   );
   const fw = runs.flatMap((x) => x.make.flatWhite);
   const lb = runs.flatMap((x) => x.make.longBlack);
-  const cells = CUSTOMERS.map((c) => {
+  const cells = DAY2_CUSTOMERS.map((c) => {
     const got = runs.map((x) => x.left[c.id]).filter((v): v is number => v !== undefined);
     const gone = runs.length - got.length;
     const s = got.length ? `${f0(Math.min(...got))}/${f0(mean(got))}` : '–';
@@ -89,8 +89,8 @@ export function paceRow(profile: string, runs: PaceRun[]): string {
   return `| ${profile} | ${runs[0]?.difficulty ?? ''} | ${walk.reduce((a, b) => a + b, 0)} / ${Math.max(...walk)} / ${Math.max(...early)} | ${mean(runs.map((x) => x.meanServe)).toFixed(1)} | ${fw.length ? mean(fw).toFixed(1) : '–'} | ${lb.length ? mean(lb).toFixed(1) : '–'} | ${cells.join(' | ')} |`;
 }
 
-export const PACE_HEADER = `| bot | difficulty | walk-outs (total / worst seed / worst in 1–3) | mean serve s | make FW s | make LB s | ${CUSTOMERS.map((c) => c.callName).join(' | ')} |
-|---|---|---|---|---|---|${CUSTOMERS.map(() => '---|').join('')}`;
+export const PACE_HEADER = `| bot | difficulty | walk-outs (total / worst seed / worst in 1–3) | mean serve s | make FW s | make LB s | ${DAY2_CUSTOMERS.map((c) => c.callName).join(' | ')} |
+|---|---|---|---|---|---|${DAY2_CUSTOMERS.map(() => '---|').join('')}`;
 
 // ------------------------------------------------------------------ the week (npm run balance)
 

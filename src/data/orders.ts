@@ -341,6 +341,81 @@ export const ORDER_LINES: Record<string, readonly OrderLine[]> = {
       cues: { drink: 'wait, a flat white', temp: 'extra hot' },
     },
   ],
+  // Japanese-accented English. Kenji: exchange student, careful and polite, picking up Aussie
+  // English from his flatmates; a Japanese greeting slips out now and then
+  // (おはようございます = good morning).
+  kenji: [
+    {
+      id: 'kenji.1',
+      text: 'Good morning. May I please have a flat white? Thank you very much.',
+      order: FW(),
+      pace: 'normal',
+      connected: 0,
+      slang: 0,
+      chatter: 0,
+      cues: { drink: 'flat white' },
+    },
+    {
+      id: 'kenji.2',
+      text: 'Excuse me, may I please have a long black? Thank you very much.',
+      order: LB,
+      pace: 'normal',
+      connected: 0,
+      slang: 0,
+      chatter: 0,
+      cues: { drink: 'long black' },
+    },
+    {
+      id: 'kenji.3',
+      text: 'Hello. A flat white with soy milk, please. I have a tutorial at nine.',
+      order: FW('soy'),
+      pace: 'normal',
+      connected: 0,
+      slang: 0,
+      chatter: 1,
+      cues: { drink: 'flat white', milk: 'soy' },
+    },
+    {
+      id: 'kenji.4',
+      text: "おはようございます! Sorry, good morning. Could I have an oat flat white with a heart, please? It's for a photo for my family in Osaka.",
+      order: FW('oat', false, true),
+      pace: 'normal',
+      connected: 0,
+      slang: 1,
+      chatter: 1,
+      cues: { drink: 'flat white', milk: 'oat', heart: 'heart' },
+    },
+    {
+      id: 'kenji.5',
+      text: 'Hi. Long black, please. My flatmates taught me to say this: cheers, mate!',
+      order: LB,
+      pace: 'normal',
+      connected: 0,
+      slang: 1,
+      chatter: 1,
+      cues: { drink: 'Long black' },
+    },
+    {
+      id: 'kenji.6',
+      text: 'Um, an almond flat white, extra hot, please. Sorry, I mean, an almond flattie? My flatmate says flattie.',
+      order: FW('almond', true),
+      pace: 'normal',
+      connected: 1,
+      slang: 1,
+      chatter: 1,
+      cues: { drink: 'flat white', milk: 'almond', temp: 'extra hot' },
+    },
+    {
+      id: 'kenji.7',
+      text: "Morning! A long black, please. Oh, sorry, no, a flat white. Extra hot, with a heart. It's my birthday today.",
+      order: FW('full', true, true),
+      pace: 'normal',
+      connected: 2,
+      slang: 0,
+      chatter: 1,
+      cues: { drink: 'no, a flat white', temp: 'Extra hot', heart: 'heart' },
+    },
+  ],
 };
 
 export const CLARIFY_ANSWERS: Record<string, ClarifyAnswers> = {
@@ -450,6 +525,26 @@ export const CLARIFY_ANSWERS: Record<string, ClarifyAnswers> = {
       yes: 'Yes, a heart, please.',
       no: 'No heart, thanks.',
       none: "No, it's a long black.",
+    },
+  },
+  kenji: {
+    drink: { flatWhite: 'A flat white, please.', longBlack: 'A long black, please.' },
+    milk: {
+      full: 'Normal milk, please.',
+      oat: 'Oat milk, please.',
+      soy: 'Soy milk, please.',
+      almond: 'Almond milk, please.',
+      none: "No milk, thank you. It's a long black.",
+    },
+    temp: {
+      normal: 'Normal is fine, thank you.',
+      extraHot: 'Extra hot, please.',
+      none: 'However it comes is fine, thank you.',
+    },
+    heart: {
+      yes: 'Yes, a heart, please. Thank you!',
+      no: "No, it's okay. Thank you.",
+      none: "No heart, thank you. It's a long black.",
     },
   },
 };

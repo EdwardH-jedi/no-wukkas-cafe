@@ -3,7 +3,7 @@
 // `npm run pace` prints the same measurements as a table.
 
 import { describe, expect, it } from 'vitest';
-import { CUSTOMERS } from '../../src/data/customers';
+import { DAY2_CUSTOMERS as CUSTOMERS } from '../../src/data/customers';
 import { paceRun } from '../helpers/pace';
 import { BOT_FIRST_TIMER, BOT_IDEAL } from '../helpers/rushBot';
 
@@ -68,7 +68,7 @@ describe('Day 2 first-shift customers', () => {
   it('arrivals are at least 35 s apart, so the line stays short', () => {
     for (let i = 1; i < CUSTOMERS.length; i++)
       expect(
-        CUSTOMERS[i]!.arriveAt - CUSTOMERS[i - 1]!.arriveAt,
+        CUSTOMERS[i]!.arriveAt! - CUSTOMERS[i - 1]!.arriveAt!,
         CUSTOMERS[i]!.id,
       ).toBeGreaterThanOrEqual(35);
   });

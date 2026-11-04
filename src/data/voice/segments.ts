@@ -210,6 +210,35 @@ const BOOKS: Record<CustomerId, BookSrc> = {
     chatter: [" Sorry, I'm on a call.", " Quick one, I've got a meeting at half past."],
     change: [', no, wait, make that '],
   },
+  // Exchange student, careful and polite; a Japanese "good morning" slips out now and then, as
+  // in his curated lines.
+  kenji: {
+    accent: 'japanese',
+    paces: ['normal'],
+    leadChance: 0.7,
+    greet: ['Good morning. ', 'Hello. ', ['おはようございます! Sorry, good morning. ', 1]],
+    lead: [
+      { text: 'May I please have ', ask: true },
+      { text: 'Could I have ', ask: true },
+    ],
+    core: {
+      'flatWhite.full': [fw('Flat white')],
+      'flatWhite.oat': [fw('Oat flat white', 'oat'), fw('Flat white with oat milk', 'oat milk')],
+      'flatWhite.soy': [fw('Soy flat white', 'soy'), fw('Flat white with soy milk', 'soy milk')],
+      'flatWhite.almond': [fw('Almond flat white', 'almond'), fw('Almond flattie', 'almond', 1)],
+      longBlack: LB,
+    },
+    vague: [{ text: 'Just a coffee', article: 'a coffee' }],
+    hot: [', extra hot'],
+    heart: [', with a heart', ', with a heart on top'],
+    closeSay: [', please. Thank you very much.', ', please.'],
+    closeAsk: [', please?', '? Thank you very much.'],
+    chatter: [
+      ' I have a lecture at nine.',
+      ' My flatmate says this is the best coffee in Surry Hills.',
+    ],
+    change: [', oh, sorry, make that '],
+  },
 };
 
 const withArticle = (t: string): string =>

@@ -6,7 +6,14 @@
 // This file is the shift itself (create, restart, phases, the fixed step); the parts it drives are
 // in the sibling modules (see index.ts).
 
-import { CUSTOMERS, customerDef, type CustomerDef, type CustomerId } from '../../data/customers';
+import {
+  CUSTOMERS,
+  customerDef,
+  DAY2_CUSTOMERS,
+  WEEK_CUSTOMERS,
+  type CustomerDef,
+  type CustomerId,
+} from '../../data/customers';
 import { ENDLESS_INTRO, RUSH_INTRO, WEEK_INTRO } from '../../data/ownerLines';
 import { PATIENCE_SCALE } from '../../data/week';
 import { normaliseOrder, pickOrder, type Difficulty } from '../../sim/listening';
@@ -96,12 +103,12 @@ function chosen(def: CustomerDef, picked: VoicedLine, lines: LineOverrides): Voi
 
 /** Day 2: the six regulars, each picking one of their curated lines (in this RNG draw order). */
 function day2Visits(difficulty: Difficulty, lines: LineOverrides, rng: Rng): Visit[] {
-  return CUSTOMERS.map((def) => ({
+  return DAY2_CUSTOMERS.map((def) => ({
     key: def.id,
     def,
     // Day 2 is the player's first shift.
     line: chosen(def, pickOrder(def.orders, difficulty, rng, true), lines),
-    arriveAt: def.arriveAt,
+    arriveAt: def.arriveAt ?? 0,
     maxPatience: def.patience,
   }));
 }
@@ -122,7 +129,9 @@ function weekVisits(
     difficulty,
     count: endless ? ENDLESS_BATCH : d.customers,
     unlockedDrinks: week.unlockedDrinks,
-    speakers: CUSTOMERS.map((c) => c.id),
+    // In cast order, cycled. Endless Rush has everyone; the week has its rotation (Kenji is
+    // Endless only for now, data/customers.ts).
+    speakers: (endless ? CUSTOMERS : WEEK_CUSTOMERS).map((c) => c.id),
   });
   const arrivals = endless ? specs.map((_, n) => endlessArrival(n)) : arrivalTimes(d);
   const scale = PATIENCE_SCALE[difficulty];
