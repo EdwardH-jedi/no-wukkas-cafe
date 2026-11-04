@@ -458,6 +458,7 @@ export function createHarness(o: HarnessOptions = {}): Harness {
       onStop: noop,
       onTicket: noop,
       onTicketFixed: noop,
+      onResult: noop,
       onAsk: noop,
       onReplay: noop,
       update: noop,

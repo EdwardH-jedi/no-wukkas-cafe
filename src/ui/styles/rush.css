@@ -121,6 +121,56 @@
   border-color: var(--flag);
   color: #ffd0c8;
 }
+/* The serve result card (ui/serveResult.ts): where the drink was handed over, just above the
+   pass while a handed-back drink still sits on it. Pointer-transparent: it never blocks a click. */
+#rserve {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(205px + env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  max-width: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+  background: var(--glass2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gum);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 14px;
+  line-height: 1.35;
+  pointer-events: none;
+  z-index: 4;
+}
+#pass:not(.hide) ~ #rserve {
+  bottom: calc(252px + env(safe-area-inset-bottom, 0px));
+}
+#rserve .rh {
+  font-weight: 700;
+}
+#rserve .ri {
+  display: inline-block;
+  width: 1.2em;
+}
+#rserve .rd {
+  color: var(--txt-dim);
+}
+#rserve .rn {
+  margin-top: 2px;
+  color: var(--paper);
+}
+#rserve.tone-great {
+  border-left-color: var(--gum);
+}
+#rserve.tone-ok {
+  border-left-color: var(--gold);
+}
+#rserve.tone-poor,
+#rserve.tone-back {
+  border-left-color: var(--crema);
+}
+#rserve.tone-gone {
+  border-left-color: var(--flag);
+}
 #ractions {
   flex-wrap: wrap;
   justify-content: center;

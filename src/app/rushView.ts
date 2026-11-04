@@ -79,14 +79,19 @@ export function createRushFrame(app: App): (r: Rush, dt: number) => void {
         const c = customerByKey(r, ev.customer);
         if (c) rushHud.onTicketFixed(c);
       } else if (ev.type === 'ask') rushHud.onAsk(ev.text);
-      else if (ev.type === 'served')
+      else if (ev.type === 'served') {
         crowd.react(
           ev.customer,
           ev.result.satisfaction >= 75 ? 'cheer' : ev.result.satisfaction >= 45 ? 'nod' : 'huff',
         );
-      else if (ev.type === 'rejected') crowd.react(ev.customer, 'shake');
-      else if (ev.type === 'walkout' || ev.type === 'refused') crowd.react(ev.customer, 'huff');
-      else if (ev.type === 'gone') {
+        rushHud.onResult(r, ev);
+      } else if (ev.type === 'rejected') {
+        crowd.react(ev.customer, 'shake');
+        rushHud.onResult(r, ev);
+      } else if (ev.type === 'walkout' || ev.type === 'refused') {
+        crowd.react(ev.customer, 'huff');
+        rushHud.onResult(r, ev);
+      } else if (ev.type === 'gone') {
         // A line of theirs whose clip lands (or fails over to the browser voice) after they've
         // left never starts in an empty doorway.
         const c = customerByKey(r, ev.customer);
