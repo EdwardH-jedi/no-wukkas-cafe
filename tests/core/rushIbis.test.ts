@@ -4,7 +4,8 @@ import { atCounter, atRegister, createRush, emptyRushInput, stepRush } from '../
 import { doorOpen, stepRushIbis } from '../../src/core/rushIbis';
 import type { Utterance } from '../../src/core/speech';
 import { clipFor } from '../../src/data/voice';
-import { createIbis } from '../../src/sim/ibis';
+import { createIbis, IBIS, type Ibis } from '../../src/sim/ibis';
+import { BOT_IDEAL, playRush } from '../helpers/rushBot';
 
 describe('the bin chicken during a shift', () => {
   it('comes in with a customer, gets shooed out, and Gaz has a (recorded) line for each beat', () => {
@@ -81,5 +82,62 @@ describe('the bin chicken during a shift', () => {
     }
     expect(JSON.stringify(a.events)).toBe(JSON.stringify(c.events));
     expect(a.rng.next()).toBe(c.rng.next());
+  });
+});
+
+describe('the bin chicken interrupts, the player deals with it, service carries on', () => {
+  /** A whole Day 2 with the ideal bot at the counter and the bird running alongside it. `shoo`
+   *  decides, each step, whether the player claps at it. */
+  function shiftWithBird(seed: number, shoo: (b: Ibis, t: number) => boolean) {
+    const b = createIbis(seed, true);
+    const timeline: Array<{ at: number; what: string }> = [];
+    const played = playRush({
+      seed,
+      ...BOT_IDEAL,
+      each: (r) => {
+        for (const e of stepRushIbis(r, b, { shoo: shoo(b, r.time), noticed: false }, STEP))
+          timeline.push({ at: r.time, what: `bird:${e.type}` });
+        for (const e of r.events)
+          if (e.type === 'served' || e.type === 'ticket')
+            timeline.push({ at: r.time, what: e.type });
+      },
+    });
+    return { ...played, b, timeline };
+  }
+
+  it('shooed out (three claps): it leaves, and every customer is still served right', () => {
+    const plain = playRush({ seed: 7, ...BOT_IDEAL });
+    let last = -1;
+    const { r, b, timeline, said } = shiftWithBird(7, (bird, t) => {
+      const go = bird.state === 'foraging' || bird.state === 'herded';
+      if (!go || t - last < 1) return false;
+      last = t;
+      return true;
+    });
+    expect(b.state).toBe('gone');
+    expect(b.shoos).toBe(IBIS.shoosToLeave);
+    expect(b.binRaided).toBe(false);
+    expect(said).toContain('ibis.enter');
+    expect(said).toContain('ibis.out');
+    // It came in during service and the shift went on around it, then after it.
+    const enter = timeline.find((x) => x.what === 'bird:enter')!.at;
+    const gone = timeline.find((x) => x.what === 'bird:leave')!.at;
+    expect(timeline.some((x) => x.what === 'served' && x.at > gone)).toBe(true);
+    expect(timeline.some((x) => x.what === 'ticket' && x.at > enter)).toBe(true);
+    // The normal flow recovered: the same customers served and served right as without the bird.
+    expect(r.phase).toBe('summary');
+    const outcome = (x: typeof r) => x.customers.map((c) => [c.key, c.outcome, c.result?.correct]);
+    expect(outcome(r)).toEqual(outcome(plain.r));
+    expect(r.summary?.walkouts).toBe(0);
+  });
+
+  it('ignored: it raids the bin, leaves on its own after IBIS.forageMax, and the shift finishes', () => {
+    const { r, b, said } = shiftWithBird(7, () => false);
+    expect(b.state).toBe('gone');
+    expect(b.binRaided).toBe(true);
+    expect(b.shoos).toBe(0);
+    expect(said).toContain('ibis.ignored');
+    expect(r.phase).toBe('summary');
+    expect(r.customers.every((c) => c.outcome === 'served')).toBe(true);
   });
 });

@@ -20,6 +20,7 @@ import {
 } from '../../src/core/rush';
 import { emptyInput } from '../../src/core/trial';
 import { DEFAULT_KEYS } from '../../src/sim/contracts/save';
+import { createIbis } from '../../src/sim/ibis';
 import { aliasKey } from '../../src/ui/screens/keys';
 
 interface Calls {
@@ -163,5 +164,40 @@ describe('Day 2 keys back at the register (unchanged)', () => {
     rushKey(app, r, aliasKey({ ...DEFAULT_KEYS, replay: 'q' }, 'q'), keyEvent());
     expect(app.rushAction).toEqual({ type: 'replay' });
     expect(calls.replays).toBe(0);
+  });
+});
+
+describe('the bin chicken key (I) in both contexts', () => {
+  const withBird = (app: App, present: boolean): App => {
+    const bird = createIbis(7, true);
+    if (present) bird.state = 'foraging';
+    Object.assign(app, { ibis: bird, ibisShoo: false });
+    return app;
+  };
+
+  it('shoos it mid-drink and at the register, and touches nothing else', () => {
+    const { r } = makingWithBDeciding('shot');
+    const calls = { ringUps: 0, replays: 0 };
+    const app = withBird(fakeApp(calls), true);
+    rushKey(app, r, 'i', keyEvent());
+    expect(app.ibisShoo).toBe(true);
+    expect(app.rushAction).toBeNull();
+    expect(calls).toEqual({ ringUps: 0, replays: 0 });
+
+    step(r, { type: 'bin' });
+    expect(rushContext(r)).toBe('register');
+    const app2 = withBird(fakeApp(calls), true);
+    rushKey(app2, r, 'i', keyEvent('pos'));
+    expect(app2.ibisShoo).toBe(true);
+    expect(app2.rushAction).toBeNull();
+    expect(calls).toEqual({ ringUps: 0, replays: 0 });
+  });
+
+  it('does nothing when there is no bird', () => {
+    const { r } = makingWithBDeciding('grind');
+    const app = withBird(fakeApp({ ringUps: 0, replays: 0 }), false);
+    rushKey(app, r, 'i', keyEvent());
+    expect(app.ibisShoo).toBe(false);
+    expect(app.rushAction).toBeNull();
   });
 });
