@@ -55,7 +55,7 @@ from Edward's first-session playtest of 2026-11-02:
   review P2 (shot window judged on whole seconds) fixed in 3c9f182. Not run: balance (Day 2 sim unchanged), real
   devices, audio listening, feel.
 - Follow-ups: the 390×844 Day 1 shot card overlaps the cup edge; `rush.posNag` can fire while the register is put
-  away; the headless balance bot still rings up mid-drink; AGENTS.md's E2E count is stale (76 tests in 21 files).
+  away; the headless balance bot still rings up mid-drink. (AGENTS.md's E2E count: updated 2026-11-06, 77 tests.)
 
 `feat/playable-loop-kenji-ibis` (from 6eec1d7 = PR #3's head, pushed; PR to `fix/playtest-first-session-20261102`,
 retargets to `main` once #3 merges; not merged), 2026-11-04:
@@ -63,7 +63,8 @@ retargets to `main` once #3 merges; not merged), 2026-11-04:
 - Kenji (Japanese-accented English) in **Endless Rush only** (`inWeek: false`); `pickVoice` browser-voice fallback
   (cast list → locale → language → en-AU → en-GB → English); per-accent loop tests `tests/core/rushAccents.test.ts`.
 - Bin chicken: flow-recovery tests (unit + `I` key in both contexts + e2e), no behaviour change.
-- Balance byte-identical to 6eec1d7 (week unchanged). Evidence: `docs/verification/2026-11-04-loop/`.
+- Balance byte-identical to 6eec1d7 (week unchanged); unit 1049/1049; full E2E 60 passed + 17 opt-in skipped (casting
+  fixed after the run: 1/1); `build:clean` 1,598,598 bytes. Evidence: `docs/verification/2026-11-06-loop/`.
 - Gate (Edward): Kenji in the week from Tuesday = `inWeek: true` + a balance diff + the review session re-issuing
   `tests/review/independentAcceptanceRates.test.ts` (exact Phase 6 counts) and the `tests/fuzz/weekPlayServe.test.ts`
   walk-out tally (0 walk-outs with him in the week).
