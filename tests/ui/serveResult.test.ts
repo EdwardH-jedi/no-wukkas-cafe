@@ -8,6 +8,7 @@ import type { Complaint } from '../../src/sim/rush';
 import {
   COMPLAINT_TEXT,
   createServeCard,
+  LAST_CALL,
   RESULT_SECONDS,
   serveResultCard,
   type ResultCard,
@@ -52,7 +53,7 @@ describe('serve result card', () => {
       expect(card.detail).toMatch(c.result!.tipCents > 0 ? /\+\$\d+\.\d\d tip/ : /no tip/);
       // Every card but the last points at the next thing to do; the last says the shift is done.
       if (i < cards.length - 1) expect(card.next, card.title).toMatch(/^Next: /);
-      else expect(card.next).toBe("That's everyone. Nice work.");
+      else expect(card.next).toBe(LAST_CALL);
     }
     expect(cards.some((c) => c.tone === 'great')).toBe(true);
   });
@@ -92,7 +93,10 @@ describe('serve result card', () => {
       week: { shiftIndex: 4, unlockedDrinks: ['flatWhite', 'longBlack'], endless: true },
     });
     expect(endless.cards).toHaveLength(3);
-    for (const c of endless.cards) expect(c.next).not.toBe("That's everyone. Nice work.");
+    for (const c of endless.cards) expect(c.next).not.toBe(LAST_CALL);
+    // A Day 2 that ends on a walk-out says it's over, without praise.
+    const last = cards[cards.length - 1]!;
+    if (last.next === LAST_CALL) expect(last.tone).toBe('gone');
   });
 
   it('names every complaint an accepted drink can have', () => {

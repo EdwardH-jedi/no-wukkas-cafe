@@ -42,6 +42,10 @@ export const COMPLAINT_TEXT: Partial<Record<Complaint, string>> = {
   slow: 'a long wait',
 };
 
+/** The last card of a shift (Day 2 and the week, never Endless), whoever that last one was: a
+ *  walk-out or an unhappy serve gets no "nice work". */
+export const LAST_CALL = "That's everyone for this shift.";
+
 /** How long the card stays up, in game seconds. */
 export const RESULT_SECONDS = 4.5;
 
@@ -73,7 +77,7 @@ export function nextStep(r: Rush, done: string): string | null {
   if (r.customers.some((c) => c.state === 'outside' && c.key !== done))
     return 'Next: the next customer is on their way.';
   if (!r.week?.endless && r.customers.every((c) => c.key === done || c.outcome !== null))
-    return "That's everyone. Nice work.";
+    return LAST_CALL;
   return null;
 }
 
