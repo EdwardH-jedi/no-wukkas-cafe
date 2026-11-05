@@ -20,7 +20,9 @@ describe('the voice pass plan', () => {
     expect(new Set(p.tts.map((j) => j.speaker))).toEqual(
       new Set(['dazza', 'beryl', 'karen', 'priya']),
     );
-    expect(new Set(p.recorded.map((j) => j.speaker))).toEqual(new Set(['gaz', 'jiwoo', 'mei']));
+    expect(new Set(p.recorded.map((j) => j.speaker))).toEqual(
+      new Set(['gaz', 'jiwoo', 'mei', 'kenji']),
+    );
     expect(p.tts.length + p.recorded.length).toBe(script.length);
     for (const j of [...p.tts, ...p.recorded]) {
       expect(j.file).toBe(

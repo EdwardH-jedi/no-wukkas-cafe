@@ -111,7 +111,7 @@ describe('buildAuditionIndex', () => {
     expect(idx.candidates.some((c) => c.character === 'ghost')).toBe(false);
   });
 
-  it('works on the real casting data: seven characters, nothing castable rendered yet', () => {
+  it('works on the real casting data: eight characters, nothing castable rendered yet', () => {
     const found: FoundCandidate[] = Object.entries(PIPELINE_TEST).map(([who, c]) => ({
       character: who,
       slug: candidateSlug(c),
@@ -125,8 +125,8 @@ describe('buildAuditionIndex', () => {
       generatedAt: 'now',
     });
     const cov = auditionCoverage(idx);
-    expect(Object.keys(cov)).toHaveLength(7);
+    expect(Object.keys(cov)).toHaveLength(8);
     for (const v of Object.values(cov)) expect(v.real).toBe(0);
-    expect(Object.values(cov).reduce((s, v) => s + v.placeholder, 0)).toBe(4);
+    expect(Object.values(cov).reduce((s, v) => s + v.placeholder, 0)).toBe(5);
   });
 });

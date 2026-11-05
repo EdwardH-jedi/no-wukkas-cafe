@@ -31,6 +31,7 @@ Six customers (Mei joined on 2026-10-13), one espresso station, Gaz watching. Re
 - [x] **D2.5 Shift report:** orders completed, correct orders, average serve time, satisfaction, tips (cents), waste, grade + Gaz's verdict; replay and back to title
 - [x] **D2.6 Checks:** sim/core unit tests incl. bot difficulty profiles, Playwright e2e of a whole shift, evidence in `docs/verification/2026-10-12-day2/`
 - [ ] **D2.7 Playtest** a full shift with real players; tune patience, arrival times and tips from what they do
+- [x] **D2.8 Serve result card** (2026-11-04): after each serve, hand-back or walk-out a card says how it went (% happy, tip, what they noticed; why a drink came back and whether the ticket was misheard) and what to do next (register, next ticket, who is coming in, "That's everyone"); `src/ui/serveResult.ts`, `tests/ui/serveResult.test.ts`, `tests/e2e/rush.spec.ts`
 
 ## Phase 0: Port and measure
 
@@ -75,6 +76,7 @@ See `OVERNIGHT_REPORT.md` for evidence and what is still placeholder.
 - [ ] **V.6 Playtest** listening difficulty and aid costs with real players; iPhone Safari audio check
 - [x] **V.7 Music QA tools:** `/dev/listening.html` on the real engine (moods, bus volumes, ducking under real dialogue, pause), offline loudness / true-peak / clipping / DC measurement; DC offset in the FM keys fixed with a regression test
 - [ ] **V.8 Human listening review** of the three moods on speakers, headphones and a phone (lab notes → `reports/listening-notes.json`)
+- [x] **V.9 Japanese accent** (2026-11-04): Kenji, the prototype's exchange student, with 7 curated orders (tiers 1–3), answers, reactions and a phrasebook; ja-JP placeholder voice (Kyoko, darkened). **Endless Rush only** for now: Day 2 and the week keep their six (adding him to the week changes Tuesday on and the review's week snapshots; Edward's call). The browser-voice fallback is a tested pure picker (`pickVoice`: cast list → locale → language → en-AU → en-GB → English, gender within a pool); per-accent loop tests in `tests/core/rushAccents.test.ts`
 
 ## Phase 2: Listen (real comprehension)
 

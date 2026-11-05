@@ -74,13 +74,14 @@ describe('Azure SSML', () => {
         expect(c.pending, who).toMatch(/signed/);
       }
     }
-    // Edward, 2026-10-16: Gaz, Jiwoo and Mei are recorded by actors.
+    // Edward, 2026-10-16: Gaz, Jiwoo and Mei are recorded by actors. Kenji follows the same rule as
+    // the other L2 speakers until Edward casts him.
     expect(
       Object.entries(CAST)
         .filter(([, c]) => c.provenance === 'recorded')
         .map(([who]) => who)
         .sort(),
-    ).toEqual(['gaz', 'jiwoo', 'mei']);
+    ).toEqual(['gaz', 'jiwoo', 'kenji', 'mei']);
     expect(TTS_BUDGET.capAud).toBe(20);
   });
 });

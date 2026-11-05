@@ -161,9 +161,9 @@ test('casting page: identity cards, missing assets, waveforms, one take at a tim
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/dev/casting.html#gaz');
 
-  // Seven identity cards; Gaz has no audio at all and says so.
-  await expect(page.locator('.castcard')).toHaveCount(7);
-  await expect(page.locator('[data-summary]')).toContainText('1 of 7');
+  // Eight identity cards (Kenji joined 2026-11-04); Gaz has no audio at all and says so.
+  await expect(page.locator('.castcard')).toHaveCount(8);
+  await expect(page.locator('[data-summary]')).toContainText('1 of 8');
   await expect(page.locator('[data-no-audio]')).toBeVisible();
   await expect(page.locator('.chead[data-status="missing"]')).toContainText('No audio yet');
   await expect(page.locator('.cell.missing')).toHaveCount(2);

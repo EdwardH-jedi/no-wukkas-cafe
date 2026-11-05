@@ -2080,6 +2080,31 @@
       }
     },
     {
+      "dialogueId": "gaz:0c20b293",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Kenji ordered a long black.",
+      "file": "assets/voice/gaz/0c20b293.mp3",
+      "duration": 3.146,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:0e58f71b",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2705,6 +2730,31 @@
       }
     },
     {
+      "dialogueId": "gaz:1cab8e53",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Kenji wanted a flat white, not a long black. Read the ticket!",
+      "file": "assets/voice/gaz/1cab8e53.mp3",
+      "duration": 3.802,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:1ce6ceac",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -2715,6 +2765,56 @@
       "transcript": "Good. 'A coffee' could mean anything in this town.",
       "file": "assets/voice/gaz/1ce6ceac.mp3",
       "duration": 2.656,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:1df623cd",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.poorServe",
+      "delivery": "normal",
+      "transcript": "Kenji's face says it all.",
+      "file": "assets/voice/gaz/1df623cd.mp3",
+      "duration": 1.395,
+      "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:1ee05963",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "You rang that up wrong. Kenji told you exactly what they wanted.",
+      "file": "assets/voice/gaz/1ee05963.mp3",
+      "duration": 3.54,
       "meanDb": -16.8,
       "playback": {
         "gain": 1,
@@ -3015,6 +3115,31 @@
       "transcript": "The whole line saw that. They're not happy.",
       "file": "assets/voice/gaz/27a22c70.mp3",
       "duration": 2.246,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:27fee836",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.noHeart",
+      "delivery": "normal",
+      "transcript": "No heart? Kenji asked nicely, too.",
+      "file": "assets/voice/gaz/27fee836.mp3",
+      "duration": 2.733,
       "meanDb": -17,
       "playback": {
         "gain": 1,
@@ -3380,6 +3505,31 @@
       }
     },
     {
+      "dialogueId": "gaz:313b5dc4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongMilk",
+      "delivery": "normal",
+      "transcript": "Kenji can't have that milk. Check the ticket before you hand it over.",
+      "file": "assets/voice/gaz/313b5dc4.mp3",
+      "duration": 3.448,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:3330dc5e",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -3416,6 +3566,31 @@
       "file": "assets/voice/gaz/33e08ad2.mp3",
       "duration": 2.172,
       "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:349dd7bb",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongMilk",
+      "delivery": "normal",
+      "transcript": "Wrong milk, champ. That's not what Kenji's ticket says.",
+      "file": "assets/voice/gaz/349dd7bb.mp3",
+      "duration": 3.509,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -3591,6 +3766,31 @@
       "file": "assets/voice/gaz/393087e5.mp3",
       "duration": 2.493,
       "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:39d1f30a",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Wrong drink, champ. Kenji ordered a flat white.",
+      "file": "assets/voice/gaz/39d1f30a.mp3",
+      "duration": 3.221,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -4655,6 +4855,31 @@
       }
     },
     {
+      "dialogueId": "gaz:51500ed4",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.firstCustomer",
+      "delivery": "normal",
+      "transcript": "Here comes Kenji. Take the order, mate.",
+      "file": "assets/voice/gaz/51500ed4.mp3",
+      "duration": 2.718,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:51e930d4",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -4866,6 +5091,31 @@
       "file": "assets/voice/gaz/56cc517c.mp3",
       "duration": 2.06,
       "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:58699dfc",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.goodServe",
+      "delivery": "normal",
+      "transcript": "Not bad. Kenji looked happy.",
+      "file": "assets/voice/gaz/58699dfc.mp3",
+      "duration": 1.898,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -5216,6 +5466,31 @@
       "file": "assets/voice/gaz/6095827c.mp3",
       "duration": 3.32,
       "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:609f1ab2",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.registerNag",
+      "delivery": "normal",
+      "transcript": "Kenji's been standing there for ages. Order!",
+      "file": "assets/voice/gaz/609f1ab2.mp3",
+      "duration": 2.527,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -6280,6 +6555,31 @@
       }
     },
     {
+      "dialogueId": "gaz:74f6ccd5",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "Lost Kenji. Lovely.",
+      "file": "assets/voice/gaz/74f6ccd5.mp3",
+      "duration": 1.565,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:754fd07a",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -7230,6 +7530,31 @@
       }
     },
     {
+      "dialogueId": "gaz:91d6b82f",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.posNag",
+      "delivery": "normal",
+      "transcript": "Ring it up, mate. Kenji's not getting any younger.",
+      "file": "assets/voice/gaz/91d6b82f.mp3",
+      "duration": 3.027,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:92906371",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -7491,6 +7816,31 @@
       "file": "assets/voice/gaz/9d1e599f.mp3",
       "duration": 1.826,
       "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:9d233307",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.slow",
+      "delivery": "normal",
+      "transcript": "Kenji's been waiting forever. Speed it up.",
+      "file": "assets/voice/gaz/9d233307.mp3",
+      "duration": 2.458,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -8480,6 +8830,31 @@
       }
     },
     {
+      "dialogueId": "gaz:b775167d",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.notHotEnough",
+      "delivery": "normal",
+      "transcript": "Kenji asked for extra hot, mate. That was barely warm.",
+      "file": "assets/voice/gaz/b775167d.mp3",
+      "duration": 3.626,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:b79ffa95",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -9016,6 +9391,31 @@
       "file": "assets/voice/gaz/c425f1b9.mp3",
       "duration": 2.949,
       "meanDb": -17.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:c461ca82",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.misheard",
+      "delivery": "normal",
+      "transcript": "That's what the ticket says, mate, but it's not what Kenji said. Listen first.",
+      "file": "assets/voice/gaz/c461ca82.mp3",
+      "duration": 4.73,
+      "meanDb": -17.1,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -10430,6 +10830,31 @@
       }
     },
     {
+      "dialogueId": "gaz:e483a293",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.walkout",
+      "delivery": "normal",
+      "transcript": "And there goes Kenji. They'll tell their mates.",
+      "file": "assets/voice/gaz/e483a293.mp3",
+      "duration": 2.528,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
       "dialogueId": "gaz:e560e9ed",
       "characterId": "gaz",
       "voiceId": "macos:Karen",
@@ -11341,6 +11766,31 @@
       "file": "assets/voice/gaz/fba1f77e.mp3",
       "duration": 2.661,
       "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Karen",
+        "rate": 182,
+        "pitch": 0.88,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "gaz:fbcce00b",
+      "characterId": "gaz",
+      "voiceId": "macos:Karen",
+      "accent": "australian",
+      "locale": "en-AU",
+      "key": "rush.wrongDrink",
+      "delivery": "normal",
+      "transcript": "Kenji wanted a long black, not a flat white. Read the ticket!",
+      "file": "assets/voice/gaz/fbcce00b.mp3",
+      "duration": 3.735,
+      "meanDb": -17,
       "playback": {
         "gain": 1,
         "rate": 1
@@ -13050,6 +13500,956 @@
         "voice": "Karen",
         "rate": 192,
         "pitch": 1.03,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:002e5f40",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.angry",
+      "delivery": "normal",
+      "transcript": "I'm sorry, but I really have to go to class.",
+      "file": "assets/voice/kenji/002e5f40.mp3",
+      "duration": 3.675,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:02601dce",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.complaint.lukewarm",
+      "delivery": "normal",
+      "transcript": "It's a little cold, but it's okay. Thank you.",
+      "file": "assets/voice/kenji/02601dce.mp3",
+      "duration": 4.071,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:0e92fd7f",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.5",
+      "delivery": "normal",
+      "transcript": "Hi. Long black, please. My flatmates taught me to say this: cheers, mate!",
+      "file": "assets/voice/kenji/0e92fd7f.mp3",
+      "duration": 6.627,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:15e15d44",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.6",
+      "delivery": "normal",
+      "transcript": "Um, an almond flat white, extra hot, please. Sorry, I mean, an almond flattie? My flatmate says flattie.",
+      "file": "assets/voice/kenji/15e15d44.mp3",
+      "duration": 9.949,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:16021f8c",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.rejectedMilk",
+      "delivery": "normal",
+      "transcript": "Sorry, I think this is the wrong milk.",
+      "file": "assets/voice/kenji/16021f8c.mp3",
+      "duration": 2.874,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:25eefab1",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.7",
+      "delivery": "normal",
+      "transcript": "Morning! A long black, please. Oh, sorry, no, a flat white. Extra hot, with a heart. It's my birthday today.",
+      "file": "assets/voice/kenji/25eefab1.mp3",
+      "duration": 10.505,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:2982722e",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.4.slow",
+      "delivery": "slow",
+      "transcript": "おはようございます! Sorry, good morning. Could I have an oat flat white with a heart, please? It's for a photo for my family in Osaka.",
+      "file": "assets/voice/kenji/2982722e-slow.mp3",
+      "duration": 12.266,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:34487c63",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.milk.soy",
+      "delivery": "normal",
+      "transcript": "Soy milk, please.",
+      "file": "assets/voice/kenji/34487c63.mp3",
+      "duration": 1.535,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:39878353",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.complaint.noHeart",
+      "delivery": "normal",
+      "transcript": "Oh, no heart today. That's okay.",
+      "file": "assets/voice/kenji/39878353.mp3",
+      "duration": 2.637,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:3a59d092",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.heart.none",
+      "delivery": "normal",
+      "transcript": "No heart, thank you. It's a long black.",
+      "file": "assets/voice/kenji/3a59d092.mp3",
+      "duration": 3.397,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:3cc15d88",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.happy.heart",
+      "delivery": "normal",
+      "transcript": "It's perfect. Thank you very much!",
+      "file": "assets/voice/kenji/3cc15d88.mp3",
+      "duration": 2.634,
+      "meanDb": -17.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:3fde1941",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.temp.normal",
+      "delivery": "normal",
+      "transcript": "Normal is fine, thank you.",
+      "file": "assets/voice/kenji/3fde1941.mp3",
+      "duration": 2.031,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:44c5fb50",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.rejected.longBlack",
+      "delivery": "normal",
+      "transcript": "Sorry, I don't think this is mine. I ordered a long black.",
+      "file": "assets/voice/kenji/44c5fb50.mp3",
+      "duration": 4.962,
+      "meanDb": -16.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:4bc059b1",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.1.slow",
+      "delivery": "slow",
+      "transcript": "Good morning. May I please have a flat white? Thank you very much.",
+      "file": "assets/voice/kenji/4bc059b1-slow.mp3",
+      "duration": 6.191,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:4c932721",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.6.slow",
+      "delivery": "slow",
+      "transcript": "Um, an almond flat white, extra hot, please. Sorry, I mean, an almond flattie? My flatmate says flattie.",
+      "file": "assets/voice/kenji/4c932721-slow.mp3",
+      "duration": 10.934,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:5c2bfc70",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.temp.none",
+      "delivery": "normal",
+      "transcript": "However it comes is fine, thank you.",
+      "file": "assets/voice/kenji/5c2bfc70.mp3",
+      "duration": 2.828,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:60155c8b",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.complaint.weak",
+      "delivery": "normal",
+      "transcript": "Hmm, a bit weak. Thank you anyway.",
+      "file": "assets/voice/kenji/60155c8b.mp3",
+      "duration": 3.97,
+      "meanDb": -15.2,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:6973b758",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.1",
+      "delivery": "normal",
+      "transcript": "Good morning. May I please have a flat white? Thank you very much.",
+      "file": "assets/voice/kenji/6973b758.mp3",
+      "duration": 5.636,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:6f688165",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.4",
+      "delivery": "normal",
+      "transcript": "おはようございます! Sorry, good morning. Could I have an oat flat white with a heart, please? It's for a photo for my family in Osaka.",
+      "file": "assets/voice/kenji/6f688165.mp3",
+      "duration": 11.164,
+      "meanDb": -16.7,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:7ac431bb",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.milk.full",
+      "delivery": "normal",
+      "transcript": "Normal milk, please.",
+      "file": "assets/voice/kenji/7ac431bb.mp3",
+      "duration": 1.757,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:7e5ccaab",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.walkout",
+      "delivery": "normal",
+      "transcript": "I'm sorry, I can't wait any longer. I'll be late for class.",
+      "file": "assets/voice/kenji/7e5ccaab.mp3",
+      "duration": 4.979,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:8618c4a9",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.heart.yes",
+      "delivery": "normal",
+      "transcript": "Yes, a heart, please. Thank you!",
+      "file": "assets/voice/kenji/8618c4a9.mp3",
+      "duration": 2.988,
+      "meanDb": -17.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:97f8e668",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.7.slow",
+      "delivery": "slow",
+      "transcript": "Morning! A long black, please. Oh, sorry, no, a flat white. Extra hot, with a heart. It's my birthday today.",
+      "file": "assets/voice/kenji/97f8e668-slow.mp3",
+      "duration": 11.57,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:9d31fade",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.impatient",
+      "delivery": "normal",
+      "transcript": "Excuse me, sorry. Is my coffee nearly ready? My lecture starts soon.",
+      "file": "assets/voice/kenji/9d31fade.mp3",
+      "duration": 5.943,
+      "meanDb": -16.9,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:a09e9397",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.drink.longBlack",
+      "delivery": "normal",
+      "transcript": "A long black, please.",
+      "file": "assets/voice/kenji/a09e9397.mp3",
+      "duration": 1.982,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:a1102ae4",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.3.slow",
+      "delivery": "slow",
+      "transcript": "Hello. A flat white with soy milk, please. I have a tutorial at nine.",
+      "file": "assets/voice/kenji/a1102ae4-slow.mp3",
+      "duration": 7.282,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:a5313252",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.temp.extraHot",
+      "delivery": "normal",
+      "transcript": "Extra hot, please.",
+      "file": "assets/voice/kenji/a5313252.mp3",
+      "duration": 1.841,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:a88e813b",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.3",
+      "delivery": "normal",
+      "transcript": "Hello. A flat white with soy milk, please. I have a tutorial at nine.",
+      "file": "assets/voice/kenji/a88e813b.mp3",
+      "duration": 6.62,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:b7ccc293",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.milk.none",
+      "delivery": "normal",
+      "transcript": "No milk, thank you. It's a long black.",
+      "file": "assets/voice/kenji/b7ccc293.mp3",
+      "duration": 3.382,
+      "meanDb": -17.1,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:b882bf75",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.okay",
+      "delivery": "normal",
+      "transcript": "Thank you very much.",
+      "file": "assets/voice/kenji/b882bf75.mp3",
+      "duration": 1.419,
+      "meanDb": -17.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:bb27d9e0",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.5.slow",
+      "delivery": "slow",
+      "transcript": "Hi. Long black, please. My flatmates taught me to say this: cheers, mate!",
+      "file": "assets/voice/kenji/bb27d9e0-slow.mp3",
+      "duration": 7.275,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:c18c46d2",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.drink.flatWhite",
+      "delivery": "normal",
+      "transcript": "A flat white, please.",
+      "file": "assets/voice/kenji/c18c46d2.mp3",
+      "duration": 2.21,
+      "meanDb": -17.4,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:c54a5430",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.2.slow",
+      "delivery": "slow",
+      "transcript": "Excuse me, may I please have a long black? Thank you very much.",
+      "file": "assets/voice/kenji/c54a5430-slow.mp3",
+      "duration": 5.928,
+      "meanDb": -16.8,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 134,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:df333465",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.rejected.flatWhite",
+      "delivery": "normal",
+      "transcript": "Sorry, I don't think this is mine. I ordered a flat white.",
+      "file": "assets/voice/kenji/df333465.mp3",
+      "duration": 5.177,
+      "meanDb": -16.6,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:dfb2132a",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.heart.no",
+      "delivery": "normal",
+      "transcript": "No, it's okay. Thank you.",
+      "file": "assets/voice/kenji/dfb2132a.mp3",
+      "duration": 2.237,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:e11585b7",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.2",
+      "delivery": "normal",
+      "transcript": "Excuse me, may I please have a long black? Thank you very much.",
+      "file": "assets/voice/kenji/e11585b7.mp3",
+      "duration": 5.396,
+      "meanDb": -17,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:ed46796e",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.milk.oat",
+      "delivery": "normal",
+      "transcript": "Oat milk, please.",
+      "file": "assets/voice/kenji/ed46796e.mp3",
+      "duration": 1.614,
+      "meanDb": -16.3,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
+        "placeholder": true,
+        "deterministic": true
+      }
+    },
+    {
+      "dialogueId": "kenji:f150a94b",
+      "characterId": "kenji",
+      "voiceId": "macos:Kyoko",
+      "accent": "japanese",
+      "locale": "ja-JP",
+      "key": "kenji.answer.milk.almond",
+      "delivery": "normal",
+      "transcript": "Almond milk, please.",
+      "file": "assets/voice/kenji/f150a94b.mp3",
+      "duration": 1.895,
+      "meanDb": -16.5,
+      "playback": {
+        "gain": 1,
+        "rate": 1
+      },
+      "source": {
+        "engine": "macos-say",
+        "voice": "Kyoko",
+        "rate": 168,
+        "pitch": 0.86,
         "placeholder": true,
         "deterministic": true
       }

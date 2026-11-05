@@ -399,6 +399,12 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   test.info().annotations.push({ type: 'Dazza', description: JSON.stringify(dazza) });
   expect(dazza.accepted).toBe(true);
   expect(dazza.satisfaction).toBeGreaterThan(50);
+  // The result card: how it went, the tip, and what to do next.
+  const card = page.locator('#rserve');
+  await expect(card).toBeVisible();
+  await expect(card).toContainText('Dazza');
+  await expect(card).toContainText(`${dazza.satisfaction}% happy`);
+  await expect(card.locator('.rn')).toContainText(/^Next: /);
   await page.waitForTimeout(400);
   await snap(page, 'dazza-served');
 
@@ -436,6 +442,9 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await expect(ticket(page, 'priya').locator('.tm s')).toContainText(
     wrong.type === 'flatWhite' ? 'flat white' : 'long black',
   );
+  // The card says why it came back, and that the ticket now says what she said.
+  await expect(page.locator('#rserve')).toContainText('Priya handed it back');
+  await expect(page.locator('#rserve')).toContainText('You heard it wrong; the ticket is fixed.');
   await snap(page, 'priya-ticket-corrected');
   await page.keyboard.press('b'); // bin the wrong drink
 
@@ -460,6 +469,7 @@ test('Day 2 morning rush: listening at the register, a misheard ticket, walk-out
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 4));
   await until(page, (s) => s.customers.some((c) => c.outcome === 'walkout'), 120_000);
   await page.evaluate(() => ((window as unknown as { __trial: Debug }).__trial.timeScale = 1));
+  await expect(page.locator('#rserve')).toContainText('walked out');
   await page.waitForTimeout(300);
   await snap(page, 'walkout');
   await expect(page.locator('#rwalk')).not.toHaveText('0'); // the top chip counts them

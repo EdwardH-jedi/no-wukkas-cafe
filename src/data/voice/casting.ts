@@ -86,6 +86,13 @@ export const CASTING: Record<string, readonly Candidate[]> = {
   mei: [
     { provider: 'files', voice: 'mei-actor-a', note: 'Mandarin L2 English speaker (recommended)' },
   ],
+  kenji: [
+    {
+      provider: 'files',
+      voice: 'kenji-actor-a',
+      note: 'Japanese L2 English speaker (recommended)',
+    },
+  ],
 };
 
 /** The placeholder voices, auditionable only to test the pipeline end to end. */
@@ -94,6 +101,7 @@ export const PIPELINE_TEST: Record<string, Candidate> = {
   priya: { provider: 'macos', voice: 'Tara', note: 'pipeline test only' },
   jiwoo: { provider: 'macos', voice: 'Yuna', note: 'pipeline test only' },
   mei: { provider: 'macos', voice: 'Tingting', note: 'pipeline test only' },
+  kenji: { provider: 'macos', voice: 'Kyoko', note: 'pipeline test only' },
 };
 
 /** Who each character is, for the casting page's identity cards (docs/VOICE_CASTING.md). The
@@ -156,6 +164,13 @@ export const CAST_BRIEFS: Record<string, CastBrief> = {
     age: '30s',
     accent: 'Mandarin-accented English (fluent L2, professional)',
     voice: 'Quick, efficient, assured; not "cute", not halting.',
+  },
+  kenji: {
+    name: 'Kenji',
+    role: 'Exchange student; careful, polite, learning Aussie slang from his flatmates',
+    age: 'Early 20s',
+    accent: 'Japanese-accented English (fluent L2)',
+    voice: 'Clear, unhurried, friendly; a natural おはようございます, never stilted or comic.',
   },
 };
 
@@ -253,6 +268,7 @@ export const CAST: Record<string, CastEntry> = {
   priya: google('en-IN-Chirp3-HD-Leda', 0.95),
   jiwoo: actor('jiwoo-actor'),
   mei: actor('mei-actor'),
+  kenji: actor('kenji-actor'),
 };
 
 /** What a licensed TTS pass may cost. Chirp 3 HD: US$30 per million characters (spaces count), the

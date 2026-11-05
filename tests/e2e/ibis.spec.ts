@@ -6,7 +6,12 @@ import { expect, test, type Page } from '@playwright/test';
 
 interface Dbg {
   ibis: { state: string; shoos: number; screen: { x: number; y: number } };
-  rush: { phase: string; drawCalls: number; line: { key: string } | null } | null;
+  rush: {
+    phase: string;
+    drawCalls: number;
+    line: { key: string } | null;
+    customers: Array<{ id: string; state: string; outcome: string | null }>;
+  } | null;
   timeScale: number;
 }
 const dbg = (page: Page): Promise<Dbg> =>
@@ -60,6 +65,20 @@ test.describe('bin chicken', () => {
     await expect.poll(async () => (await dbg(page)).ibis.state).toBe('gone');
     expect(heard.has('ibis.enter')).toBe(true);
     expect(heard.has('ibis.out')).toBe(true);
+    // The café gets back to normal: the next customer at the register is served as usual.
+    await page.evaluate(() => ((window as unknown as { __trial: Dbg }).__trial.timeScale = 4));
+    await expect
+      .poll(async () => (await dbg(page)).rush!.customers.some((c) => c.state === 'register'), {
+        timeout: 60_000,
+      })
+      .toBe(true);
+    await page.evaluate(() => ((window as unknown as { __trial: Dbg }).__trial.timeScale = 1));
+    const next = (await dbg(page)).rush!.customers.find((c) => c.state === 'register')!;
+    await page.keyboard.press('t');
+    await expect
+      .poll(async () => (await dbg(page)).rush!.customers.find((c) => c.id === next.id)!.state)
+      .toMatch(/ordering|deciding/);
+    await page.screenshot({ path: 'test-results/evidence-ibis/03-next-order-after-bird.png' });
     expect(errors).toEqual([]);
   });
 

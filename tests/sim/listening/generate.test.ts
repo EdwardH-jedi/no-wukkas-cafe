@@ -152,6 +152,6 @@ describe('generateOrders', () => {
         expect(spec.voice).toEqual({ kind: 'clip', id: dialogueId(speaker, line.text) });
         n++;
       }
-    expect(n).toBe(30);
+    expect(n).toBe(37); // 30, plus Kenji's 7
   });
 });

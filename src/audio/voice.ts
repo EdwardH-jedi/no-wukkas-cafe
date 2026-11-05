@@ -37,10 +37,59 @@ export interface Tts {
   readonly lastVoice: string;
 }
 
+// Voice names by gender, for the voices the cast's locales ship with on macOS/iOS, Windows,
+// Android and Chrome (en-AU, en-IN, ko-KR, zh-CN, ja-JP). Unlisted names count as unknown.
 const MALE =
-  /lee|gordon|\bmale\b|daniel|james|william|david|mark|george|ryan|arthur|oliver|aaron|fred|alex|tom|russell|rishi|aman/i;
+  /lee|gordon|\bmale\b|daniel|james|william|david|mark|george|ryan|arthur|oliver|aaron|fred|alex|tom|russell|rishi|aman|ravi|prabhat|kunal|injoon|hyunsu|otoya|hattori|ichiro|keita|kangkang|yunxi/i;
 const FEMALE =
-  /karen|catherine|female|zira|samantha|serena|sonia|natasha|hazel|susan|libby|moira|tessa|fiona|victoria|nicky|yuna|kate|tara|tingting|isha/i;
+  /karen|catherine|female|zira|samantha|serena|sonia|natasha|hazel|susan|libby|moira|tessa|fiona|victoria|nicky|yuna|kate|tara|tingting|isha|lekha|veena|sangeeta|heera|neerja|heami|sunhi|kyoko|haruka|ayumi|nanami|sayaka|huihui|xiaoxiao|lili|hayley/i;
+
+/** What the picker needs of a browser voice (SpeechSynthesisVoice has both). */
+export interface VoiceLike {
+  name: string;
+  lang: string;
+}
+
+const normLang = (l: string): string => (l || '').replace(/_/g, '-').toLowerCase();
+
+/**
+ * The browser voice for a speaker whose recording is missing, so their accent survives the
+ * fallback: a named voice from their own list first (best first); else a voice in their locale
+ * (`ja-JP`), then in their language (`ja`, for a locale that isn't English), then Australian,
+ * British and any English, in that order. Within a pool the speaker's gender wins, then a voice
+ * of unknown gender, then the other. Null when the browser has no voice at all.
+ */
+export function pickVoice<V extends VoiceLike>(voices: readonly V[], style: TtsStyle): V | null {
+  for (const name of style.prefer ?? []) {
+    const v = voices.find((x) => x.name === name || x.name.startsWith(`${name} `));
+    if (v) return v;
+  }
+  const own = style.locale ? normLang(style.locale) : null;
+  const lang = own?.split('-')[0];
+  const langs = [
+    ...(own ? [own] : []),
+    ...(lang && lang !== 'en' ? [lang] : []),
+    'en-au',
+    'en-gb',
+    'en',
+  ];
+  const same = style.female ? FEMALE : MALE;
+  const other = style.female ? MALE : FEMALE;
+  for (const l of langs) {
+    const pool = voices.filter((v) => {
+      const vl = normLang(v.lang);
+      return vl === l || vl.startsWith(`${l}-`);
+    });
+    if (pool.length)
+      return (
+        pool.find((v) => same.test(v.name)) ??
+        pool.find((v) => !other.test(v.name)) ??
+        pool[0] ??
+        null
+      );
+  }
+  return null;
+}
 
 /** Text tweaks so engines don't read punctuation literally. Subtitles keep the original. */
 export const ttsText = (text: string): string =>
@@ -69,20 +118,7 @@ export function createTts(): Tts {
   let started = false;
   let lastVoice = '';
 
-  const pick = (style: TtsStyle): SpeechSynthesisVoice | null => {
-    for (const name of style.prefer ?? []) {
-      const v = voices.find((x) => x.name === name || x.name.startsWith(`${name} `));
-      if (v) return v;
-    }
-    const norm = (l: string): string => (l || '').replace('_', '-').toLowerCase();
-    const langs = [...(style.locale ? [style.locale.toLowerCase()] : []), 'en-au', 'en-gb', 'en'];
-    for (const l of langs) {
-      const pool = voices.filter((v) => norm(v.lang).startsWith(l));
-      if (pool.length)
-        return pool.find((v) => (style.female ? FEMALE : MALE).test(v.name)) ?? pool[0] ?? null;
-    }
-    return null;
-  };
+  const pick = (style: TtsStyle): SpeechSynthesisVoice | null => pickVoice(voices, style);
 
   return {
     get available() {

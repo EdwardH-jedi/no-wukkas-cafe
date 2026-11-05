@@ -23,6 +23,7 @@ import { instruction } from './instructions';
 import { createPos } from './pos';
 import { createRail, nextTicket, railOrder } from './rushRail';
 import { createTopChips, TOP_CHIPS_HTML } from './rushTopbar';
+import { createServeCard, serveResultCard, type ResultEvent } from './serveResult';
 import { esc } from './screens';
 import { renderShiftReport, type ShiftReportCallbacks } from './screens/shiftReport';
 import { subtitleMode, type ListenSettings } from './settings';
@@ -60,6 +61,9 @@ export interface RushHud {
   onTicket(c: RushCustomer): void;
   /** A hand-back set a misheard ticket straight: mark what was misheard on it. */
   onTicketFixed(c: RushCustomer): void;
+  /** Someone was served, handed a drink back, walked out or was shown the door: the result card
+   *  says how it went and what to do next. */
+  onResult(r: Rush, ev: ResultEvent): void;
   /** Enter at the register: ring up the selection (never while a drink is being made). */
   ringUp(): boolean;
   setPaused(p: boolean): void;
@@ -83,6 +87,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       <div id="rinstr" class="hide"><div class="h"></div><div class="b"></div></div>
     </div>
     <div id="pass" class="hide"></div>
+    <div id="rserve" class="hide" role="status" aria-live="polite"></div>
     <div id="revent" class="hide" data-play role="group" aria-label="Something's come up"><div class="ek">Something's come up</div><div class="h"></div><div class="b"></div></div>
     <div id="rbl" class="hudcol">
       <div id="rgauges" class="hide" data-play></div>
@@ -115,6 +120,10 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
   const subsText = subs.querySelector('.text') as HTMLElement;
   const summary = $('#rsummary');
   const pauseEl = $('#rpause');
+  const serveCard = createServeCard($('#rserve'));
+  /** The ticket a hand-back set straight this step (core/rush/serve.ts reports the fix just
+   *  before the hand-back itself), so the card can say it was a listening mistake. */
+  let fixedAt: { key: string; time: number } | null = null;
   // The shot card's Stop button: the same as Enter while steaming during the shot.
   const gauges = createGauges($('#rgauges'), touch, () => cb.action({ type: 'next' }));
   const pos = createPos(root, touch, cb.action);
@@ -237,6 +246,8 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
     },
     onTicketFixed(c) {
       railView.onTicketFixed(c);
+      fixedAt = lastRush ? { key: c.key, time: lastRush.time } : null;
+      if (lastRush) serveCard.markFixed(lastRush, c.key, lastRush.time);
     },
     ringUp() {
       return pos.ringUp();
@@ -245,7 +256,14 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
       showLine(speaker, text);
       replayHold = seconds;
     },
+    onResult(r, ev) {
+      const fixed =
+        ev.type === 'rejected' && fixedAt?.key === ev.customer && fixedAt.time === r.time;
+      const card = serveResultCard(r, fixed ? { ...ev, fixed } : ev);
+      if (card) serveCard.show(card, r.time);
+    },
     onPhase(phase, r) {
+      if (phase !== 'service') serveCard.hide();
       if (phase === 'intro') {
         endQuote = '';
         railView.reset();
@@ -286,6 +304,7 @@ export function createRushHud(root: HTMLElement, cb: RushHudCallbacks): RushHud 
         subHideIn -= dt;
         if (subHideIn <= 0) subs.classList.add('gone');
       }
+      serveCard.update(r.time);
       if (r.phase === 'summary') {
         railView.clear();
         actions.innerHTML = '';
