@@ -28,6 +28,8 @@ The first public web build: the Day 1 trial, the Day 2 rush, a playable week and
 - Gauges for the shot timer, steam temperature and both hands; the milk shows as text and an icon.
 - Top chips for the shift, drinks served and walk-outs.
 - Shift report: one screen for Day 2, the week and Endless, with listening and event rows.
+- A result card after every serve, hand-back and walk-out: how happy they were, the tip, what they noticed, and what to do next.
+- Kenji, an exchange student with Japanese-accented English, orders in Endless Rush; when a recording is missing, the browser voice keeps each speaker's accent where the browser has one.
 - Spoken dialogue from pre-rendered clips with subtitles; without clips the game uses the browser's voice and says so.
 - In the rush, subtitles start when the voice does, not before.
 
