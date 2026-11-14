@@ -23,7 +23,7 @@ See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full plan.
 
 ## How to play
 
-The web build will live at https://edwardh-jedi.github.io/no-wukkas-cafe/ once it is published. It is not live yet: Edward publishes with `npm run deploy -- --push`. Until then run it locally (see Getting started) with `npm run dev`, which opens http://localhost:5183. On a phone on the same Wi-Fi, run `npm run dev -- --host`, then open `http://<your Mac's LAN IP>:5183/` in Safari or Chrome.
+Play the web build at https://edwardh-jedi.github.io/no-wukkas-cafe/. Edward republishes it with `npm run deploy -- --push`. To run it locally (see Getting started), use `npm run dev`, which opens http://localhost:5183. On a phone on the same Wi-Fi, run `npm run dev -- --host`, then open `http://<your Mac's LAN IP>:5183/` in Safari or Chrome.
 
 What's playable now:
 
